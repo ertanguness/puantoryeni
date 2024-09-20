@@ -1,0 +1,458 @@
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.4);
+
+
+}
+
+.preloader-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    /* background-color: #fff; */
+    border-radius: 50%;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.tableFixHead {
+    overflow: auto;
+    height: calc(100vh - 270px);
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    /* Arka plan rengini belirleyin, sticky header'ın altındaki içeriğin görünmesini engellemek için */
+
+}
+
+.tableFixHead thead:nth-of-type(2) th {
+    top: 35px;
+    /* İlk başlık satırının yüksekliğine bağlı olarak ayarlayın */
+}
+
+*/ .icon {
+    font-size: 20px;
+}
+
+.active-link {
+    color: #007bff !important;
+}
+
+.dt-layout-row.ui-helper-clearfix:not(.dt-layout-table) {
+    padding: 0 15px !important;
+}
+
+.ts-wrapper .option .title {
+    display: block;
+}
+
+.ts-wrapper .option .url {
+    font-size: 12px;
+    display: block;
+    color: #a0a0a0;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #495057 !important;
+    line-height: 38px !important;
+
+}
+
+.select2-dropdown .select2-dropdown--below {
+    border: 0 !important;
+    box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, 0.15) !important;
+    border-radius: .46rem !important;
+    padding: 2rem 0 !important;
+    -webkit-border-radius: .46rem;
+    -moz-border-radius: .46rem;
+    -ms-border-radius: .46rem;
+    -o-border-radius: .46rem;
+}
+
+.select2-results__option .select2-results__option--selectable {
+    padding: 10px 15px !important;
+
+
+}
+
+.select2-container--open .select2-dropdown--below {
+    border: 1px solid #ced4da !important;
+    box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, 0.15) !important;
+    border-radius: .46rem !important;
+    -webkit-border-radius: .46rem;
+    -moz-border-radius: .46rem;
+    -ms-border-radius: .46rem;
+    -o-border-radius: .46rem;
+}
+
+.select2-results__options {
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+.select2-dropdown .select2-results__option {
+    padding: 10px !important;
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #eaecec !important;
+    color: #1B84FF !important;
+    transition: background-color 0.5s !important;
+
+
+}
+
+.form-floating .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #495057 !important;
+    line-height: 72px !important;
+}
+
+.select2-container .select2-selection--single {
+    /* height: 40px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important; */
+    font-size: 14px !important;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+
+.form-floating .select2-container .select2-selection--single {
+    height: 58px !important;
+    border: 1px solid #ced4da !important;
+
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 38px !important;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 20px;
+}
+
+.select2-search__field {
+    border-radius: 4px !important;
+
+}
+
+.select2-search__field:focus {
+    border-color: #80bdff !important;
+    outline: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.invoice-input {
+    width: 300px;
+}
+
+.invoice-row {
+    margin: 10px;
+    border: 2px solid #05adad;
+    padding: 10px;
+    border-radius: 5px;
+    flex-shrink: inherit;
+}
+
+.form-control:focus {
+    border: 1px solid #80bdff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 5px rgba(71, 216, 241, 0.527) !important;
+}
+
+.form-control:hover {
+    border-color: #80bdff !important;
+    box-shadow: 0 0 5px rgba(71, 216, 241, 0.527) !important;
+    transition: box-shadow 0.5s !important;
+    -webkit-transition: box-shadow 0.5s !important;
+    -moz-transition: box-shadow 0.5s !important;
+    -ms-transition: box-shadow 0.5s !important;
+    -o-transition: box-shadow 0.5s !important;
+}
+
+.fs-22 {
+    font-size: 22px !important;
+}
+
+.fs-24 {
+    font-size: 24px !important;
+}
+
+
+.fs-30 {
+    font-size: 30px !important;
+}
+
+.error {
+    color: red;
+}
+
+
+/* Daha spesifik bir seçici kullanarak */
+.error {
+    color: red;
+    text-align: left !important;
+    /* !important kullanmadan */
+    margin-bottom: 5px !important;
+}
+
+div.dt-container .dt-search input {
+    padding: 10px;
+    border: 1px solid #e4e7e9 !important;
+
+}
+
+div.dt-container .dt-search input:focus {
+    border: 1px solid #80bdff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 5px rgba(71, 216, 241, 0.527) !important;
+}
+
+div.dt-container .dt-search input:hover {
+    border: 1px solid #80bdff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 5px rgba(71, 216, 241, 0.527) !important;
+}
+
+div.dt-container .dt-search input::placeholder {
+    color: #a0a0a0 !important;
+}
+
+body.swal2-height-auto {
+    height: auto;
+}
+
+.brand-img img {
+    border: 1px solid #d3d4d6;
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    min-height: 100px;
+    border-radius: 10%;
+    object-fit: cover;
+    -webkit-border-radius: 10%;
+    -moz-border-radius: 10%;
+    -ms-border-radius: 10%;
+    -o-border-radius: 10%;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 1600px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1520px;
+    }
+}
+
+.form-control {
+    border: 1px solid #c6cbcf !important;
+}
+
+table tr td {
+    vertical-align: middle !important;
+}
+
+
+
+/* 
+  You want a simple and fancy tooltip?
+  Just copy all [data-tooltip] blocks:
+*/
+[data-tooltip] {
+    --arrow-size: 5px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Positioning and visibility settings of the tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    left: 50%;
+    bottom: calc(100% + var(--arrow-size));
+    pointer-events: none;
+    transition: 0.2s;
+    will-change: transform;
+}
+
+/* The actual tooltip with a dynamic width */
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    padding: 10px 18px;
+    min-width: 50px;
+    max-width: 300px;
+    width: max-content;
+    width: -moz-max-content;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: rgba(59, 72, 80, 0.9);
+    background-image: linear-gradient(30deg,
+            rgba(59, 72, 80, 0.44),
+            rgba(59, 68, 75, 0.44),
+            rgba(60, 82, 88, 0.44));
+    box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-align: center;
+    white-space: pre-wrap;
+    transform: translate(-50%, calc(0px - var(--arrow-size))) scale(0.5);
+}
+
+/* Tooltip arrow */
+[data-tooltip]:after {
+    content: '';
+    border-style: solid;
+    border-width: var(--arrow-size) var(--arrow-size) 0px var(--arrow-size);
+    /* CSS triangle */
+    border-color: rgba(55, 64, 70, 0.9) transparent transparent transparent;
+    transition-duration: 0s;
+    /* If the mouse leaves the element, 
+                                the transition effects for the 
+                                tooltip arrow are "turned off" */
+    transform-origin: top;
+    /* Orientation setting for the
+                                slide-down effect */
+    transform: translateX(-50%) scaleY(0);
+}
+
+/* Tooltip becomes visible at hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Scales from 0.5 to 1 -> grow effect */
+[data-tooltip]:hover:before {
+    transition-delay: 0.3s;
+    transform: translate(-50%, calc(0px - var(--arrow-size))) scale(1);
+}
+
+/* 
+    Arrow slide down effect only on mouseenter (NOT on mouseleave)
+  */
+[data-tooltip]:hover:after {
+    transition-delay: 0.5s;
+    /* Starting after the grow effect */
+    transition-duration: 0.2s;
+    transform: translateX(-50%) scaleY(1);
+}
+
+/*
+    That's it for the basic tooltip.
+  
+    If you want some adjustability
+    here are some orientation settings you can use:
+  */
+
+/* LEFT */
+/* Tooltip + arrow */
+[data-tooltip-location="left"]:before,
+[data-tooltip-location="left"]:after {
+    left: auto;
+    right: calc(100% + var(--arrow-size));
+    bottom: 50%;
+}
+
+/* Tooltip */
+[data-tooltip-location="left"]:before {
+    transform: translate(calc(0px - var(--arrow-size)), 50%) scale(0.5);
+}
+
+[data-tooltip-location="left"]:hover:before {
+    transform: translate(calc(0px - var(--arrow-size)), 50%) scale(1);
+}
+
+/* Arrow */
+[data-tooltip-location="left"]:after {
+    border-width: var(--arrow-size) 0px var(--arrow-size) var(--arrow-size);
+    border-color: transparent transparent transparent rgba(55, 64, 70, 0.9);
+    transform-origin: left;
+    transform: translateY(50%) scaleX(0);
+}
+
+[data-tooltip-location="left"]:hover:after {
+    transform: translateY(50%) scaleX(1);
+}
+
+
+
+/* RIGHT */
+[data-tooltip-location="right"]:before,
+[data-tooltip-location="right"]:after {
+    left: calc(100% + var(--arrow-size));
+    bottom: 50%;
+}
+
+[data-tooltip-location="right"]:before {
+    transform: translate(var(--arrow-size), 50%) scale(0.5);
+}
+
+[data-tooltip-location="right"]:hover:before {
+    transform: translate(var(--arrow-size), 50%) scale(1);
+}
+
+[data-tooltip-location="right"]:after {
+    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0px;
+    border-color: transparent rgba(55, 64, 70, 0.9) transparent transparent;
+    transform-origin: right;
+    transform: translateY(50%) scaleX(0);
+}
+
+[data-tooltip-location="right"]:hover:after {
+    transform: translateY(50%) scaleX(1);
+}
+
+
+
+/* BOTTOM */
+[data-tooltip-location="bottom"]:before,
+[data-tooltip-location="bottom"]:after {
+    top: calc(100% + var(--arrow-size));
+    bottom: auto;
+}
+
+[data-tooltip-location="bottom"]:before {
+    transform: translate(-50%, var(--arrow-size)) scale(0.5);
+}
+
+[data-tooltip-location="bottom"]:hover:before {
+    transform: translate(-50%, var(--arrow-size)) scale(1);
+}
+
+[data-tooltip-location="bottom"]:after {
+    border-width: 0px var(--arrow-size) var(--arrow-size) var(--arrow-size);
+    border-color: transparent transparent rgba(55, 64, 70, 0.9) transparent;
+    transform-origin: bottom;
+}

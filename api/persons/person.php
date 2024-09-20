@@ -1,0 +1,82 @@
+
+<?php
+require_once "../../Database/db.php";
+require_once "../../Model/Persons.php";
+
+use Database\Db;
+
+$dbInstance = new Db(); // Db sınıfının bir örneğini oluşturuyoruz.
+$db = $dbInstance->connect(); // Veritabanı bağlantısını alıyoruz.
+
+$person = new Persons();
+
+
+if ($_POST["action"] == "savePerson") {
+    $id = $_POST["id"];
+
+    $data = [
+        "id" => $id,
+        "full_name" => $_POST["full_name"],
+        "kimlik_no" => $_POST["kimlik_no"],
+        "email" => $_POST["email"],
+        "phone" => $_POST["phone"],
+        "address" => $_POST["address"],
+        "job" => $_POST["job"],
+        "job_group" => $_POST["job_groups"],
+        "firm_id" => $_POST["firm_id"],
+        // "salary" => $_POST["salary"],
+        "daily_wages" => $_POST["daily_wages"],
+        "job_start_date" => $_POST["job_start_date"],
+        // "end_date" => $_POST["end_date"],
+        // "status" => $_POST["status"],
+    ];
+
+    try {
+        $lastInsertId = $person->saveWithAttr($data);
+        $status = "success";
+        if ($id == 0) {
+            $message = "Personel başarıyla kaydedildi.";
+        } else {
+            $message = "Personel başarıyla güncellendi.";
+        }
+    } catch (PDOException $e) {
+        $status = "error";
+        if ($e->errorInfo[1] == 1062) {
+            // Hata mesajından ihlal edilen benzersiz kısıtın adını çıkar
+            preg_match('/Duplicate entry .* for key \'(.*)\'/', $e->getMessage(), $matches);
+            $violatedField = $matches[1] ?? 'Bilinmeyen alan';
+            if ($violatedField == 'kimlik_no') {
+                $message = "Bu kimlik numarası adresi zaten kayıtlı.";
+            } elseif ($violatedField == 'phone') {
+                $message = "Bu telefon numarası adresi zaten kayıtlı.";
+            } else {
+                $message =  $e->getMessage();
+            }
+        } else {
+            $message =  $e->getMessage();
+        }
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message,
+        "lastid" => $lastInsertId ?? 0
+    ];
+    echo json_encode($res);
+}
+
+if ($_POST["action"] == "deletePerson") {
+    $id = $_POST["id"];
+    try {
+        $person->delete($id);
+        $status = "success";
+        $message = "Personel başarıyla silindi.";
+    } catch (PDOException $e) {
+        $status = "error";
+        $message = $e->getMessage();
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message
+    ];
+    echo json_encode($res);
+}

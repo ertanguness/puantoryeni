@@ -1,0 +1,86 @@
+$(document).on("click", "#savePerson", function () {
+  var form = $("#personForm");
+
+  form.validate({
+    rules: {
+      full_name: {
+        required: true,
+        minlength: 3,
+        maxlength: 50,
+        number: false,
+      },
+      kimlik_no: {
+        required: true,
+        minlength: 11,
+        maxlength: 11,
+        number: true,
+      },
+      job_start_date: {
+        required: true,
+   
+      },
+    },
+    messages: {
+      full_name: {
+        required: "Lütfen personel adını giriniz",
+        minlength: "Ad-Soyad en az 3 karakter olmalıdır",
+        maxlength: "Ad-Soyad en fazla 50 karakter olmalıdır",
+        number: "Ad-Soyadda sayısal değer bulunamaz",
+      },
+      kimlik_no: {
+        required: "Lütfen kimlik numarasını giriniz",
+        minlength: "Kimlik numarası 11 karakter olmalıdır",
+        maxlength: "Kimlik numarası 11 karakter olmalıdır",
+        number: "Kimlik numarası sayısal değer olmalıdır",
+      },
+      job_start_date: {
+        required: "Lütfen işe başlama tarihini giriniz",
+        date: "Lütfen geçerli bir tarih giriniz",
+      },
+    },
+  });
+  if (!form.valid()) return false;
+
+  var formData = new FormData(form[0]);
+  formData.append("action", "savePerson");
+
+  fetch("api/persons/person.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.status == "success") {
+        title = "Başarılı!";
+      } else {
+        title = "Hata!";
+      }
+      swal.fire({
+        title: title,
+        text: data.message,
+        icon: data.status,
+      });
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
+$(document).on("click", ".delete-person", function () {
+  //Tablo adı butonun içinde bulunduğu tablo
+  let action = "deletePerson";
+  let confirmMessage = "Personel silinecektir!";
+  let url = "/api/persons/person.php";
+
+  deleteRecord(this, action, confirmMessage, url);
+});
+
+$('input[name="kimlik_no"]').keypress(function (e) {
+  if (this.value.length >= 11) {
+    return false;
+  }
+  if (e.which < 48 || e.which > 57) {
+    return false;
+  }
+});
