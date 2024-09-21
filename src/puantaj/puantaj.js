@@ -34,7 +34,8 @@ listgun.on("click", function (e) {
   if (background === "rgb(187, 187, 187)") {
     return; // Exit the function and prevent further code execution
   }
-  $(this).addClass("clicked");
+
+  // $(this).addClass("clicked");
   if (e.which === 1 && e.ctrlKey) {
     if ($(this).hasClass("clicked")) {
       $("#modal-default").modal("show");
@@ -73,6 +74,7 @@ $(".gun:not(.selected)")
       // Only execute the code if left mouse button is clicked
       isMouseDown = true;
       $(this).toggleClass("clicked");
+      
     }
   })
   .mouseup(function () {
@@ -93,22 +95,7 @@ $(document).keydown(function (event) {
   }
 });
 
-//********************************************* */
-//Delete tuşuna basıldığı zaman içeriği temizler
-$(document).keydown(function (event) {
-  // 'Delete' tuşunun keycode'u 46'dır
-  if (event.keyCode === 46) {
-    // .clicked sınıfına sahip tüm td elemanlarını seç ve içeriğini temizle
-    $("td.clicked").each(function () {
-      $(this).attr("data-id", "");
 
-      $(this).empty();
-      $(this).toggleClass("clicked");
-      $(this).css("background-color", "white");
-    });
-  }
-});
-//********************************************* */
 
 //********************************************** */
 function puantaj_olustur() {
@@ -131,11 +118,9 @@ function puantaj_olustur() {
     //gt = greater then
     row.find("td:gt(2)").each(function (index, td) {
       var date =
-        $("table thead tr:eq(1) th")
+        year + month + $("table thead tr:eq(1) th")
           .eq(index + 3)
-          .text() +
-        month +
-        year; // İndeks + 2, 2. indeksten başlamasını sağlar
+          .text()// İndeks + 2, 2. indeksten başlamasını sağlar
       var puantajId = $(this).attr("data-id") ? $(this).attr("data-id") : ""; // Durum bilgisini al
       // console.log(person_id + "--" + date + "--" + status); //
 
@@ -189,7 +174,7 @@ function puantaj_olustur() {
     project_id: project_id,
     data: JSON.stringify(jsonData),
   };
-  console.log(jsonData);
+
   let formData = new FormData();
   formData.append("action", "savePuantaj");
   formData.append("project_id", project_id);
@@ -203,13 +188,16 @@ function puantaj_olustur() {
     .then((data) => {
       // console.log(data);
       if (data.status == "success") {
+        console.log(data.error_wages);
+      
         title = "Başarılı";
+
       } else {
         title = "Hata";
       }
       Swal.fire({
         title: "Başarılı",
-        text: data.message,
+        html: data.message,
         icon: "success",
       });
     });

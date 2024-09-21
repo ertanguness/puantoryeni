@@ -11,7 +11,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
 
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 
 <head>
   <meta charset="utf-8" />
@@ -37,7 +37,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
       cursor: pointer;
     }
     .list-item:hover {
-      background-color: #fdeccc;
+      background-color: #eee;
     }
   </style>
 </head>

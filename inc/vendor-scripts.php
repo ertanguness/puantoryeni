@@ -69,6 +69,10 @@ if ($page == "projects/list" || $page == "projects/manage" || $page == "projects
 if ($page == "puantaj/list" ) {
     echo '<script src="./src/puantaj/puantaj.js"></script>';
 }
+//Bordro sayfası
+if ($page == "bordro/list" ) {
+    echo '<script src="./src/bordro/bordro.js"></script>';
+}
 ?>
 
 

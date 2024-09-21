@@ -15,6 +15,13 @@ class Menus extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function getMenusByLink($page_link)
+    {
+        $sql = $this->db->prepare("SELECT id,page_name FROM menu where page_link = ?");
+        $sql->execute([$page_link]);
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }   
+
     public function getSubMenusisMenu($menuId)
     {
         $sql = $this->db->prepare("SELECT * FROM menu WHERE parent_id = ? and isMenu = 1");

@@ -4,12 +4,12 @@ namespace App\Helper;
 
 class Date
 {
-    public static function dmY($date)
+    public static function dmY($date,$format = 'd.m.Y')
     {
         if ($date == null) {
             return "";
         }
-        return date('d.m.Y', strtotime($date));
+        return date($format, strtotime($date));
     }
 
     public static function Ymd($date)
@@ -22,12 +22,12 @@ class Date
 
     public static function firstDay($month, $year)
     {
-        return sprintf("%d%02d%02d", 1,$month, $year);
+        return sprintf("%d%02d%02d", $year , $month , 1 );
     }
 
     public static function lastDay($month, $year)
     {
-        return sprintf("%d%02d%02d",self::daysInMonth($month, $year),$month, $year );
+        return sprintf("%d%02d%02d",$year, $month,  self::daysInMonth($month, $year), );
     }
 
     public static function daysInMonth($month, $year)
@@ -40,11 +40,22 @@ class Date
         $dateList = [];
         for ($day = 1; $day <= $days; $day++) {
             // Tarih formatını ayarlama (d.m.Y)
-            $formattedDate = sprintf("%02d.%02d.%d", $day, $month, $year);
+            $formattedDate = sprintf("%2d%02d%02d", $year, $month,  $day);
             $dateList[] = $formattedDate;
         }
         return $dateList;
     }
+
+    // public static function generateDates($year, $month, $days)
+    // {
+    //     $dateList = [];
+    //     for ($day = 1; $day <= $days; $day++) {
+    //         // Tarih formatını ayarlama (d.m.Y)
+    //         $formattedDate = sprintf("%02d.%02d.%d", $day, $month, $year);
+    //         $dateList[] = $formattedDate;
+    //     }
+    //     return $dateList;
+    // }
 
     public static function isWeekend($date)
     {
@@ -90,6 +101,9 @@ class Date
 
     public static function getMonthsSelect($name =  "months", $month = null,)
     {
+        if ($month == null) {
+            $month = date('m');
+        }
         $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="width:100%">';
         $select .= '<option value="">Ay Seçiniz</option>';
         foreach (self::MONTHS as $key => $value) {
@@ -103,6 +117,9 @@ class Date
 
     public static function getYearsSelect($name =  "years", $year = null,)
     {
+        if ($year == null) {
+            $year = date('Y');
+        }
         $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="width:100%">';
         $select .= '<option value="">Yıl Seçiniz</option>';
         for ($i = 2021; $i <= 2030; $i++) {

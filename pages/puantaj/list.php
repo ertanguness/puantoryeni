@@ -1,7 +1,7 @@
 <?php
 require_once "App/Helper/helper.php";
 require_once "App/Helper/date.php";
-require_once "App/Helper/projects.php";
+require_once "App/Helper/Projects.php";
 require_once "App/Helper/puantaj.php";
 require_once "Model/Persons.php";
 require_once "Model/Puantaj.php";
@@ -12,19 +12,38 @@ use App\Helper\Date;
 $puantajHelper = new puantajHelper();
 $projectHelper = new ProjectHelper();
 $personObj = new Persons();
-$persons = $personObj->getByFirm($firm_id);
+$projects = new Projects();
 
 $puantajObj = new Puantaj();
 
 $year = isset($_POST["year"]) ? $_POST["year"] : date('Y');
 $month = isset($_POST["months"]) ? $_POST["months"] : date('m');
-$projet_id = isset($_POST["projects"]) ? $_POST["projects"] : 0;
+$project_id = isset($_POST["projects"]) ? $_POST["projects"] : 0;
+
+
+if ($project_id == 0 || $project_id == "") {
+    //Proje id boş ise Firma id'sine göre tüm personelleri getirir
+    $persons = $personObj->getPersonIdByFirm($firm_id);
+
+} else {
+    //Proje id dolu ise projeye ait personelleri getirir
+    $persons = $projects->getPersonFromProject($project_id);
+    if (count($persons) > 0) {
+        //149,181 şeklinde gelen stringi diziye çevirir
+        $persons = explode(",", $persons[0]->id);
+        for ($i = 0; $i < count($persons); $i++) {
+            //Dizi içindeki id'leri object yapar
+            $persons[$i] = (object) ['id' => $persons[$i]];
+        }
+    }
+
+
+}
 
 //Ayın son gününü bulma
 $days = Date::daysInMonth($month, $year);
 //Tarihleri oluşturma
 $dates = Date::generateDates($year, $month, $days);
-
 
 
 ?>
@@ -241,28 +260,37 @@ $dates = Date::generateDates($year, $month, $days);
         <div class="row g-2 align-items-center">
 
             <div class="col-md-3">
-                <?php echo $projectHelper->getProjectSelect("projects", $projet_id); ?>
+                <label for="projects" class="form-label">Proje:</label>
+                <?php echo $projectHelper->getProjectSelect("projects", $project_id); ?>
             </div>
             <div class="col-md-3">
+                <label for="projects" class="form-label">Ay:</label>
                 <?php echo Date::getMonthsSelect("months", $month); ?>
             </div>
             <div class="col-md-3">
+                <label for="projects" class="form-label">Yıl:</label>
                 <?php echo Date::getYearsSelect("year", $year); ?>
             </div>
             <div class="col-md-3">
-
-                <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1" autocomplete="off">
-                <label for="btn-radio-toolbar-1" data-tooltip="İndir" class="btn btn-icon"><!-- Download SVG icon from http://tabler-icons.io/i/bold -->
+                <label for="projects" class="form-label">İşlem</label>
+                <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
+                    autocomplete="off">
+                <label for="btn-radio-toolbar-1" data-tooltip="İndir" class="btn btn-icon">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/bold -->
                     <i class="ti ti-file-type-xls icon"></i>
                 </label>
 
-                <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1" autocomplete="off">
-                <label for="btn-radio-toolbar-1" data-tooltip="Yazdır" class="btn btn-icon"><!-- Download SVG icon from http://tabler-icons.io/i/bold -->
+                <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
+                    autocomplete="off">
+                <label for="btn-radio-toolbar-1" data-tooltip="Yazdır" class="btn btn-icon">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/bold -->
                     <i class="ti ti-printer icon"></i>
                 </label>
 
-                <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1" autocomplete="off">
-                <label for="btn-radio-toolbar-1" data-tooltip="Personele Gönder" class="btn btn-icon"><!-- Download SVG icon from http://tabler-icons.io/i/bold -->
+                <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
+                    autocomplete="off">
+                <label for="btn-radio-toolbar-1" data-tooltip="Personele Gönder" class="btn btn-icon">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/bold -->
                     <i class="ti ti-send icon"></i>
                 </label>
 
@@ -285,20 +313,23 @@ $dates = Date::generateDates($year, $month, $days);
                 <div class="card-header">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-1">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
-                            <h3 class="card-title">Puantaj +</h3>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-1" aria-expanded="false">
+                                <h3 class="card-title">Puantaj +</h3>
                             </button>
                         </h2>
                         <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#accordion-example">
                             <div class="accordion-body pt-0">
-                                <strong>Tek tek seçim</strong>  yapmak için ilgili alanlara tıklayınız! <br>
-                                <strong>Çoklu seçim </strong> seçim yapmak için ilgili alanların üzerinde mouse basılı şekilde tıklayınız!<br>
-                                <strong>Seçim yaptıktan</strong> sonra puantaj türü listesinin açılmasını istiyorsanız ctrl tuşu basılı şekilde seçim yapın 
-                            
+                                <strong>Tek tek seçim</strong> yapmak için ilgili alanlara tıklayınız! <br>
+                                <strong>Çoklu seçim </strong> seçim yapmak için ilgili alanların üzerinde mouse basılı
+                                şekilde tıklayınız!<br>
+                                <strong>Seçim yaptıktan</strong> sonra puantaj türü listesinin açılmasını istiyorsanız
+                                ctrl tuşu basılı şekilde seçim yapın
+
                             </div>
                         </div>
                     </div>
-                   
+
                     <div class="col-auto ms-auto">
                         <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modal-default">
                             <i class="ti ti-plus icon me-2"></i> Puantaj Türleri
@@ -316,7 +347,7 @@ $dates = Date::generateDates($year, $month, $days);
                                 <th></th>
                                 <th style="display:none"></th>
 
-                                <?php foreach ($dates as $date) : ?>
+                                <?php foreach ($dates as $date): ?>
                                     <?php
                                     $style = '';
                                     if (Date::isWeekend($date)) {
@@ -332,13 +363,13 @@ $dates = Date::generateDates($year, $month, $days);
                                 <th class="ld">Adı Soyadı</th>
                                 <th class="ld">Unvanı</th>
                                 <th class="ld" style="display:none">Seç</th>
-                                <?php foreach ($dates as $date) :
+                                <?php foreach ($dates as $date):
                                     $style = '';
                                     if (Date::isWeekend($date)) {
                                         $style = "background-color:#99A98F;color:white";
                                     }
                                     echo '<th class="head-date" style="' . $style . '"><span>' . date('d', strtotime($date)) . '</span></th>';
-                                ?>
+                                    ?>
 
                                 <?php endforeach; ?>
                             </tr>
@@ -346,11 +377,14 @@ $dates = Date::generateDates($year, $month, $days);
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($persons as $person) :
-                            ?>
+                            foreach ($persons as $item):
+                                $person = $personObj->find($item->id);
+                                ?>
                                 <tr>
-                                    <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $person->id ?>"><a class="btn-user-modal" type="button">
-                                      <a href="index.php?p=persons/manage&id=<?php echo $person->id ?>" target="_blank"><?php echo $person->full_name ?></a></td>
+                                    <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $person->id ?>"><a
+                                            class="btn-user-modal" type="button">
+                                            <a href="index.php?p=persons/manage&id=<?php echo $person->id ?>"
+                                                target="_blank"><?php echo $person->full_name ?></a></td>
 
                                     <td class="text-nowrap" style="min-width:10vw;">
                                         <?php echo $person->id ?>
@@ -365,30 +399,22 @@ $dates = Date::generateDates($year, $month, $days);
                                         <input type="checkbox" name="checkbox_name" value="checkbox_value">
                                     </td>
                                     <?php
-                                    foreach ($dates as $date) :
-                                        // $month_date = Date::dmY($date);
-                                        $jobStartDate = DateTime::createFromFormat('d.m.Y', $person->job_start_date);
-                                        $month_date = DateTime::createFromFormat('d.m.Y', $date);
-                                        $gun = $month_date->format('dmY');
-                                    ?>
+                                    foreach ($dates as $date):
+                                        $jobStartDate = str_replace("-", "", Date::Ymd($person->job_start_date));
+                                        $month_date = $gun = $date;
+
+
+                                        ?>
                                         <?php
 
-                                        $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
-                                        // echo $person->id . " - " . $puantaj_id   . "<br>";
+
 
                                         if ($jobStartDate <= $month_date) {
+                                            $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
 
                                             if ($puantaj_id > 0) {
-                                                // $query = $con->prepare("SELECT * FROM puantaj where id = ?");
-                                                // $query->execute(array($puantaj_id));
-                                                // $puantaj_data = $query->fetch(PDO::FETCH_ASSOC);
-                                                // $data_json = json_decode($puantaj_data["datas"], true);
-
-
-
-                                                // $value = isset($data_json[$date]["status"]) ? $data_json[$date]["status"] : "0";
-                                                $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);
-                                                $puantajHelper->puantajClass($puantaj_id, $projet_id, $puantaj_project);
+                                                $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);                                   
+                                                $puantajHelper->puantajClass($puantaj_id, $project_id, $puantaj_project);
                                             } else {
 
                                                 if (Date::isWeekend($date)) {

@@ -28,6 +28,9 @@ if ($(".select2").length > 0) {
   $("#amount_money").select2({
     dropdownParent: $(".modal"),
   });
+  $("#wage_cut_month, #wage_cut_year,#income_month,#income_year").select2({
+    dropdownParent: $(".modal"),
+  });
 }
 
 if ($(".flatpickr").length > 0) {

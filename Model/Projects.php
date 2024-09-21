@@ -21,26 +21,28 @@ class Projects extends Model
         $this->table =  "project_person";
         return $this->saveWithAttr($data);
     }
+
+    // Proje ve firma id'sine göre personelleri getirir
     public function getPersontoProject($project_id, $firm_id)
     {
-        // $sql = $this->db->prepare("SELECT 
-        //                                 p.id, 
-        //                                 p.full_name, 
-        //                                 p.job, 
-        //                                 COALESCE(pp.state, 0) AS state,
-        //                                 CASE 
-        //                                     WHEN p.job_end_date IS NULL  THEN 'Aktif'
-        //                                     ELSE 'Pasif' 
-        //                                     END AS job_status 
-        //                             FROM 
-        //                                 persons p
-        //                             LEFT JOIN 
-        //                                 project_person pp ON FIND_IN_SET(p.id, pp.person_id) > 0 AND pp.project_id = ?
-        //                             WHERE 
-        //                                 p.firm_id = ?");
         $sql = $this->db->prepare("CALL GetPersonsByProjectAndFirm(?, ?)");
         $sql->execute([$project_id, $firm_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    public function getPersonFromProject($project_id)
+    {
+        $sql = $this->db->prepare("SELECT person_id FROM project_person WHERE project_id = ?");
+        $sql->execute([$project_id]);
+        $result = $sql->fetchAll(PDO::FETCH_OBJ);
+        if ($result) {
+            $persons = array_map(function ($item) {
+                return empty($item->person_id) ? null : (object) ['id' => $item->person_id];
+            }, $result);
+            $persons = array_filter($persons); // Remove null values
+        }
+        return $persons ?? [];
     }
 
     public function findById($id)

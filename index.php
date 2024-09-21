@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 session_start();
 
 require_once "Database/db.php";
+require_once "Model/Menus.php";
 
 
 if (!isset($_SESSION['user'])) {
@@ -11,6 +12,10 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 $user_role = $_SESSION['user_role'];
+$active_page = isset($_GET["p"]) ? $_GET["p"] : "";
+$menus = new Menus();
+$menu_name = $menus->getMenusByLink($active_page);
+
 ?>
 
 
@@ -42,6 +47,7 @@ $user_role = $_SESSION['user_role'];
 
             <?php 
             if(isset($_GET["p"]) && file_exists("pages/{$page}.php")){
+                
                 include "pages/{$page}.php"; 
                 
             }else{
@@ -58,10 +64,10 @@ $user_role = $_SESSION['user_role'];
 
     <?php include "inc/vendor-scripts.php" ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var preloader = document.querySelector('.preloader');
-            fadeOut(preloader, 300);
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        var preloader = document.querySelector('.preloader');
+        fadeOut(preloader, 300);
+    });
     </script>
 
 </body>

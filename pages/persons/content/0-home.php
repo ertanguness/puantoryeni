@@ -45,7 +45,7 @@ $jobGroups = new Jobs();
             <label for="">Günlük Ücreti</label>
         </div>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="daily_wages" value="<?php echo $person->daily_wages ?? ''; ?>">
+            <input type="text" class="form-control fw-bold" name="daily_wages" value="<?php echo $person->daily_wages ?? ''; ?>">
            
         </div>
     </div>
