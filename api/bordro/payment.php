@@ -39,20 +39,20 @@ if ($_POST['action'] == 'savePayment') {
         $last_payment = $payment->getPersonIncomeExpensePayment($lastInsertId);
 
         // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
-        $income_expence = $payment->getPersonTotalIncomeExpensePayment($person_id);
+        $income_expense = $payment->getPersonTotalIncomeExpensePayment($person_id);
 
         // Puantaj tablosundaki toplam hakediş toplamlarını getirir
         $income_puantaj = $puantaj->getPuantajIncomeByPerson($person_id);
 
         // Toplam gelir ve puantajdaki toplam hakediş toplamını alır
-        $total_income_puantaj = $income_expence->total_income + $income_puantaj->total_income;
+        $total_income_puantaj = $income_expense->total_income + $income_puantaj->total_income;
 
-        $balance = Helper::formattedMoney($total_income_puantaj - $income_expence->total_payment - $income_expence->total_expense);  // Bakiye
-        $income_expence->total_income = Helper::formattedMoney($total_income_puantaj);  // Toplam gelir
-        $income_expence->total_montly_income = Helper::formattedMoney($total_montly_income);  // Toplam gelir
-        $income_expence->total_payment = Helper::formattedMoney($income_expence->total_payment);  // Toplam ödeme
-        $income_expence->total_expense = Helper::formattedMoney($income_expence->total_expense);  // Toplam gider
-        $income_expence->balance = $balance;  // Bakiye
+        $balance = Helper::formattedMoney($total_income_puantaj - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
+        $income_expense->total_income = Helper::formattedMoney($total_income_puantaj ?? 0);  // Toplam gelir
+        $income_expense->total_montly_income = Helper::formattedMoney($total_montly_income ?? 0);  // Toplam gelir
+        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
+        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
+        $income_expense->balance = $balance;  // Bakiye
 
         // Son eklenn kaydın bilgileri formatlanır
         $last_payment->kategori = Helper::getIncomeExpenseType($last_payment->kategori);
@@ -69,11 +69,12 @@ if ($_POST['action'] == 'savePayment') {
         'status' => $status,
         'message' => $message,
         'payment' => $last_payment,
-        'income_expence' => $income_expence ?? [],
+        'income_expense' => $income_expense ?? [],
     ];
 
     echo json_encode($res);
 }
+
 if ($_POST['action'] == 'deletePayment') {
     $id = $_POST['id'];
 
@@ -83,13 +84,26 @@ if ($_POST['action'] == 'deletePayment') {
         // Ödeme bilgilerini getirir
         $paymentInfo = $payment->getPersonIncomeExpensePayment($id);
 
-         $payment->delete($id);
+        $payment->delete($id);
         $status = 'success';
         $message = 'Başarıyla silindi.';
 
-        //Ödeme bilgilerindeki person_id alınır, 
-        //Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
-        $income_expence = $payment->getPersonTotalIncomeExpensePayment($paymentInfo->person_id);
+        // Ödeme bilgilerindeki person_id alınır,
+        // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
+        $income_expense = $payment->getPersonTotalIncomeExpensePayment($paymentInfo->person_id);
+
+        // Puantaj tablosundaki toplam hakediş toplamlarını getirir
+        $income_puantaj = $puantaj->getPuantajIncomeByPerson($paymentInfo->person_id);
+
+        // Toplam gelir ve puantajdaki toplam hakediş toplamını alır
+        $total_income_puantaj = $income_expense->total_income + $income_puantaj->total_income;
+
+        $balance = Helper::formattedMoney($total_income_puantaj - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
+        $income_expense->total_income = Helper::formattedMoney($total_income_puantaj ?? 0);  // Toplam gelir
+        $income_expense->total_montly_income = Helper::formattedMoney($total_montly_income ?? 0);  // Toplam gelir
+        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
+        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
+        $income_expense->balance = $balance;  // Bakiye
 
         $db->commit();
     } catch (PDOException $e) {
@@ -100,36 +114,7 @@ if ($_POST['action'] == 'deletePayment') {
     $res = [
         'status' => $status,
         'message' => $message,
-        'income_expence' => $income_expence ,
+        'income_expense' => $income_expense,
     ];
     echo json_encode($res);
 }
-
-// if ($_POST['action'] == 'deletePayment') {
-//     $id = $_POST['id'];
-//     $status = $message = '';
-//     try {
-//         $db->beginTransaction();
-//         if($id == null || $id == 0 || $id = "undefined") {
-//             $status = 'error';
-//             $message= ' ID numarası tanımsız.İşlem yapılamadı!' ;
-
-//         }else{
-//             $payment->delete($id) ;
-//             $status = 'success';
-//             $message = 'Başarıyla silindi.' . $id;
-
-//         }
-
-//         $db->commit();
-//     } catch (PDOException $e) {
-//         $db->rollBack();
-//         $status = 'error';
-//         $message = $e->getMessage();
-//     }
-//     $res = [
-//         'status' => $status,
-//         'message' => $message
-//     ];
-//     echo json_encode($res);
-// }

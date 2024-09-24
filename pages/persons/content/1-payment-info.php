@@ -12,7 +12,7 @@ use App\Helper\Date;
 use App\Helper\Helper;
 
 // Gelir gider bilgierini getir
-$income_expences = $bordro->getPersonIncomeExpenseInfo($id);
+$income_expenses = $bordro->getPersonIncomeExpenseInfo($id);
 
 // Puantajdaki çalışmalarına karşılık gelir bilgilerini getir
 $income_puantaj = $puantaj->getPuantajIncomeByPerson($id)->total_income;
@@ -188,7 +188,7 @@ $balance = $total_income - $total_expense - $total_payment;
 
 
                             <?php
-                                foreach ($income_expences as $item):
+                                foreach ($income_expenses as $item):
                             ?>
                             <tr>
                                 <td><?php echo $item->id; ?></td>

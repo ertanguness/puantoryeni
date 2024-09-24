@@ -7,7 +7,7 @@ require_once "Model/Bordro.php";
 use App\Helper\Helper;
 
 $bordro = new Bordro();
-$income_expence = $bordro->getPersonIncomeExpenseInfo($id);
+$income_expense = $bordro->getPersonIncomeExpenseInfo($id);
 
 echo $id;
 
@@ -36,7 +36,7 @@ echo $id;
                         <tbody>
 
 
-                            <?php foreach ($income_expences as $item) :
+                            <?php foreach ($income_expenses as $item) :
                             ?>
                                 <tr>
 
