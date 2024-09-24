@@ -5,7 +5,8 @@ if (
     $page == "companies/list" || $page == "offers/list" || $page == "reports/list"
     || $page == "users/list" || $page == "users/roles/list" || $page == "products/list"
     || $page == "defines/service-head/list"
-    || $page == "persons/list" || $page == "mycompany/list" || $page == "financial/case/list"
+    || $page == "persons/list" || $page == "persons/manage"
+    || $page == "mycompany/list" || $page == "financial/case/list"
     || $page == "financial/transactions/list" || $page == "financial/transactions/manage"
     || $page == "projects/list" || $page == "projects/add-person"
     || $page == "puantaj/list" || $page == "bordro/list"
@@ -39,9 +40,14 @@ if ($page == "products/list" || $page == "products/manage") {
 if ($page == "defines/service-head/list" || $page == "defines/service-head/manage") {
     echo '<script src="./src/defines/service-head.js"></script>';
 }
-//Servis Konusu ekleme ve düzenleme sayfası
+//Personel Liste, ekleme ve düzenleme sayfası
 if ($page == "persons/list" || $page == "persons/manage") {
-    echo '<script src="./src/persons/persons.js"></script>';
+    echo '<script src="./src/persons/persons.js"></script>'; 
+}
+//Personel diğer bilgileri ekleme ve düzenleme sayfası
+if ($page == "persons/manage") {
+    echo '<script src="./src/persons/payment.js"></script>'; 
+    echo '<script src="./src/persons/wages.js"></script>'; 
 }
 
 //Servis Konusu ekleme ve düzenleme sayfası
@@ -53,7 +59,7 @@ if ($page == "companies/list" || $page == "companies/manage") {
     echo '<script src="./src/companies/companies.js"></script>';
 }
 
-//Kasa İşlemleri(kasa ekleme ve düzenleme sayfası)
+//Kasa (kasa ekleme ve düzenleme sayfası)
 if ($page == "financial/case/list" || $page == "financial/case/manage") {
     echo '<script src="./src/financial/case.js"></script>';
 }
@@ -72,6 +78,7 @@ if ($page == "puantaj/list" ) {
 //Bordro sayfası
 if ($page == "bordro/list" ) {
     echo '<script src="./src/bordro/bordro.js"></script>';
+    echo '<script src="./src/bordro/payment.js"></script>';
 }
 ?>
 

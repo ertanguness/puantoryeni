@@ -24,6 +24,7 @@ if ($_POST["action"] == "savePerson") {
         "job" => $_POST["job"],
         "job_group" => $_POST["job_groups"],
         "firm_id" => $_POST["firm_id"],
+        "wage_type" => $_POST["wage_type"],
         // "salary" => $_POST["salary"],
         "daily_wages" => $_POST["daily_wages"],
         "job_start_date" => $_POST["job_start_date"],

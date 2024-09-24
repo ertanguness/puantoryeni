@@ -23,6 +23,14 @@ class Persons extends Model
         $query->execute([$firm_id]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
+    public function getPersonIdByFirmBlueCollar($firm_id)
+    {
+        $query = $this->db->prepare('SELECT id FROM persons WHERE firm_id = ? AND wage_type = ?');
+        $query->execute([$firm_id,2]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
 
     public function getPersonById($person_id,$field)
     {

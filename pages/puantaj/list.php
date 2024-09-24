@@ -1,7 +1,7 @@
 <?php
 require_once "App/Helper/helper.php";
 require_once "App/Helper/date.php";
-require_once "App/Helper/Projects.php";
+require_once "App/Helper/projects.php";
 require_once "App/Helper/puantaj.php";
 require_once "Model/Persons.php";
 require_once "Model/Puantaj.php";
@@ -23,7 +23,7 @@ $project_id = isset($_POST["projects"]) ? $_POST["projects"] : 0;
 
 if ($project_id == 0 || $project_id == "") {
     //Proje id boş ise Firma id'sine göre tüm personelleri getirir
-    $persons = $personObj->getPersonIdByFirm($firm_id);
+    $persons = $personObj->getPersonIdByFirmBlueCollar($firm_id);
 
 } else {
     //Proje id dolu ise projeye ait personelleri getirir
@@ -276,21 +276,18 @@ $dates = Date::generateDates($year, $month, $days);
                 <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
                     autocomplete="off">
                 <label for="btn-radio-toolbar-1" data-tooltip="İndir" class="btn btn-icon">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/bold -->
                     <i class="ti ti-file-type-xls icon"></i>
                 </label>
 
                 <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
                     autocomplete="off">
                 <label for="btn-radio-toolbar-1" data-tooltip="Yazdır" class="btn btn-icon">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/bold -->
-                    <i class="ti ti-printer icon"></i>
+                     <i class="ti ti-printer icon"></i>
                 </label>
 
                 <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
                     autocomplete="off">
                 <label for="btn-radio-toolbar-1" data-tooltip="Personele Gönder" class="btn btn-icon">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/bold -->
                     <i class="ti ti-send icon"></i>
                 </label>
 

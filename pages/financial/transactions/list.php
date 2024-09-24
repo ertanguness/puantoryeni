@@ -10,7 +10,7 @@ use App\Helper\Date;
 
 
 $ct = new CaseTransactions();
-$transactions = $ct->all();
+$transactions = $ct->allTransactionByFirm($firm_id);
 $financial = new Financial();
 
 ?>

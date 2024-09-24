@@ -28,7 +28,9 @@ if ($(".select2").length > 0) {
   $("#amount_money").select2({
     dropdownParent: $(".modal"),
   });
-  $("#wage_cut_month, #wage_cut_year,#income_month,#income_year").select2({
+  $(
+    "#wage_cut_month, #wage_cut_year,#income_month, #income_year, #payment_month, #payment_year"
+  ).select2({
     dropdownParent: $(".modal"),
   });
 }
@@ -59,6 +61,9 @@ if ($(".select2").length > 0) {
   });
 }
 
+
+
+//Geri dönüş yapmadan kayıt silme işlemi
 function deleteRecord(
   button = this,
   action = null,
@@ -95,13 +100,23 @@ function deleteRecord(
 
       //Sonuc olumlu ise success toast mesajı göster
       .then((data) => {
+        // console.log(data);
+
+        if (data.status == "success") {
+          title = "Başarılı!";
+          icon = "success";
+        } else {
+          title = "Hata!";
+          icon = "error";
+        }
         Swal.fire({
-          title: "Başarılı!",
+          title: title,
           text: data.message,
-          icon: "success",
+          icon: icon,
         }).then((result) => {
           if (result.isConfirmed) {
-            tableRow.remove().draw(false);
+            if (data.status == "success") tableRow.remove().draw(false);
+            return data;
           }
         });
         // createToast("success", data.message);
@@ -111,6 +126,67 @@ function deleteRecord(
       .catch((error) => alert("Error deleting : " + error));
   });
 }
+
+//Geri dönüş yaparak kayıt silme işlemi
+async function deleteRecordByReturn(
+  button,
+  action = null,
+  confirmMessage = "Kayıt silinecektir!",
+  url = "/api/ajax.php"
+) {
+  // Butonun bulunduğu satırın referansını al
+  var row = $(button).closest("tr");
+
+  //Tablo adı butonun içinde bulunduğu tablo
+  var tableName = $(button).closest("table")[0].id;
+  var table = $("#" + tableName).DataTable();
+
+  var tableRow = table.row(row);
+
+  var id = $(button).data("id");
+
+  //formData objesi oluştur
+  const formData = new FormData();
+  //formData objesine action ve id elemanlarını ekle
+  formData.append("action", action);
+  formData.append("id", id);
+
+  const result = await AlertConfirm(confirmMessage);
+  if (result) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+
+      let title, icon;
+      if (data.status == "success") {
+        title = "Başarılı!";
+        icon = "success";
+      } else {
+        title = "Hata!";
+        icon = "error";
+      }
+
+      await Swal.fire({
+        title: title,
+        text: data.message,
+        icon: icon,
+      });
+
+      if (data.status == "success") {
+        tableRow.remove().draw(false);
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error deleting:", error);
+      return { status: "error", message: "Bir hata oluştu." };
+    }
+  }
+}
+
 function AlertConfirm(confirmMessage = "Emin misiniz?") {
   return new Promise((resolve, reject) => {
     Swal.fire({
@@ -130,6 +206,7 @@ function AlertConfirm(confirmMessage = "Emin misiniz?") {
     });
   });
 }
+
 $(document).on("change", "#myFirm", function () {
   var page = new URLSearchParams(window.location.search).get("p");
   window.location = "set-session.php?p=" + page + "&firm_id=" + $(this).val();

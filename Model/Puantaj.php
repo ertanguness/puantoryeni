@@ -42,4 +42,12 @@ class Puantaj extends Model
         $sql->execute([$person_id, $date]);
         return $sql->fetch(PDO::FETCH_OBJ)->project_id ?? 0;
     }
+
+    //Puantaj tablosundan personel id'sine göre toplam tutarları çek
+    public function getPuantajIncomeByPerson($person_id)
+    {
+        $sql = $this->db->prepare("SELECT SUM(tutar) as total_income FROM puantaj WHERE person = ?");
+        $sql->execute([$person_id]);
+        return $sql->fetch(PDO::FETCH_OBJ) ?? 0;
+    }
 }

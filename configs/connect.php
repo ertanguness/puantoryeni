@@ -3,7 +3,7 @@
 
 // $host = "localhost";
 // $user = "mbeyazil_root";
-// $pass = "aAg~ZMcxkE0h";
+// $pass = "KT308WuD*ge+";
 // $db = "mbeyazil_puantoryeni";
 $host = "localhost";
 $user = "root";

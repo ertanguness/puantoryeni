@@ -22,7 +22,7 @@ $menu_name = $menus->getMenusByLink($active_page);
 
 <?php include_once "inc/head.php" ?>
 
-<body>
+<body class=" layout-fluid">
     <script src="./dist/js/demo-theme.min.js?1692870487"></script>
     <div class="page">
 

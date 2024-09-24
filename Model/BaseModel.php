@@ -1,28 +1,28 @@
 <?php
 
-require_once   $_SERVER["DOCUMENT_ROOT"] . "/Database/db.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Database/db.php';
 
 use Database\Db;
 
 class Model extends Db
 {
     protected $table;
-    protected $primaryKey = "id";
+    protected $primaryKey = 'id';
     protected $attributes = [];
     protected $isNew = true;
 
     public function __construct($table = null)
     {
-        parent::__construct(); // Eğer bir üst sınıf varsa ve yapıcı metodu önemliyse
+        parent::__construct();  // Eğer bir üst sınıf varsa ve yapıcı metodu önemliyse
         $this->table = $table ?: $this->getTableName();
     }
 
     protected function getTableName()
     {
         $className = get_called_class();
-        $parts = explode("\\", $className);
+        $parts = explode('\\', $className);
         $className = end($parts);
-        return strtolower($className) . "s";
+        return strtolower($className) . 's';
     }
 
     public function all()
@@ -47,22 +47,22 @@ class Model extends Db
             $this->update();
         }
     }
-    public function saveWithAttr ($data)
+
+    public function saveWithAttr($data)
     {
         $this->attributes = $data;
-        if (isset($data["id"]) && $data["id"] > 0) {
+        if (isset($data['id']) && $data['id'] > 0) {
             $this->update();
-        }else{
+        } else {
             return $this->insert();
         }
     }
 
     protected function insert()
     {
-        $columns = implode(", ", array_keys($this->attributes));
-        $values = ":" . implode(", :", array_keys($this->attributes));
+        $columns = implode(', ', array_keys($this->attributes));
+        $values = ':' . implode(', :', array_keys($this->attributes));
         $sql = $this->db->prepare("INSERT INTO $this->table ($columns) VALUES ($values)");
-
 
         foreach ($this->attributes as $key => $value) {
             $sql->bindValue(":$key", $value);
@@ -76,20 +76,18 @@ class Model extends Db
         return $this->attributes[$this->primaryKey];
     }
 
-
     protected function update()
     {
         $setClause = '';
 
-
         if ($this->find($this->attributes[$this->primaryKey]) === false) {
-            throw new Exception("Kayıt bulunamadı." . $this->attributes[$this->primaryKey]);
+            throw new Exception('Kayıt bulunamadı.' . $this->attributes[$this->primaryKey]);
         }
 
         foreach ($this->attributes as $key => $value) {
             $setClause .= "$key = :$key, ";
         }
-        $setClause = rtrim($setClause, ", ");
+        $setClause = rtrim($setClause, ', ');
 
         $sql = $this->db->prepare("UPDATE $this->table SET $setClause WHERE $this->primaryKey = :$this->primaryKey");
 
@@ -119,6 +117,10 @@ class Model extends Db
     {
         $sql = $this->db->prepare("DELETE FROM $this->table WHERE $this->primaryKey = ?");
         $sql->execute(array($id));
-        return $this->table;
+        
+        if ($sql->rowCount() === 0) {
+            return new Exception('Kayıt bulunamadı veya silinemedi.');
+        }
+        return true;
     }
 }

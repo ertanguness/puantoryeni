@@ -17,7 +17,7 @@ $(document).on("click", "#savePerson", function () {
       },
       job_start_date: {
         required: true,
-   
+
       },
     },
     messages: {
@@ -83,4 +83,16 @@ $('input[name="kimlik_no"]').keypress(function (e) {
   if (e.which < 48 || e.which > 57) {
     return false;
   }
+});
+
+
+$(document).on('click', '.wage_type', function () {
+  if ($(this).attr('id') === 'blue_collar') {
+    $('#wage_type_label').text('Günlük Ücreti');
+
+  } else if ($(this).attr('id') === 'white_collar') {
+    $('#wage_type_label').text('Aylık Maaş');
+  }
+
+
 });

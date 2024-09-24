@@ -8,6 +8,7 @@ class Db {
     protected $db;
 
     public function __construct() {
+        // $this->db = new PDO("mysql:host=localhost;dbname=mbeyazil_puantoryeni", "mbeyazil_root", "KT308WuD*ge+");
         $this->db = new PDO("mysql:host=localhost;dbname=puantor", "root", "");
     }
 

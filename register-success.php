@@ -41,6 +41,12 @@
                         Kayıt işleminiz başarıyla tamamlandı. En kısa sürede sizinle iletişime geçeceğiz.
                     </p>
                 </div>
+                
+                <div class="align-center">
+                    <a href="sign-in.php" class="btn btn-primary w-100">
+                        Giriş Sayfasına Git
+                    </a>
+                </div>
 
             </div>
         </div>

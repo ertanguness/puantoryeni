@@ -17,6 +17,30 @@ $projects = $projectObj->allWithFirm($firm_id);
                 <div class="card-header">
                     <h3 class="card-title">Proje Listesi</h3>
                     <div class="col-auto ms-auto">
+                        <div class="form-selectgroup">
+                            
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="icons" value="user" class="form-selectgroup-input" checked>
+                                <span class="form-selectgroup-label">
+                                 <i class="ti ti-list-check icon me-2"></i>
+                                    Tümü
+                                </span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="icons" value="circle" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">
+                                <i class="ti ti-download icon me-2"></i>
+                                    Alınan Projeler
+                                </span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="icons" value="square" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">
+                                <i class="ti ti-upload icon me-2"></i>
+                                    Verilen Projeler
+                                </span>
+                            </label>
+                        </div>
                         <a href="#" class="btn btn-primary route-link" data-page="projects/manage">
                             <i class="ti ti-plus icon me-2"></i> Yeni
                         </a>
@@ -43,32 +67,35 @@ $projects = $projectObj->allWithFirm($firm_id);
 
                             <?php foreach ($projects as $project) :
                             ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $project->id ?></td>
-                                    <td ><?php echo $project->firm_id ?></td>
-                                    <td ><?php echo $project->project_name ?></td>
-                                    <td ><?php echo Helper::formattedMoney($project->budget ?? 0) ?></td>
-                                    <td ><?php echo $cities->getCityName($project->city) ?></td>
-                                    <td ><?php echo $project->town ?></td>
-                                    <td ><?php echo $project->start_date ?></td>
-                                    <td class="text-end">
-                                        <div class="dropdown">
-                                            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link" data-page="projects/add-person&id=<?php echo $project->id ?>" href="#">
-                                                    <i class="ti ti-users-plus icon me-3"></i> Projeye Personel Ekle
-                                                </a>
-                                                <a class="dropdown-item route-link" data-page="projects/manage&id=<?php echo $project->id ?>" href="#">
-                                                    <i class="ti ti-edit icon me-3"></i> Güncelle
-                                                </a>
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="ti ti-trash icon me-3"></i> Sil
-                                                </a>
-                                            </div>
+                            <tr>
+                                <td class="text-center"><?php echo $project->id ?></td>
+                                <td><?php echo $project->firm_id ?></td>
+                                <td><?php echo $project->project_name ?></td>
+                                <td><?php echo Helper::formattedMoney($project->budget ?? 0) ?></td>
+                                <td><?php echo $cities->getCityName($project->city) ?></td>
+                                <td><?php echo $project->town ?></td>
+                                <td><?php echo $project->start_date ?></td>
+                                <td class="text-end">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle align-text-top"
+                                            data-bs-toggle="dropdown">İşlem</button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item route-link"
+                                                data-page="projects/add-person&id=<?php echo $project->id ?>" href="#">
+                                                <i class="ti ti-users-plus icon me-3"></i> Projeye Personel Ekle
+                                            </a>
+                                            <a class="dropdown-item route-link"
+                                                data-page="projects/manage&id=<?php echo $project->id ?>" href="#">
+                                                <i class="ti ti-edit icon me-3"></i> Güncelle
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-trash icon me-3"></i> Sil
+                                            </a>
                                         </div>
+                                    </div>
 
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

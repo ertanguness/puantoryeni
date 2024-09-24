@@ -2,7 +2,7 @@
 -- Sunucu:                       127.0.0.1
 -- Sunucu sürümü:                10.4.32-MariaDB - mariadb.org binary distribution
 -- Sunucu İşletim Sistemi:       Win64
--- HeidiSQL Sürüm:               12.7.0.6850
+-- HeidiSQL Sürüm:               12.8.0.6908
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,12 +16,10 @@
 
 
 -- puantor için veritabanı yapısı dökülüyor
-DROP DATABASE IF EXISTS `puantor`;
 CREATE DATABASE IF NOT EXISTS `puantor` /*!40100 DEFAULT CHARACTER SET latin5 COLLATE latin5_turkish_ci */;
 USE `puantor`;
 
 -- tablo yapısı dökülüyor puantor.authority
-DROP TABLE IF EXISTS `authority`;
 CREATE TABLE IF NOT EXISTS `authority` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `authName` varchar(50) DEFAULT NULL,
@@ -33,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `authority` (
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.authority: ~58 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `authority`;
 INSERT INTO `authority` (`id`, `authName`, `authTitle`, `authGroup`, `authValue`, `isActive`) VALUES
 	(1, 'customeradd', 'Müşteri Ekle', 1, 1, 1),
 	(2, 'customeredit', 'Müşteri Düzenle', 1, 1, 1),
@@ -95,11 +92,10 @@ INSERT INTO `authority` (`id`, `authName`, `authTitle`, `authGroup`, `authValue`
 	(65, 'docedit', 'Evrak Düzenleme Sayfası', 4, 1, 1);
 
 -- tablo yapısı dökülüyor puantor.cases
-DROP TABLE IF EXISTS `cases`;
 CREATE TABLE IF NOT EXISTS `cases` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL DEFAULT 0,
-  `company_id` int(11) DEFAULT NULL,
+  `firm_id` int(11) DEFAULT NULL,
   `start_budget` decimal(10,2) DEFAULT NULL,
   `case_name` varchar(255) DEFAULT NULL,
   `bank_name` varchar(255) DEFAULT NULL,
@@ -110,18 +106,16 @@ CREATE TABLE IF NOT EXISTS `cases` (
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.cases: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `cases`;
-INSERT INTO `cases` (`id`, `account_id`, `company_id`, `start_budget`, `case_name`, `bank_name`, `branch_name`, `description`, `isDefault`) VALUES
+INSERT INTO `cases` (`id`, `account_id`, `firm_id`, `start_budget`, `case_name`, `bank_name`, `branch_name`, `description`, `isDefault`) VALUES
 	(22, 4, 2, 90000.00, 'Nakit Kasası', 'Garanti Bankası', 'Konya', 'Gelen Nakitleri Buraya', 1),
 	(32, 4, 4, 10000.00, 'Nakit Kasası', 'Türkiye İş Bankası', 'Ankara', 'Gelen Nakitleri Buraya', NULL),
 	(33, 4, 4, 9000.00, 'Kasa 25', '1', 'Manisa', '', NULL),
 	(34, 4, 4, 0.00, 'Ziraat TL', '3', 'Yükseltepe', '', 1),
-	(35, 50, 46, 1200.00, 'dene', '1', 'konya', '', NULL),
+	(35, 60, 8, 1200.00, 'dene', '1', 'konya', '', NULL),
 	(46, 4, 2, 10000.00, 'Kredi Kartı', 'Garanti Bankası', 'Konya', 'Kredi kartı ile gelen işlemler buraya', NULL),
 	(47, 4, 4, 10000.00, 'Kredi Kartı', 'Garanti Bankası', 'Konya', 'Kredi kartı ile gelen işlemler buraya', NULL);
 
 -- tablo yapısı dökülüyor puantor.case_transactions
-DROP TABLE IF EXISTS `case_transactions`;
 CREATE TABLE IF NOT EXISTS `case_transactions` (
   `id` int(100) NOT NULL AUTO_INCREMENT,
   `type_id` int(100) NOT NULL,
@@ -139,15 +133,13 @@ CREATE TABLE IF NOT EXISTS `case_transactions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.case_transactions: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `case_transactions`;
 INSERT INTO `case_transactions` (`id`, `type_id`, `date`, `case_id`, `sub_type`, `amount`, `amount_money`, `account_name`, `description`, `created_at`, `updated_at`, `company_id`) VALUES
 	(58, 1, '', 22, 2, 0, NULL, NULL, '', '2024-06-19 13:10:18', NULL, NULL),
 	(131, 1, '2024-09-17', 22, 0, 90000, 2, NULL, '', '2024-09-17 22:33:41', NULL, NULL),
-	(132, 1, '2024-09-17', 22, 0, 125000, 3, NULL, '', '2024-09-17 22:34:28', NULL, NULL),
+	(132, 1, '2024-09-17', 35, 0, 125000, 3, NULL, '', '2024-09-17 22:34:28', NULL, NULL),
 	(133, 1, '2024-09-18', 22, 0, 90, 1, NULL, '', '2024-09-18 21:22:13', NULL, NULL);
 
 -- tablo yapısı dökülüyor puantor.cgroups
-DROP TABLE IF EXISTS `cgroups`;
 CREATE TABLE IF NOT EXISTS `cgroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(155) NOT NULL,
@@ -157,7 +149,6 @@ CREATE TABLE IF NOT EXISTS `cgroups` (
 ) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.cgroups: 10 rows tablosu için veriler indiriliyor
-DELETE FROM `cgroups`;
 /*!40000 ALTER TABLE `cgroups` DISABLE KEYS */;
 INSERT INTO `cgroups` (`id`, `title`, `regdate`, `statu`) VALUES
 	(1, 'Müşteri', '2024-01-24 14:15:23', 1),
@@ -173,7 +164,6 @@ INSERT INTO `cgroups` (`id`, `title`, `regdate`, `statu`) VALUES
 /*!40000 ALTER TABLE `cgroups` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.companies
-DROP TABLE IF EXISTS `companies`;
 CREATE TABLE IF NOT EXISTS `companies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `grp` int(11) DEFAULT NULL,
@@ -194,21 +184,21 @@ CREATE TABLE IF NOT EXISTS `companies` (
   `updater` int(10) NOT NULL,
   `updated_at` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=103 DEFAULT CHARSET=utf32 COLLATE=utf32_turkish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=106 DEFAULT CHARSET=utf32 COLLATE=utf32_turkish_ci;
 
--- puantor.companies: 5 rows tablosu için veriler indiriliyor
-DELETE FROM `companies`;
+-- puantor.companies: 7 rows tablosu için veriler indiriliyor
 /*!40000 ALTER TABLE `companies` DISABLE KEYS */;
 INSERT INTO `companies` (`id`, `grp`, `user_id`, `company_name`, `yetkili`, `phone`, `email`, `city`, `town`, `address`, `tax_number`, `account_number`, `created_at`, `creativer`, `OdemeVade`, `description`, `updater`, `updated_at`) VALUES
 	(58, 3, 4, 'P.C.C. ENDÜSTRİYEL EKİPMANLAR İNŞ.TES.MÜH.SAN.TİC.LTD.ŞTİ.', 'SONER BEY', '05322210714', 'omer.seckin.74@gmail.com', 16, 'BÜYÜKORHAN', NULL, NULL, '', '2024-02-01 11:00:18', 92, '', 'MARMARA', 0, ''),
 	(59, 2, 4, 'POZİTİF ELEKTROMARKET ELEKTRİK SAN. VE TİC. LTD.ŞTİ.', 'SONER BEY', '05322210714', 'omer.seckin.74@gmail.com', 16, 'BÜYÜKORHAN', NULL, NULL, '', '2024-02-01 11:01:45', 92, '', 'MARMARA', 0, ''),
 	(67, 2, 4, 'GALATA YANGIN ENVER KAROĞLU ', 'ENVER KAROĞLU', '05353151550', ' info@galatayangin.com', 34, 'BEYLİKDÜZÜ', NULL, NULL, '', '2024-04-24 10:37:00', 5, '', '', 0, ''),
 	(68, 1, 3, 'BURSAM BOYA APRE TEKSTİL DOKUMA İNŞAAT TURİZM SANAYİ TİCARET LTD.ŞTİ.', 'EMRE BEY', '', 'omerseckin@aydinogullari.com', 16, 'GÜRSU', NULL, NULL, 'YENİ MÜŞTERİ.SELMAN BEY YÖNLENDİRDİ.', '2024-04-29 13:51:11', 1, '', 'GÜRSU', 0, ''),
-	(101, NULL, 4, 'mbeYazilim Com', 'Mehmet Ali Gökmen', '05079432722', 'beyzade83@gmail.com', 2, '', 'Yenibatı Mah', '0010450321', '1234', '2024-09-16 18:29:34', NULL, NULL, 'yazilim firmamız', 0, '');
+	(101, NULL, 4, 'mbeYazilim Com', 'Mehmet Ali Gökmen', '05079432722', 'beyzade83@gmail.com', 2, '', 'Yenibatı Mah', '0010450321', '1234', '2024-09-16 18:29:34', NULL, NULL, 'yazilim firmamız', 0, ''),
+	(104, NULL, 65, '', '', '', '', 0, '', '', '', '', '2024-09-23 18:52:18', NULL, NULL, '', 0, ''),
+	(105, NULL, 60, 'Aksa Seramik', '', '', '', 2, '', '', '', '', '2024-09-23 19:44:55', NULL, NULL, '', 0, '');
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.define_numbers
-DROP TABLE IF EXISTS `define_numbers`;
 CREATE TABLE IF NOT EXISTS `define_numbers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ysc` int(20) NOT NULL,
@@ -225,14 +215,12 @@ CREATE TABLE IF NOT EXISTS `define_numbers` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf32 COLLATE=utf32_turkish_ci;
 
 -- puantor.define_numbers: 1 rows tablosu için veriler indiriliyor
-DELETE FROM `define_numbers`;
 /*!40000 ALTER TABLE `define_numbers` DISABLE KEYS */;
 INSERT INTO `define_numbers` (`id`, `ysc`, `hst`, `met`, `yas`, `purchase`, `purchase_demand`, `aas`, `oys`, `offer`, `service`) VALUES
 	(1, 39, 1, 1, 1, 33, 4, 1, 1, 9, 2);
 /*!40000 ALTER TABLE `define_numbers` ENABLE KEYS */;
 
 -- yöntem yapısı dökülüyor puantor.GetPersonsByProjectAndFirm
-DROP PROCEDURE IF EXISTS `GetPersonsByProjectAndFirm`;
 DELIMITER //
 CREATE PROCEDURE `GetPersonsByProjectAndFirm`(
 	IN `p_project_id` INT,
@@ -258,7 +246,6 @@ END//
 DELIMITER ;
 
 -- tablo yapısı dökülüyor puantor.il
-DROP TABLE IF EXISTS `il`;
 CREATE TABLE IF NOT EXISTS `il` (
   `id` tinyint(4) NOT NULL DEFAULT 0,
   `city_name` varchar(20) NOT NULL,
@@ -267,7 +254,6 @@ CREATE TABLE IF NOT EXISTS `il` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.il: 81 rows tablosu için veriler indiriliyor
-DELETE FROM `il`;
 /*!40000 ALTER TABLE `il` DISABLE KEYS */;
 INSERT INTO `il` (`id`, `city_name`) VALUES
 	(1, 'Adana'),
@@ -354,7 +340,6 @@ INSERT INTO `il` (`id`, `city_name`) VALUES
 /*!40000 ALTER TABLE `il` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.ilce
-DROP TABLE IF EXISTS `ilce`;
 CREATE TABLE IF NOT EXISTS `ilce` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `il_id` tinyint(4) NOT NULL,
@@ -363,7 +348,6 @@ CREATE TABLE IF NOT EXISTS `ilce` (
 ) ENGINE=MyISAM AUTO_INCREMENT=959 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.ilce: 958 rows tablosu için veriler indiriliyor
-DELETE FROM `ilce`;
 /*!40000 ALTER TABLE `ilce` DISABLE KEYS */;
 INSERT INTO `ilce` (`id`, `il_id`, `ilce_adi`) VALUES
 	(1, 1, 'Aladağ(Karsantı)'),
@@ -1327,7 +1311,6 @@ INSERT INTO `ilce` (`id`, `il_id`, `ilce_adi`) VALUES
 /*!40000 ALTER TABLE `ilce` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.job_groups
-DROP TABLE IF EXISTS `job_groups`;
 CREATE TABLE IF NOT EXISTS `job_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(100) NOT NULL DEFAULT '0',
@@ -1335,32 +1318,37 @@ CREATE TABLE IF NOT EXISTS `job_groups` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
 -- puantor.job_groups: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `job_groups`;
 INSERT INTO `job_groups` (`id`, `group_name`) VALUES
 	(1, 'Alçı'),
 	(2, 'Fayans');
 
 -- tablo yapısı dökülüyor puantor.maas_gelir_kesinti
-DROP TABLE IF EXISTS `maas_gelir_kesinti`;
 CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
   `person_id` int(11) NOT NULL DEFAULT 0,
+  `gun` varchar(8) NOT NULL DEFAULT '0',
   `ay` int(11) NOT NULL DEFAULT 0,
   `yil` int(11) NOT NULL DEFAULT 0,
   `tutar` int(11) NOT NULL DEFAULT 0,
   `kategori` int(11) NOT NULL DEFAULT 0,
-  `turu` int(11) NOT NULL DEFAULT 0,
-  `aciklama` int(11) NOT NULL DEFAULT 0,
-  `created_at` int(11) NOT NULL DEFAULT 0,
+  `turu` varchar(255) NOT NULL DEFAULT '0',
+  `aciklama` varchar(255) NOT NULL DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantor.maas_gelir_kesinti: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `maas_gelir_kesinti`;
+-- puantor.maas_gelir_kesinti: ~15 rows (yaklaşık) tablosu için veriler indiriliyor
+INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `gun`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
+	(1, 4, 181, '20240915', 9, 2024, 900, 2, '0', '0', '0000-00-00 00:00:00'),
+	(2, 4, 149, '20240915', 9, 2024, 900, 2, '900', '0', '0000-00-00 00:00:00'),
+	(3, 4, 149, '20240915', 9, 2024, 1800, 2, '900', '0', '0000-00-00 00:00:00'),
+	(4, 4, 149, '20240915', 9, 2024, 1800, 2, '900', '0', '0000-00-00 00:00:00'),
+	(14, 4, 149, '20240915', 9, 2024, 450, 3, 'Kalan Ödeme', '', '2024-09-23 17:31:16'),
+	(90, 4, 227, '20240915', 9, 2024, 1000, 1, 'Ödül', 'Ek Ödeme Eklendi', '2024-09-23 17:36:02'),
+	(93, 4, 227, '20240915', 9, 2024, 1000, 1, 'Ödül', 'Ek Ödeme Eklendi', '2024-09-23 17:36:02');
 
 -- tablo yapısı dökülüyor puantor.menu
-DROP TABLE IF EXISTS `menu`;
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `page_name` varchar(50) NOT NULL DEFAULT '0',
@@ -1371,10 +1359,9 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `isMenu` int(11) DEFAULT 1,
   `index_no` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantor.menu: ~38 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `menu`;
+-- puantor.menu: ~40 rows (yaklaşık) tablosu için veriler indiriliyor
 INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActive`, `isMenu`, `index_no`) VALUES
 	(1, 'Ana Sayfa', 'home', 'home', 0, 1, 1, 1),
 	(2, 'Teklif', '', 'checklist', 0, 0, 1, NULL),
@@ -1413,10 +1400,11 @@ INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActi
 	(38, 'Gelir-Gider İşlemleri', 'financial/transactions/list', '0', 36, 1, 1, NULL),
 	(39, 'Firmalarım', 'mycompany/list', 'buildings', 0, 1, 1, 7),
 	(40, 'Firma Ekle/Güncelle', 'mycompany/manage', '0', 39, 1, 0, NULL),
-	(41, 'Proje Ekle/Güncelle', 'projects/manage', '0', 35, 1, 0, NULL);
+	(41, 'Proje Ekle/Güncelle', 'projects/manage', '0', 35, 1, 0, NULL),
+	(42, 'Firmalar Ekle/Düzenle', 'companies/manage', '0', 7, 1, 0, NULL),
+	(43, 'Ayarlar', 'settings/manage', 'settings', 0, 1, 1, 11);
 
 -- tablo yapısı dökülüyor puantor.myfirms
-DROP TABLE IF EXISTS `myfirms`;
 CREATE TABLE IF NOT EXISTS `myfirms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
@@ -1429,16 +1417,15 @@ CREATE TABLE IF NOT EXISTS `myfirms` (
   `created_at` varchar(255) NOT NULL DEFAULT current_timestamp(),
   `deleted_at` varchar(255) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantor.myfirms: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `myfirms`;
+-- puantor.myfirms: ~3 rows (yaklaşık) tablosu için veriler indiriliyor
 INSERT INTO `myfirms` (`id`, `user_id`, `firm_name`, `phone`, `email`, `start_budget`, `brand_logo`, `description`, `created_at`, `deleted_at`) VALUES
 	(2, 4, 'BilgeKazaz Bilişim Hizmetleri', '05079432723', 'mbeyazilim@gmail.com', 0, '66e812ce6f957depositphotos_449066958-stock-photo-financial-accounting-logo-financial-logo.jpg', 'yazilim firmamız', '2024-09-16 13:56:22', '0'),
-	(4, 4, 'Mbe Yazılım Hizmetleri', '05079432723', 'mbeyazilim@gmail.com', 0, '0', 'yazilim firmamız', '2024-09-16 16:19:02', '0');
+	(4, 4, 'Mbe Yazılım Hizmetleri', '05079432723', 'mbeyazilim@gmail.com', 0, '0', 'yazilim firmamız', '2024-09-16 16:19:02', '0'),
+	(8, 60, 'Gokmen İnşaat', '0', '0', 0, '0', '0', '2024-09-23 22:18:25', '0');
 
 -- tablo yapısı dökülüyor puantor.offers
-DROP TABLE IF EXISTS `offers`;
 CREATE TABLE IF NOT EXISTS `offers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `offerNumber` varchar(20) DEFAULT NULL,
@@ -1478,7 +1465,6 @@ CREATE TABLE IF NOT EXISTS `offers` (
 ) ENGINE=MyISAM AUTO_INCREMENT=304 DEFAULT CHARSET=utf32 COLLATE=utf32_turkish_ci;
 
 -- puantor.offers: 5 rows tablosu için veriler indiriliyor
-DELETE FROM `offers`;
 /*!40000 ALTER TABLE `offers` DISABLE KEYS */;
 INSERT INTO `offers` (`id`, `offerNumber`, `cid`, `company_authors`, `total_price`, `mycompany`, `authors`, `regdate`, `reg_date`, `tax`, `creativer`, `notes`, `currency`, `statu`, `dollar`, `euro`, `payment_period`, `offer_header`, `offer_header_content`, `offer_footer`, `offer_footer_content`, `description`, `file`, `Kdv`, `iskonto`, `subdescription`, `buyTotal`, `saleTotal`, `amountTotal`, `curDollar`, `curEuro`, `DolarTotal`, `EuroTotal`, `TLTotal`) VALUES
 	(300, 'tn0009', 68, 'Mehmet Ali', NULL, '', '', '2024-09-01', NULL, 0, 0, '', '', 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 964.80, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1489,7 +1475,6 @@ INSERT INTO `offers` (`id`, `offerNumber`, `cid`, `company_authors`, `total_pric
 /*!40000 ALTER TABLE `offers` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.offer_products
-DROP TABLE IF EXISTS `offer_products`;
 CREATE TABLE IF NOT EXISTS `offer_products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `xid` int(11) NOT NULL,
@@ -1508,7 +1493,6 @@ CREATE TABLE IF NOT EXISTS `offer_products` (
 ) ENGINE=MyISAM AUTO_INCREMENT=631 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.offer_products: 30 rows tablosu için veriler indiriliyor
-DELETE FROM `offer_products`;
 /*!40000 ALTER TABLE `offer_products` DISABLE KEYS */;
 INSERT INTO `offer_products` (`id`, `xid`, `oid`, `stokKodu`, `title`, `unit`, `amount`, `buyprice`, `buycur`, `saleprice`, `salecur`, `total_price`, `satirno`) VALUES
 	(630, 76, 303, '', 'FirePro Fire Extinguishing Generator FP-1200', '1', '345', 5.00, '1', 12.00, '1', 0.00, 0),
@@ -1544,7 +1528,6 @@ INSERT INTO `offer_products` (`id`, `xid`, `oid`, `stokKodu`, `title`, `unit`, `
 /*!40000 ALTER TABLE `offer_products` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.persons
-DROP TABLE IF EXISTS `persons`;
 CREATE TABLE IF NOT EXISTS `persons` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
   `firm_id` varchar(25) DEFAULT NULL,
@@ -1557,6 +1540,7 @@ CREATE TABLE IF NOT EXISTS `persons` (
   `company_id` bigint(255) NOT NULL,
   `daily_wages` decimal(20,2) DEFAULT NULL,
   `iban_number` varchar(26) DEFAULT NULL,
+  `wage_type` tinyint(1) DEFAULT NULL,
   `job_start_date` varchar(10) NOT NULL,
   `job_end_date` varchar(10) DEFAULT NULL,
   `job` varchar(40) DEFAULT NULL,
@@ -1566,18 +1550,36 @@ CREATE TABLE IF NOT EXISTS `persons` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `kimlik_no` (`kimlik_no`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- puantor.persons: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `persons`;
-INSERT INTO `persons` (`id`, `firm_id`, `full_name`, `kimlik_no`, `sigorta_no`, `phone`, `address`, `project_id`, `company_id`, `daily_wages`, `iban_number`, `job_start_date`, `job_end_date`, `job`, `state`, `email`, `job_group`) VALUES
-	(149, '2', 'MEHMET ALİ GÖKMEN', 32450401908, 1, '507943', 'Deneme adres', '', 45, 1900.00, 'TR60', '06.09.2024', NULL, '', NULL, 'beyzade83@hotmail.com', '1'),
-	(150, '2', 'Beratcan Demir', 0, 0, '1', '', '34|35', 46, 540.00, '', '01.11.2023', '19.07.2024', 'Genel', NULL, '', NULL),
-	(181, '2', 'Ertan Güneş', 32450401990, NULL, '05079432722', '', NULL, 0, 100.00, NULL, '01.09.2024', NULL, '', NULL, '', ''),
-	(222, '4', 'Mehmet Ali Gökmen', 32450401920, NULL, '05079432787', 'km', NULL, 0, 0.00, NULL, '01.08.2024', NULL, '', NULL, 'beyzade83@gmail.com', '');
+-- puantor.persons: ~3 rows (yaklaşık) tablosu için veriler indiriliyor
+INSERT INTO `persons` (`id`, `firm_id`, `full_name`, `kimlik_no`, `sigorta_no`, `phone`, `address`, `project_id`, `company_id`, `daily_wages`, `iban_number`, `wage_type`, `job_start_date`, `job_end_date`, `job`, `state`, `email`, `job_group`) VALUES
+	(223, '7', 'Mehmet Ali Gökmen', 32450401908, NULL, '5079432723', '', NULL, 0, 900.00, NULL, 2, '01.09.2024', NULL, '', NULL, '', ''),
+	(226, '8', 'Mehmet Ali Gökmen', 32450401910, NULL, '5079432724', '', NULL, 0, 1250.00, NULL, 2, '03.09.2024', NULL, '', NULL, 'beyzade83@gmail.com', '1'),
+	(227, '8', 'Ertan Güneş', 11111111111, NULL, '5050105555', '', NULL, 0, 45000.00, NULL, 1, '01.09.2024', NULL, '', NULL, '', '');
+
+-- tablo yapısı dökülüyor puantor.person_daily_wages
+CREATE TABLE IF NOT EXISTS `person_daily_wages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `person_id` int(11) DEFAULT NULL,
+  `wage_name` varchar(255) DEFAULT NULL,
+  `start_date` varchar(8) DEFAULT NULL,
+  `end_date` varchar(8) DEFAULT NULL,
+  `amount` decimal(20,4) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+
+-- puantor.person_daily_wages: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
+INSERT INTO `person_daily_wages` (`id`, `person_id`, `wage_name`, `start_date`, `end_date`, `amount`, `description`, `created_at`) VALUES
+	(44, 149, 'Güncellendi', '20240912', '20240930', 450.0000, '', '2024-09-22 18:18:01'),
+	(51, 149, 'Eylül 2024 Ücret', '20240901', '20240930', 1450.0000, '', '2024-09-22 21:40:34'),
+	(52, 223, 'Temmuz ücret', '20240901', '20240930', 1000.0000, '', '2024-09-23 21:50:10'),
+	(53, 226, 'Eylül 2024 Ücret', '20240901', '20240930', 1500.0000, '', '2024-09-24 09:16:20'),
+	(56, 227, 'dsda', '20240904', '20240918', 256.0000, '', '2024-09-24 15:15:53');
 
 -- tablo yapısı dökülüyor puantor.products
-DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(29) NOT NULL AUTO_INCREMENT,
   `urun_adi` varchar(89) DEFAULT NULL,
@@ -1604,7 +1606,6 @@ CREATE TABLE IF NOT EXISTS `products` (
 ) ENGINE=MyISAM AUTO_INCREMENT=387 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.products: 386 rows tablosu için veriler indiriliyor
-DELETE FROM `products`;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
 INSERT INTO `products` (`id`, `urun_adi`, `Turu`, `TedarikciID`, `stok_kodu`, `UrunGrubu`, `birimi`, `alis_fiyati`, `alis_para_birimi`, `satis_fiyati`, `satis_para_birimi`, `ExtraMaliyet`, `Barkod`, `RafKodu`, `MinStok`, `aciklama`, `Durum`, `PersonelID`, `OlusturmaTarihi`, `Duzenleyen`, `DuzenlemeTarihi`) VALUES
 	(1, 'FirePro Fire Extinguishing Generator FP-1200', '', 0, 'AE0001', '', '1', '56', '2', '45', '1', '', '', '', '', '', '', '', '16.05.2024', '', ''),
@@ -1996,7 +1997,6 @@ INSERT INTO `products` (`id`, `urun_adi`, `Turu`, `TedarikciID`, `stok_kodu`, `U
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantor.projects
-DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` int(2) NOT NULL,
@@ -2017,10 +2017,9 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `creator` varchar(255) DEFAULT NULL,
   `created_at` date NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantor.projects: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `projects`;
+-- puantor.projects: ~10 rows (yaklaşık) tablosu için veriler indiriliyor
 INSERT INTO `projects` (`id`, `type`, `account_id`, `company_id`, `firm_id`, `project_name`, `budget`, `city`, `town`, `address`, `phone`, `email`, `account_number`, `notes`, `start_date`, `project_file`, `creator`, `created_at`) VALUES
 	(34, 1, 50, 2, 7, 'Akka Ges', 470304.00, 32, 0, '', '', '', '', '', '01.11.2023', '', '35', '2024-07-05'),
 	(35, 1, 50, 2, 8, 'Başkent Üniversitesi Alpu Ges', 4750000.00, 26, 329, '', NULL, '', '', '', '28.11.2023', '', '35', '2024-07-05'),
@@ -2030,10 +2029,10 @@ INSERT INTO `projects` (`id`, `type`, `account_id`, `company_id`, `firm_id`, `pr
 	(39, 0, 0, NULL, NULL, 'Ankara Şantiyesi', NULL, NULL, NULL, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-17'),
 	(40, 0, 0, NULL, NULL, 'Ankara Şantiyesi', NULL, 0, 0, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-17'),
 	(41, 0, 0, NULL, 2, 'Yeni Proje eklendi', NULL, 0, 0, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-17'),
-	(42, 0, 0, 2, NULL, 'Yeni Proje eklendi', NULL, 0, 0, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-17');
+	(42, 0, 0, 2, NULL, 'Yeni Proje eklendi', NULL, 0, 0, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-17'),
+	(43, 0, 0, 8, NULL, 'Akka Ges', NULL, 0, 0, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-23');
 
 -- tablo yapısı dökülüyor puantor.project_person
-DROP TABLE IF EXISTS `project_person`;
 CREATE TABLE IF NOT EXISTS `project_person` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` int(11) DEFAULT NULL,
@@ -2041,18 +2040,17 @@ CREATE TABLE IF NOT EXISTS `project_person` (
   `state` int(11) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantor.project_person: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `project_person`;
+-- puantor.project_person: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
 INSERT INTO `project_person` (`id`, `project_id`, `person_id`, `state`, `create_date`) VALUES
 	(65, 34, '149,181', 1, '2024-09-18 15:28:25'),
 	(85, 35, '181', 1, '2024-09-18 09:06:48'),
 	(91, 37, '150,181', 1, '2024-09-18 05:11:44'),
-	(92, 42, '149,150,181', 1, '2024-09-18 06:30:01');
+	(92, 42, '149,150,181', 1, '2024-09-18 06:30:01'),
+	(93, 43, '226', 1, '2024-09-23 19:24:21');
 
 -- tablo yapısı dökülüyor puantor.puantaj
-DROP TABLE IF EXISTS `puantaj`;
 CREATE TABLE IF NOT EXISTS `puantaj` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `company_id` int(255) NOT NULL,
@@ -2065,69 +2063,50 @@ CREATE TABLE IF NOT EXISTS `puantaj` (
   `created_at` varchar(30) NOT NULL DEFAULT current_timestamp(),
   `updated_at` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=995 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1053 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantor.puantaj: ~47 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `puantaj`;
+-- puantor.puantaj: ~38 rows (yaklaşık) tablosu için veriler indiriliyor
 INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`, `gun`, `saat`, `tutar`, `created_at`, `updated_at`) VALUES
-	(940, 0, 35, '149', 53, '15092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(941, 0, 35, '149', 53, '22092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(942, 0, 35, '149', 53, '29092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(943, 0, 35, '149', 22, '06092024', 8.00, 1900.00, '2024-09-20 14:06:52', ''),
-	(944, 0, 35, '149', 53, '08092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(945, 0, 35, '150', 53, '15092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(946, 0, 35, '150', 53, '22092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(947, 0, 35, '150', 53, '29092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(948, 0, 35, '150', 53, '01092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(949, 0, 35, '150', 53, '08092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(950, 0, 35, '181', 53, '15092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(951, 0, 35, '181', 53, '22092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(952, 0, 35, '181', 53, '29092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(953, 0, 35, '181', 53, '01092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(954, 0, 35, '181', 53, '08092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(955, 0, 35, '222', 53, '15092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(956, 0, 35, '222', 53, '22092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(957, 0, 35, '222', 53, '29092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(958, 0, 35, '222', 53, '01092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(959, 0, 35, '222', 53, '08092024', 0.00, 0.00, '2024-09-20 14:06:52', ''),
-	(960, 0, 35, '149', 23, '07092024', 12.00, 2850.00, '2024-09-20 14:07:18', ''),
-	(961, 0, 35, '150', 22, '02092024', 8.00, 540.00, '2024-09-20 14:07:44', ''),
-	(962, 0, 35, '150', 22, '04092024', 8.00, 540.00, '2024-09-20 14:08:34', ''),
-	(963, 0, 35, '150', 22, '06092024', 8.00, 540.00, '2024-09-20 14:12:22', ''),
-	(964, 0, 34, '149', 22, '09092024', 8.00, 1900.00, '2024-09-20 14:15:17', ''),
-	(965, 0, 34, '149', 22, '10092024', 8.00, 1900.00, '2024-09-20 14:18:42', ''),
-	(966, 0, 34, '149', 22, '11092024', 8.00, 1900.00, '2024-09-20 14:18:42', ''),
-	(967, 0, 34, '149', 22, '12092024', 8.00, 1900.00, '2024-09-20 14:18:42', ''),
-	(968, 0, 35, '150', 22, '03092024', 8.00, 540.00, '2024-09-20 14:21:24', ''),
-	(969, 0, 35, '150', 22, '05092024', 8.00, 540.00, '2024-09-20 14:21:24', ''),
-	(970, 0, 35, '150', 22, '07092024', 8.00, 540.00, '2024-09-20 14:21:24', ''),
-	(971, 0, 37, '150', 22, '10092024', 8.00, 540.00, '2024-09-20 14:21:38', ''),
-	(972, 0, 37, '150', 22, '11092024', 8.00, 540.00, '2024-09-20 14:21:38', ''),
-	(973, 0, 37, '150', 22, '12092024', 8.00, 540.00, '2024-09-20 14:21:38', ''),
-	(974, 0, 37, '150', 22, '13092024', 8.00, 540.00, '2024-09-20 14:21:38', ''),
-	(975, 0, 37, '150', 22, '14092024', 8.00, 540.00, '2024-09-20 14:21:38', ''),
-	(976, 0, 37, '150', 22, '09092024', 8.00, 540.00, '2024-09-20 14:21:38', ''),
-	(977, 0, 35, '181', 22, '02092024', 8.00, 100.00, '2024-09-20 14:30:51', ''),
-	(978, 0, 35, '181', 22, '03092024', 8.00, 100.00, '2024-09-20 14:30:51', ''),
-	(979, 0, 35, '181', 22, '04092024', 8.00, 100.00, '2024-09-20 14:30:51', ''),
-	(980, 0, 35, '181', 4, '05092024', 10.00, 125.00, '2024-09-20 14:30:51', ''),
-	(981, 0, 35, '181', 4, '06092024', 10.00, 125.00, '2024-09-20 14:30:51', ''),
-	(982, 0, 35, '181', 4, '07092024', 10.00, 125.00, '2024-09-20 14:30:51', ''),
-	(983, 0, 34, '181', 22, '10092024', 8.00, 100.00, '2024-09-20 14:36:23', ''),
-	(984, 0, 34, '181', 22, '11092024', 8.00, 100.00, '2024-09-20 14:36:23', ''),
-	(985, 0, 34, '181', 22, '12092024', 8.00, 100.00, '2024-09-20 14:36:23', ''),
-	(986, 0, 34, '181', 22, '09092024', 8.00, 100.00, '2024-09-20 14:36:23', ''),
-	(987, 0, 0, '149', 22, '13092024', 8.00, 1900.00, '2024-09-20 16:18:53', ''),
-	(988, 0, 0, '149', 22, '14092024', 8.00, 1900.00, '2024-09-20 16:18:53', ''),
-	(989, 0, 34, '149', 21, '16092024', 4.00, 950.00, '2024-09-20 16:21:43', ''),
-	(990, 0, 34, '149', 21, '17092024', 4.00, 950.00, '2024-09-20 16:21:43', ''),
-	(991, 0, 34, '149', 21, '18092024', 4.00, 950.00, '2024-09-20 16:21:43', ''),
-	(992, 0, 34, '149', 21, '19092024', 4.00, 950.00, '2024-09-20 16:21:43', ''),
-	(993, 0, 34, '149', 21, '20092024', 4.00, 950.00, '2024-09-20 16:21:43', ''),
-	(994, 0, 34, '149', 21, '21092024', 4.00, 950.00, '2024-09-20 16:21:43', '');
+	(995, 0, 0, '149', 53, '20240901', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(996, 0, 0, '149', 22, '20240902', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
+	(997, 0, 0, '149', 22, '20240903', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
+	(998, 0, 0, '149', 22, '20240904', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
+	(999, 0, 0, '149', 22, '20240905', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
+	(1000, 0, 0, '149', 22, '20240906', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
+	(1001, 0, 0, '149', 22, '20240907', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
+	(1002, 0, 0, '149', 53, '20240908', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1003, 0, 0, '149', 53, '20240915', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1004, 0, 0, '149', 53, '20240922', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1005, 0, 0, '149', 53, '20240929', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1006, 0, 0, '150', 53, '20240901', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1007, 0, 0, '150', 53, '20240908', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1008, 0, 0, '150', 53, '20240915', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1009, 0, 0, '150', 53, '20240922', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1010, 0, 0, '150', 53, '20240929', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1011, 0, 0, '181', 53, '20240901', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1012, 0, 0, '181', 53, '20240908', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1013, 0, 0, '181', 53, '20240915', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1014, 0, 0, '181', 53, '20240922', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1015, 0, 0, '181', 53, '20240929', 0.00, 0.00, '2024-09-22 19:25:47', ''),
+	(1016, 0, 0, '181', 22, '20240902', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
+	(1017, 0, 0, '181', 22, '20240903', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
+	(1018, 0, 0, '181', 22, '20240904', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
+	(1019, 0, 0, '181', 22, '20240905', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
+	(1020, 0, 0, '181', 22, '20240906', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
+	(1021, 0, 0, '181', 22, '20240907', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
+	(1022, 0, 0, '226', 53, '20240901', 0.00, 0.00, '2024-09-23 22:24:30', ''),
+	(1023, 0, 43, '226', 22, '20240902', 8.00, 1250.00, '2024-09-23 22:24:30', ''),
+	(1024, 0, 43, '226', 22, '20240903', 8.00, 1250.00, '2024-09-23 22:24:30', ''),
+	(1025, 0, 43, '226', 22, '20240904', 8.00, 1250.00, '2024-09-23 22:24:30', ''),
+	(1026, 0, 43, '226', 22, '20240905', 8.00, 1250.00, '2024-09-23 22:24:30', ''),
+	(1027, 0, 43, '226', 22, '20240906', 8.00, 1250.00, '2024-09-23 22:24:30', ''),
+	(1028, 0, 43, '226', 22, '20240907', 8.00, 1250.00, '2024-09-23 22:24:30', ''),
+	(1029, 0, 0, '226', 53, '20240908', 0.00, 0.00, '2024-09-23 22:24:30', ''),
+	(1030, 0, 0, '226', 53, '20240915', 0.00, 0.00, '2024-09-23 22:24:30', ''),
+	(1031, 0, 0, '226', 53, '20240922', 0.00, 0.00, '2024-09-23 22:24:30', ''),
+	(1032, 0, 0, '226', 53, '20240929', 0.00, 0.00, '2024-09-23 22:24:30', '');
 
 -- tablo yapısı dökülüyor puantor.puantajturu
-DROP TABLE IF EXISTS `puantajturu`;
 CREATE TABLE IF NOT EXISTS `puantajturu` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `PuantajAdi` varchar(55) DEFAULT NULL,
@@ -2142,7 +2121,6 @@ CREATE TABLE IF NOT EXISTS `puantajturu` (
 ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- puantor.puantajturu: ~59 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `puantajturu`;
 INSERT INTO `puantajturu` (`id`, `PuantajAdi`, `PuantajKod`, `PuantajSaati`, `Turu`, `FontRengi`, `ArkaPlanRengi`, `isActive`, `IzinRapor`) VALUES
 	(1, '0,5 Yarım Fazla Çalışma', 'X05', 8.5, 'Fazla Çalışma', '#080808', '#f9f4fe', 1, 0),
 	(2, '1 Saat Fazla Çalışma', 'X1', 9, 'Fazla Çalışma', '#080808', '#ecdefd', 1, 0),
@@ -2205,7 +2183,6 @@ INSERT INTO `puantajturu` (`id`, `PuantajAdi`, `PuantajKod`, `PuantajSaati`, `Tu
 	(59, 'Yarım Saat Çalışma', 'S05', 0.5, 'Saatlik', '#080808', '#f4fefa', NULL, NULL);
 
 -- tablo yapısı dökülüyor puantor.reports
-DROP TABLE IF EXISTS `reports`;
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `report_number` varchar(50) DEFAULT NULL,
@@ -2239,7 +2216,6 @@ CREATE TABLE IF NOT EXISTS `reports` (
 ) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.reports: ~17 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `reports`;
 INSERT INTO `reports` (`id`, `report_number`, `report_type`, `isemrino`, `last_control_date`, `control_date`, `next_control_date`, `control_period`, `validity_date`, `customer_id`, `standarts`, `equipments`, `warnings`, `notes`, `subNotes`, `controller_id`, `company_official`, `test_date`, `servis_no`, `report_matters`, `bakim_bilgileri`, `dedektor_info`, `oys_general_matters`, `controller_peak_info`, `creator`, `create_time`, `updater`, `update_time`) VALUES
 	(154, 'YSC00154', '1', '1', '', '2024-09-01', '', '12 Ay', '2024-09-30', 58, '                                    ', '', '', '', 'Yukarıda kontrol tarihinde teknik özellikleri belirtilen Yangın Söndürme Sistemi ; mevcut şartlar altında 25 Nisan 2013 tarih ve 28628 sayılı resmi gazetede yayınlanan "İş Ekipmanlarının Kullanımında Sağlık Ve Güvenlik Şartları Yönetmeliği" nde belirtilen kriterlere uygun olarak TS ISO 11602-2 standartı 4.2 maddesine göre Periyodik Kontrol\'ü yapılmıştır. Bu kontrol raporu muayene tarihindeki durumunu yansıtır, uygunluğun devamlılığından işveren sorumludur.Yangın söndürme cihazlarının kullanılmasında teknik olarak sakınca yoktur\r\n                ', 4, 3, '', '', NULL, NULL, NULL, NULL, '', 13, '2024-09-12 11:43:55', 0, ''),
 	(164, 'YSC0039', '', '', '', '', '', '', '', 79, NULL, NULL, NULL, '', NULL, 3, 4, '', '', NULL, NULL, NULL, NULL, '', 0, '2024-09-12 23:48:16', 0, ''),
@@ -2260,7 +2236,6 @@ INSERT INTO `reports` (`id`, `report_number`, `report_type`, `isemrino`, `last_c
 	(189, 'YSC0039', '', '12', '', '2024-04-20', '', '12 Ay', '2024-04-20', 59, '                    <span style="background-color: rgb(156, 198, 239);"><font color="#efefef"><b><u>Deneme İçerik Kaydedildi</u></b></font></span>                ', '', '', '', 'Yukarıda kontrol tarihinde teknik özellikleri belirtilen Yangın Söndürme Sistemi ; mevcut şartlar altında 25 Nisan 2013 tarih ve 28628 sayılı resmi gazetede yayınlanan "İş Ekipmanlarının Kullanımında Sağlık Ve Güvenlik Şartları Yönetmeliği" nde belirtilen kriterlere uygun olarak TS ISO 11602-2 standartı 4.2 maddesine göre Periyodik Kontrol\'ü yapılmıştır. Bu kontrol raporu muayene tarihindeki durumunu yansıtır, uygunluğun devamlılığından işveren sorumludur.Yangın söndürme cihazlarının kullanılmasında teknik olarak sakınca yoktur\r\n                ', 3, 3, '', '', NULL, NULL, NULL, NULL, '', 0, '2024-09-13 16:05:04', 0, '');
 
 -- tablo yapısı dökülüyor puantor.report_ysc_content
-DROP TABLE IF EXISTS `report_ysc_content`;
 CREATE TABLE IF NOT EXISTS `report_ysc_content` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `report_id` int(20) NOT NULL,
@@ -2284,7 +2259,6 @@ CREATE TABLE IF NOT EXISTS `report_ysc_content` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4040 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.report_ysc_content: ~968 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `report_ysc_content`;
 INSERT INTO `report_ysc_content` (`id`, `report_id`, `cihaz_no`, `bulundugu_bolge`, `cinsi`, `cihaz_dolum_tarihi`, `cihaz_sonkullanma_tarihi`, `kontrol_tarihi_1`, `kontrol_tarihi_2`, `islem_kontrol_tarihi_1`, `islem_kontrol_tarihi_2`, `dis_muhafaza`, `cevre_kontrolu`, `pim_kontrolu`, `manometre_kontrolu`, `hortum_kontrolu`, `talimat_kontrolu`, `agirlik_kontrolu`) VALUES
 	(16, 21, 'YSC4267', '2.kat', NULL, '04-03-2024', '11-03-2024', '04-03-2024', '19-03-2024', '18-03-2024', '25-03-2024', '1', '0', '1', '0', '0', '1', '1'),
 	(18, 23, 'YSC4267', '2.kat', NULL, '03-03-2024', '03-03-2024', '03-03-2024', '03-03-2024', '03-03-2024', '03-03-2024', '0', '1', '1', '1', '0', '1', '1'),
@@ -3256,7 +3230,6 @@ INSERT INTO `report_ysc_content` (`id`, `report_id`, `cihaz_no`, `bulundugu_bolg
 	(4039, 186, '2', 'GÜVENLİK', 'TÜP', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- tablo yapısı dökülüyor puantor.userauths
-DROP TABLE IF EXISTS `userauths`;
 CREATE TABLE IF NOT EXISTS `userauths` (
   `id` int(25) NOT NULL AUTO_INCREMENT,
   `roleID` int(10) NOT NULL,
@@ -3265,7 +3238,6 @@ CREATE TABLE IF NOT EXISTS `userauths` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2292 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.userauths: ~197 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `userauths`;
 INSERT INTO `userauths` (`id`, `roleID`, `authID`) VALUES
 	(23, 10, 4),
 	(24, 10, 5),
@@ -3466,7 +3438,6 @@ INSERT INTO `userauths` (`id`, `roleID`, `authID`) VALUES
 	(2291, 1, 27);
 
 -- tablo yapısı dökülüyor puantor.userroles
-DROP TABLE IF EXISTS `userroles`;
 CREATE TABLE IF NOT EXISTS `userroles` (
   `id` int(25) NOT NULL AUTO_INCREMENT,
   `roleName` varchar(255) NOT NULL,
@@ -3476,7 +3447,6 @@ CREATE TABLE IF NOT EXISTS `userroles` (
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.userroles: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `userroles`;
 INSERT INTO `userroles` (`id`, `roleName`, `roleDescription`, `isActive`) VALUES
 	(1, 'AdminLte', 'Tüm Yetkilere Sahip Kullanıcı', 1),
 	(9, 'User', 'Normal Kullanıcı', 1),
@@ -3484,7 +3454,6 @@ INSERT INTO `userroles` (`id`, `roleName`, `roleDescription`, `isActive`) VALUES
 	(11, 'Kısıtlı Kullanıcı', 'Sınırlı yetkilere sahip personel', 1);
 
 -- tablo yapısı dökülüyor puantor.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(255) NOT NULL,
@@ -3503,14 +3472,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- puantor.users: ~3 rows (yaklaşık) tablosu için veriler indiriliyor
-DELETE FROM `users`;
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `ekipnet_no`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `created_at`) VALUES
 	(3, 'Bilge Kazaz', 'bilgekazaz@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '507', 'Mühendis', '', 1, 1, NULL, NULL, NULL, NULL, NULL, '2024-08-30 16:00:31'),
 	(4, 'Mehmet Ali Gökmen', 'beyzade83@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '539', '', '', 9, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:56:13'),
-	(56, 'Mehmet Ali Gökmen', 'beyzade83@gmail.cofm', '81dc9bdb52d04dc20036dbd8313ed055', '539', '', '', 9, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:56:13');
+	(60, 'Mehmet Ali Gökmen', 'beyzade83@hotmail.com', '$2y$10$AT6jUkLr/nAgKkEQm3wqqOIAi0u6ey7FnFiR/8AHl1Y0r9l4awwJe', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-23 19:18:25');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

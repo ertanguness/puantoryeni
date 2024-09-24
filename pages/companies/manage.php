@@ -46,7 +46,7 @@ $pageTitle = $id > 0 ? "Firma Güncelle" : "Yeni Firma";
                 <div class="card">
                     <div class="card-body">
                         <form action="" id="companyForm">
-                            <div class="row d-flex">
+                            <div class="row d-flex d-none">
                                 <div class="col-md-4">
                                     <input type="text" name="id" class="form-control" value="<?php echo $id ?>">
                                 </div>

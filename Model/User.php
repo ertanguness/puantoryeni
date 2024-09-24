@@ -10,6 +10,13 @@ class User extends Model
         parent::__construct($this->table);
     }
 
+    public function getUserByEmailandPassword($email, $password)
+    {
+        $sql = $this->db->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
+        $sql->execute(array($email, $password));
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
     public function getUser($id)
     {
         $sql = $this->db->prepare("SELECT * FROM users WHERE id = ?");
@@ -19,10 +26,12 @@ class User extends Model
 
     public function getUserByEmail($email)
     {
-        $sql = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $sql = $this->db->prepare("SELECT * FROM users WHERE email = ? ");
         $sql->execute(array($email));
         return $sql->fetch(PDO::FETCH_OBJ);
     }
+
+ 
 
     public function saveUser($data)
     {

@@ -27,6 +27,19 @@ class Helper
         "20" => "% 20",
     ];
 
+    const INCOME_EXPENSE_TYPE = [
+        "1" => "Gelir",
+        "2" => "Kesinti",
+        "3" => "Ödeme",
+        "4" => "Maaş",
+    ];
+
+    public static function getIncomeExpenseType($type)
+    {
+    
+        $types = self::INCOME_EXPENSE_TYPE;
+        return $types[$type];
+    }
 
 
 

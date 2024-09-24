@@ -48,7 +48,7 @@ $cases = $caseObj->allWithFirmId($firm_id);
                             ?>
                                 <tr>
                                     <td><?php echo $case->id; ?></td>
-                                    <td><?php echo $company->getFirmName($case->company_id); ?></td>
+                                    <td><?php echo $company->getFirmName($case->company_id ?? ''); ?></td>
                                     <td><?php echo $case->case_name; ?></td>
                                     <td><?php echo $case->bank_name; ?></td>
                                     <td><?php echo $case->branch_name; ?></td>

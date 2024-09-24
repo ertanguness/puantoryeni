@@ -20,7 +20,7 @@ class Cases extends Model
     }
     public function allWithFirmId($firm_id)
     {
-        $query = $this->db->prepare("SELECT * FROM cases WHERE company_id = ?");
+        $query = $this->db->prepare("SELECT * FROM cases WHERE firm_id = ?");
         $query->execute([$firm_id]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }

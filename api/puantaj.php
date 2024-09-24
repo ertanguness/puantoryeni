@@ -25,7 +25,7 @@ if ($_POST["action"] == "savePuantaj") {
 
         }
         foreach ($person_item as $puantaj_key => $puantaj_item) {
-            if (!empty($puantaj_item['puantajId'])) {
+            if (!empty($puantaj_item['puantajId']) || $puantaj_item['puantajId'] == 0) {
                 $saat = $puantajObj->getPuantajSaati($puantaj_item["puantajId"]);
 
                 $tutar = $saat * $ucret;

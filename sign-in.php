@@ -1,3 +1,20 @@
+<?php
+
+
+require_once 'configs/require.php';
+require_once "Model/User.php";
+
+$userObj = new User();
+// if ($_POST && isset($_POST['submitForm'])) {
+//   $email = $_POST['email'];
+//   $password = MD5($_POST['password']);
+//   echo $password;
+// };
+
+?>
+
+
+
 <!doctype html>
 
 <html lang="en">
@@ -23,19 +40,12 @@
     }
   </style>
 </head>
-<?php
 
-
-require_once 'configs/require.php';
-if ($_POST) {
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-}; ?>
 
 <script>
-  setTimeout(function() {
-    $('.alert-danger').each(function() {
-      $(this).fadeOut(500, function() {
+  setTimeout(function () {
+    $('.alert-danger').each(function () {
+      $(this).fadeOut(500, function () {
         $(this).remove();
       });
     });
@@ -55,22 +65,34 @@ if ($_POST) {
             </div>
             <?php
             if ($_POST && isset($_POST['submitForm'])) {
+              $email = $_POST['email'];
+              $password = $_POST['password'];
+
+              //Email adresi boş ise
               if (empty($email)) {
                 echo alertdanger("Email adresi boş bırakılamaz");
               } elseif (empty($password)) {
                 echo alertdanger("Şifre boş bırakılamaz");
               } else {
-                $sql = $db->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
-                $sql->execute([$email, md5($password)]);
-                $user = $sql->fetch(PDO::FETCH_OBJ);
-                if ($user) {
-                  $_SESSION['user'] = $user;
-                  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                  $_SESSION['full_name'] = $user->full_name;
-                  $_SESSION['user_role'] = $user->user_roles;
-                  header("Location: company-list.php");
-                } else {
+                $user = $userObj->getUserByEmail($email);
+                //Kullanıcı bulunamadıysa
+                if (!$user) {
                   echo alertdanger("Kullanıcı bulunamadı");
+                  //Kullanıcı aktif değilse
+                } else if (isset($user) && $user->status == 0) {
+                  echo alertdanger("Kullanıcı henüz aktif değil");
+                } else {
+                  $verified = password_verify($password, $user->password ?? '');
+
+                  if ($verified) {
+                    $_SESSION['user'] = $user;
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    $_SESSION['full_name'] = $user->full_name;
+                    $_SESSION['user_role'] = $user->user_roles;
+                    header("Location: company-list.php");
+                  } else {
+                    echo alertdanger("Hatalı şifre veya email adresi");
+                  }
                 }
               }
             }
@@ -79,9 +101,11 @@ if ($_POST) {
               <div class="card-body">
                 <h2 class="h2 text-center mb-4">Oturum Aç</h2>
                 <form method="POST" action="#" autocomplete="off">
+
                   <div class="mb-3">
                     <label class="form-label">Email Adresi</label>
-                    <input type="email" class="form-control" name="email" value="<?php echo $email ?? '' ?>" placeholder="Email adresinizi girin" autocomplete="off">
+                    <input type="email" class="form-control" name="email" value="<?php echo $email ?? '' ?>"
+                      placeholder="Email adresinizi girin" autocomplete="off">
                   </div>
                   <div class="mb-2">
                     <label class="form-label">
@@ -91,13 +115,18 @@ if ($_POST) {
                       </span>
                     </label>
                     <div class="input-group input-group-flat">
-                      <input type="password" class="form-control" name="password" placeholder="Your password" autocomplete="off">
+                      <input type="password" class="form-control" name="password" placeholder="Şifrenizi giriniz"
+                        autocomplete="off">
                       <span class="input-group-text">
-                        <a href="#" class="link-secondary" title="Göster" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <a href="#" class="link-secondary" title="Göster" data-bs-toggle="tooltip">
+                          <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                            <path
+                              d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
                           </svg>
                         </a>
                       </span>
@@ -110,12 +139,13 @@ if ($_POST) {
                     </label>
                   </div>
                   <div class="form-footer">
-                    <button type="submit" name="submitForm" class="btn btn-primary w-100">Giriş Yap</button>
+                    <button type="submit" name="submitForm" class="btn btn-primary w-100">Giriş
+                      Yap</button>
                   </div>
                 </form>
               </div>
-             
-             
+
+
             </div>
             <div class="text-center text-secondary mt-3">
               Henüz hesabınız yok mu? <a href="./register.php" tabindex="-1">Kayıt Ol</a>

@@ -33,6 +33,24 @@
   }
 }
 
+.spinner {
+  border: 4px solid rgba(70, 69, 69, 0.1);
+  border-left-color: #353434;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .tableFixHead {
   overflow: auto;
   height: calc(100vh - 270px);
@@ -50,10 +68,16 @@
   /* İlk başlık satırının yüksekliğine bağlı olarak ayarlayın */
 }
 
+.table-responsive {
+    overflow-x: inherit !important;
+}
+
 .icon {
   font-size: 20px;
 }
-
+.link{
+  cursor: pointer;
+}
 .active-link {
   color: #007bff !important;
 }
@@ -621,4 +645,57 @@ table tr td {
   padding: 3px 0 2px 0;
   margin-bottom: 10px;
   background: rgba(0, 0, 0, 0.04);
+}
+
+
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+  background-color: transparent !important;
+  color: #000 !important;
+  border: 1px solid #dce1e7 !important;
+  background-image: transparent !important;
+
+}
+
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm),
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+  transition: background-color 0.4ms ease !important;
+  transition: border-color 0.4ms ease !important;
+  transition: color 0.4ms ease !important;
+  min-width: 150px !important;
+}
+
+
+div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-confirm:hover {
+  background-image: linear-gradient(transparent, transparent), linear-gradient(transparent, transparent) !important;
+  border: 1px solid #aab2bf !important;
+  transition: border-color 0.4ms ease !important;
+
+
+}
+
+div:where(.swal2-icon).swal2-warning {
+  border-color: #FB773C !important;
+  color: #FB773C !important;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+  font-size: 0.875rem !important;
+  padding: 0 0 2em 0 !important;
+
+}
+
+div:where(.swal2-actions) {
+  flex-wrap: nowrap !important;
+  width: 80% !important
+}
+
+
+div:where(.swal2-icon-content) {
+  font-size: 3em !important;
+}
+
+.font-weight-700 {
+  font-weight: 700 !important;
 }

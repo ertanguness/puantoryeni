@@ -8,7 +8,7 @@ class Financial extends Db
 {
     public function getCasesSelect($name = "case_id", $firm_id = null) 
     {
-        $query = $this->db->prepare("SELECT * FROM cases WHERE company_id = ?");
+        $query = $this->db->prepare("SELECT * FROM cases WHERE firm_id = ?");
         $query->execute([$firm_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
 

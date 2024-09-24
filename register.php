@@ -1,9 +1,10 @@
 <?php
 require_once "Database/require.php";
 require_once "Model/User.php";
+require_once "Model/Company.php";
 
 $user = new User();
-
+$company = new Company();
 
 function alertdanger($message)
 {
@@ -97,10 +98,21 @@ function alertdanger($message)
                         $data = [
                             'full_name' => $_POST['full_name'],
                             'email' => $_POST['email'],
+                            "status" => 0,
                             'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                            
                         ];
                         try {
-                            $user->saveWithAttr($data);
+                           $db->beginTransaction();
+                            $lastInsertId= $user->saveWithAttr($data);
+
+
+                            $data = [
+                                'firm_name' => $_POST['company_name'],
+                                'user_id' => $lastInsertId,
+                            ];
+                            $company->saveMyFirms($data);
+                            $db->commit();
                             header("Location: register-success.php");
                         } catch (PDOException $exh) {
                             if($exh->errorInfo[1] == 1062){
@@ -125,8 +137,8 @@ function alertdanger($message)
                     <h2 class="card-title text-center mb-4">Yeni Hesap Oluştur</h2>
                     <div class="mb-3">
                         <label class="form-label">Ad Soyad</label>
-                        <input type="text" class="form-control" name="full_name" value="<?php echo $full_name ?? '' ?>"
-                            placeholder="Adınız Soyadınız">
+                        <input type="text" class="form-control" autocomplete="on" name="full_name"
+                            value="<?php echo $full_name ?? '' ?>" placeholder="Adınız Soyadınız">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Firma Adı</label>
@@ -163,8 +175,8 @@ function alertdanger($message)
                     <div class="mb-3">
                         <label class="form-check">
                             <input type="checkbox" class="form-check-input">
-                            <span class="form-check-label"><a href="./terms-of-service.html"
-                                    tabindex="-1">Şartlar ve  Koşulları</a> kabul ediyorum.</span>
+                            <span class="form-check-label"><a href="./terms-of-service.html" tabindex="-1">Şartlar ve
+                                    Koşulları</a> kabul ediyorum.</span>
                         </label>
                     </div>
                     <div class="form-footer">

@@ -50,7 +50,7 @@ $(document).keydown(function (event) {
   if (event.keyCode === 46) {
     // .clicked sınıfına sahip tüm td elemanlarını seç ve içeriğini temizle
     $("td.clicked").each(function () {
-      $(this).attr("data-id", "");
+      $(this).attr("data-id", 0);
 
       $(this).empty();
       $(this).toggleClass("clicked");
@@ -124,6 +124,7 @@ function puantaj_olustur() {
       var puantajId = $(this).attr("data-id") ? $(this).attr("data-id") : ""; // Durum bilgisini al
       // console.log(person_id + "--" + date + "--" + status); //
 
+
       // var key = person_id + " : " + position;
       var key = person_id;
       if (jsonData[key] && jsonData[key][date]) {
@@ -148,14 +149,14 @@ function puantaj_olustur() {
               puantajId: puantajId,
               project_id: project_id,
             };
-            console.log("değişenler" + project_id);
-          } else {
+          }
+           else {
             // değişiklik yapılmamışsa sadece kendi kayıtlarını al
             jsonData[key][date] = {
               puantajId: puantajId,
               project_id: $(this).attr("data-project"),
             };
-            console.log("değişmeden gelen" + $(this).attr("data-project"));
+            console.log(person_id + "--" + date + "--" + puantajId); //
           }
         } else {
           jsonData[key][date] = { puantajId: puantajId, project_id: "" };

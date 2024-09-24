@@ -4,30 +4,46 @@ namespace App\Helper;
 
 class Date
 {
-    public static function dmY($date,$format = 'd.m.Y')
+    public static function dmY($date, $format = 'd.m.Y')
     {
         if ($date == null) {
-            return "";
+            return '';
         }
         return date($format, strtotime($date));
     }
 
-    public static function Ymd($date)
+    public static function Ymd($date, $format = 'd.m.Y')
     {
         if ($date == null) {
-            return "";
+            return '';
         }
-        return date('Y-m-d', strtotime($date));
+        return date($format, strtotime($date));
     }
 
     public static function firstDay($month, $year)
     {
-        return sprintf("%d%02d%02d", $year , $month , 1 );
+        return sprintf('%d%02d%02d', $year, $month, 1);
     }
 
     public static function lastDay($month, $year)
     {
-        return sprintf("%d%02d%02d",$year, $month,  self::daysInMonth($month, $year), );
+        return sprintf(
+            '%d%02d%02d',
+            $year,
+            $month,
+            self::daysInMonth($month, $year),
+        );
+    }
+
+    public static function getMonth($date = null, $leadingZero = true)
+    {
+        $format = $leadingZero ? 'm' : 'n';
+        return $date ? date($format, strtotime($date)) : date($format);
+    }
+
+    public static function getYear()
+    {
+        return date('Y');
     }
 
     public static function daysInMonth($month, $year)
@@ -40,22 +56,11 @@ class Date
         $dateList = [];
         for ($day = 1; $day <= $days; $day++) {
             // Tarih formatını ayarlama (d.m.Y)
-            $formattedDate = sprintf("%2d%02d%02d", $year, $month,  $day);
+            $formattedDate = sprintf('%2d%02d%02d', $year, $month, $day);
             $dateList[] = $formattedDate;
         }
         return $dateList;
     }
-
-    // public static function generateDates($year, $month, $days)
-    // {
-    //     $dateList = [];
-    //     for ($day = 1; $day <= $days; $day++) {
-    //         // Tarih formatını ayarlama (d.m.Y)
-    //         $formattedDate = sprintf("%02d.%02d.%d", $day, $month, $year);
-    //         $dateList[] = $formattedDate;
-    //     }
-    //     return $dateList;
-    // }
 
     public static function isWeekend($date)
     {
@@ -63,35 +68,35 @@ class Date
         $dayOfWeek = $dateTime->format('N');
         return ($dayOfWeek == 7);
     }
+
     public static function gunAdi($gun)
     {
-        $gun = date("D", strtotime($gun));
+        $gun = date('D', strtotime($gun));
         $gunler = array(
-            "Mon" => "Pzt",
-            "Tue" => "Sal",
-            "Wed" => "Çar",
-            "Thu" => "Per",
-            "Fri" => "Cum",
-            "Sat" => "Cmt",
-            "Sun" => "Paz"
+            'Mon' => 'Pzt',
+            'Tue' => 'Sal',
+            'Wed' => 'Çar',
+            'Thu' => 'Per',
+            'Fri' => 'Cum',
+            'Sat' => 'Cmt',
+            'Sun' => 'Paz'
         );
         return $gunler[$gun];
     }
 
-
     const MONTHS = [
-        1 => "Ocak",
-        2 => "Şubat",
-        3 => "Mart",
-        4 => "Nisan",
-        5 => "Mayıs",
-        6 => "Haziran",
-        7 => "Temmuz",
-        8 => "Ağustos",
-        9 => "Eylül",
-        10 => "Ekim",
-        11 => "Kasım",
-        12 => "Aralık"
+        1 => 'Ocak',
+        2 => 'Şubat',
+        3 => 'Mart',
+        4 => 'Nisan',
+        5 => 'Mayıs',
+        6 => 'Haziran',
+        7 => 'Temmuz',
+        8 => 'Ağustos',
+        9 => 'Eylül',
+        10 => 'Ekim',
+        11 => 'Kasım',
+        12 => 'Aralık'
     ];
 
     public static function monthName($month)
@@ -99,8 +104,10 @@ class Date
         return self::MONTHS[$month];
     }
 
-    public static function getMonthsSelect($name =  "months", $month = null,)
-    {
+    public static function getMonthsSelect(
+        $name = 'months',
+        $month = null,
+    ) {
         if ($month == null) {
             $month = date('m');
         }
@@ -114,9 +121,10 @@ class Date
         return $select;
     }
 
-
-    public static function getYearsSelect($name =  "years", $year = null,)
-    {
+    public static function getYearsSelect(
+        $name = 'years',
+        $year = null,
+    ) {
         if ($year == null) {
             $year = date('Y');
         }
