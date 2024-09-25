@@ -121,12 +121,19 @@ $lastDay = Date::lastDay($month, $year);
                                 // Personel id'sine göre personel bilgilerini getirir
                                 $person = $personObj->find($item->id);
                                 // Personel id'sine göre personelin maaş ve kesinti bilgilerini getirir(Örnek: 20240901-20240930 arası)
-                                $salary = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->maas;
                                 $gelir = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->gelir;
                                 $wage_cut = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->kesinti;
-                                $hakedis = $salary + $gelir - $wage_cut;
+                                $hakedis = $gelir - $wage_cut;
                                 $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->odeme;
                                 $kalan = $hakedis - $odeme;
+                                if($kalan < 0){
+                                    $color = "text-danger";
+                                }
+                                elseif($kalan > 0){
+                                    $color = "text-success";
+                                }else{
+                                    $color = "";
+                                }
                                 ?>
                                 <tr>
                                     <td><?php echo $person->id; ?></td>
@@ -134,13 +141,14 @@ $lastDay = Date::lastDay($month, $year);
                                     <td><?php echo $person->wage_type == 1 ? "Beyaz Yaka" : "Mavi Yaka"; ?></td>
                                     <td><?php echo $person->job; ?></td>
                                     <td><?php echo $person->job_start_date; ?></td>
-                                    <td class="text-center"><?php echo Helper::formattedMoney(($salary + $gelir) ?? 0 ) ?></td>
+                                    <td class="text-center "><?php echo Helper::formattedMoney(($gelir) ?? 0 ) ?></td>
                                     <td class="text-center"><?php echo Helper::formattedMoney($wage_cut ?? 0); ?></td>
                                     <td class="text-center">
                                         <?php echo Helper::formattedMoney(($hakedis) ?? 0); ?>
                                     </td>
                                     <td class="text-center"><?php echo Helper::formattedMoney($odeme ?? 0); ?></td>
-                                    <td class="text-center"><?php echo Helper::formattedMoney($kalan ?? 0); ?></td>
+
+                                    <td class="text-center <?php echo $color?>"><?php echo Helper::formattedMoney($kalan ?? 0); ?></td>
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <button class="btn dropdown-toggle align-text-top"

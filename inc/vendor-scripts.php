@@ -48,6 +48,8 @@ if ($page == "persons/list" || $page == "persons/manage") {
 if ($page == "persons/manage") {
     echo '<script src="./src/persons/payment.js"></script>'; 
     echo '<script src="./src/persons/wages.js"></script>'; 
+    echo '<script src="./src/persons/income.js"></script>'; 
+    echo '<script src="./src/persons/wage-cut.js"></script>'; 
 }
 
 //Servis Konusu ekleme ve düzenleme sayfası

@@ -38,23 +38,27 @@ if ($_POST['action'] == 'savePayment') {
 
         $last_payment = $payment->getPersonIncomeExpensePayment($lastInsertId);
 
-        // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
-        $income_expense = $payment->getPersonTotalIncomeExpensePayment($person_id);
+        // // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
+        $income_expense = $payment->getIncomeExpenseData($person_id);
 
-        // Puantaj tablosundaki toplam hakediş toplamlarını getirir
-        $income_puantaj = $puantaj->getPuantajIncomeByPerson($person_id);
+        
+        // // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
+        // $income_expense = $payment->getPersonTotalIncomeExpensePayment($person_id);
 
-        // Toplam gelir ve puantajdaki toplam hakediş toplamını alır
-        $total_income_puantaj = $income_expense->total_income + $income_puantaj->total_income;
+        // // Puantaj tablosundaki toplam hakediş toplamlarını getirir
+        // $income_puantaj = $puantaj->getPuantajIncomeByPerson($person_id);
 
-        $balance = Helper::formattedMoney($total_income_puantaj - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
-        $income_expense->total_income = Helper::formattedMoney($total_income_puantaj ?? 0);  // Toplam gelir
-        $income_expense->total_montly_income = Helper::formattedMoney($total_montly_income ?? 0);  // Toplam gelir
-        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
-        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
-        $income_expense->balance = $balance;  // Bakiye
+        // // Toplam gelir ve puantajdaki toplam hakediş toplamını alır
+        // $total_income_puantaj = $income_expense->total_income + $income_puantaj->total_income;
 
-        // Son eklenn kaydın bilgileri formatlanır
+        // $balance = Helper::formattedMoney($total_income_puantaj - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
+        // $income_expense->total_income = Helper::formattedMoney($total_income_puantaj ?? 0);  // Toplam gelir
+        // $income_expense->total_montly_income = Helper::formattedMoney($total_montly_income ?? 0);  // Toplam gelir
+        // $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
+        // $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
+        // $income_expense->balance = $balance;  // Bakiye
+
+        // Son eklenen kaydın bilgileri formatlanır
         $last_payment->kategori = Helper::getIncomeExpenseType($last_payment->kategori);
         $last_payment->tutar = Helper::formattedMoney($last_payment->tutar);
 

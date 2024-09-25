@@ -51,3 +51,15 @@ if ($_POST["action"] == "deleteCase") {
     ];
     echo json_encode($res);
 }
+
+if($_POST["action"] == "defaultCase"){
+    $id = $_POST["case_id"];
+
+    $caseObj->setDefaultCase($id);
+    $res = [
+        "status" => "success",
+        "message" => "Varsayılan kasa başarıyla ayarlandı."
+    ];
+    echo json_encode($res);
+    
+}

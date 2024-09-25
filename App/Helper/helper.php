@@ -32,6 +32,7 @@ class Helper
         "2" => "Kesinti",
         "3" => "Ödeme",
         "4" => "Maaş",
+        "5" => "Puantaj Çalışma",
     ];
 
     public static function getIncomeExpenseType($type)

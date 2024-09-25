@@ -60,6 +60,7 @@ $(document).on("click", "#payment_addButton", function () {
         table.row
           .add([
             data.payment.id,
+            data.payment.gun,
             data.payment.turu,
             data.payment.ay,
             data.payment.yil,
@@ -81,6 +82,7 @@ $(document).on("click", "#payment_addButton", function () {
                         </div>
                     </div>`,
           ])
+          .order([0, 'desc'])
           .draw(false);
 
         $("#payment-modal").modal("hide");
@@ -126,7 +128,7 @@ $(document).on("click", ".delete-payment", async function () {
   let total_income = income_expense.total_income;
   let total_expense = income_expense.total_expense;
   let total_payment = income_expense.total_payment;
-  let balance = total_income - total_payment;
+  let balance = income_expense.balance;
 
   console.log(total_income + " " + total_payment + " " + balance);
   
@@ -134,7 +136,7 @@ $(document).on("click", ".delete-payment", async function () {
   $("#total_payment").text(total_payment);
   $("#total_income").text(total_income);
   $("#total_expense").text(total_expense);
-  $("#balance").text();
+  $("#balance").text(balance);
   
 
 });

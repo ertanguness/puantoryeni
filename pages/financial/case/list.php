@@ -65,6 +65,9 @@ $cases = $caseObj->allWithFirmId($firm_id);
                                                 <a class="dropdown-item route-link" data-page="financial/case/manage&id=<?php echo $case->id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
+                                                <a class="dropdown-item default-case" data-id="<?php echo $case->id ?>"  href="#">
+                                                    <i class="ti ti-checks icon me-3"></i> Varsayılan Yap
+                                                </a>
                                                 <a class="dropdown-item delete-case" data-id="<?php echo $case->id ?>" href="#">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>

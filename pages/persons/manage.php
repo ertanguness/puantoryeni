@@ -42,8 +42,15 @@ $pageTitle = $id > 0 ? "Personel Güncelle" : "Yeni Personel";
                 <div class="card card-sm">
                     <div class="card-body">
                         <div class="row align-items-center">
+                            
                             <div class="col-auto">
-                                <span class="avatar" style="background-image: url(./static/avatars/006m.jpg)"></span>
+                                <?php
+                                $noback_shape = "";
+                                $wage_type = $person->wage_type ?? 1;
+                                if($wage_type == 1) {
+                                    $noback_shape = "-noback-shape";
+                                }; ?>
+                                <span class="avatar" style="background-image: url('./static/hard-hat<?php echo $noback_shape; ?>.svg')"></span>
                             </div>
                             <div class="col">
                                 <div class="font-weight-700">

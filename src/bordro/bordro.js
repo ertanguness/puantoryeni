@@ -13,8 +13,8 @@ $(document).on("click", "#income_addButton", function () {
 $(document).on("click", ".add-wage-cut", function () {
   let personel_id = $(this).data("id");
   let personel_name = $(this).closest("tr").find("td:eq(1)").text();
-  $("#person_id").val(personel_id);
-  $("#person_name").text(personel_name);
+  $("#person_id_wage_cut").val(personel_id);
+  $("#person_name_wage_cut").text(personel_name);
 });
 
 $(document).on("click", ".add-income", function () {

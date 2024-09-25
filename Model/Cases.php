@@ -25,5 +25,14 @@ class Cases extends Model
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function setDefaultCase($id)
+    {
+        $query = $this->db->prepare("UPDATE cases SET isDefault = 0");
+        $query->execute();
+        $query = $this->db->prepare("UPDATE cases SET isDefault = 1 WHERE id = ?");
+        $query->execute([$id]);
+        return $query->rowCount();
+    }
+
    
 }

@@ -41,10 +41,11 @@ class Date
         return $date ? date($format, strtotime($date)) : date($format);
     }
 
-    public static function getYear()
+    public static function getYear($date = null)
     {
-        return date('Y');
+        return $date ? date('Y', strtotime($date)) : date('Y');
     }
+    
 
     public static function daysInMonth($month, $year)
     {

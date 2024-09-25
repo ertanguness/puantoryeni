@@ -18,25 +18,25 @@ $projects = $projectObj->allWithFirm($firm_id);
                     <h3 class="card-title">Proje Listesi</h3>
                     <div class="col-auto ms-auto">
                         <div class="form-selectgroup">
-                            
+
                             <label class="form-selectgroup-item">
                                 <input type="radio" name="icons" value="user" class="form-selectgroup-input" checked>
                                 <span class="form-selectgroup-label">
-                                 <i class="ti ti-list-check icon me-2"></i>
+                                    <i class="ti ti-list-check icon me-2"></i>
                                     Tümü
                                 </span>
                             </label>
                             <label class="form-selectgroup-item">
                                 <input type="radio" name="icons" value="circle" class="form-selectgroup-input">
                                 <span class="form-selectgroup-label">
-                                <i class="ti ti-download icon me-2"></i>
+                                    <i class="ti ti-download icon me-2"></i>
                                     Alınan Projeler
                                 </span>
                             </label>
                             <label class="form-selectgroup-item">
                                 <input type="radio" name="icons" value="square" class="form-selectgroup-input">
                                 <span class="form-selectgroup-label">
-                                <i class="ti ti-upload icon me-2"></i>
+                                    <i class="ti ti-upload icon me-2"></i>
                                     Verilen Projeler
                                 </span>
                             </label>
@@ -65,8 +65,8 @@ $projects = $projectObj->allWithFirm($firm_id);
                         <tbody>
 
 
-                            <?php foreach ($projects as $project) :
-                            ?>
+                            <?php foreach ($projects as $project):
+                                ?>
                             <tr>
                                 <td class="text-center"><?php echo $project->id ?></td>
                                 <td><?php echo $project->firm_id ?></td>
@@ -83,6 +83,12 @@ $projects = $projectObj->allWithFirm($firm_id);
                                             <a class="dropdown-item route-link"
                                                 data-page="projects/add-person&id=<?php echo $project->id ?>" href="#">
                                                 <i class="ti ti-users-plus icon me-3"></i> Projeye Personel Ekle
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-cash-register icon me-3"></i> Hakediş Ekle
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-upload icon me-3"></i> Ödeme Yap
                                             </a>
                                             <a class="dropdown-item route-link"
                                                 data-page="projects/manage&id=<?php echo $project->id ?>" href="#">

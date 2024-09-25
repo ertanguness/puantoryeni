@@ -115,14 +115,7 @@ $company = new CompanyHelper();
                                                 data-page="persons/manage&id=<?php echo $person->id ?>" href="#">
                                                 <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
                                             </a>
-                                            <a class="dropdown-item"
-                                                data-page="persons/manage&id=<?php echo $person->id ?>" href="#">
-                                                <i class="ti ti-cash-register icon me-3"></i> Ödeme Yap
-                                            </a>
-                                            <a class="dropdown-item"
-                                                data-page="persons/manage&id=<?php echo $person->id ?>" href="#">
-                                                <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
-                                            </a>
+                                     
                                             <a class="dropdown-item delete-person" data-id="<?php echo $person->id ?>"
                                                 href="#">
                                                 <i class="ti ti-trash icon me-3"></i> Sil

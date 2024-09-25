@@ -1,6 +1,6 @@
 if ($(".datatable").length > 0) {
   $(".datatable:not(#puantajTable)").DataTable({
-    autoWidth: false,
+   
     language: {
       url: "src/tr.json",
     },
