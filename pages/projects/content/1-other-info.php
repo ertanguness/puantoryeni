@@ -1,3 +1,8 @@
+<?php 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/App/Helper/cities.php';
+$cities = new Cities();
+
+?>
 <div class="row mt-3">
     <div class="col-md-2">
         <label for="">Şehir</label>
@@ -6,11 +11,13 @@
         <?php echo $cityHelper->citySelect("project_city", $project->city ?? '') ?>
     </div>
     <div class="col-md-2">
-        <label for="">Firması</label>
+        <label for="">İlçe</label>
     </div>
     <div class="col-md-4">
         <select type="text" class="form-control select2" name="project_town" id="project_town" style="width:100%">
             <option value="">İlçe seçiniz</option>
+            <option selected value="<?php echo $project->town ?? '';?>"><?php echo $cities->getTownName($project->town ?? ''); ?></option>
+
         </select>
     </div>
 </div>

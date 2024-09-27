@@ -44,6 +44,9 @@ $(document).on("click", "#savePersontoProject", function () {
   formData.append("person_id", checkedItems);
   formData.append("action", "addPersonToProject");
 
+
+
+
   fetch("/api/projects/project-person.php", {
     method: "POST",
     body: formData,
@@ -76,3 +79,10 @@ $(document).ready(function () {
     $("#addPersontoProject .form-check-input").prop("checked", isChecked);
   });
 });
+
+
+$(document).on("change", "#project_city", function () {
+  //İl id'si alınır ilce selectine ilceler yüklenir
+  getTowns($(this).val(),"#project_town");
+});
+

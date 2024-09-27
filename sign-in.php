@@ -1,8 +1,7 @@
 <?php
 
-
 require_once 'configs/require.php';
-require_once "Model/User.php";
+require_once 'Model/User.php';
 
 $userObj = new User();
 // if ($_POST && isset($_POST['submitForm'])) {
@@ -64,38 +63,39 @@ $userObj = new User();
                 <img src="./static/logo.svg" height="36" alt=""></a>
             </div>
             <?php
-            if ($_POST && isset($_POST['submitForm'])) {
-              $email = $_POST['email'];
-              $password = $_POST['password'];
+              if ($_POST && isset($_POST['submitForm'])) {
+                $email = $_POST['email'];
+                $password = $_POST['password'];
 
-              //Email adresi boş ise
-              if (empty($email)) {
-                echo alertdanger("Email adresi boş bırakılamaz");
-              } elseif (empty($password)) {
-                echo alertdanger("Şifre boş bırakılamaz");
-              } else {
-                $user = $userObj->getUserByEmail($email);
-                //Kullanıcı bulunamadıysa
-                if (!$user) {
-                  echo alertdanger("Kullanıcı bulunamadı");
-                  //Kullanıcı aktif değilse
-                } else if (isset($user) && $user->status == 0) {
-                  echo alertdanger("Kullanıcı henüz aktif değil");
+                // Email adresi boş ise
+                if (empty($email)) {
+                  echo alertdanger('Email adresi boş bırakılamaz');
+                } elseif (empty($password)) {
+                  echo alertdanger('Şifre boş bırakılamaz');
                 } else {
-                  $verified = password_verify($password, $user->password ?? '');
-
-                  if ($verified) {
-                    $_SESSION['user'] = $user;
-                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                    $_SESSION['full_name'] = $user->full_name;
-                    $_SESSION['user_role'] = $user->user_roles;
-                    header("Location: company-list.php");
+                  $user = $userObj->getUserByEmail($email);
+                  // Kullanıcı bulunamadıysa
+                  if (!$user) {
+                    echo alertdanger('Kullanıcı bulunamadı');
+                    // Kullanıcı aktif değilse
+                  } else if (isset($user) && $user->status == 0) {
+                    echo alertdanger('Kullanıcı henüz aktif değil');
                   } else {
-                    echo alertdanger("Hatalı şifre veya email adresi");
+                    $verified = password_verify($password, $user->password);
+
+                   
+                    if ($verified) {
+                      $_SESSION['user'] = $user;
+                      $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                      $_SESSION['full_name'] = $user->full_name;
+                      $_SESSION['user_role'] = $user->user_roles;
+                      header('Location: company-list.php');
+                    } else {
+                      echo alertdanger('Hatalı şifre veya email adresi');
+                    }
                   }
                 }
               }
-            }
             ?>
             <div class="card card-md">
               <div class="card-body">

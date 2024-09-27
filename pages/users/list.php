@@ -5,7 +5,7 @@ require_once "Model/User.php";
 use App\Helper\Helper;
 
 $userObj = new User();
-$users = $userObj->all();
+$users = $userObj->allByFirms($firm_id);
 
 ?>
 <div class="container-xl mt-3">
@@ -42,7 +42,7 @@ $users = $userObj->all();
                             ?>
                                 <tr>
                                     <td><?php echo $user->id; ?></td>
-                                    <td><?php echo $userObj->roleName($user->user_roles); ?></td>
+                                    <td><?php echo $userObj->roleName($user->user_roles ?? ''); ?></td>
                                     <td><?php echo $user->full_name; ?></td>
                                     <td><?php echo $user->email; ?></td>
                                     <td><?php echo $user->phone; ?></td>

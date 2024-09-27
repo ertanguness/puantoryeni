@@ -1,6 +1,5 @@
 <?php
-require_once "App/Helper/helper.php";
-
+require_once 'App/Helper/helper.php';
 
 use App\Helper\Helper;
 
@@ -15,6 +14,11 @@ use App\Helper\Helper;
             <div class="modal-body">
                 <form action="" id="transactionModalForm">
                     <input type="hidden" class="form-control" id="transaction_id" name="transaction_id" value="0">
+                    <div class="mb-3">
+                        <label class="form-label">Kasa</label>
+                        <?php echo $financial->getCasesSelect('case_id', $firm_id) ?>
+                    </div>
+                    
                     <label class="form-label">Türü</label>
                     <div class="form-selectgroup-boxes row mb-3">
                         <div class="col-lg-6">
@@ -44,10 +48,7 @@ use App\Helper\Helper;
                             </label>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kasa</label>
-                        <?php echo $financial->getCasesSelect("case_id", $firm_id) ?>
-                    </div>
+                  
 
                     <div class="row">
                         <div class="col-md-8">
@@ -59,7 +60,7 @@ use App\Helper\Helper;
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Tutar</label>
-                                <?php echo Helper::moneySelect("amount_money", ""); ?>
+                                <?php echo Helper::moneySelect('amount_money', ''); ?>
                             </div>
                         </div>
 

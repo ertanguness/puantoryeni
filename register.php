@@ -1,7 +1,7 @@
 <?php
-require_once "Database/require.php";
-require_once "Model/User.php";
-require_once "Model/Company.php";
+require_once 'Database/require.php';
+require_once 'Model/User.php';
+require_once 'Model/Company.php';
 
 $user = new User();
 $company = new Company();
@@ -13,10 +13,6 @@ function alertdanger($message)
     <strong>Hata!</strong> ' . $message . '
   </div>';
 }
-
-
-
-
 
 ?>
 <html lang="tr">
@@ -78,52 +74,54 @@ function alertdanger($message)
 
                 <?php
 
+                    if (isset($_POST['action']) && $_POST['action'] == 'saveUser') {
+                        $full_name = $_POST['full_name'];
+                        $company_name = $_POST['company_name'];
+                        $email = $_POST['email'];
+                        $password = $_POST['password'];
 
-                if (isset($_POST["action"]) && $_POST["action"] == "saveUser") {
-                    $full_name = $_POST['full_name'];
-                    $company_name = $_POST['company_name'];
-                    $email = $_POST['email'];
-                    $password = $_POST['password'];
-
-                    if (empty($full_name)) {
-                        echo alertdanger("Ad Soyad alanı boş bırakılamaz.");
-                    } elseif (empty($company_name)) {
-                        echo alertdanger("Firma adı boş bırakılamaz.");
-                    } elseif (empty($email)) {
-                        echo alertdanger("Email alanı boş bırakılamaz.");
-                    } elseif (empty($password)) {
-                        echo alertdanger("Şifre alanı boş bırakılamaz.");
-                    } else {
-
-                        $data = [
-                            'full_name' => $_POST['full_name'],
-                            'email' => $_POST['email'],
-                            "status" => 0,
-                            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
-                            
-                        ];
-                        try {
-                           $db->beginTransaction();
-                            $lastInsertId= $user->saveWithAttr($data);
-
-
+                        if (empty($full_name)) {
+                            echo alertdanger('Ad Soyad alanı boş bırakılamaz.');
+                        } elseif (empty($company_name)) {
+                            echo alertdanger('Firma adı boş bırakılamaz.');
+                        } elseif (empty($email)) {
+                            echo alertdanger('Email alanı boş bırakılamaz.');
+                        } elseif (empty($password)) {
+                            echo alertdanger('Şifre alanı boş bırakılamaz.');
+                        } else {
                             $data = [
-                                'firm_name' => $_POST['company_name'],
-                                'user_id' => $lastInsertId,
+                                'full_name' => $_POST['full_name'],
+                                'email' => $_POST['email'],
+                                'status' => 0,
+                                'user_roles' => 1,
+                                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
                             ];
-                            $company->saveMyFirms($data);
-                            $db->commit();
-                            header("Location: register-success.php");
-                        } catch (PDOException $exh) {
-                            if($exh->errorInfo[1] == 1062){
-                                echo alertdanger("Bu email adresi ile daha önce kayıt olunmuş.");
+                            try {
+                                $db->beginTransaction();
+                                $lastInsertUserId = $user->saveWithAttr($data);
+
+                                $data = [
+                                    'firm_name' => $_POST['company_name'],
+                                    'user_id' => $lastInsertUserId,
+                                ];
+                                $lastInsertFirmId = $company->saveMyFirms($data);
+
+                                $data = [
+                                    "id" => $lastInsertUserId,
+                                    'firm_id' => $lastInsertFirmId,
+                                ];
+                                $user->saveWithAttr($data);
+
+                                $db->commit();
+                                header('Location: register-success.php');
+                            } catch (PDOException $exh) {
+                                if ($exh->errorInfo[1] == 1062) {
+                                    $db->rollBack();
+                                    echo alertdanger('Bu email adresi ile daha önce kayıt olunmuş.');
+                                }
                             }
-
                         }
-
                     }
-                }
-
 
                 ?>
 

@@ -23,10 +23,24 @@ class Persons extends Model
         $query->execute([$firm_id]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
+    
+    
+    public function getPersonIdByFirmCurrentMonth($firm_id,$last_day)
+    {
+        $query = $this->db->prepare('SELECT id FROM persons WHERE firm_id = ? and STR_TO_DATE(job_start_date, "%d.%m.%Y") <= ?');
+        $query->execute([$firm_id,$last_day]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
     public function getPersonIdByFirmBlueCollar($firm_id)
     {
         $query = $this->db->prepare('SELECT id FROM persons WHERE firm_id = ? AND wage_type = ?');
         $query->execute([$firm_id,2]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function getPersonIdByFirmBlueCollarCurrentMonth($firm_id,$last_day)
+    {
+        $query = $this->db->prepare('SELECT id FROM persons WHERE firm_id = ? AND wage_type = ? AND STR_TO_DATE(job_start_date, "%d.%m.%Y") <= ?');
+        $query->execute([$firm_id,2,$last_day]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 

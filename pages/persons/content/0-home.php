@@ -16,7 +16,7 @@ if(isset($person->wage_type) && $person->wage_type == 1){
 
     <div class="row d-none">
         <div class="col-4">
-            <input type="text" class="form-control" name="id" value="<?php echo $person->id ?? 0; ?>" required>
+            <input type="text" class="form-control" name="id" id="person_id" value="<?php echo $person->id ?? 0; ?>" required>
         </div>
         <div class="col-4">
             <input type="text" class="form-control" name="action" value="savePerson" required>

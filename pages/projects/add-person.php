@@ -57,6 +57,7 @@ $company = new CompanyHelper();
                                 </th>
                                 <th style="width:1%">ID</th>
                                 <th>Adı Soyadı</th>
+                                <th>Ücret Türü</th>
                                 <th>Görevi</th>
                                 <th style="width:1%">Durumu</th>
                             </tr>
@@ -73,6 +74,7 @@ $company = new CompanyHelper();
                                     </td>
                                     <td><?php echo $person->id; ?></td>
                                     <td><?php echo $person->full_name; ?></td>
+                                    <td><?php echo $person->wage_type == 1 ? "Beyaz Yaka" : "Mavi Yaka"; ?></td>
                                     <td><?php echo $person->job; ?></td>
                                     <td><?php echo $person->job_status ?></td>
 

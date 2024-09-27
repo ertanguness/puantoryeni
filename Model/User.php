@@ -10,6 +10,14 @@ class User extends Model
         parent::__construct($this->table);
     }
 
+
+    
+    public function allByFirms($firm_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = :firm_id");
+        $sql->execute(['firm_id' => $firm_id]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
     public function getUserByEmailandPassword($email, $password)
     {
         $sql = $this->db->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
@@ -48,7 +56,7 @@ class User extends Model
         $sql = $this->db->prepare("SELECT * FROM userroles WHERE id = ?");
         $sql->execute(array($id));
         $result = $sql->fetch(PDO::FETCH_OBJ);
-        return $result->roleName;
+        return $result->roleName ?? "Bilinmiyor";
     }
 
 

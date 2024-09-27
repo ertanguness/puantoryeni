@@ -11,7 +11,7 @@ $projectObj = new Projects();
 $id = $_GET['id'] ?? 0;
 $project = $projectObj->find($id);
 
-$pageTitle = $id > 0 ? "Proje Güncelle" : "Yeni Proje";
+$pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
 
 ?>
 <div class="page-wrapper">
@@ -75,6 +75,18 @@ $pageTitle = $id > 0 ? "Proje Güncelle" : "Yeni Proje";
                                             Diğer Bilgiler
                                         </a>
                                     </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#tabs-payment-3" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                            <i class="ti ti-cash-register icon me-1"></i>
+                                            Hakediş/Ödeme Bilgileri
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#tabs-puantaj-3" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                            <i class="ti ti-calendar-month icon me-1"></i>
+                                            Çalışma/Puantaj Bilgileri
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -86,6 +98,14 @@ $pageTitle = $id > 0 ? "Proje Güncelle" : "Yeni Proje";
                                     <div class="tab-pane" id="tabs-profile-3" role="tabpanel">
                                         <?php include_once "content/1-other-info.php" ?>
                                     </div>
+                                    <div class="tab-pane" id="tabs-payment-3" role="tabpanel">
+                                        <?php include_once "content/2-payment-info.php" ?>
+                                        
+                                    </div>
+                                    <div class="tab-pane" id="tabs-puantaj-3" role="tabpanel">
+                                        <?php include_once "content/3-works-puantaj-info.php" ?>
+                                        
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -96,3 +116,6 @@ $pageTitle = $id > 0 ? "Proje Güncelle" : "Yeni Proje";
         </div>
     </div>
 </div>
+
+<?php include_once 'modals/payment-modal.php' ?>
+<?php include_once 'modals/progress-payment-modal.php' ?>

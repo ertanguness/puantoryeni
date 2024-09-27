@@ -45,7 +45,7 @@
     || $page == "persons/list" || $page == "persons/manage"
     || $page == "mycompany/list" || $page == "financial/case/list"
     || $page == "financial/transactions/list" || $page == "financial/transactions/manage"
-    || $page == "projects/list" || $page == "projects/add-person"
+    || $page == "projects/list" || $page == "projects/add-person" || $page == 'projects/manage'
     || $page == "puantaj/list" || $page == "bordro/list"
   ) {
     echo '<link href="./dist/libs/datatable/datatables.min.css" rel="stylesheet" />';

@@ -59,25 +59,3 @@ $userHelper = new UserHelper();; ?>
     </div>
 
 </div>
-<div class="row mb-3">
-
-    <div class="col-md-2">
-        <label for="" class="align-middle">Ekipnet No: / Oda Sicil No
-            
-        </label>
-    </div>
-    <div class="col-md-2 col-sm-6">
-    <input type="text" class="form-control" name="ekipnet_no" value="<?php echo $user->ekipnet_no ?? '' ?>" id="ekipnet_no" >
-    </div>
-    <div class="col-md-2 col-sm-6">
-    <input type="text" class="form-control" name="sicil_no" value="<?php echo $user->sicil_no ?? '' ?>" id="sicil_no" >
-    </div>
-
-    <div class="col-md-2">
-        <label for="" class="align-middle">Yetkinlik No</label>
-    </div>
-    <div class="col-md-4 ">
-        <input type="text" class="form-control" name="yetkinlik_no" value="<?php echo $user->yetkinlik_no ?? '' ?>" id="yetkinlik_no" >
-    </div>
-
-</div>

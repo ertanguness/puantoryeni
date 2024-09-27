@@ -11,6 +11,7 @@ if ($_POST['action'] == "saveProject") {
         "id" => $id,
         "company_id" => $_POST['firm_id'],
         'project_name' => $_POST['project_name'],
+        'budget' => $_POST['budget'],
         'city' => $_POST['project_city'],
         'town' => $_POST['project_town'],
         'email' => $_POST['email'],

@@ -14,6 +14,7 @@ $bordro = new Bordro();
 $persons = $person->getByFirm($firm_id);
 $company = new CompanyHelper();
 
+
 // firma id'sini almak için $firm_id
 ?>
 <div class="container-xl mt-3">
@@ -69,6 +70,7 @@ $company = new CompanyHelper();
                                 <th>Adres</th>
                                 <th>Günlük/Aylık Ücretİ</th>
                                 <th>Durumu</th>
+                                <th>Güncel Bakiyesi</th>
                                 <th style="width:1%">İşlem</th>
                             </tr>
                         </thead>
@@ -79,26 +81,13 @@ $company = new CompanyHelper();
                                 foreach ($persons as $person):
                                     $wage_type = $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka';
                                     $wage_type_color = $person->wage_type == 2 ? "style='color:blue'" : '';
-
-                                    // Personel Beyaz Yaka ise
-                                    if ($person->wage_type == 1) {
-                                        // Ay ve yıl bilgilerini alalım
-                                        $year = Date::getYear();
-                                        $month = Date::getMonth(leadingZero: false);
-
-                                        // Eylül 2024 Maaş şeklinde açıklama oluştur
-                                        $description = Date::monthName($month) . ' ' . $year . ' Maaş';
-                                        // Personelin aylık maaşı eklenmemişse
-                                        if (!$bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)) {
-                                            // Personelin aylık maaşını ekleyelim
-                                            $bordro->addPersonMonthlyIncome($person->id, $month, $year, $person->daily_wages, $description);
-                                        }
-                                    }
+                                    $balance =$bordro->getBalance($person->id);
+                                    $color =Helper::balanceColor($balance);
 
                             ?>
                             <tr>
                                 <td><?php echo $person->id; ?></td>
-                                <td><?php echo $person->full_name; ?></td>
+                                <td> <a href="#"data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
                                 <td><?php echo $company->getcompanyName($person->company_id); ?></td>
                                 <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
                                 <td><?php echo $person->sigorta_no; ?></td>
@@ -106,6 +95,7 @@ $company = new CompanyHelper();
                                 <td><?php echo $person->address; ?></td>
                                 <td><?php echo Helper::formattedMoney($person->daily_wages ?? 0); ?></td>
                                 <td><?php echo $person->state ?></td>
+                                <td class="<?php echo $color ?>"><?php echo Helper::formattedMoney($balance) ?></td>
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle align-text-top"

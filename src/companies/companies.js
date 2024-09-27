@@ -31,3 +31,9 @@ $(document).on("click", ".delete-company", function () {
 
   deleteRecord(this, action, confirmMessage, url);
 });
+
+
+$(document).on("change", "#firm_cities", function () {
+  //İl id'si alınır ilce selectine ilceler yüklenir
+  getTowns($(this).val(),"#firm_towns");
+});

@@ -4,6 +4,11 @@ var wage_name, start_date, end_date, amount, description;
 
 $(document).on("click", "#add_wage_row", function () {
     var table = $("#personWageTable").DataTable();
+    var personel_id = $("#person_id").val();
+    if (!checkPersonId(personel_id)) {
+        return;
+      } 
+
     let rowCount = table.rows().count() + 1;
     wage_id.val(0);
     //tabloya yeni bir satır ekliyoruz

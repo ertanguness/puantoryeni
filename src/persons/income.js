@@ -1,7 +1,11 @@
 $(document).on("click", ".add-income", function () {
   let person_name = $(".full-name").text();
   let personel_id = $(this).data("id");
+  if (!checkPersonId(personel_id)) {
+    return;
+  } 
 
+  $("#income_modal").modal("show")
   $("#person_name_income").text(person_name);
   $("#person_id_income").val(personel_id);
 });
@@ -26,13 +30,10 @@ $(document).on("click", "#income_addButton", function () {
       var income = data.income_data;
       var income_expense = data.income_expense;
 
-
       $("#total_payment").text(income_expense.total_payment);
       $("#total_income").text(income_expense.total_income);
       $("#total_expense").text(income_expense.total_expense);
       $("#balance").text(income_expense.balance);
-
-
 
       var table = $("#person_paymentTable").DataTable();
       table.row
@@ -60,10 +61,8 @@ $(document).on("click", "#income_addButton", function () {
                       </div>
                   </div>`,
         ])
-        .order([0, 'desc'])
+        .order([0, "desc"])
         .draw(false);
-
-      
 
       if (data.status == "success") {
         title = "Başarılı!";
@@ -83,3 +82,5 @@ $(document).on("click", "#income_addButton", function () {
       });
     });
 });
+
+

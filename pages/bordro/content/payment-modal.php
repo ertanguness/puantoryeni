@@ -43,7 +43,7 @@ use App\Helper\Date;
                         <div class="row d-flex">
                             <div class="col-6">
 
-                                <?php echo Date::getMonthsSelect("payment_month"); ?>
+                                <?php echo Date::getMonthsSelect("payment_month",$month); ?>
                             </div>
                             <div class="col-6">
 

@@ -4,6 +4,8 @@ require_once "Model/Roles.php";
 $roleObj = new Roles();
 $id = $_GET["id"] ?? 0;
 $roles = $roleObj->find($id);
+
+$pageTitle = $id > 0 ? "Yetki Grubu Düzenle" : "Yeni Yetki Grubu";
 ?>
 <div class="page-wrapper">
     <!-- Page header -->
@@ -12,7 +14,7 @@ $roles = $roleObj->find($id);
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title">
-                        Yetki Grubu Düzenle
+                        <?php echo $pageTitle; ?>
                     </h2>
                 </div>
 
@@ -41,7 +43,7 @@ $roles = $roleObj->find($id);
                     <div class="card-body">
                         <form action="" id="roleForm">
                             <div class="row mt-3">
-                                <input type="text" class="form-control mb-3" id="role_id" value="<?php echo $id ?>">
+                                <input type="hidden" class="form-control mb-3" id="role_id" value="<?php echo $id ?>">
                                 <div class="col-md-2">
                                     <label class="form-label">Pozisyon Adı</label>
                                 </div>

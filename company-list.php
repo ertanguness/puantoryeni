@@ -7,8 +7,6 @@ $companyObj = new Company();
 $myCompanies = $companyObj->getMyCompanies($user_id);
 
 
-
-
 ?>
 <!doctype html>
 <html lang="tr">
@@ -39,7 +37,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
     }
 
     .list-item:hover {
-        background-color: #eee;
+        background-color: rgba(var(--tblr-secondary-rgb), .08);
     }
     </style>
 </head>
@@ -125,6 +123,8 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
 
                   foreach ($myCompanies as $myCompany) { ?>
                                     <form action="#" method="post">
+                       
+
                                         <div class="card list-item" data-id="<?php echo $myCompany->id ?>">
                                             <div class="row g-0">
                                                 <div class="col-auto">

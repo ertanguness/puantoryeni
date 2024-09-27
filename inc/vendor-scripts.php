@@ -1,84 +1,94 @@
 <script src="./dist/js/jquery.3.7.1.min.js"></script>
 <?php
-$page = isset($_GET["p"]) ? $_GET["p"] : "";
+$page = isset($_GET['p']) ? $_GET['p'] : '';
 if (
-    $page == "companies/list" || $page == "offers/list" || $page == "reports/list"
-    || $page == "users/list" || $page == "users/roles/list" || $page == "products/list"
-    || $page == "defines/service-head/list"
-    || $page == "persons/list" || $page == "persons/manage"
-    || $page == "mycompany/list" || $page == "financial/case/list"
-    || $page == "financial/transactions/list" || $page == "financial/transactions/manage"
-    || $page == "projects/list" || $page == "projects/add-person"
-    || $page == "puantaj/list" || $page == "bordro/list"
+    $page == 'companies/list' ||
+    $page == 'offers/list' ||
+    $page == 'reports/list' ||
+    $page == 'users/list' ||
+    $page == 'users/roles/list' ||
+    $page == 'products/list' ||
+    $page == 'defines/service-head/list' ||
+    $page == 'persons/list' ||
+    $page == 'persons/manage' ||
+    $page == 'mycompany/list' ||
+    $page == 'financial/case/list' ||
+    $page == 'financial/transactions/list' ||
+    $page == 'financial/transactions/manage' ||
+    $page == 'projects/list' || $page == 'projects/manage' ||
+    $page == 'projects/add-person' ||
+    $page == 'puantaj/list' ||
+    $page == 'bordro/list'
 ) {
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
 
-if ($page == "offers/add") {
+if ($page == 'offers/add') {
     echo '<script src="./src/offer.js" defer ></script>';
 }
-if ($page == "reports/ysc") {
+if ($page == 'reports/ysc') {
     echo '<script src="./src/report-ysc.js" ></script>';
 }
 
-//Kullanıcı ekleme ve düzenleme sayfası
-if ($page == "users/list" || $page == "users/manage") {
+// Kullanıcı ekleme ve düzenleme sayfası
+if ($page == 'users/list' || $page == 'users/manage') {
     echo '<script src="./src/users/users.js"></script>';
 }
 
-//Kullanıcı rolü ekleme ve düzenleme sayfası
-if ($page == "users/roles/list" || $page == "users/roles/manage") {
+// Kullanıcı rolü ekleme ve düzenleme sayfası
+if ($page == 'users/roles/list' || $page == 'users/roles/manage') {
     echo '<script src="./src/users/roles.js"></script>';
 }
-//Ürün ekleme ve düzenleme sayfası
-if ($page == "products/list" || $page == "products/manage") {
+// Ürün ekleme ve düzenleme sayfası
+if ($page == 'products/list' || $page == 'products/manage') {
     echo '<script src="./src/product.js"></script>';
 }
 
-
-//Servis Konusu ekleme ve düzenleme sayfası
-if ($page == "defines/service-head/list" || $page == "defines/service-head/manage") {
+// Servis Konusu ekleme ve düzenleme sayfası
+if ($page == 'defines/service-head/list' || $page == 'defines/service-head/manage') {
     echo '<script src="./src/defines/service-head.js"></script>';
 }
-//Personel Liste, ekleme ve düzenleme sayfası
-if ($page == "persons/list" || $page == "persons/manage") {
-    echo '<script src="./src/persons/persons.js"></script>'; 
+// Personel Liste, ekleme ve düzenleme sayfası
+if ($page == 'persons/list' || $page == 'persons/manage') {
+    echo '<script src="./src/persons/persons.js"></script>';
 }
-//Personel diğer bilgileri ekleme ve düzenleme sayfası
-if ($page == "persons/manage") {
-    echo '<script src="./src/persons/payment.js"></script>'; 
-    echo '<script src="./src/persons/wages.js"></script>'; 
-    echo '<script src="./src/persons/income.js"></script>'; 
-    echo '<script src="./src/persons/wage-cut.js"></script>'; 
+// Personel diğer bilgileri ekleme ve düzenleme sayfası
+if ($page == 'persons/manage') {
+    echo '<script src="./src/persons/payment.js"></script>';
+    echo '<script src="./src/persons/wages.js"></script>';
+    echo '<script src="./src/persons/income.js"></script>';
+    echo '<script src="./src/persons/wage-cut.js"></script>';
 }
 
-//Servis Konusu ekleme ve düzenleme sayfası
-if ($page == "mycompany/list" || $page == "mycompany/manage") {
+// Servis Konusu ekleme ve düzenleme sayfası
+if ($page == 'mycompany/list' || $page == 'mycompany/manage') {
     echo '<script src="./src/companies/mycompanies.js"></script>';
 }
 
-if ($page == "companies/list" || $page == "companies/manage") {
+if ($page == 'companies/list' || $page == 'companies/manage') {
     echo '<script src="./src/companies/companies.js"></script>';
 }
 
-//Kasa (kasa ekleme ve düzenleme sayfası)
-if ($page == "financial/case/list" || $page == "financial/case/manage") {
+// Kasa (kasa ekleme ve düzenleme sayfası)
+if ($page == 'financial/case/list' || $page == 'financial/case/manage') {
     echo '<script src="./src/financial/case.js"></script>';
 }
-//Kasa İşlemleri(kasa ekleme ve düzenleme sayfası)
-if ($page == "financial/transactions/list") {
+// Kasa İşlemleri(kasa ekleme ve düzenleme sayfası)
+if ($page == 'financial/transactions/list') {
     echo '<script src="./src/financial/transactions.js"></script>';
+}   
+// Proje Ekleme,güncelleme ve listeleme sayfası
+if ($page == 'projects/list' || $page == 'projects/manage' || $page == 'projects/add-person') {
+    echo '<script src="./src/project/projects.js"></script>';
+    echo '<script src="./src/project/progress-payment.js"></script>';
+    echo '<script src="./src/project/payment.js"></script>';
 }
-//Proje Ekleme,güncelleme ve listeleme sayfası
-if ($page == "projects/list" || $page == "projects/manage" || $page == "projects/add-person") {
-    echo '<script src="./src/projects.js"></script>';
-}
-//Puantaj Ekleme,güncelleme ve listeleme sayfası
-if ($page == "puantaj/list" ) {
+// Puantaj Ekleme,güncelleme ve listeleme sayfası
+if ($page == 'puantaj/list') {
     echo '<script src="./src/puantaj/puantaj.js"></script>';
 }
-//Bordro sayfası
-if ($page == "bordro/list" ) {
+// Bordro sayfası
+if ($page == 'bordro/list') {
     echo '<script src="./src/bordro/bordro.js"></script>';
     echo '<script src="./src/bordro/payment.js"></script>';
 }
@@ -91,7 +101,7 @@ if ($page == "bordro/list" ) {
 
 
 <?php
-if ($page == "home") {
+if ($page == 'home') {
     echo '<script src="./dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>';
     echo '<script src="./dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>';
     echo '<script src="./dist/libs/jsvectormap/dist/maps/world.js" defer></script>';
@@ -109,13 +119,6 @@ if ($page == "home") {
 <script src="./dist/js/tabler.min.js?1692870487"></script>
 <script src="./dist/js/demo.min.js?1692870487"></script>
 
-<?php
-if ($page == "offers/add") {
-    echo '<script src="./dist/libs/summernote/summernote-lite.min.js?1692870487"></script>';
-}
-?>
 
-
-<!-- <script src="./dist/libs/tinymce/tinymce.min.js?1725736825"></script> -->
 
 <script src="./src/app.js" defer??></script>

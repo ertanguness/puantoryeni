@@ -1,7 +1,11 @@
 $(document).on("click", ".add-wage-cut", function () {
     let person_name = $(".full-name").text();
     let personel_id = $(this).data("id");
-  
+    if (!checkPersonId(personel_id)) {
+      return;
+    } 
+
+  $("#wage_cut_modal").modal("show");
     $("#person_name_wage_cut").text(person_name);
     $("#person_id_wage_cut").val(personel_id);
   });

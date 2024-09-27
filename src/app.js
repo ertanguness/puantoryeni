@@ -1,6 +1,7 @@
 if ($(".datatable").length > 0) {
   $(".datatable:not(#puantajTable)").DataTable({
-   
+
+autoWidth :false,
     language: {
       url: "src/tr.json",
     },
@@ -228,4 +229,37 @@ function fadeOut(element, duration) {
   }
 
   var fading = setInterval(reduceOpacity, interval);
+}
+
+//İl seçildiğinde ilçeleri getir
+function getTowns(cityId , targetElement) {
+  let formData = new FormData();
+  formData.append("city_id", cityId);
+  formData.append("action", "getTowns");
+
+  fetch("/api/il-ilce.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      let towns = data.towns;
+      $(targetElement).html(towns);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+//Personeli kaydedip kaydetmediğimize bakarız
+function checkPersonId(id) {
+  if (id == 0) {
+    swal.fire({
+      title: "Hata",
+      icon: "warning",
+      text: "Öncelikle personeli kaydetmeniz gerekir!",
+    });
+    return false;
+  }
+  return true;
 }

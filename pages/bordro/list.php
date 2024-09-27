@@ -16,22 +16,23 @@ $bordro = new Bordro();
 
 $year = isset($_POST['year']) ? $_POST['year'] : date('Y');
 $month = isset($_POST['months']) ? $_POST['months'] : date('m');
+$last_day = Date::Ymd(Date::lastDay($month, $year));
 $project_id = isset($_POST['projects']) ? $_POST['projects'] : 0;
 
 if ($project_id == 0 || $project_id == '') {
     // Proje id boş ise Firma id'sine göre tüm personelleri getirir
-    $persons = $personObj->getPersonIdByFirm($firm_id);
+    $persons = $personObj->getPersonIdByFirmCurrentMonth($firm_id,$last_day);
 } else {
     // Proje id dolu ise projeye ait personelleri getirir
-    $persons = $projects->getPersonFromProject($project_id);
-    if (count($persons) > 0) {
-        // 149,181 şeklinde gelen stringi diziye çevirir
-        $persons = explode(',', $persons[0]->id);
-        for ($i = 0; $i < count($persons); $i++) {
-            // Dizi içindeki id'leri object yapar
-            $persons[$i] = (object) ['id' => $persons[$i]];
-        }
-    }
+    $persons = $projects->getPersonIdByFromProjectCurrentMonth($project_id,$last_day);
+    // if (count($persons) > 0) {
+    //     // 149,181 şeklinde gelen stringi diziye çevirir
+    //     $persons = explode(',', $persons[0]->id);
+    //     for ($i = 0; $i < count($persons); $i++) {
+    //         // Dizi içindeki id'leri object yapar
+    //         $persons[$i] = (object) ['id' => $persons[$i]];
+    //     }
+    // }
 }
 
 // Ayın ilk gününü bulma (20240901) şeklinde döner
@@ -97,7 +98,7 @@ $lastDay = Date::lastDay($month, $year);
                 </style>
 
                 <div class="table-responsive">
-                    <table class="table card-table text-nowrap datatable" id="bordroTable">
+                    <table class="table card-table table-responsive text-nowrap datatable" id="bordroTable">
                         <thead>
                             <tr>
                                 <th style="width:1%">id</th>
@@ -120,35 +121,48 @@ $lastDay = Date::lastDay($month, $year);
                             foreach ($persons as $item):
                                 // Personel id'sine göre personel bilgilerini getirir
                                 $person = $personObj->find($item->id);
+
+                                // Personel Beyaz Yaka ise
+                                if ($person->wage_type == 1) {
+                                    // Eylül 2024 Maaş şeklinde açıklama oluştur
+                                    $description = Date::monthName($month) . ' ' . $year . ' Maaş';
+                                    // Personelin aylık maaşı eklenmemişse
+                                    // Personelin işe başlama tarihi o ay içindeyse
+                            
+                                    if (Date::isBetween($person->job_start_date, $firstDay, $lastDay)) {
+                                        // Personelin aylık maaşını ekleyelim
+                                        if (!$bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)) {
+                                            // Personelin aylık maaşını ekleyelim
+                                            $bordro->addPersonMonthlyIncome($person->id, $month, $year, $person->daily_wages, $description);
+                                        }
+                                    }
+                                }
+
                                 // Personel id'sine göre personelin maaş ve kesinti bilgilerini getirir(Örnek: 20240901-20240930 arası)
-                                $gelir = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->gelir;
-                                $wage_cut = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->kesinti;
+                                $gelir = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->gelir;
+                                $wage_cut = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->kesinti;
                                 $hakedis = $gelir - $wage_cut;
-                                $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay,$person->wage_type)->odeme;
+                                $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->odeme;
                                 $kalan = $hakedis - $odeme;
-                                if($kalan < 0){
-                                    $color = "text-danger";
-                                }
-                                elseif($kalan > 0){
-                                    $color = "text-success";
-                                }else{
-                                    $color = "";
-                                }
+
                                 ?>
                                 <tr>
                                     <td><?php echo $person->id; ?></td>
-                                    <td><?php echo $person->full_name; ?></td>
-                                    <td><?php echo $person->wage_type == 1 ? "Beyaz Yaka" : "Mavi Yaka"; ?></td>
+                                    <td> <a href="#"data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                    <td><?php echo $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka'; ?></td>
                                     <td><?php echo $person->job; ?></td>
                                     <td><?php echo $person->job_start_date; ?></td>
-                                    <td class="text-center "><?php echo Helper::formattedMoney(($gelir) ?? 0 ) ?></td>
+                                    <td class="text-center "><?php echo Helper::formattedMoney(($gelir) ?? 0) ?></td>
                                     <td class="text-center"><?php echo Helper::formattedMoney($wage_cut ?? 0); ?></td>
                                     <td class="text-center">
                                         <?php echo Helper::formattedMoney(($hakedis) ?? 0); ?>
                                     </td>
                                     <td class="text-center"><?php echo Helper::formattedMoney($odeme ?? 0); ?></td>
-
-                                    <td class="text-center <?php echo $color?>"><?php echo Helper::formattedMoney($kalan ?? 0); ?></td>
+                                    <!-- Bakiye rengini belirle ve göster -->
+                                    <td class="text-center <?php echo Helper::balanceColor($kalan) ?>">
+                                        <!-- //Bakiyesini yazdır -->
+                                        <?php echo Helper::formattedMoney($kalan ?? 0); ?>
+                                    </td>
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <button class="btn dropdown-toggle align-text-top"

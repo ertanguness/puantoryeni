@@ -25,7 +25,6 @@ if ($_POST["action"] == "userSave") {
             "password" => md5($_POST["password"]),
             "phone" => $_POST["phone"],
             "user_roles" => $_POST["user_roles"],
-            "title" => $_POST["title"],
             "job" => $_POST["job"],
 
         ];

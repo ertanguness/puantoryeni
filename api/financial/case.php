@@ -10,7 +10,7 @@ if ($_POST["action"] == "saveCase") {
         "id" => $id,
         "case_name" => $_POST["case_name"],
         "account_id" => $_SESSION["user"]->id,
-        "company_id" => $_POST["firm_company"],
+        "firm_id" => $_POST["firm_company"],
         "start_budget" => $_POST["start_budget"],
         "bank_name" => $_POST["bank_name"],
         "branch_name" => $_POST["branch_name"],
@@ -26,7 +26,7 @@ if ($_POST["action"] == "saveCase") {
         }
     } catch (PDOException $ex) {
         $status = "error";
-        $message = "Kasa kaydedilirken bir hata oluştu.";
+        $message = "Kasa kaydedilirken bir hata oluştu." . $ex->getMessage();
     }
     $res = [
         "status" => $status,

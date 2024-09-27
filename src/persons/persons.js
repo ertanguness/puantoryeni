@@ -19,6 +19,12 @@ $(document).on("click", "#savePerson", function () {
         required: true,
 
       },
+      daily_wages : {
+        required :true,
+        number :true,
+        min:1
+
+      }
     },
     messages: {
       full_name: {
@@ -37,6 +43,12 @@ $(document).on("click", "#savePerson", function () {
         required: "Lütfen işe başlama tarihini giriniz",
         date: "Lütfen geçerli bir tarih giriniz",
       },
+      daily_wages : {
+        required : "Ücret alanı zorunludur",
+        number : "Ücret alanı sayısal değer olmalıdır",
+        min : "Ücret alanı 0 den büyük olmalıdır"
+
+      }
     },
   });
   if (!form.valid()) return false;

@@ -12,7 +12,7 @@ class Date
         return date($format, strtotime($date));
     }
 
-    public static function Ymd($date, $format = 'd.m.Y')
+    public static function Ymd($date, $format = 'Ymd')
     {
         if ($date == null) {
             return '';
@@ -35,6 +35,11 @@ class Date
         );
     }
 
+    public static function getDay($date = null, $leadingZero = true)
+    {
+        $format = $leadingZero ? 'd' : 'j';
+        return $date ? date($format, strtotime($date)) : date($format);
+    }
     public static function getMonth($date = null, $leadingZero = true)
     {
         $format = $leadingZero ? 'm' : 'n';
@@ -63,11 +68,21 @@ class Date
         return $dateList;
     }
 
+
     public static function isWeekend($date)
     {
         $dateTime = new \DateTime($date);
         $dayOfWeek = $dateTime->format('N');
         return ($dayOfWeek == 7);
+    }
+
+    
+    public static function isBetween($date, $startDate, $endDate)
+    {
+        $date = strtotime($date);
+        $startDate = strtotime($startDate);
+        $endDate = strtotime($endDate);
+        return ($date >= $startDate && $date <= $endDate);
     }
 
     public static function gunAdi($gun)
@@ -102,6 +117,8 @@ class Date
 
     public static function monthName($month)
     {
+        //09 şeklinde gelen ayları 9 şekline çevir
+        $month = ltrim($month, '0');
         return self::MONTHS[$month];
     }
 

@@ -1,8 +1,11 @@
 $(document).on("click", ".add-payment", function () {
     let personel_id = $(this).data("id");
     let personel_name = $(this).closest("tr").find("td:eq(1)").text();
+    let balance = $(this).closest("tr").find("td:eq(9)").text();
     $("#person_id_payment").val(personel_id);
     $("#person_name_payment").text(personel_name);
+  
+    $("#person_payment_balance").text("Bakiye :" + balance);
 });
 
 $(document).on('click', '#payment_addButton', function () {
@@ -65,3 +68,17 @@ $(document).on('click', '#payment_addButton', function () {
             }
         })
 });
+
+//Kalan bakiye tutarı ile ödeme alanını doldurma
+$(document).on("click", "#person_payment_balance", function () {
+    let balanceText = $(this).text();
+    let balanceNumber = parseFloat(
+      balanceText.replace(/[^\d,-]/g, "").replace(",", ".")
+    );
+    
+    if(balanceNumber < 0){
+      return
+    }
+    $("#payment_amount").val(balanceNumber);
+    $("#payment_type").val("Bakiye Ödemesi").focus();
+  });

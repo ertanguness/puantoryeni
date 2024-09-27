@@ -1,5 +1,10 @@
 $(document).on("click", ".add-payment", function () {
   let personel_id = $(this).data("id");
+  if (!checkPersonId(personel_id)) {
+    return;
+  } 
+
+$("#payment-modal").modal("show")
 
   let personel_name = $(".full-name").text();
   let balance = $("#balance").text();
@@ -64,7 +69,8 @@ $(document).on("click", "#payment_addButton", function () {
             data.payment.turu,
             data.payment.ay,
             data.payment.yil,
-            data.payment.kategori,
+            `<i class='ti ti-upload icon color-yellow me-1' ></i>
+            ${data.payment.kategori}`,
             data.payment.tutar,
             data.payment.aciklama,
             data.payment.created_at,
@@ -85,7 +91,7 @@ $(document).on("click", "#payment_addButton", function () {
           .order([0, 'desc'])
           .draw(false);
 
-        $("#payment-modal").modal("hide");
+        // $("#payment-modal").modal("hide");
         form.trigger("reset");
         Swal.fire({
           icon: "success",
@@ -108,8 +114,12 @@ $(document).on("click", "#payment_addButton", function () {
 $(document).on("click", "#person_payment_balance", function () {
   let balanceText = $(this).text();
   let balanceNumber = parseFloat(
-    balanceText.replace(/[^\d,]/g, "").replace(",", ".")
+    balanceText.replace(/[^\d,-]/g, "").replace(",", ".")
   );
+  
+  if(balanceNumber < 0){
+    return
+  }
   $("#payment_amount").val(balanceNumber);
   $("#payment_type").val("Bakiye Ödemesi").focus();
 });
@@ -140,3 +150,4 @@ $(document).on("click", ".delete-payment", async function () {
   
 
 });
+

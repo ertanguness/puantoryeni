@@ -2,7 +2,9 @@
 require_once "Database/db.php";
 require_once "Model/Projects.php";
 
-$project = new Projects();
+require_once "App/Helper/projects.php";
+
+
 
 
 use Database\Db;
@@ -38,9 +40,13 @@ class puantajHelper extends Db{
 
     function puantajClass($turu, $project = 0, $puantaj_project = "")
     {
+        $projectObj = new ProjectHelper();
+
         $pcq = $this->db->prepare("SELECT * FROM puantajturu WHERE id = ?");
         $pcq->execute(array($turu));
         $result = $pcq->fetch(PDO::FETCH_ASSOC);
+
+        $tooltip = $projectObj->getProjectName($puantaj_project);
 
         if ($result) {
             if ($result["PuantajKod"] == "HT") {
@@ -48,7 +54,7 @@ class puantajHelper extends Db{
                 $color = $result["FontRengi"];
                 $selected = "";
             } else {
-                if($puantaj_project != $project) {
+                if($puantaj_project != $project){ 
                     $backcolor = "#bbb";
                     $color = "#666";
                     $selected = "selected";
@@ -58,7 +64,7 @@ class puantajHelper extends Db{
                     $selected = "";
             }
             } 
-            echo "<td class='gun noselect $selected' data-change='false'  data-project='" . $puantaj_project . "' data-id=" . $result["id"] . " style='background:".$backcolor.";color:".$color."'>" . $result["PuantajKod"] . "</td>";
+            echo "<td class='gun noselect $selected' data-tooltip ='$tooltip' data-change='false'  data-project='" . $puantaj_project . "' data-id=" . $result["id"] . " style='background:".$backcolor.";color:".$color."'>" . $result["PuantajKod"] . "</td>";
         } else {
             echo "<td class='gun noselect' data-change='false' data-project='0'></td>";
         }

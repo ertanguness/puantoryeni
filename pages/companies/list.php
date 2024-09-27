@@ -64,7 +64,7 @@ $companies = $companyObj->allWithUserId();
                                         <?php echo $cities->getCityName($company->city); ?>
                                     </td>
                                     <td>
-                                        <?php echo $company->ilce ?? ''; ?>
+                                        <?php echo $cities->getTownName($company->town); ?>
                                     </td>
                                     <td>
                                         <?php echo $company->phone; ?>

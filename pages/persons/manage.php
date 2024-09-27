@@ -1,13 +1,11 @@
 <?php
-require_once "Model/Persons.php";
-
-
+require_once 'Model/Persons.php';
 
 $id = $_GET['id'] ?? 0;
 $personObj = new Persons();
 $person = $personObj->find($id);
 
-$pageTitle = $id > 0 ? "Personel Güncelle" : "Yeni Personel";
+$pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
 
 ?>
 
@@ -45,11 +43,12 @@ $pageTitle = $id > 0 ? "Personel Güncelle" : "Yeni Personel";
                             
                             <div class="col-auto">
                                 <?php
-                                $noback_shape = "";
-                                $wage_type = $person->wage_type ?? 1;
-                                if($wage_type == 1) {
-                                    $noback_shape = "-noback-shape";
-                                }; ?>
+                                    $noback_shape = '';
+                                    $wage_type = $person->wage_type ?? 1;
+                                    if ($wage_type == 1) {
+                                        $noback_shape = '-noback-shape';
+                                    };
+                                ?>
                                 <span class="avatar" style="background-image: url('./static/hard-hat<?php echo $noback_shape; ?>.svg')"></span>
                             </div>
                             <div class="col">
@@ -57,7 +56,7 @@ $pageTitle = $id > 0 ? "Personel Güncelle" : "Yeni Personel";
                                 <?php echo $pageTitle; ?>
                                 </div>
                                 <div class="text-secondary full-name">
-                                    <?php echo $person->full_name ?? '' ; ?>
+                                    <?php echo $person->full_name ?? ''; ?>
                                 </div>
                             </div>
                             <div class="col-auto d-flex">
@@ -145,19 +144,24 @@ $pageTitle = $id > 0 ? "Personel Güncelle" : "Yeni Personel";
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active show" id="tabs-home-3" role="tabpanel">
-                                    <?php include_once "content/0-home.php" ?>
+                                    <?php include_once 'content/0-home.php' ?>
                                 </div>
                                 <div class="tab-pane" id="tabs-payment-3" role="tabpanel">
-                                    <?php include_once "content/1-payment-info.php" ?>
+                                    <?php include_once 'content/1-payment-info.php' ?>
                                 </div>
                                 <div class="tab-pane" id="tabs-puantaj-3" role="tabpanel">
-                                </div>
-                                <div class="tab-pane" id="tabs-leave-3" role="tabpanel">
-                                </div>
-                                <div class="tab-pane" id="tabs-documents-3" role="tabpanel">
+                                <?php include_once 'content/3-puantaj-info.php' ?>
+                            </div>
+                            <div class="tab-pane" id="tabs-leave-3" role="tabpanel">
+                                
+                                <?php include_once 'content/4-leave-info.php' ?>
+                            </div>
+                            <div class="tab-pane" id="tabs-documents-3" role="tabpanel">
+                                <?php include_once 'content/5-documents.php' ?>
+                                
                                 </div>
                                 <div class="tab-pane" id="tabs-wages-3" role="tabpanel">
-                                    <?php include_once "content/5-wage-defines.php" ?>
+                                    <?php include_once 'content/6-wage-defines.php' ?>
                                 </div>
                             </div>
                         </div>

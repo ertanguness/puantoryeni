@@ -69,11 +69,17 @@
 }
 
 .table-responsive {
-    overflow-x: inherit !important;
+  overflow-x: inherit;
+
 }
+
+
 
 .icon {
   font-size: 20px;
+}
+.icon-lg{
+  font-size: 60px;
 }
 .link{
   cursor: pointer;
@@ -81,6 +87,7 @@
 .active-link {
   color: #007bff !important;
 }
+
 
 .color-green{
   color: #28a745 !important;

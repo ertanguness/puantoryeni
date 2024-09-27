@@ -3,14 +3,16 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 
-require_once "Database/db.php";
-require_once "Model/Menus.php";
 
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     header("Location: sign-in.php");
     exit;
 }
+
+require_once "Database/db.php";
+require_once "Model/Menus.php";
+
 $user_role = $_SESSION['user_role'];
 $active_page = isset($_GET["p"]) ? $_GET["p"] : "";
 $menus = new Menus();

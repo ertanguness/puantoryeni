@@ -11,52 +11,48 @@ class Helper
     ];
 
     const UNITS = [
-        "1" => "Ad.",
-        "2" => "Kg",
-        "3" => "Lt.",
-        "4" => "Mt.",
-        "5" => "Pak.",
-
+        '1' => 'Ad.',
+        '2' => 'Kg',
+        '3' => 'Lt.',
+        '4' => 'Mt.',
+        '5' => 'Pak.',
     ];
 
     const KDV_ORANI = [
-        "0" => "% 0",
-        "1" => "% 1",
-        "8" => "% 8",
-        "18" => "% 18",
-        "20" => "% 20",
+        '0' => '% 0',
+        '1' => '% 1',
+        '8' => '% 8',
+        '18' => '% 18',
+        '20' => '% 20',
     ];
 
     const INCOME_EXPENSE_TYPE = [
-        "1" => "Gelir",
-        "2" => "Kesinti",
-        "3" => "Ödeme",
-        "4" => "Maaş",
-        "5" => "Puantaj Çalışma",
+        '1' => 'Gelir',
+        '2' => 'Kesinti',
+        '3' => 'Ödeme',
+        '4' => 'Maaş',
+        '5' => 'Puantaj Çalışma',
+        '6' => 'Hakediş',
+        '' => 'Bilinmiyor',
     ];
 
     public static function getIncomeExpenseType($type)
     {
-    
         $types = self::INCOME_EXPENSE_TYPE;
         return $types[$type];
     }
 
-
-
     public static function short($value, $lenght = 21)
     {
-        return strlen($value) > $lenght ? substr($value, 0, $lenght) . "..." : $value;
+        return strlen($value) > $lenght ? substr($value, 0, $lenght) . '...' : $value;
     }
 
     public static function formattedMoney($value, $currency = 1)
     {
-        return number_format($value, 2, ',', '.') . " " .  self::MONEY_UNIT[$currency];
-       
+        return number_format($value, 2, ',', '.') . ' ' . self::MONEY_UNIT[$currency];
     }
 
-
-    public static function moneySelect($name = "moneys", $selected = '1')
+    public static function moneySelect($name = 'moneys', $selected = '1')
     {
         $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
         foreach (self::MONEY_UNIT as $key => $value) {
@@ -75,7 +71,7 @@ class Helper
         return self::MONEY_UNIT[$currency];
     }
 
-    public static function unitSelect($name = "units", $selected = '1')
+    public static function unitSelect($name = 'units', $selected = '1')
     {
         $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
         foreach (self::UNITS as $key => $value) {
@@ -94,7 +90,7 @@ class Helper
         return self::UNITS[$unit];
     }
 
-    public static function kdvSelect($name = "kdv", $selected = '20')
+    public static function kdvSelect($name = 'kdv', $selected = '20')
     {
         $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
         foreach (self::KDV_ORANI as $key => $value) {
@@ -110,5 +106,14 @@ class Helper
         return $value . ' %' . self::KDV_ORANI[$kdv];
     }
 
-    
+    public static function balanceColor($tutar)
+    {
+        if ($tutar < 0) {
+            return 'text-danger';
+        } elseif ($tutar > 0) {
+            return 'text-success';
+        } else {
+            return '';
+        }
+    }
 }

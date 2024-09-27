@@ -1,13 +1,13 @@
 <?php
-require_once "App/Helper/helper.php";
-require_once "App/Helper/date.php";
-require_once "App/Helper/projects.php";
-require_once "App/Helper/puantaj.php";
-require_once "Model/Persons.php";
-require_once "Model/Puantaj.php";
+require_once 'App/Helper/helper.php';
+require_once 'App/Helper/date.php';
+require_once 'App/Helper/projects.php';
+require_once 'App/Helper/puantaj.php';
+require_once 'Model/Persons.php';
+require_once 'Model/Puantaj.php';
 
-use App\Helper\Helper;
 use App\Helper\Date;
+use App\Helper\Helper;
 
 $puantajHelper = new puantajHelper();
 $projectHelper = new ProjectHelper();
@@ -16,35 +16,25 @@ $projects = new Projects();
 
 $puantajObj = new Puantaj();
 
-$year = isset($_POST["year"]) ? $_POST["year"] : date('Y');
-$month = isset($_POST["months"]) ? $_POST["months"] : date('m');
-$project_id = isset($_POST["projects"]) ? $_POST["projects"] : 0;
+$year = isset($_POST['year']) ? $_POST['year'] : date('Y');
+$month = isset($_POST['months']) ? $_POST['months'] : date('m');
+$last_day = Date::Ymd(Date::lastDay($month, $year));
+$project_id = isset($_POST['projects']) ? $_POST['projects'] : 0;
 
 
-if ($project_id == 0 || $project_id == "") {
-    //Proje id boş ise Firma id'sine göre tüm personelleri getirir
-    $persons = $personObj->getPersonIdByFirmBlueCollar($firm_id);
-
+if ($project_id == 0 || $project_id == '') {
+    // Proje id boş ise Firma id'sine göre tüm mavi yakalı, işe başlama tarihi o ayın son gününden önce olan personelleri getirir
+    $persons = $personObj->getPersonIdByFirmBlueCollarCurrentMonth($firm_id, $last_day);
 } else {
-    //Proje id dolu ise projeye ait personelleri getirir
-    $persons = $projects->getPersonFromProject($project_id);
-    if (count($persons) > 0) {
-        //149,181 şeklinde gelen stringi diziye çevirir
-        $persons = explode(",", $persons[0]->id);
-        for ($i = 0; $i < count($persons); $i++) {
-            //Dizi içindeki id'leri object yapar
-            $persons[$i] = (object) ['id' => $persons[$i]];
-        }
-    }
-
+    // Proje id dolu ise projeye ait, işe başlama tarihi o ayın son gününden önce olan mavi yakalı personelleri getirir
+    $persons = $projects->getPersonIdByFromProjectCurrentMonth($project_id, $last_day);
 
 }
 
-//Ayın son gününü bulma
+// Ayın son gününü bulma
 $days = Date::daysInMonth($month, $year);
-//Tarihleri oluşturma
+// Tarihleri oluşturma
 $dates = Date::generateDates($year, $month, $days);
-
 
 ?>
 <style>
@@ -252,7 +242,7 @@ $dates = Date::generateDates($year, $month, $days);
 
 
 
-<?php include_once "content/puantaj-turleri-modal.php" ?>
+<?php include_once 'content/puantaj-turleri-modal.php' ?>
 
 
 <div class="container-xl mt-3">
@@ -261,15 +251,15 @@ $dates = Date::generateDates($year, $month, $days);
 
             <div class="col-md-3">
                 <label for="projects" class="form-label">Proje:</label>
-                <?php echo $projectHelper->getProjectSelect("projects", $project_id); ?>
+                <?php echo $projectHelper->getProjectSelect('projects', $project_id); ?>
             </div>
             <div class="col-md-3">
                 <label for="projects" class="form-label">Ay:</label>
-                <?php echo Date::getMonthsSelect("months", $month); ?>
+                <?php echo Date::getMonthsSelect('months', $month); ?>
             </div>
             <div class="col-md-3">
                 <label for="projects" class="form-label">Yıl:</label>
-                <?php echo Date::getYearsSelect("year", $year); ?>
+                <?php echo Date::getYearsSelect('year', $year); ?>
             </div>
             <div class="col-md-3">
                 <label for="projects" class="form-label">İşlem</label>
@@ -282,7 +272,7 @@ $dates = Date::generateDates($year, $month, $days);
                 <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
                     autocomplete="off">
                 <label for="btn-radio-toolbar-1" data-tooltip="Yazdır" class="btn btn-icon">
-                     <i class="ti ti-printer icon"></i>
+                    <i class="ti ti-printer icon"></i>
                 </label>
 
                 <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
@@ -348,10 +338,11 @@ $dates = Date::generateDates($year, $month, $days);
                                     <?php
                                     $style = '';
                                     if (Date::isWeekend($date)) {
-                                        $style = "background-color:#99A98F;color:white";
+                                        $style = 'background-color:#99A98F;color:white';
                                     }
                                     echo ' <th class="gunadi" style="' . $style . '">' . Date::gunadi($date);
-                                    '.</th>' ?>
+                                    '.</th>'
+                                    ?>
                                 <?php endforeach; ?>
 
                             </tr>
@@ -360,13 +351,14 @@ $dates = Date::generateDates($year, $month, $days);
                                 <th class="ld">Adı Soyadı</th>
                                 <th class="ld">Unvanı</th>
                                 <th class="ld" style="display:none">Seç</th>
-                                <?php foreach ($dates as $date):
-                                    $style = '';
-                                    if (Date::isWeekend($date)) {
-                                        $style = "background-color:#99A98F;color:white";
-                                    }
-                                    echo '<th class="head-date" style="' . $style . '"><span>' . date('d', strtotime($date)) . '</span></th>';
-                                    ?>
+                                <?php
+                                    foreach ($dates as $date):
+                                        $style = '';
+                                        if (Date::isWeekend($date)) {
+                                            $style = 'background-color:#99A98F;color:white';
+                                        }
+                                        echo '<th class="head-date" style="' . $style . '"><span>' . date('d', strtotime($date)) . '</span></th>';
+                                ?>
 
                                 <?php endforeach; ?>
                             </tr>
@@ -374,9 +366,9 @@ $dates = Date::generateDates($year, $month, $days);
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($persons as $item):
-                                $person = $personObj->find($item->id);
-                                ?>
+                                foreach ($persons as $item):
+                                    $person = $personObj->find($item->id);
+                            ?>
                                 <tr>
                                     <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $person->id ?>"><a
                                             class="btn-user-modal" type="button">
@@ -397,23 +389,20 @@ $dates = Date::generateDates($year, $month, $days);
                                     </td>
                                     <?php
                                     foreach ($dates as $date):
-                                        $jobStartDate = str_replace("-", "", Date::Ymd($person->job_start_date));
+                                        $jobStartDate = str_replace('-', '', Date::Ymd($person->job_start_date));
                                         $month_date = $gun = $date;
 
-
-                                        ?>
+                                                                    ?>
                                         <?php
-
-
 
                                         if ($jobStartDate <= $month_date) {
                                             $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
 
-                                            if ($puantaj_id > 0) {
-                                                $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);                                   
+
+                                            if ($puantaj_id >= 0 ) {
+                                                $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);
                                                 $puantajHelper->puantajClass($puantaj_id, $project_id, $puantaj_project);
                                             } else {
-
                                                 if (Date::isWeekend($date)) {
                                                     $puantajHelper->puantajClass(53);
                                                 } else {
@@ -423,7 +412,7 @@ $dates = Date::generateDates($year, $month, $days);
                                         } else {
                                             echo "<td class='noselect text-center' style='background:#ddd'>---</td>";
                                         }
-                                        ?>
+                                                                        ?>
 
                                     <?php endforeach; ?>
                                 </tr>

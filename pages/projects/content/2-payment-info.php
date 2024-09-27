@@ -1,40 +1,31 @@
 <?php
 require_once 'App/Helper/helper.php';
-require_once 'Model/Bordro.php';
-require_once 'Model/Puantaj.php';
 require_once 'App/Helper/date.php';
 
-$puantaj = new Puantaj();
-$bordro = new Bordro();
+require_once 'Model/ProjectIncomeExpense.php';
 
 use App\Helper\Date;
-// Eğer personel beyaz yaka ise ve içinde bulunduğu ayda gelir tablosuna maaş eklenmediyse git o tabloya personelin aylık ücretini ekle
 use App\Helper\Helper;
 
+$incexp = new ProjectIncomeExpense();
+
 // Gelir gider bilgierini getir
-$income_expenses = $bordro->getPersonWorkTransactions($id);
+$income_expenses = $incexp->getAllIncomeExpenseByProject($project->id);
 
-$month = Date::getMonth();
-
-
-
-// maas_gelir_gider tablosunda personelin toplam gelir, gider ve ödeme bilgilerini getir
-// ********************************************************************************* */
-$summary = $bordro->sumAllIncomeExpense($id);
-
-$incomes = $summary->total_income;
-$total_expense = $summary->total_expense;
-$total_payment = $summary->total_payment;
-// ********************************************************************************* */
-
-// Toplam Gelir(Puantaj + Eklenen Gelirler+ veya maaş)
-$total_income =  $incomes ;
-
-// Bakiye hesaplanacak
+// Özet Bilgileri getir
+$summary = $incexp->sumAllIncomeExpense($project->id);
+$total_income = $summary->hakedis;
+$total_expense = $summary->kesinti;
+$total_payment = $summary->odeme;
 $balance = $total_income - $total_expense - $total_payment;
 
+
+
 ?>
-<div class="container-xl">
+
+
+
+<div class="container-xl mt-3">
     <div class="row row-deck row-cards">
         <div class="col-12">
             <div class="card">
@@ -52,14 +43,17 @@ $balance = $total_income - $total_expense - $total_payment;
                                 <i class="ti ti-list-details icon me-2"></i>
                                 İşlemler</button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item add-payment" data-tooltip="Personellere Ödeme yapın"
-                                    data-tooltip-location="left" data-id="<?php echo $id ; ?>" href="#">
+                                <a class="dropdown-item add-payment" data-bs-toggle="modal"
+                                    data-bs-target="#payment-modal" data-tooltip="Projeye Ödeme yapın"
+                                    data-tooltip-location="left" data-id="<?php echo $project->id; ?>" href="#">
                                     <i class="ti ti-upload icon me-3"></i> Ödeme Yap
                                 </a>
-                                <a class="dropdown-item add-income" href="#" data-id="<?php echo $id; ?>">
-                                    <i class="ti ti-download icon me-3"></i> Gelir Ekle
+                                <a class="dropdown-item add-income" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#progress-payment-modal" data-id="<?php echo $project->id; ?>">
+                                    <i class="ti ti-download icon me-3"></i> Hakediş Ekle
                                 </a>
-                                <a class="dropdown-item add-wage-cut" href="#"  data-id="<?php echo $id; ?>">
+                                <a class="dropdown-item add-deduction" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#deduction_modal" data-id="<?php echo $project->id; ?>">
                                     <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
                                 </a>
 
@@ -68,6 +62,8 @@ $balance = $total_income - $total_expense - $total_payment;
 
                     </div>
                 </div>
+
+                <!-- Gelir Gider Özet Bilgileri -->
                 <div class="card-header">
                     <div class="row row-cards">
 
@@ -161,7 +157,7 @@ $balance = $total_income - $total_expense - $total_payment;
                                             </div>
                                             <div class="text-secondary">
                                                 <label for="" id="balance">
-                                                    <?php echo Helper::formattedMoney($balance); ?>
+                                                    <?php echo Helper::formattedMoney($balance ?? 0); ?>
                                                 </label>
                                             </div>
                                         </div>
@@ -182,7 +178,6 @@ $balance = $total_income - $total_expense - $total_payment;
                                 <th>Adı</th>
                                 <th>Ay</th>
                                 <th>Yıl</th>
-                          
                                 <th>İşlem Türü</th>
                                 <th>Tutar</th>
                                 <th>Açıklama</th>
@@ -194,24 +189,29 @@ $balance = $total_income - $total_expense - $total_payment;
 
 
                             <?php
-                            foreach ($income_expenses as $item):
-                                ?>
+                                foreach ($income_expenses as $item):
+                            ?>
                             <tr>
                                 <td><?php echo $item->id; ?></td>
-                                <td><?php echo Date::dmY($item->gun); ?></td>
+                                <td><?php echo Date::dmY($item->tarih); ?></td>
                                 <td><?php echo $item->turu; ?></td>
                                 <td><?php echo $item->ay; ?></td>
                                 <td><?php echo $item->yil; ?></td>
                          
-                                <td><?php 
-                                 if($item->kategori == 1 || $item->kategori == 4){
-                                     echo "<i class='ti ti-download icon color-green me-1' ></i>";
-                                 }elseif($item->kategori == 2){
-                                     echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
-                                 }elseif($item->kategori == 3){
-                                     echo "<i class='ti ti-upload icon color-yellow me-1' ></i> ";
-                                 };
-                                 echo Helper::getIncomeExpenseType($item->kategori); ?>
+                                <td><?php
+                                    if ($item->kategori == 1 || $item->kategori == 4) {
+                                        echo "<i class='ti ti-download icon color-green me-1' ></i>";
+                                    } elseif ($item->kategori == 2) {
+                                        echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
+                                    } elseif ($item->kategori == 3) {
+                                        echo "<i class='ti ti-upload icon color-yellow me-1' ></i> ";
+                                    } elseif ($item->kategori == 6) {
+                                        echo "<i class='ti ti-cash-register icon color-green me-1' ></i> ";
+                                    } elseif ($item->kategori == '') {
+                                        echo "<i class='ti ti-question-mark icon me-1' ></i> ";
+                                    };
+                                    echo Helper::getIncomeExpenseType($item->kategori) ?? '';
+                                ?>
                                  
                                  </td>
                                 <td><?php echo Helper::formattedMoney($item->tutar); ?></td>
@@ -223,8 +223,8 @@ $balance = $total_income - $total_expense - $total_payment;
                                         <button class="btn dropdown-toggle align-text-top"
                                             data-bs-toggle="dropdown">İşlem</button>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item edit-payment" 
-                                                >
+                                            <a class="dropdown-item route-link"
+                                                data-page="reports/ysc&id=<?php echo $item->id ?>" href="#">
                                                 <i class="ti ti-edit icon me-3"></i> Güncelle
                                             </a>
                                             <a class="dropdown-item delete-payment" href="#"
@@ -245,6 +245,7 @@ $balance = $total_income - $total_expense - $total_payment;
         </div>
     </div>
 </div>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/bordro/content/wage_cut-modal.php' ?>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/bordro/content/income-modal.php' ?>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/bordro/content/payment-modal.php' ?>
+
+
+
+
