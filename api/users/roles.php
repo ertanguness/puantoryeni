@@ -1,12 +1,8 @@
 <?php
 
-require_once "../../Database/db.php";
+require_once "../../Database/require.php";
 require_once "../../Model/Roles.php";
 
-use Database\Db;
-
-$dbInstance = new Db(); // Db sınıfının bir örneğini oluşturuyoruz.
-$db = $dbInstance->connect(); // Veritabanı bağlantısını alıyoruz.
 
 $roles = new Roles();
 
@@ -17,6 +13,7 @@ $id = $_POST["id"];
     try {
         $data = [
             "id" => $id,
+            "firm_id" => $_SESSION["firm_id"],
             "roleName" => $_POST["role_name"],
             "roleDescription" => $_POST["role_description"],
         ];

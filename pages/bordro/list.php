@@ -21,10 +21,10 @@ $project_id = isset($_POST['projects']) ? $_POST['projects'] : 0;
 
 if ($project_id == 0 || $project_id == '') {
     // Proje id boş ise Firma id'sine göre tüm personelleri getirir
-    $persons = $personObj->getPersonIdByFirmCurrentMonth($firm_id,$last_day);
+    $persons = $personObj->getPersonIdByFirmCurrentMonth($firm_id, $last_day);
 } else {
     // Proje id dolu ise projeye ait personelleri getirir
-    $persons = $projects->getPersonIdByFromProjectCurrentMonth($project_id,$last_day);
+    $persons = $projects->getPersonIdByFromProjectCurrentMonth($project_id, $last_day);
     // if (count($persons) > 0) {
     //     // 149,181 şeklinde gelen stringi diziye çevirir
     //     $persons = explode(',', $persons[0]->id);
@@ -58,20 +58,32 @@ $lastDay = Date::lastDay($month, $year);
                 <?php echo Date::getYearsSelect('year', $year); ?>
             </div>
 
-            <div class="col-auto ms-auto mt-auto">
-                <label for="year" class="form-label"></label>
+            <div class="col-auto ms-auto mt-auto d-flex">
+                <label for=""></label>
+                <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                    <i class="ti ti-file-excel icon"></i>
+                </a>
+                <label for="" class="form-label"></label>
+
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle align-text-top" data-bs-toggle="dropdown">
+                    <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                         <i class="ti ti-list-details icon me-2"></i>
                         İşlemler</button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item add-wage-cut" data-tooltip="Personelleri yükleyin veya güncelleyin"
-                            data-tooltip-location="left" href="api/bordro/toexcel.php">
-                            <i class="ti ti-upload icon me-3"></i> Excelden Aktar
+                        <a class="dropdown-item add-income" data-tooltip="Personellere yapılan ödemeleri excelden yükleyin"
+                            data-tooltip-location="left" href="#" data-bs-toggle="modal"
+                            data-bs-target="#load-payment-modal">
+                            <i class="ti ti-table-import icon me-3"></i> Ödeme Yükle
                         </a>
                         <a class="dropdown-item add-income" data-tooltip="Günlük Ücretleri güncelleyin"
                             data-tooltip-location="left" href="#" data-bs-toggle="modal" data-bs-target="#income_modal">
                             <i class="ti ti-user-dollar icon me-3"></i> Ücretleri Güncelle
+                        </a>
+
+
+                        <a class="dropdown-item add-income" data-tooltip="Personellere yapılan ödemeleri excelden yükleyin"
+                            data-tooltip-location="left" href="#">
+                            <i class="ti ti-checklist icon me-3"></i> Banka Listesi İndir
                         </a>
 
                     </div>
@@ -128,7 +140,7 @@ $lastDay = Date::lastDay($month, $year);
                                     $description = Date::monthName($month) . ' ' . $year . ' Maaş';
                                     // Personelin aylık maaşı eklenmemişse
                                     // Personelin işe başlama tarihi o ay içindeyse
-                            
+
                                     if (Date::isBetween($person->job_start_date, $firstDay, $lastDay)) {
                                         // Personelin aylık maaşını ekleyelim
                                         if (!$bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)) {
@@ -145,10 +157,10 @@ $lastDay = Date::lastDay($month, $year);
                                 $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->odeme;
                                 $kalan = $hakedis - $odeme;
 
-                                ?>
+                            ?>
                                 <tr>
                                     <td><?php echo $person->id; ?></td>
-                                    <td> <a href="#"data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                    <td> <a href="#" data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
                                     <td><?php echo $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka'; ?></td>
                                     <td><?php echo $person->job; ?></td>
                                     <td><?php echo $person->job_start_date; ?></td>
@@ -207,3 +219,4 @@ $lastDay = Date::lastDay($month, $year);
 <?php include_once 'content/wage_cut-modal.php'; ?>
 <?php include_once 'content/income-modal.php'; ?>
 <?php include_once 'content/payment-modal.php'; ?>
+<?php include_once 'content/payment-load-modal.php'; ?>

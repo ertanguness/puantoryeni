@@ -13,6 +13,9 @@ $myfirms = $companyObj->getMyCompanies($user_id);
                 <div class="card-header">
                     <h3 class="card-title">Firmalarım Listesi</h3>
                     <div class="col-auto ms-auto">
+                        <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                            <i class="ti ti-file-excel icon"></i>
+                        </a>
                         <a href="#" class="btn btn-primary route-link" data-page="mycompany/manage">
                             <i class="ti ti-plus icon me-2"></i> Yeni
                         </a>
@@ -24,13 +27,13 @@ $myfirms = $companyObj->getMyCompanies($user_id);
                     <table class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th style="width:10%">id</th>
+                                <th style="width:1%">id</th>
                                 <th>Firma Adı</th>
                                 <th>telefon</th>
                                 <th>Mail Adresi</th>
                                 <th>Açıklama</th>
                                 <th>Oluşturulma Tarihi</th>
-                                <th style="width:10%">İşlem</th>
+                                <th style="width:1%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,7 +43,9 @@ $myfirms = $companyObj->getMyCompanies($user_id);
                             ?>
                                 <tr>
                                     <td><?php echo $myfirm->id; ?></td>
-                                    <td><?php echo $myfirm->firm_name; ?></td>
+                                    <td><a class="btn route-link" data-page="mycompany/manage&id=<?php echo $myfirm->id ?>" href="#">
+                                            <?php echo $myfirm->firm_name; ?>
+                                        </a></td>
                                     <td><?php echo $myfirm->phone; ?></td>
                                     <td><?php echo $myfirm->email; ?></td>
                                     <td><?php echo $myfirm->description; ?></td>

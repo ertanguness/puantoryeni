@@ -232,6 +232,17 @@
   box-shadow: 0 0 5px rgba(71, 216, 241, 0.527) !important;
 }
 
+.search-input-row .form-control{
+height: 34px !important;
+border-radius: 4px !important;
+margin: 2px 0 !important;
+}
+
+.search-input-row .search{
+  margin: 0 1px !important;
+  padding: 2px 3px !important;
+}
+
 
 .form-control:hover {
   border-color: #80bdff !important;

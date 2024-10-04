@@ -1,15 +1,12 @@
 <?php
 
-require_once "../../Database/db.php";
+require_once "../../Database/require.php";
 require_once "../../Model/User.php";
 require_once "../../App/Helper/date.php";
 
-use Database\Db;
 
 use App\Helper\Date;
 
-$dbInstance = new Db(); // Db sınıfının bir örneğini oluşturuyoruz.
-$db = $dbInstance->connect(); // Veritabanı bağlantısını alıyoruz.
 
 $user = new User();
 
@@ -20,6 +17,7 @@ if ($_POST["action"] == "userSave") {
     try {
         $data = [
             "id" => $id,
+            "firm_id" => $_SESSION["firm_id"],
             "full_name" => $_POST["full_name"],
             "email" => $_POST["email"],
             "password" => md5($_POST["password"]),

@@ -20,24 +20,46 @@ class User extends Model
     }
     public function getUserByEmailandPassword($email, $password)
     {
-        $sql = $this->db->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ? AND password = ?");
         $sql->execute(array($email, $password));
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 
     public function getUser($id)
     {
-        $sql = $this->db->prepare("SELECT * FROM users WHERE id = ?");
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
         $sql->execute(array($id));
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 
     public function getUserByEmail($email)
     {
-        $sql = $this->db->prepare("SELECT * FROM users WHERE email = ? ");
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ? ");
         $sql->execute(array($email));
         return $sql->fetch(PDO::FETCH_OBJ);
     }
+
+    function getUsersByFirm($firm_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? ");
+        $sql->execute(array($firm_id));
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getUserByToken($token)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE token = ? ");
+        $sql->execute(array($token));
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function getUserByResetToken($token)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE reset_token = ? ");
+        $sql->execute(array($token));
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
 
  
 
@@ -60,9 +82,4 @@ class User extends Model
     }
 
 
-    public function authorities(){
-        $sql = $this->db->prepare("SELECT * FROM authority");
-        $sql->execute();
-        return $sql->fetchAll(PDO::FETCH_OBJ);
-    }
 }

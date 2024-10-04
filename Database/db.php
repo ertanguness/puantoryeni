@@ -9,7 +9,7 @@ class Db {
 
     public function __construct() {
         // $this->db = new PDO("mysql:host=localhost;dbname=mbeyazil_puantoryeni", "mbeyazil_root", "KT308WuD*ge+");
-        $this->db = new PDO("mysql:host=localhost;dbname=puantor", "root", "");
+        $this->db = new PDO("mysql:host=localhost;dbname=puantoryeni", "root", "");
     }
 
      // $db özelliğine dışarıdan erişim sağlayan metod

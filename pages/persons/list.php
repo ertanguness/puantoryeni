@@ -24,7 +24,12 @@ $company = new CompanyHelper();
                 <div class="card-header">
                     <h3 class="card-title">Personel Listesi</h3>
                     <div class="d-flex col-auto ms-auto">
-                  
+                    <a href="/pages/persons/to-pdf.php" class="btn btn-icon me-2" data-page="" data-tooltip="Pdf'e Aktar">
+                            <i class="ti ti-file-type-pdf icon"></i>
+                        </a>
+                        <a href="/pages/persons/to-xls.php" class="btn btn-icon me-2" data-page="" data-tooltip="Excele Aktar">
+                            <i class="ti ti-file-excel icon"></i>
+                        </a>
                         <div class="dropdown me-2">
                             <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                                 <i class="ti ti-list-details icon me-2"></i>
@@ -40,11 +45,7 @@ $company = new CompanyHelper();
                                     data-bs-target="#income_modal">
                                     <i class="ti ti-user-dollar icon me-3"></i> Ücretleri Güncelle
                                 </a>
-                                <a class="dropdown-item add-income" data-tooltip="Personellere yapılan ödemeleri excelden yükleyin"
-                                    data-tooltip-location="left" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#income_modal">
-                                    <i class="ti ti-wallet icon me-3"></i> Ödeme Yükle
-                                </a>
+
 
                             </div>
                         </div>
@@ -78,43 +79,43 @@ $company = new CompanyHelper();
 
 
                             <?php
-                                foreach ($persons as $person):
-                                    $wage_type = $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka';
-                                    $wage_type_color = $person->wage_type == 2 ? "style='color:blue'" : '';
-                                    $balance =$bordro->getBalance($person->id);
-                                    $color =Helper::balanceColor($balance);
+                            foreach ($persons as $person):
+                                $wage_type = $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka';
+                                $wage_type_color = $person->wage_type == 2 ? "style='color:blue'" : '';
+                                $balance = $bordro->getBalance($person->id);
+                                $color = Helper::balanceColor($balance);
 
                             ?>
-                            <tr>
-                                <td><?php echo $person->id; ?></td>
-                                <td> <a href="#"data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
-                                <td><?php echo $company->getcompanyName($person->company_id); ?></td>
-                                <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
-                                <td><?php echo $person->sigorta_no; ?></td>
-                                <td><?php echo $person->phone; ?></td>
-                                <td><?php echo $person->address; ?></td>
-                                <td><?php echo Helper::formattedMoney($person->daily_wages ?? 0); ?></td>
-                                <td><?php echo $person->state ?></td>
-                                <td class="<?php echo $color ?>"><?php echo Helper::formattedMoney($balance) ?></td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle align-text-top"
-                                            data-bs-toggle="dropdown">İşlem</button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item route-link"
-                                                data-page="persons/manage&id=<?php echo $person->id ?>" href="#">
-                                                <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
-                                            </a>
-                                     
-                                            <a class="dropdown-item delete-person" data-id="<?php echo $person->id ?>"
-                                                href="#">
-                                                <i class="ti ti-trash icon me-3"></i> Sil
-                                            </a>
-                                        </div>
-                                    </div>
+                                <tr>
+                                    <td><?php echo $person->id; ?></td>
+                                    <td> <a href="#" data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                    <td><?php echo $company->getcompanyName($person->company_id); ?></td>
+                                    <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
+                                    <td><?php echo $person->sigorta_no; ?></td>
+                                    <td><?php echo $person->phone; ?></td>
+                                    <td><?php echo $person->address; ?></td>
+                                    <td><?php echo Helper::formattedMoney($person->daily_wages ?? 0); ?></td>
+                                    <td><?php echo $person->state ?></td>
+                                    <td class="<?php echo $color ?>"><?php echo Helper::formattedMoney($balance) ?></td>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle align-text-top"
+                                                data-bs-toggle="dropdown">İşlem</button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item route-link"
+                                                    data-page="persons/manage&id=<?php echo $person->id ?>" href="#">
+                                                    <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
+                                                </a>
 
-                                </td>
-                            </tr>
+                                                <a class="dropdown-item delete-person" data-id="<?php echo $person->id ?>"
+                                                    href="#">
+                                                    <i class="ti ti-trash icon me-3"></i> Sil
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

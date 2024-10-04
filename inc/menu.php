@@ -16,14 +16,14 @@ $menus = new Menus();
             <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark">
-            <a href=".">
-                <img src="./static/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+            <a href="index.php?p=home">
+                <img src="./static/logo-aiv5.svg"  width="300" height="80" class="navbar-brand-image" style="width:160px;height:60px">
             </a>
         </h1>
 
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
-
+    
                 <?php
 
                 //Aktif sayfa alınır

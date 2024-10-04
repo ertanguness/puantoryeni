@@ -19,6 +19,9 @@ $projects = $projectObj->allWithFirm($firm_id);
                 <div class="card-header">
                     <h3 class="card-title">Proje Listesi</h3>
                     <div class="col-auto ms-auto">
+                    <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                    <i class="ti ti-file-excel icon"></i>
+                </a>
                         <div class="form-selectgroup">
 
                             <label class="form-selectgroup-item">

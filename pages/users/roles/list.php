@@ -2,7 +2,7 @@
 require_once "Model/Roles.php";
 
 $roleObj = new Roles();
-$roles = $roleObj->all();
+$roles = $roleObj->getRolesByFirm($firm_id);
 
 
 ?>
@@ -24,7 +24,7 @@ $roles = $roleObj->all();
                     <table id="roleTable" class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th>id</th>
+                                <th style="width:7%">id</th>
                                 <th>Pozisyon Adı</th>
                                 <th>Açıklama</th>
                                 <th>Durumu</th>
@@ -46,7 +46,7 @@ $roles = $roleObj->all();
                                         <div class="dropdown">
                                             <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link" data-page="users/roles/authorities&id=<?php echo $role->id ?>" href="#">
+                                                <a class="dropdown-item route-link" data-page="users/auths/auths&id=<?php echo $role->id ?>" href="#">
                                                     <i class="ti ti-lock icon me-3"></i> Yetkileri Düzenle
                                                 </a>
                                                 <a class="dropdown-item route-link" data-page="users/roles/manage&id=<?php echo $role->id ?>" href="#">

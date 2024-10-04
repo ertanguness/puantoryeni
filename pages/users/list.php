@@ -5,7 +5,7 @@ require_once "Model/User.php";
 use App\Helper\Helper;
 
 $userObj = new User();
-$users = $userObj->allByFirms($firm_id);
+$users = $userObj->getUsersByFirm($firm_id);
 
 ?>
 <div class="container-xl mt-3">

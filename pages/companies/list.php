@@ -25,6 +25,9 @@ $companies = $companyObj->allWithUserId();
                         <h2 class="card-title">Firma Listesi </h2>
                     </div>
                     <div class="col-auto ms-auto">
+                    <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                    <i class="ti ti-file-excel icon"></i>
+                </a>
                         <a href="#" class="btn btn-primary route-link" data-page="companies/manage">
                             <i class="ti ti-plus icon me-2"></i> Yeni
                         </a>
