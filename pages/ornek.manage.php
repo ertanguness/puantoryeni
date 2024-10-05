@@ -1,10 +1,10 @@
 <?php
-require_once "Model/Cases.php";
-$caseObj = new Cases();
+require_once "Model/Defines.php";
+$defineObj = new Cases();
 $id = $_GET['id'] ?? 0;
-$case = $caseObj->find($id);
+$incexp = $defineObj->find($id);
 
-$pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
+$pageTitle = $id > 0 ? "Geir-Gider Türü Güncelleme" : "Yeni Gelir-Gider Türü";
 
 ?>
 <div class="page-wrapper">
@@ -20,13 +20,13 @@ $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
 
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-outline-secondary route-link" data-page="financial/case/list">
+                    <button type="button" class="btn btn-outline-secondary route-link" data-page="defines/incexp/list">
                         <i class="ti ti-list icon me-2"></i>
                         Listeye Dön
                     </button>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-primary" id="saveCase">
+                    <button type="button" class="btn btn-primary" id="saveIncExpType">
                         <i class="ti ti-device-floppy icon me-2"></i>
                         Kaydet
                     </button>
@@ -40,16 +40,20 @@ $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="" id="caseForm">
+                        <!-- **************FORM**************** -->
+                        <form action="" id="incExpForm">
+                            <!--********** HIDDEN ROW************** -->
                             <div class="row">
                                 <div class="col-md-4">
-                                    <input type="text" name="id" class="form-control" value="<?php echo $case->id ?? ''?>">
+                                    <input type="text" name="id" class="form-control" value="<?php echo $incexp->id ?? ''?>">
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" name="action" value="saveCase" class="form-control">
+                                    <input type="text" name="action" value="saveIncExpType" class="form-control">
                                 </div>
                             </div>
+                            <!--********** HIDDEN ROW************** -->
                         </form>
+                         <!-- **************FORM**************** -->
 
                     </div>
                 </div>

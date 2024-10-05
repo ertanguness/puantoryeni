@@ -6,7 +6,8 @@ session_start();
 
 
 if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-    header("Location: sign-in.php");
+    $returnUrl = urlencode($_SERVER["REQUEST_URI"]);
+    header("Location: sign-in.php?returnUrl={$returnUrl}");
     exit;
 }
 
@@ -56,10 +57,6 @@ $menu_name = $menus->getMenusByLink($active_page);
                 include "pages/404.php";
             }
                 ?>
-
-
-
-
             <?php include "inc/footer.php" ?>
         </div>
     </div>

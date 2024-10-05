@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `auths` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.auths: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.auths: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `auths`;
 INSERT INTO `auths` (`id`, `name`, `title`, `value`, `is_active`, `parent_id`, `tooltip_1`, `tooltip_2`, `tooltip_3`, `tooltip_4`) VALUES
 	(1, 'mainpage', 'Ana Sayfa Bilgileri', 1, 1, 0, NULL, NULL, NULL, NULL),
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `cases` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.cases: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.cases: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `cases`;
 INSERT INTO `cases` (`id`, `account_id`, `firm_id`, `start_budget`, `case_name`, `bank_name`, `branch_name`, `description`, `isDefault`) VALUES
 	(22, 4, 2, 90000.00, 'Nakit Kasası', 'Garanti Bankası', 'Konya', 'Gelen Nakitleri Buraya', 0),
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `case_transactions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.case_transactions: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.case_transactions: ~6 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `case_transactions`;
 INSERT INTO `case_transactions` (`id`, `type_id`, `date`, `case_id`, `sub_type`, `amount`, `amount_money`, `account_name`, `description`, `created_at`, `updated_at`, `company_id`) VALUES
 	(58, 1, '', 22, 2, 0, NULL, NULL, '', '2024-06-19 13:10:18', NULL, NULL),
@@ -240,6 +240,28 @@ INSERT INTO `companies` (`id`, `grp`, `user_id`, `company_name`, `yetkili`, `pho
 	(104, NULL, 65, '', '', '', '', 0, '', '', '', '', '2024-09-23 18:52:18', NULL, NULL, '', 0, ''),
 	(105, NULL, 60, 'Aksa Seramik', '', '', '', 2, '', '', '', '', '2024-09-23 19:44:55', NULL, NULL, '', 0, '');
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
+
+-- tablo yapısı dökülüyor puantoryeni.defines
+DROP TABLE IF EXISTS `defines`;
+CREATE TABLE IF NOT EXISTS `defines` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `group_type` int(2) NOT NULL DEFAULT 0,
+  `firm_id` int(11) NOT NULL DEFAULT 0,
+  `name` varchar(50) NOT NULL DEFAULT '0',
+  `type` int(1) DEFAULT 0,
+  `description` varchar(30) DEFAULT NULL,
+  `created_at` int(11) DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+
+-- puantoryeni.defines: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
+DELETE FROM `defines`;
+INSERT INTO `defines` (`id`, `user_id`, `group_type`, `firm_id`, `name`, `type`, `description`, `created_at`) VALUES
+	(2, 60, 2, 8, 'fasfas', 1, 'dfasdfa', 2147483647),
+	(3, 60, 2, 8, 'fasfas', 1, 'dfasdfa', 2147483647),
+	(4, 60, 2, 8, 'Eklenen Veri', 2, 'dfasdfa', 2147483647),
+	(5, 60, 2, 15, 'Eklenen Veri', 1, '', 2147483647);
 
 -- tablo yapısı dökülüyor puantoryeni.define_numbers
 DROP TABLE IF EXISTS `define_numbers`;
@@ -1365,7 +1387,7 @@ CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.maas_gelir_kesinti: ~43 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.maas_gelir_kesinti: ~44 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `maas_gelir_kesinti`;
 INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `gun`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
 	(1, 4, 181, '20240915', 9, 2024, 900.00, 2, '0', '0', '0000-00-00 00:00:00'),
@@ -1425,9 +1447,9 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `isMenu` int(11) DEFAULT 1,
   `index_no` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.menu: ~40 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.menu: ~48 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `menu`;
 INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActive`, `isMenu`, `index_no`) VALUES
 	(1, 'Ana Sayfa', 'home', 'home', 0, 1, 1, 1),
@@ -1469,7 +1491,61 @@ INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActi
 	(40, 'Firma Ekle/Güncelle', 'mycompany/manage', '0', 39, 1, 0, NULL),
 	(41, 'Proje Ekle/Güncelle', 'projects/manage', '0', 35, 1, 0, NULL),
 	(42, 'Firmalar Ekle/Düzenle', 'companies/manage', '0', 7, 1, 0, NULL),
-	(43, 'Ayarlar', 'settings/manage', 'settings', 0, 1, 1, 11);
+	(43, 'Ayarlar', 'settings/manage', 'settings', 0, 1, 1, 11),
+	(44, 'Gelir-Gider Türü Tanımlama', 'defines/incexp/list', '0', 27, 1, 1, NULL),
+	(45, 'Görev Yönetimi', '0', 'mist', 0, 1, 1, 8),
+	(46, 'Gelir-Gider Türü Ekle/Güncelle', 'defines/incexp/manage', '0', 27, 1, 0, NULL),
+	(47, 'Görev Listesi', 'missions/list', '0', 45, 1, 1, NULL),
+	(48, 'Görevlerim', 'missions/my-missions', '0', 45, 1, 1, NULL),
+	(49, 'Verdiğim Görevler', 'missions/to-missions', '0', 45, 1, 1, NULL),
+	(50, 'Süreç Yönetimi', 'missions/process/list', '0', 45, 1, 1, NULL),
+	(51, 'Süreç Ekle/Güncelle', 'missions/process/manage', '0', 45, 1, 0, 0);
+
+-- tablo yapısı dökülüyor puantoryeni.missions
+DROP TABLE IF EXISTS `missions`;
+CREATE TABLE IF NOT EXISTS `missions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `firm_id` int(11) NOT NULL DEFAULT 0,
+  `surec_id` int(11) NOT NULL DEFAULT 0,
+  `user_ids` int(11) NOT NULL DEFAULT 0,
+  `name` varchar(100) NOT NULL DEFAULT '0',
+  `degree` int(11) NOT NULL DEFAULT 0,
+  `start_date` varchar(10) NOT NULL DEFAULT '0',
+  `end_date` varchar(10) NOT NULL DEFAULT '0',
+  `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+
+-- puantoryeni.missions: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
+DELETE FROM `missions`;
+INSERT INTO `missions` (`id`, `user_id`, `firm_id`, `surec_id`, `user_ids`, `name`, `degree`, `start_date`, `end_date`, `created_at`) VALUES
+	(1, 0, 8, 0, 0, 'Deneme', 0, '0', '0', '2024-10-05 00:05:30');
+
+-- tablo yapısı dökülüyor puantoryeni.mission_process
+DROP TABLE IF EXISTS `mission_process`;
+CREATE TABLE IF NOT EXISTS `mission_process` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `firm_id` int(11) NOT NULL DEFAULT 0,
+  `status` int(1) NOT NULL DEFAULT 0,
+  `process_name` varchar(100) NOT NULL DEFAULT '0',
+  `process_order` int(3) NOT NULL DEFAULT 0,
+  `description` varchar(255) NOT NULL DEFAULT '0',
+  `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+
+-- puantoryeni.mission_process: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
+DELETE FROM `mission_process`;
+INSERT INTO `mission_process` (`id`, `user_id`, `firm_id`, `status`, `process_name`, `process_order`, `description`, `created_at`) VALUES
+	(1, 60, 8, 1, 'Yapılacak', 3, 'adfasdf', '2024-10-05 08:51:29'),
+	(2, 60, 8, 0, 'Tamamlandı', 7, 'dfasdfasd', '2024-10-05 09:45:43'),
+	(3, 60, 8, 1, 'Deneme ka', 5, 'sdfsdfsf', '2024-10-05 09:46:42'),
+	(4, 60, 8, 0, 'Denmeem Pasif', 1, 'adfdsf asdf', '2024-10-05 09:56:55'),
+	(5, 60, 8, 1, 'Denmeem', 2, 'Ankara Şantiyesi', '2024-10-05 10:53:44'),
+	(6, 60, 8, 1, 'Ara Süreç', 6, 'sdfsdfsf', '2024-10-05 10:54:05'),
+	(7, 60, 8, 1, 'adfasfasdf', 4, 'sdf', '2024-10-05 10:54:29');
 
 -- tablo yapısı dökülüyor puantoryeni.myfirms
 DROP TABLE IF EXISTS `myfirms`;
@@ -1487,7 +1563,7 @@ CREATE TABLE IF NOT EXISTS `myfirms` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.myfirms: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.myfirms: ~10 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `myfirms`;
 INSERT INTO `myfirms` (`id`, `user_id`, `firm_name`, `phone`, `email`, `start_budget`, `brand_logo`, `description`, `created_at`, `deleted_at`) VALUES
 	(2, 4, 'BilgeKazaz Bilişim Hizmetleri', '05079432723', 'mbeyazilim@gmail.com', 0, '66e812ce6f957depositphotos_449066958-stock-photo-financial-accounting-logo-financial-logo.jpg', 'yazilim firmamız', '2024-09-16 13:56:22', '0'),

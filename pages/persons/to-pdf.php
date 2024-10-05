@@ -1,12 +1,23 @@
 <?php
 
+session_start();
+define('ROOT', $_SERVER["DOCUMENT_ROOT"]);
+require ROOT. '/vendor/autoload.php';
+require_once ROOT . '/Model/Persons.php';
+
+$inputFileName = ROOT . '/files/example1.xlsx';
+
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php';
+$firm_id = $_SESSION['firm_id'];
 
-$inputFileName = $_SERVER["DOCUMENT_ROOT"] . '/files/example1.xlsx';
+
+$personObj = new Persons();
+$persons = $personObj->getPersonsByFirm($firm_id);
+
+
 
 /** Load $inputFileName to a Spreadsheet object **/
 $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
@@ -21,16 +32,31 @@ $spreadsheet->getProperties()->setCreator('Maarten Balliauw')
     ->setCategory('Test result file');
 
 // Add some data
-$spreadsheet->setActiveSheetIndex(0)
-    ->setCellValue('A2', 'Hello')
-    ->setCellValue('B2', 'world!')
-    ->setCellValue('C2', 'Hello')
-    ->setCellValue('D2', 'world!');
 
-// Miscellaneous glyphs, UTF-8
+
+
+
+
 $spreadsheet->setActiveSheetIndex(0)
-    ->setCellValue('A4', 'Miscellaneous glyphs')
-    ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+    ->setCellValue('A2', 'Full Name')
+    ->setCellValue('B2', 'Email')
+    ->setCellValue('C2', 'Phone')
+    ->setCellValue('D2', 'Job Start Date')
+    ->setCellValue('E2', 'Daily Wages')
+    ->setCellValue('F2', 'Wage Type');
+
+
+
+foreach ($persons as $key => $person) {
+    $spreadsheet->setActiveSheetIndex(0)
+        ->setCellValue('A' . ($key + 3), $person->full_name)
+        ->setCellValue('B' . ($key + 3), $person->email)
+        ->setCellValue('C' . ($key + 3), $person->phone)
+        ->setCellValue('D' . ($key + 3), $person->job_start_date)
+        ->setCellValue('E' . ($key + 3), $person->daily_wages)
+        ->setCellValue('F' . ($key + 3), $person->wage_type);
+}
+
 
 // Rename worksheet
 $spreadsheet->getActiveSheet()->setTitle('Simple');

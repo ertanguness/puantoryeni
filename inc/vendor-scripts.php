@@ -1,4 +1,5 @@
 <script src="./dist/js/jquery.3.7.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <?php
 $page = isset($_GET['p']) ? $_GET['p'] : '';
 if (
@@ -18,7 +19,9 @@ if (
     $page == 'projects/list' || $page == 'projects/manage' ||
     $page == 'projects/add-person' ||
     $page == 'puantaj/list' ||
-    $page == 'bordro/list'
+    $page == 'bordro/list'||
+    $page == 'defines/incexp/list' ||
+    $page == 'missions/list' || $page == 'missions/process/list'
 ) {
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
@@ -92,6 +95,23 @@ if ($page == 'bordro/list') {
     echo '<script src="./src/bordro/bordro.js"></script>';
     echo '<script src="./src/bordro/payment.js"></script>';
 }
+// Gelir Gider Türü Tanımlama
+if ($page == 'defines/incexp/list' || $page == 'defines/incexp/manage') {
+    echo '<script src="./src/defines/incexp.js"></script>';
+}
+
+
+// Misyon Ekleme,güncelleme ve listeleme sayfası
+if ($page == 'missions/list' || $page == 'missions/manage') {
+    echo '<script src="./src/missions/missions.js"></script>';
+}
+
+// Misyon İşlem Ekleme,güncelleme ve listeleme sayfası
+if ($page == 'missions/process/list' || $page == 'missions/process/manage') {
+    echo '<script src="./src/missions/process.js"></script>';
+}
+
+
 ?>
 
 

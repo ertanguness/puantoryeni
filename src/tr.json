@@ -1,5 +1,5 @@
 {
-    "info": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+    "info": "_START_ - _END_ / _TOTAL_ Toplam Kayıt ",
     "infoEmpty": "Kayıt yok",
     "infoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
     "infoThousands": ".",

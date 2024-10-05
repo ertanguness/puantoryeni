@@ -11,7 +11,7 @@ use App\Helper\Date;
 $person = new Persons();
 $bordro = new Bordro();
 
-$persons = $person->getByFirm($firm_id);
+$persons = $person->getPersonsByFirm($firm_id);
 $company = new CompanyHelper();
 
 
@@ -27,7 +27,7 @@ $company = new CompanyHelper();
                     <a href="/pages/persons/to-pdf.php" class="btn btn-icon me-2" data-page="" data-tooltip="Pdf'e Aktar">
                             <i class="ti ti-file-type-pdf icon"></i>
                         </a>
-                        <a href="/pages/persons/to-xls.php" class="btn btn-icon me-2" data-page="" data-tooltip="Excele Aktar">
+                        <a href="pages/persons/to-xls.php" id="export" class="btn btn-icon me-2" data-page="" data-tooltip="Excele Aktar">
                             <i class="ti ti-file-excel icon"></i>
                         </a>
                         <div class="dropdown me-2">
@@ -59,7 +59,7 @@ $company = new CompanyHelper();
 
 
                 <div class="table-responsive">
-                    <table class="table card-table table-hover text-nowrap datatable">
+                    <table class="table card-table table-hover text-nowrap datatable" id="persons">
                         <thead>
                             <tr>
                                 <th style="width:1%">ID</th>

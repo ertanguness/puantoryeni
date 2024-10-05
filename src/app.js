@@ -1,6 +1,7 @@
 if ($(".datatable").length > 0) {
   $(".datatable:not(#puantajTable)").DataTable({
 autoWidth :false,
+order: false,
     language: {
       url: "src/tr.json",
     },
@@ -303,3 +304,4 @@ function checkPersonId(id) {
   }
   return true;
 }
+

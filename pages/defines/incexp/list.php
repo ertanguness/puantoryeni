@@ -1,9 +1,17 @@
 <?php
 require_once "App/Helper/helper.php";
+require_once "App/Helper/date.php";
+require_once "Model/Defines.php";
 
 use App\Helper\Helper;
+use App\Helper\Date;
 
-$items = [];
+$defines = new Defines();
+
+$items = $defines->getIncExpTypesByFirm($firm_id);
+
+$user_id = $_SESSION['user']->id;
+
 
 ?>
 <div class="container-xl mt-3">
@@ -11,9 +19,9 @@ $items = [];
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Servis Konusu Listesi</h3>
+                    <h3 class="card-title">Gelir/Gider Türü Listesi</h3>
                     <div class="col-auto ms-auto">
-                        <a href="#" class="btn btn-primary route-link" data-page="defines/service-head/manage">
+                        <a href="#" class="btn btn-primary route-link" data-page="defines/incexp/manage">
                             <i class="ti ti-plus icon me-2"></i> Yeni
                         </a>
                     </div>
@@ -39,11 +47,12 @@ $items = [];
                             <?php foreach ($items as $item) :
                             ?>
                                 <tr>
-                                    <td>1</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?php echo $item->id; ?></td>
+                                    <td><?php echo $item->name; ?></td>
+                                    <td><?php echo Helper::getIncExpTypeName($item->type); ?></td>
+                                    <td><?php echo $item->description; ?></td>
+                                    <td><?php echo Date::dmY($item->created_at); ?></td>
+
 
                                     <td class="text-end">
                                         <div class="dropdown">

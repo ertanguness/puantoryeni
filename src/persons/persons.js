@@ -106,5 +106,7 @@ $(document).on('click', '.wage_type', function () {
     $('#wage_type_label').text('Aylık Maaş');
   }
 
-
 });
+
+
+

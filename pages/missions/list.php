@@ -1,9 +1,12 @@
 <?php
 require_once "App/Helper/helper.php";
+require_once "Model/Missions.php";
+
+$missionObj = new Missions();
 
 use App\Helper\Helper;
 
-$items = [];
+$missions = $missionObj->getMissionsFirm($firm_id);
 
 ?>
 <div class="container-xl mt-3">
@@ -11,7 +14,7 @@ $items = [];
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Servis Konusu Listesi</h3>
+                    <h3 class="card-title">Görevler Listesi</h3>
                     <div class="col-auto ms-auto">
                         <a href="#" class="btn btn-primary route-link" data-page="defines/service-head/manage">
                             <i class="ti ti-plus icon me-2"></i> Yeni
@@ -25,10 +28,12 @@ $items = [];
                         <thead>
                             <tr>
                                 <th style="width:7%">ID</th>
-                                <th>Adı</th>
-                                <th>Türü</th>
-                                <th>Açıklama</th>
-                                <th>Eklenme Tarihi</th>
+                                <th>Görev Adı</th>
+                                <th>Yetkili Kişi</th>
+                                <th>Önem Derecesi</th>
+                                <th>Başlama Tarihi</th>
+                                <th>Bitiş Tarihi</th>
+                                <th>Süreci</th>
                                 <th>İşlem</th>
 
                             </tr>
@@ -36,10 +41,12 @@ $items = [];
                         <tbody>
 
 
-                            <?php foreach ($items as $item) :
+                            <?php foreach ($missions as $item) :
                             ?>
                                 <tr>
                                     <td>1</td>
+                                    <td><?php echo $item->name; ?></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

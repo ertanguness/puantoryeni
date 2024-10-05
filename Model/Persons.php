@@ -11,7 +11,7 @@ class Persons extends Model
         parent::__construct($this->table);
     }
 
-    public function getByFirm($firm_id)
+    public function getPersonsByFirm($firm_id)
     {
         $query = $this->db->prepare('SELECT * FROM persons WHERE firm_id = ?');
         $query->execute([$firm_id]);

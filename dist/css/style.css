@@ -17,10 +17,10 @@
   height: 60px;
   /* background-color: #fff; */
   border-radius: 50%;
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #3498db;
+  border: 1px solid #f3f3f3;
+  border-top: 5px solid #3498db;
   animation: spin 1s linear infinite;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes spin {

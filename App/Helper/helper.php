@@ -36,6 +36,11 @@ class Helper
         '' => 'Bilinmiyor',
     ];
 
+    const INC_EXP = [
+        '1' => 'Gelir',
+        '2' => 'Gider',
+    ];
+
     public static function getIncomeExpenseType($type)
     {
         $types = self::INCOME_EXPENSE_TYPE;
@@ -116,4 +121,23 @@ class Helper
             return '';
         }
     }
+
+    public static function getIncExpTypeName($type)
+    {
+        $types = self::INC_EXP;
+        return $types[$type];
+    }
+
+    public static function incExpTypeSelect($name = 'incexp_type', $selected = '1')
+    {
+        $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
+        foreach (self::INC_EXP as $key => $value) {
+            $selectedAttr = $selected == $key ? 'selected' : '';
+            $select .= "<option value='$key' $selectedAttr>$value</option>";
+        }
+        $select .= '</select>';
+        return $select;
+    }
+
+
 }
