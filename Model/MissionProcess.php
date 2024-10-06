@@ -40,4 +40,12 @@ class MissionProcess extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
+    
+    public function getMissionProcessFirst($firm_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? ORDER BY process_order asc LIMIT 1");
+        $sql->execute([$firm_id]);
+        return $sql->fetch(PDO::FETCH_OBJ) ?? [];
+    }
+
 }

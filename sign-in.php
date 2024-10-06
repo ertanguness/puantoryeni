@@ -91,10 +91,10 @@ $userObj = new User();
                       $_SESSION['user_role'] = $user->user_roles;
 
                       // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
-                      //$returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? $_GET['returnUrl'] : '';
-                       //header("Location: company-list.php?returnUrl={$returnUrl}");
+                      $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';
+                       header("Location: company-list.php?returnUrl={$returnUrl}");
                       //header("Location:company-list.php");
-                      header("Location: company-list.php");
+                     // header("Location: company-list.php");
                       exit();
                       
                     } else {

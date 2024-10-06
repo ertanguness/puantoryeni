@@ -10,6 +10,7 @@ class MissionProcessMapping extends Model
     {
         parent::__construct($this->table);
     }
+    //first mission process mapping
 
     //Gelen Sürec id'sinde olan görevleri getirir
     public function getMissionProcessMapByLastProcessId($mission_id)

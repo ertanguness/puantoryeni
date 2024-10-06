@@ -18,12 +18,13 @@ use App\Helper\Helper;
                         <label class="form-label">Kasa</label>
                         <?php echo $financial->getCasesSelect('case_id', $firm_id) ?>
                     </div>
-                    
+
                     <label class="form-label">Türü</label>
                     <div class="form-selectgroup-boxes row mb-3">
                         <div class="col-lg-6">
                             <label class="form-selectgroup-item">
-                                <input type="radio" name="transaction_type" value="1" class="form-selectgroup-input" checked="">
+                                <input type="radio" name="transaction_type" value="1" class="form-selectgroup-input"
+                                    checked="">
                                 <span class="form-selectgroup-label d-flex align-items-center p-3">
                                     <span class="me-3">
                                         <span class="form-selectgroup-check"></span>
@@ -48,7 +49,7 @@ use App\Helper\Helper;
                             </label>
                         </div>
                     </div>
-                  
+
 
                     <div class="row">
                         <div class="col-md-8">
@@ -64,14 +65,25 @@ use App\Helper\Helper;
                             </div>
                         </div>
 
+
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Gelir/Gider Türü</label>
+                                <?php echo $financial->getIncExpTypeSelect(); ?>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Açıklama</label>
                                 <div class="input-group input-group-flat">
 
-                                    <textarea class="form-control" name="description" placeholder="Açıklama giriniz"></textarea>
+                                    <textarea class="form-control" name="description"
+                                        placeholder="Açıklama giriniz"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +98,9 @@ use App\Helper\Helper;
                 </a>
                 <a href="#" class="btn btn-primary ms-auto" id="saveTransaction">
                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M12 5l0 14"></path>
                         <path d="M5 12l14 0"></path>

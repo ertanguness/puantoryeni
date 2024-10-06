@@ -142,7 +142,7 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                                     <label class="form-label">Göreve Eklenecek Not</label>
                                     <textarea class="form-control summernote" name="description"
                                         placeholder="Teklif altına bilgiliendirici not ekleyebilirsiniz">
-                                        <?php echo $mission->description; ?>
+                                        <?php echo $mission->description ?? ''; ?>
                                      </textarea>
                                 </div>
                             </div>

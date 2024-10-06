@@ -59,7 +59,7 @@ if ($(".select2").length > 0) {
   $("#products").select2({
     dropdownParent: $(".modal"),
   });
-  $(".modal-select").select2({
+  $(".modal .select2").select2({
     dropdownParent: $(".modal"),
   });
   $("#amount_money").select2({

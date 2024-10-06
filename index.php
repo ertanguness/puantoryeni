@@ -1,15 +1,17 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-session_start();
+ session_start();
 
 
 if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
 
     $returnUrl = urlencode($_SERVER["REQUEST_URI"]);
     if(!isset($_GET["p"])){
-        $returnUrl = urlencode("index.php?p=home");
+        $returnUrl = urlencode("/index.php?p=home");
     }
+
+
     header("Location: sign-in.php?returnUrl={$returnUrl}");
     exit();
 }

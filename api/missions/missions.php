@@ -3,9 +3,15 @@
 require_once "../../Database/require.php";
 
 require_once "../../Model/Missions.php";
+require_once "../../Model/MissionProcess.php";
 
+require_once "../../Model/MissionProcessMapping.php";
 
+$firm_id = $_SESSION["firm_id"];
 $mission = new Missions();
+$process = new MissionProcess();
+$mapping = new MissionProcessMapping();
+$first_map = $process->getMissionProcessFirst($firm_id);
 
 
 if ($_POST["action"] == "saveMission") {
@@ -32,8 +38,16 @@ if ($_POST["action"] == "saveMission") {
 
         $lastInsertId = $mission->saveWithAttr($data) ?? $id;
 
+        if ($id == 0) {
+            $mapData = [
+                "mission_id" => $lastInsertId,
+                "process_id" => $first_map->id,
+            ];
+            $mapping->saveWithAttr($mapData);
+        }
+
         $status = "success";
-        $message = $id > 0 ? "Güncelleme Başarılı" : "Kayıt Başarılı!!" . $user_ids;
+        $message = $id > 0 ? "Güncelleme Başarılı" : "Kayıt Başarılı!!" ;
 
     } catch (PDOException $ex) {
         $status = "error";

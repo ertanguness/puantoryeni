@@ -53,7 +53,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
 
 
         // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
-        $redirectUri = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? $_GET['returnUrl'] : 'index.php?p=home';
+        $redirectUri = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? $_GET['returnUrl'] : '/index.php?p=home';
         header('Location: ' . $redirectUri);
         exit();
 

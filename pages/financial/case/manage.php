@@ -42,62 +42,41 @@ $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
         <div class="container-xl">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
-                        <form action="" id="caseForm">
-                            <div class="row d-none">
-                                <div class="col-md-4">
-                                    <input type="text" name="id" class="form-control" value="<?php echo $case->id ?? 0 ?>">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="action" value="saveCase" class="form-control">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-2">
-                                    <label for="case_name" class="form-label">Firması</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <?php echo $company->myCompanySelect("firm_company", $case->company_id ?? ''); ?>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="case_name" class="form-label">Kasa Adı</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="case_name" id="case_name" class="form-control" value="<?php echo $case->case_name ?? '' ?>">
-                                </div>
-                            </div>
 
-                            <div class="row mb-3">
-                                <div class="col-md-2">
-                                    <label for="case_name" class="form-label">Bankası</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="bank_name" class="form-control" value="<?php echo $case->bank_name ?? '' ?>">
+                    <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-home-3" class="nav-link active" data-bs-toggle="tab"
+                                        aria-selected="true" role="tab">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                        <i class="ti ti-home icon me-1"></i>
+                                        Genel Bilgiler
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-payment-3" class="nav-link" data-bs-toggle="tab"
+                                        aria-selected="false" tabindex="-1" role="tab">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <i class="ti ti-calculator icon me-1"></i>
+                                        Kasa Hareketleri
+                                    </a>
+                                </li>
 
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="case_name" class="form-label">Şubesi</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="branch_name" class="form-control" value="<?php echo $case->branch_name ?? '' ?>">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-2">
-                                    <label for="case_name" class="form-label">Başlangıç Bütçesi</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="start_budget" class="form-control" value="<?php echo $case->start_budget ?? '' ?>">
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="case_name" class="form-label">Açıklama</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="description" class="form-control" value="<?php echo $case->description ?? '' ?>">
-                                </div>
-                            </div>
-                        </form>
 
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="tabs-home-3" role="tabpanel">
+                                    <?php include_once 'content/0-home.php' ?>
+                                </div>
+                                <div class="tab-pane" id="tabs-payment-3" role="tabpanel">
+                                    <?php include_once 'content/1-payment-info.php' ?>
+                                </div>
+                               
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

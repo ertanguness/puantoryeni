@@ -13,7 +13,7 @@ if (
     $page == 'persons/list' ||
     $page == 'persons/manage' ||
     $page == 'mycompany/list' ||
-    $page == 'financial/case/list' ||
+    $page == 'financial/case/list' || $page == 'financial/case/manage' ||
     $page == 'financial/transactions/list' ||
     $page == 'financial/transactions/manage' ||
     $page == 'projects/list' || $page == 'projects/manage' ||

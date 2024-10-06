@@ -33,4 +33,22 @@ class Financial extends Db
             return "";
         }
     }
+
+
+    //firma id'ye göre gelir veya gider türlerini getirir
+    public function getIncExpTypeSelect($name = "inc_exp_type", $type = 1)
+    {
+        $firm_id = $_SESSION['firm_id'];
+        $query = $this->db->prepare("SELECT * FROM defines WHERE firm_id = ? AND type = ?");
+        $query->execute([$firm_id, $type]);
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+
+        $select = '<select name="' . $name . '" class="form-select modal-select select2" id="' . $name . '" style="width:100%">';
+        $select .= '<option value="">Tür Seçiniz</option>';
+        foreach ($results as $row) {
+            $select .= '<option value="' . $row->id . '">' . $row->name . '</option>';
+        }
+        $select .= '</select>';
+        return $select;
+    }
 }
