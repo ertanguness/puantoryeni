@@ -1,5 +1,5 @@
 <?php
-require_once "Database/Db.php";
+require_once "Database/db.php";
 
 use Database\Db;
 
@@ -24,6 +24,41 @@ class UserHelper extends Db
         return $select;
     }
 
+    public function userSelectMultiple($name = "users[]", $selectedIds = [])
+    {
+        $query = $this->db->prepare("SELECT * FROM users"); // Tüm sütunları seç
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
+
+        $id = str_replace('[]', ' ', $name);
+        $id = $id . uniqid();
+        $select = '<select name="' . $name . '" class="form-select select2" id="' . $id . '" style="width:100%" multiple>';
+        $select .= '<option value="">Personel Seçiniz</option>';
+        foreach ($results as $row) { // $results üzerinde döngü
+            $selected = in_array($row->id, $selectedIds) ? ' selected' : ''; // Eğer id varsa seçili yap
+            $select .= '<option value="' . $row->id . '"' . $selected . '>' . $row->full_name . '</option>'; // $row->title yerine $row->name kullanıldı
+        }
+        $select .= '</select>';
+        return $select;
+    }
+
+    //user id'leri aralarında virgül olan bir string alır ve bu id'lerin karşılık geldiği kullanıcıların isimlerini döndürür    
+    public function getUsersName($user_ids)
+    {
+        $user_ids = explode(',', $user_ids);
+        $users = [];
+        foreach ($user_ids as $id) {
+            $query = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+            $query->execute(['id' => $id]);
+            $result = $query->fetch(PDO::FETCH_OBJ);
+            if ($result) {
+                $users[] = $result->full_name;
+            } else {
+                $users[] = "Binimiyor (ID: $id)";
+            }
+        }
+        return implode(',', $users);
+    }
 
     public function userSelectwithJob($name = "userwithJob", $selectedId = null)
     {

@@ -19,7 +19,6 @@ class Missions extends Model
         $sql->execute([$firm_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
-
-   
+    
 
 }

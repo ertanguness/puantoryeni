@@ -4,11 +4,14 @@ ini_set('display_errors', 1);
 session_start();
 
 
-
 if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+
     $returnUrl = urlencode($_SERVER["REQUEST_URI"]);
+    if(!isset($_GET["p"])){
+        $returnUrl = urlencode("index.php?p=home");
+    }
     header("Location: sign-in.php?returnUrl={$returnUrl}");
-    exit;
+    exit();
 }
 
 require_once "Database/db.php";
@@ -53,9 +56,12 @@ $menu_name = $menus->getMenusByLink($active_page);
                 
                 include "pages/{$page}.php"; 
                 
-            }else{
+            }else if(!file_exists("pages/{$page}.php")) {
+
                 include "pages/404.php";
-            }
+            }else(
+                include "pages/home.php"
+            );
                 ?>
             <?php include "inc/footer.php" ?>
         </div>

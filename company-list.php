@@ -1,8 +1,9 @@
 <?php
 session_start();
-$user_id = $_SESSION['user']->id;
-require_once "Model/Company.php";
 
+$user_id = $_SESSION['user']->id;
+
+require_once "Model/Company.php";
 $companyObj = new Company();
 $myCompanies = $companyObj->getMyCompanies($user_id);
 
@@ -15,7 +16,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Search for Jobs - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+    <title>Firma Listesi | Puantor - Puantaj Takip Sistemi
     </title>
     <!-- CSS files -->
     <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet" />
@@ -50,11 +51,12 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
         $_SESSION['firm_id'] = $firm_id;
 
 
+
         // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
         $redirectUri = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? $_GET['returnUrl'] : 'index.php?p=home';
         header('Location: ' . $redirectUri);
+        exit();
 
-        // header("Location: index.php?p=home");
     }
 
     ?>

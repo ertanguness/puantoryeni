@@ -72,6 +72,12 @@ if ($(".select2").length > 0) {
   });
 }
 
+if ($(".summernote").length > 0) {
+  $(".summernote").summernote({
+    height: 100     
+  });
+}
+
 if ($(".flatpickr").length > 0) {
   $(".flatpickr").flatpickr({
     dateFormat: "d.m.Y",

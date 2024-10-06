@@ -24,10 +24,20 @@ class Projects extends Model
     }
 
     // Proje ve firma id'sine göre personelleri getirir
-    public function getPersontoProject($project_id, $firm_id)
+    public function getPersontoProject($firm_id,$project_id)
     {
-        $sql = $this->db->prepare('CALL GetPersonsByProjectAndFirm(?, ?)');
-        $sql->execute([$project_id, $firm_id]);
+        $sql = $this->db->prepare('SELECT 
+                                            p.*, 
+                                            (CASE 
+                                                WHEN FIND_IN_SET(p.id, (SELECT GROUP_CONCAT(person_id) FROM project_person WHERE project_id = ?)) > 0 THEN 1 
+                                                ELSE 0 
+                                            END) AS is_added
+                                        FROM 
+                                            persons p
+                                        WHERE 
+                                            p.firm_id = ? AND
+                                            p.wage_type = 2;');
+        $sql->execute([$project_id,$firm_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 

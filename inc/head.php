@@ -33,7 +33,7 @@
     <?php
   $page = isset($_GET["p"]) ? $_GET["p"] : "";
 
-  if ($page == "offers/add") {
+  if ($page == "missions/manage") {
 
     echo '<link href="./dist/libs/summernote/summernote-lite.min.css" rel="stylesheet">';
   };

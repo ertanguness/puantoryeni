@@ -84,15 +84,18 @@ $userObj = new User();
                     $verified = password_verify($password, $user->password);
 
                     if ($verified) {
+                
                       $_SESSION['user'] = $user;
                       $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                       $_SESSION['full_name'] = $user->full_name;
                       $_SESSION['user_role'] = $user->user_roles;
 
                       // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
-                      $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? $_GET['returnUrl'] : 'company-list.php';
-
-                      header("Location: company-list.php?returnUrl={$returnUrl}");
+                      //$returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? $_GET['returnUrl'] : '';
+                       //header("Location: company-list.php?returnUrl={$returnUrl}");
+                      //header("Location:company-list.php");
+                      header("Location: company-list.php");
+                      exit();
                       
                     } else {
                       echo alertdanger('Hatalı şifre veya email adresi');

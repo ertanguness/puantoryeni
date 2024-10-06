@@ -1,5 +1,4 @@
-var form= $("#missionProcessForm");
-var formData = new FormData(form[0]);
+var form = $("#missionProcessForm");
 $(document).on("click", "#saveMissionProcess", function () {
   //var form = $("#missionProcessForm");
 
@@ -10,7 +9,7 @@ $(document).on("click", "#saveMissionProcess", function () {
       },
       process_order: {
         required: true,
-        number : true
+        number: true,
       },
     },
     messages: {
@@ -19,7 +18,7 @@ $(document).on("click", "#saveMissionProcess", function () {
       },
       process_order: {
         required: "Süreç sırası boş bırakılamaz.",
-        number: "Süreç sırası sayı olmalı"
+        number: "Süreç sırası sayı olmalı",
       },
     },
   });
@@ -28,11 +27,11 @@ $(document).on("click", "#saveMissionProcess", function () {
     return;
   }
 
-  //let formData = new FormData(form[0]);
+  let formData = new FormData(form[0]);
 
-//   for (var pair of formData.entries()) {
-//     console.log(pair[0] + ", " + pair[1]);
-//   }
+  // for (var pair of formData.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   fetch("/api/missions/process.php", {
     method: "POST",
@@ -40,59 +39,51 @@ $(document).on("click", "#saveMissionProcess", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.status == "success") {
-        title = "Başarılı";
-      } else {
-        title = "Hata";
-      }
-      Swal.fire({
-        title: title,
-        text: data.message,
-        icon: data.status,
-      });
+      title = data.status == "success" ? "Başarılı" : "Hata";
+      Swal.fire({ title: title, text: data.message, icon: data.status });
     });
 });
 
 //Süreç sırası inputuna sadece sayı girilmesini sağlar
 $(document).on("keypress", "#process_order", function (e) {
-  if (e.which != 8 && e.which != 0 && e.which < 48 || e.which > 57) {
+  if ((e.which != 8 && e.which != 0 && e.which < 48) || e.which > 57) {
     return false;
   }
 });
 
-let action =
-
 $("#sortable").sortable({
-    items: ".process-item",
-    update: function(event, ui) {
-        var order = $(this).sortable('toArray');
-        formData.append("order", JSON.stringify(order));
-            formData.append("action", "updateOrder");
+  items: ".process-item",
+  update: function (event, ui) {
+    var order = $(this).sortable("toArray");
+    let formData = new FormData(form[0]);
+    formData.append("order", JSON.stringify(order));
+    formData.append("action", "updateOrder");
 
-for (var pair of formData.entries()) {
-        console.log(pair[0] + ', ' + pair[1]); 
-      }
+    // for (var pair of formData.entries()) {
+    //         console.log(pair[0] + ', ' + pair[1]);
+    //       }
 
-      fetch("/api/missions/process.php", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.status === "success") {
-                // Sıralama güncellendi, DOM'u güncelle
-                updateOrderInDOM(order);
-            } else {
-                console.error('Error updating order:', data.message);
-            }
-        });
-        
-    }
+    fetch("/api/missions/process.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          // Sıralama güncellendi, DOM'u güncelle
+          updateOrderInDOM(order);
+        } else {
+          console.error("Error updating order:", data.message);
+        }
+      });
+  },
 });
 $("#sortable").disableSelection();
 
 function updateOrderInDOM(order) {
-    order.forEach((id, index) => {
-        $("#" + id).find(".process-order").text(index + 1);
-    });
+  order.forEach((id, index) => {
+    $("#" + id)
+      .find(".process-order")
+      .text(index + 1);
+  });
 }

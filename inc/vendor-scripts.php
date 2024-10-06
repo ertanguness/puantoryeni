@@ -26,12 +26,11 @@ if (
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
 
-if ($page == 'offers/add') {
-    echo '<script src="./src/offer.js" defer ></script>';
+//Summernote eklenecek sayfalar 
+if ($page == "missions/manage") {
+    echo '<script src="./dist/libs/summernote/summernote-lite.min.js?1692870487"></script>';
 }
-if ($page == 'reports/ysc') {
-    echo '<script src="./src/report-ysc.js" ></script>';
-}
+
 
 // Kullanıcı ekleme ve düzenleme sayfası
 if ($page == 'users/list' || $page == 'users/manage') {
@@ -107,9 +106,11 @@ if ($page == 'missions/list' || $page == 'missions/manage') {
 }
 
 // Misyon İşlem Ekleme,güncelleme ve listeleme sayfası
-if ($page == 'missions/process/list' || $page == 'missions/process/manage') {
+if ( $page == 'missions/process/manage') {
     echo '<script src="./src/missions/process.js"></script>';
 }
+
+//
 
 
 ?>

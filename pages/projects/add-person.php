@@ -12,11 +12,12 @@ $person = new Persons();
 $id = $_GET['id'] ?? 0;
 
 $project = $projects->find($id);
-$persons = $projects->getPersontoProject($id,$firm_id);
+$persons = $projects->getPersontoProject($firm_id,$id);
 $company = new CompanyHelper();
 
 
 //firma id'sini almak için $firm_id
+echo "firma id".$firm_id . "project id".$id;
 ?>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">
@@ -26,10 +27,10 @@ $company = new CompanyHelper();
                     <div class="col">
                         <!-- Page pre-title -->
                         <div class="page-pretitle">
-                            <?php echo $project->project_name ?>
-                        </div>
-                        <h2 class="page-title">
-                            Projeye Personel Ekle
+                        Projeye Personel Ekle
+                    </div>
+                    <h2 class="page-title">
+                        <?php echo $project->project_name ?>
                         </h2>
                     </div>
                     <!-- <h3 class="card-title"></h3>
@@ -66,7 +67,7 @@ $company = new CompanyHelper();
 
 
                             <?php foreach ($persons as $person) :
-                            $checked = $person->state == 1 ? "checked" : "";
+                            $checked = $person->is_added == 1 ? "checked" : "";
                             ?>
                                 <tr>
                                     <td>
@@ -76,7 +77,7 @@ $company = new CompanyHelper();
                                     <td><?php echo $person->full_name; ?></td>
                                     <td><?php echo $person->wage_type == 1 ? "Beyaz Yaka" : "Mavi Yaka"; ?></td>
                                     <td><?php echo $person->job; ?></td>
-                                    <td><?php echo $person->job_status ?></td>
+                                    <td><?php echo $person->state ?></td>
 
                                 </tr>
                             <?php endforeach; ?>

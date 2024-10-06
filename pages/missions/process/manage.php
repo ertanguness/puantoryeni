@@ -187,6 +187,3 @@ $pageTitle = $id > 0 ? "Görev Süreci Güncelleme" : "Yeni Görev Süreci";
     </div>
 </div>
 
-<script>
-      
-    </script>

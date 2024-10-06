@@ -41,6 +41,18 @@ class Helper
         '2' => 'Gider',
     ];
 
+    const PRIORITY = [
+        '1' => 'Düşük',
+        '2' => 'Orta',
+        '3' => 'Yüksek',
+    ];
+    
+    public static function getPriority($priority)
+    {
+        $priorities = self::PRIORITY;
+        return $priorities[$priority];
+    }
+
     public static function getIncomeExpenseType($type)
     {
         $types = self::INCOME_EXPENSE_TYPE;
@@ -137,6 +149,15 @@ class Helper
         }
         $select .= '</select>';
         return $select;
+    }
+
+    //dd fonksiyonu
+    public static function dd($data)
+    {
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        
     }
 
 

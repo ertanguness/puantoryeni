@@ -45,7 +45,7 @@ $pageTitle = $id > 0 ? "Geir-Gider Türü Güncelleme" : "Yeni Gelir-Gider Tür�
                             <!--********** HIDDEN ROW************** -->
                             <div class="row">
                                 <div class="col-md-4">
-                                    <input type="text" name="id" class="form-control" value="<?php echo $incexp->id ?? ''?>">
+                                    <input type="text" name="id" class="form-control" value="<?php echo $id ?? ''?>">
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" name="action" value="saveIncExpType" class="form-control">
