@@ -20,7 +20,7 @@ if ($_POST["action"] == "userSave") {
             "firm_id" => $_SESSION["firm_id"],
             "full_name" => $_POST["full_name"],
             "email" => $_POST["email"],
-            "password" => md5($_POST["password"]),
+            "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
             "phone" => $_POST["phone"],
             "user_roles" => $_POST["user_roles"],
             "job" => $_POST["job"],

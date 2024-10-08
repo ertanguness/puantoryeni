@@ -1,8 +1,7 @@
 <?php
 define("ROOT", $_SERVER['DOCUMENT_ROOT']);
 require_once ROOT . "/Model/Missions.php";
-require_once ROOT . "/Model/MissionProcess.php";
-require_once ROOT . "/Model/MissionProcessMapping.php";
+require_once ROOT . "/Model/MissionHeaders.php";
 require_once ROOT . "/Model/User.php";
 require_once ROOT . "/App/Helper/helper.php";
 
@@ -11,11 +10,9 @@ use App\Helper\Helper;
 $users = new User();
 
 $missionObj = new Missions();
-$process = new MissionProcess();
-$mapping = new MissionProcessMapping();
+$headerObj = new MissionHeaders();
 
-$missions = $missionObj->getMissionsFirm($firm_id);
-$m_process = $process->getMissionProcessFirm($firm_id);
+$missionHeaders = $missionObj->getHeaderFromMissionsFirm($firm_id);
 
 // Helper::dd($m_process);
 ?>
@@ -62,39 +59,61 @@ $m_process = $process->getMissionProcessFirm($firm_id);
                 vertical-align: top;
                 margin-right: 10px;
             }
+
+            .card {
+                overflow: auto;
+                white-space: wrap;
+                border-radius: 6px;
+                box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s;
+
+            }
+
+            .pointer {
+                cursor: pointer;
+            }
         </style>
         <!-- Page body -->
         <div class="page-body">
             <div class="container-xl">
 
-                <div class="responsive d-flex">
-                    <?php foreach ($m_process as $item) { ?>
-                        <?php $isProcessFromMapping = $process->getMissionProcessFromMapping($item->id) ?>
-                        <?php if (empty($isProcessFromMapping)) {
-                            continue;
-                        } ?>
+                <div class="responsive d-flex" id="sortable">
+                    <?php foreach ($missionHeaders as $item) { ?>
+                        <?php
+                        $mission_header_name = $headerObj->getMissionHeader($item->header_id)->header_name;
 
-                        <div class="col-md-3 col-lg-3 me-3">
-                            <h2 class="mb-3"><?php echo $item->process_order . "-" .  $item->process_name; ?></h2>
-                            <!-- Görevler listeliyoruz, süreç tablosundaki son süreç id'sine göre görevleri listeliyoruz. -->
+                        ?>
+
+                        <div class="col-md-2 col-lg-2 me-3 header-item" id="item-<?php echo $item->header_id; ?>">
+                            <div class="d-flex pointer">
+                                <i class="ti ti-drag-drop icon me-1 "></i>
+                                <h2 class="mb-3"> <?php echo $mission_header_name; ?></h2>
+                            </div>
+                            <?php
+                            $missions = $missionObj->getMissionsByHeader($item->header_id);
+
+                            ?>
                             <?php foreach ($missions as $mission) { ?>
 
-                                <?php $mission_process = $mapping->getMissionProcessMapByLastProcessId($mission->id);
-                                // Eklenen görev süreç tablosundaki son süreç id'sine göre getirilir yoksa gösterilmez. 
-                                $process_id = $mission_process[0]->process_id ?? 0;
-                                ?>
-                                <?php if ($process_id != $item->id) {
-                                    continue;
-                                } ?>
-
-
-
-                                <div class="mb-4">
+                                <div class="mb-2 mission-items">
                                     <div class="row row-cards">
                                         <div class="col-12">
                                             <div class="card card-sm">
                                                 <div class="card-body">
-                                                    <h3 class="card-title"><?php echo $mission->name; ?></h3>
+                                                   
+                                                    <h3 class="card-title">
+                                                        <label class="form-colorinput form-colorinput-light"
+                                                        data-tooltip="Tamamlandı yap" 
+                                                        >
+                                                            <input name="color-rounded" type="radio" value="white"
+                                                                class="form-colorinput-input" checked="">
+                                                            <span class="form-colorinput-color bg-white rounded-circle"></span>
+                                                        </label>
+                                                   
+
+                                                        <?php echo $mission->name; ?>
+                                                    </h3>
+                                                   
                                                     <div class="card-subtitle text-muted">
                                                         <span><?php echo $mission->start_date . "-" . $mission->end_date; ?></span>
                                                     </div>

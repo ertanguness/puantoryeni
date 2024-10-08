@@ -19,3 +19,12 @@ $(document).on("click", "#saveMission", function () {
       console.error("Error:", error);
     });
 });
+
+$(document).on("click", ".delete-mission", function () {
+  //Tablo adı butonun içinde bulunduğu tablo
+  let action = "deleteMission";
+  let confirmMessage = "Görev silinecektir!";
+  let url = "/api/missions/missions.php";
+
+  deleteRecord(this, action, confirmMessage, url);
+});

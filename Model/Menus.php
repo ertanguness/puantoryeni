@@ -31,8 +31,8 @@ class Menus extends Model
 
     public function getSubMenus($menuId)
     {
-        $sql = $this->db->prepare("SELECT * FROM menu WHERE parent_id = ? ");
-        $sql->execute(array($menuId));
+        $sql = $this->db->prepare("SELECT * FROM menu WHERE parent_id = ? and isActive = ? ");
+        $sql->execute(array($menuId,1));
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 }

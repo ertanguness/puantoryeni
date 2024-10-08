@@ -28,7 +28,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <!-- jQuery UI CSS -->
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <?php
   $page = isset($_GET["p"]) ? $_GET["p"] : "";
@@ -47,7 +48,8 @@
     || $page == "financial/transactions/list" || $page == "financial/transactions/manage"
     || $page == "projects/list" || $page == "projects/add-person" || $page == 'projects/manage'
     || $page == "puantaj/list" || $page == "bordro/list" || $page == "defines/incexp/list" 
-    || $page == "missions/list" || $page == "missions/process/list"
+    || $page == "missions/list" || $page == "missions/process/list" ||
+        $page == 'missions/headers/manage' || $page == 'missions/headers/list'
   ) {
     echo '<link href="./dist/libs/datatable/datatables.min.css" rel="stylesheet" />';
   }

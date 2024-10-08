@@ -97,3 +97,29 @@ $('input[name="amount"]').keypress(function (e) {
     return false;
 }
 });
+
+
+$(document).on('click', '.transaction_type', function() {
+    var type = $(this).val();
+     var formData = new FormData();
+    formData.append("action", "getSubTypes");
+    formData.append("type", type);
+
+    fetch("api/financial/transaction.php", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            var options = "<option value=''>Tür Seçiniz</option>";
+            data = data.subTypes;
+            
+            data.forEach((element) => {
+                options += `<option value="${element.id}">${element.name}</option>`;
+            });
+            $("#inc_exp_type").html(options);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+});

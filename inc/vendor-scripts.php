@@ -1,7 +1,17 @@
 <script src="./dist/js/jquery.3.7.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
+
+
 <?php
+
+
+
+
 $page = isset($_GET['p']) ? $_GET['p'] : '';
+
+
+
 if (
     $page == 'companies/list' ||
     $page == 'offers/list' ||
@@ -19,12 +29,16 @@ if (
     $page == 'projects/list' || $page == 'projects/manage' ||
     $page == 'projects/add-person' ||
     $page == 'puantaj/list' ||
-    $page == 'bordro/list'||
+    $page == 'bordro/list' ||
     $page == 'defines/incexp/list' ||
-    $page == 'missions/list' || $page == 'missions/process/list'
+    $page == 'missions/list' || $page == 'missions/process/list' ||
+    $page == 'missions/headers/manage' || $page == 'missions/headers/list'
 ) {
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
+
+
+
 
 //Summernote eklenecek sayfalar 
 if ($page == "missions/manage") {
@@ -78,7 +92,7 @@ if ($page == 'financial/case/list' || $page == 'financial/case/manage') {
 // Kasa İşlemleri(kasa ekleme ve düzenleme sayfası)
 if ($page == 'financial/transactions/list') {
     echo '<script src="./src/financial/transactions.js"></script>';
-}   
+}
 // Proje Ekleme,güncelleme ve listeleme sayfası
 if ($page == 'projects/list' || $page == 'projects/manage' || $page == 'projects/add-person') {
     echo '<script src="./src/project/projects.js"></script>';
@@ -106,11 +120,22 @@ if ($page == 'missions/list' || $page == 'missions/manage') {
 }
 
 // Misyon İşlem Ekleme,güncelleme ve listeleme sayfası
-if ( $page == 'missions/process/manage') {
+if ($page == 'missions/process/manage') {
     echo '<script src="./src/missions/process.js"></script>';
 }
 
-//
+// Misyon Başlığı Ekleme,güncelleme ve listeleme sayfası
+
+//Jquery UI eklenecek sayfalar
+if ($page == 'missions/headers/manage' || $page == "home") {
+    echo '<script src="./dist/js/jquery-ui.js"></script>';
+}
+
+
+if ($page == 'missions/headers/manage') {
+    echo '<script src="./src/missions/headers.js"></script>';
+}
+
 
 
 ?>
@@ -122,12 +147,15 @@ if ( $page == 'missions/process/manage') {
 
 
 <?php
+
+
 if ($page == 'home') {
     echo '<script src="./dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>';
-    echo '<script src="./dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>';
-    echo '<script src="./dist/libs/jsvectormap/dist/maps/world.js" defer></script>';
-    echo '<script src="./dist/libs/jsvectormap/dist/maps/world-merc.js" defer></script>';
+    // echo '<script src="./dist/libs/jsvectormap/dist/js/jsvectormap.min.js" defer></script>';
+    //echo '<script src="./dist/libs/jsvectormap/dist/maps/world.js" defer></script>';
+    //echo '<script src="./dist/libs/jsvectormap/dist/maps/world-merc.js" defer></script>';
     echo '<script src="./src/charts.js" defer></script>';
+    echo '<script src="./src/home/missions.js"></script>';
 }
 ?>
 

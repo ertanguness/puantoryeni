@@ -21,10 +21,18 @@ class Defines extends Model
 
 
     //gelir-gider türü tanım : 2
-    public function getIncExpTypesByFirm($firm_id)
+    public function getIncExpTypesByFirm()
     {
-        $sql =  $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? and `group_type` = ?");
-        $sql->execute([$firm_id, 2]);
+        $sql =  $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ?");
+        $sql->execute([$_SESSION['firm_id']]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
+    public function getIncExpTypesByFirmandType($type)
+    {
+        $sql =  $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? and `type` = ?");
+        $sql->execute([$_SESSION['firm_id'], $type]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
 }

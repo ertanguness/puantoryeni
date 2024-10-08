@@ -2,10 +2,10 @@
 require_once "App/Helper/helper.php";
 require_once "App/Helper/users.php";
 require_once "Model/Missions.php";
-require_once "Model/MissionProcess.php";
+require_once "Model/MissionHeaders.php";
 
 $missionObj = new Missions();
-$process = new MissionProcess();
+$headers = new MissionHeaders();
 $userHelper = new UserHelper();
 
 use App\Helper\Helper;
@@ -32,6 +32,7 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                         <thead>
                             <tr>
                                 <th style="width:7%">ID</th>
+                                <th>Görev Başlığı</th>
                                 <th>Görev Adı</th>
                                 <th>Yetkili Kişi</th>
                                 <th>Önem Derecesi</th>
@@ -49,6 +50,12 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                             ?>
                                 <tr>
                                     <td><?php echo $item->id; ?></td>
+                                    <td>
+                                        <?php
+                                        $header = $headers->getMissionHeader($item->header_id);
+                                        echo $header->header_name;
+                                        ?>
+                                    </td>
                                     <td><?php echo $item->name; ?></td>
                                     <td>
                                         <?php
@@ -68,7 +75,7 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                                                 <a class="dropdown-item route-link" data-page="missions/manage&id=<?php echo $item->id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
-                                                <a class="dropdown-item delete-incexp" href="#" data-id="<?php echo $item->id ?>">
+                                                <a class="dropdown-item delete-mission" href="#" data-id="<?php echo $item->id ?>">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
                                             </div>

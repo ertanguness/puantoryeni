@@ -71,12 +71,19 @@ if ($(".select2").length > 0) {
     dropdownParent: $(".modal"),
   });
 }
-
+$(document).ready(function() {
 if ($(".summernote").length > 0) {
+  var summernoteHeight = $(window).height() * 0.37; // Set height to 30% of window height
   $(".summernote").summernote({
-    height: 100     
+    height: summernoteHeight,
+    callbacks: {
+      onInit: function() {
+        $('.summernote').summernote('height', summernoteHeight);
+      }
+    }
   });
 }
+});
 
 if ($(".flatpickr").length > 0) {
   $(".flatpickr").flatpickr({
@@ -85,9 +92,7 @@ if ($(".flatpickr").length > 0) {
   });
 }
 
-if ($(".summernote").length > 0) {
-  $(".summernote").summernote();
-}
+
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 }

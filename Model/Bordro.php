@@ -56,6 +56,39 @@ class Bordro extends Model
         return $query->fetch(PDO::FETCH_OBJ);
     }
 
+
+    //Devreden Bakiye Hesaplama
+    public function getCarryOverBalance($person_id, $start_date)
+    {
+        $query = $this->db->prepare('SELECT (
+                        -COALESCE((
+                            SELECT SUM(tutar) FROM maas_gelir_kesinti mgkk
+                            WHERE mgkk.person_id = :person_id
+                            AND mgkk.kategori IN (2, 3)
+                            AND mgkk.gun < :start_date  -- Kesinti Toplamı
+                        ), 0) +
+                        COALESCE((
+                            SELECT SUM(tutar) FROM maas_gelir_kesinti mgkg
+                            WHERE mgkg.person_id = :person_id
+                            AND mgkg.kategori IN (1, 4)
+                            AND mgkg.gun < :start_date  -- Maaş veya diğer ödemeler toplamı
+                        ), 0) +
+                        COALESCE((
+                            SELECT SUM(tutar) FROM puantaj p
+                            WHERE p.person = :person_id  
+                            AND p.gun < :start_date  -- puantaj çalışmaları toplamı
+                        ), 0)
+                    ) AS toplam;');
+
+        $query->execute(
+            [
+                ':person_id' => $person_id,
+                ':start_date' => $start_date
+            ]
+        );
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
+
     public function getPersonIncomeExpenseInfo($person_id)
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE person_id = :person_id");
@@ -100,7 +133,7 @@ class Bordro extends Model
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 
-//Personelin Bakiyesini döndürür
+    //Personelin Bakiyesini döndürür
     function getBalance($person_id)
     {
         $result = $this->sumAllIncomeExpense($person_id);

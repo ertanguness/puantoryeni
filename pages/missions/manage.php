@@ -1,8 +1,10 @@
 <?php
 require_once "Model/Missions.php";
 require_once "App/Helper/users.php";
+require_once "App/Helper/MissionsHelper.php";
 
 $userHelper = new UserHelper();
+$missionHelper = new MissionsHelper();
 $missionObj = new Missions();
 $id = $_GET['id'] ?? 0;
 $mission = $missionObj->find($id);
@@ -65,11 +67,14 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                             </style>
                             <div class="row">
                                 <div class="col-md-2">
-                                    <label class="form-label">Görev Adı</label>
+                                    <label class="form-label">Görev Başlığı</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" name="name" class="form-control"
-                                        value="<?php echo $mission->name ?? '' ?>">
+                                    <?php
+                                    $header_id = $mission->header_id ?? 0;
+                                   echo $missionHelper->getMissionHeaderSelect("header_id", $header_id);
+                                    
+                                    ?>
                                 </div>
                                 <div class="col-md-2">
                                     <?php $priority = $mission->priority ?? 1; ?>
@@ -106,7 +111,14 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
 
                             <div class="row">
                                 <div class="col-md-2">
-                                    <label class="form-label">Görevi Atanacak Kişi</label>
+                                    <label class="form-label">Görev Adı</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="name" class="form-control"
+                                        value="<?php echo $mission->name ?? '' ?>">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Görevi Atanacak Kişiler</label>
 
                                 </div>
                                 <div class="col-md-4">

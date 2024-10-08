@@ -1,4 +1,5 @@
 // @formatter:off
+if($("#chart-revenue-bg").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("chart-revenue-bg"), {
@@ -95,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
@@ -296,6 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // @formatter:on
 
 // @formatter:off
+if($("#chart-mentions").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("chart-mentions"), {
@@ -429,9 +432,11 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:on
+if($("#map-world").lenght > 0){ 
 document.addEventListener("DOMContentLoaded", function () {
   const map = new jsVectorMap({
     selector: "#map-world",
@@ -639,9 +644,11 @@ document.addEventListener("DOMContentLoaded", function () {
     map.updateSize();
   });
 });
+}
 // @formatter:off
 
 // @formatter:off
+if($("#sparkline-activity").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-activity"), {
@@ -678,9 +685,11 @@ document.addEventListener("DOMContentLoaded", function () {
       series: [35],
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if($("#chart-development-activity").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("chart-development-activity"), {
@@ -780,9 +789,11 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if ($("#sparkline-bounce-rate-1").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-bounce-rate-1"), {
@@ -812,9 +823,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if($("#sparkline-bounce-rate-2").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-bounce-rate-2"), {
@@ -844,9 +857,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if($("#sparkline-bounce-rate-3").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-bounce-rate-3"), {
@@ -876,9 +891,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if($("#sparkline-bounce-rate-4").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-bounce-rate-4"), {
@@ -908,9 +925,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if($("#sparkline-bounce-rate-5").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-bounce-rate-5"), {
@@ -940,9 +959,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     }).render();
 });
+}
 // @formatter:on
 
 // @formatter:off
+if($("#sparkline-bounce-rate-6").lenght > 0){
 document.addEventListener("DOMContentLoaded", function () {
   window.ApexCharts &&
     new ApexCharts(document.getElementById("sparkline-bounce-rate-6"), {
@@ -972,4 +993,5 @@ document.addEventListener("DOMContentLoaded", function () {
       ],
     }).render();
 });
+}
 // @formatter:on

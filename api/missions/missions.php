@@ -32,6 +32,9 @@ if ($_POST["action"] == "saveMission") {
             "name" => $_POST["name"],
             "firm_id" => $_SESSION["firm_id"],
             "user_ids" => $user_ids,
+            "header_id" => $_POST["header_id"],
+            "start_date" => $_POST["start_date"],
+            "end_date" => $_POST["end_date"],
             "priority" => $_POST["priority"],
             "description" => $_POST["description"]
         ];
@@ -52,6 +55,23 @@ if ($_POST["action"] == "saveMission") {
     } catch (PDOException $ex) {
         $status = "error";
         $message = $ex->getMessage();
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message
+    ];
+    echo json_encode($res);
+}
+
+if ($_POST["action"] == "deleteMission") {
+    $id = $_POST["id"];
+    try {
+        $mission->delete($id);
+        $status = "success";
+        $message = "Görev başarıyla silindi." ;
+    } catch (PDOException $e) {
+        $status = "error";
+        $message = $e->getMessage();
     }
     $res = [
         "status" => $status,

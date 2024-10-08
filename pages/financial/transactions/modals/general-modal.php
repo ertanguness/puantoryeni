@@ -23,7 +23,7 @@ use App\Helper\Helper;
                     <div class="form-selectgroup-boxes row mb-3">
                         <div class="col-lg-6">
                             <label class="form-selectgroup-item">
-                                <input type="radio" name="transaction_type" value="1" class="form-selectgroup-input"
+                                <input type="radio" name="transaction_type" value="1" class="form-selectgroup-input transaction_type "
                                     checked="">
                                 <span class="form-selectgroup-label d-flex align-items-center p-3">
                                     <span class="me-3">
@@ -37,7 +37,7 @@ use App\Helper\Helper;
                         </div>
                         <div class="col-lg-6">
                             <label class="form-selectgroup-item">
-                                <input type="radio" name="transaction_type" value="1" class="form-selectgroup-input">
+                                <input type="radio" name="transaction_type" value="2" class="form-selectgroup-input transaction_type">
                                 <span class="form-selectgroup-label d-flex align-items-center p-3">
                                     <span class="me-3">
                                         <span class="form-selectgroup-check"></span>
@@ -92,6 +92,7 @@ use App\Helper\Helper;
                 </form>
             </div>
 
+         
             <div class="modal-footer">
                 <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                     Vazgeç
