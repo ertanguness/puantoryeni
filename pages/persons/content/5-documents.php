@@ -1,1 +1,0 @@
-<?php include "pages/under-maintance.php"; ?>

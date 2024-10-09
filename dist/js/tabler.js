@@ -5014,7 +5014,7 @@
 	const WIDTH = 'width';
 	const HEIGHT = 'height';
 	const SELECTOR_ACTIVES = '.collapse.show, .collapse.collapsing';
-	const SELECTOR_DATA_TOGGLE$4 = '[data-bs-toggle="collapse"]';
+	const SELECTOR_DATA_TOGGLE$4 = '[="collapse"]';
 	const Default$a = {
 	  parent: null,
 	  toggle: true

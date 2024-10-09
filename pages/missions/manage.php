@@ -2,6 +2,9 @@
 require_once "Model/Missions.php";
 require_once "App/Helper/users.php";
 require_once "App/Helper/MissionsHelper.php";
+require_once "App/Helper/date.php";
+
+use App\Helper\Date;
 
 $userHelper = new UserHelper();
 $missionHelper = new MissionsHelper();
@@ -49,7 +52,7 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                             <!--********** HIDDEN ROW************** -->
                             <div class="row d-none">
                                 <div class="col-md-4">
-                                    <input type="text" name="id" class="form-control" value="<?php echo $id ?>">
+                                    <input type="text" name="id" id="mission_id" class="form-control" value="<?php echo $id ?>">
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" name="action" value="saveMission" class="form-control">
@@ -72,8 +75,9 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                                 <div class="col-md-4">
                                     <?php
                                     $header_id = $mission->header_id ?? 0;
-                                   echo $missionHelper->getMissionHeaderSelect("header_id", $header_id);
-                                    
+                                    //Görev Başlıklarını getirir
+                                    echo $missionHelper->getMissionHeaderSelect("header_id", $header_id);
+
                                     ?>
                                 </div>
                                 <div class="col-md-2">
@@ -86,21 +90,21 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                                     <?php $status = $mission->status ?? 'active'; ?>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="priority" value="3" id="high"
-                                            <?php echo $status == 'active' ? 'checked' : ''; ?>>
+                                            <?php echo $priority == 3 ? 'checked' : ''; ?>>
                                         <label class="form-check-label" for="high">
                                             Yüksek
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="priority" value="2"
-                                            id="middle" <?php echo $status == 'inactive' ? 'checked' : ''; ?>>
+                                            id="middle" <?php echo $priority == 2 ? 'checked' : ''; ?>>
                                         <label class="form-check-label" for="middle">
                                             Orta
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="priority" value="1" id="low"
-                                            <?php echo $status == 'inactive' ? 'checked' : ''; ?>>
+                                            <?php echo $priority == 1 ? 'checked' : ''; ?>>
                                         <label class="form-check-label" for="low">
                                             Düşük
                                         </label>
@@ -138,14 +142,14 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                                     <label class="form-label">Başlama Tarihi</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="date" name="start_date" class="form-control flatpickr"
+                                    <input type="text" name="start_date" class="form-control flatpickr"
                                         value="<?php echo $mission->start_date ?? '' ?>">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label">Bitiş Tarihi</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="date" name="end_date" class="form-control flatpickr"
+                                    <input type="text" name="end_date" class="form-control flatpickr"
                                         value="<?php echo $mission->end_date ?? '' ?>">
                                 </div>
                             </div>

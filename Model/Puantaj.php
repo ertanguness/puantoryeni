@@ -19,6 +19,22 @@ class Puantaj extends Model
         return $sql->fetch(PDO::FETCH_OBJ)->PuantajSaati ?? 0;
     }
 
+    //Personelin puantaj tablosundaki çalışmaları getirilir
+    public function getPuantajInfoByPerson($person_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM puantaj WHERE person = ?");
+        $sql->execute([$person_id]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    //Puantaj id'sine göre puantaj bilgilerini getiri
+    public function getPuantajTuruById($id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM puantajturu WHERE id = ?");
+        $sql->execute([$id]);
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
     //puantaj gununden puantaj tablosundaki id'yi çekiyoruz
     public function getPuantajId($person_id, $date)
     {
@@ -50,4 +66,5 @@ class Puantaj extends Model
         $sql->execute([$person_id]);
         return $sql->fetch(PDO::FETCH_OBJ) ?? 0;
     }
+    
 }

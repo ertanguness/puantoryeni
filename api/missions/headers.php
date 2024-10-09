@@ -42,7 +42,7 @@ if ($_POST["action"] == "updateOrder") {
     //Sıralamayı güncelleyin
     foreach ($order as $position => $id) {
         // ID'yi ayıklayın (örneğin, "item-1" -> 1)
-        $id = str_replace('item-', '', $id);
+        // $id = str_replace('item-', '', $id);
 
         $data = [
             "id" => $id,

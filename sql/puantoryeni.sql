@@ -16,10 +16,12 @@
 
 
 -- puantoryeni için veritabanı yapısı dökülüyor
+DROP DATABASE IF EXISTS `puantoryeni`;
 CREATE DATABASE IF NOT EXISTS `puantoryeni` /*!40100 DEFAULT CHARACTER SET latin5 COLLATE latin5_turkish_ci */;
 USE `puantoryeni`;
 
 -- tablo yapısı dökülüyor puantoryeni.authority
+DROP TABLE IF EXISTS `authority`;
 CREATE TABLE IF NOT EXISTS `authority` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `authName` varchar(50) DEFAULT NULL,
@@ -93,6 +95,7 @@ INSERT INTO `authority` (`id`, `authName`, `authTitle`, `authGroup`, `authValue`
 	(65, 'docedit', 'Evrak Düzenleme Sayfası', 4, 1, 1);
 
 -- tablo yapısı dökülüyor puantoryeni.auths
+DROP TABLE IF EXISTS `auths`;
 CREATE TABLE IF NOT EXISTS `auths` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
@@ -107,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `auths` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.auths: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.auths: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `auths`;
 INSERT INTO `auths` (`id`, `name`, `title`, `value`, `is_active`, `parent_id`, `tooltip_1`, `tooltip_2`, `tooltip_3`, `tooltip_4`) VALUES
 	(1, 'mainpage', 'Ana Sayfa Bilgileri', 1, 1, 0, NULL, NULL, NULL, NULL),
@@ -120,6 +123,7 @@ INSERT INTO `auths` (`id`, `name`, `title`, `value`, `is_active`, `parent_id`, `
 	(8, 'bordro', 'Bordro Sayfası Bilgileri', 1, 1, 3, 'Bordro Sayfasını göremez', 'Bordro Sayfasını görür,işlem yapamaz', 'Bordro sayfasında ekleme ve düzenleme yapablir', 'Bordro sayfasındaki tüm yetkilere sahiptir.');
 
 -- tablo yapısı dökülüyor puantoryeni.cases
+DROP TABLE IF EXISTS `cases`;
 CREATE TABLE IF NOT EXISTS `cases` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL DEFAULT 0,
@@ -147,6 +151,7 @@ INSERT INTO `cases` (`id`, `account_id`, `firm_id`, `start_budget`, `case_name`,
 	(49, 60, 15, 90000.00, 'TL Kasası', 'Akbank', 'Ankara', 'Ankara Şantiyesi', 0);
 
 -- tablo yapısı dökülüyor puantoryeni.case_transactions
+DROP TABLE IF EXISTS `case_transactions`;
 CREATE TABLE IF NOT EXISTS `case_transactions` (
   `id` int(100) NOT NULL AUTO_INCREMENT,
   `type_id` int(100) NOT NULL,
@@ -161,9 +166,9 @@ CREATE TABLE IF NOT EXISTS `case_transactions` (
   `updated_at` varchar(30) DEFAULT NULL,
   `company_id` int(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.case_transactions: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.case_transactions: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `case_transactions`;
 INSERT INTO `case_transactions` (`id`, `type_id`, `date`, `case_id`, `sub_type`, `amount`, `amount_money`, `account_name`, `description`, `created_at`, `updated_at`, `company_id`) VALUES
 	(58, 1, '', 22, 2, 0, NULL, NULL, '', '2024-06-19 13:10:18', NULL, NULL),
@@ -172,9 +177,12 @@ INSERT INTO `case_transactions` (`id`, `type_id`, `date`, `case_id`, `sub_type`,
 	(133, 1, '2024-09-18', 22, 0, 90, 1, NULL, '', '2024-09-18 21:22:13', NULL, NULL),
 	(134, 1, '2024-09-27', 48, 0, 5000, 1, NULL, '', '2024-09-27 12:14:41', NULL, NULL),
 	(135, 1, '2024-10-04', 49, 0, 9000, 1, NULL, 'Çay parası', '2024-10-04 08:30:07', NULL, NULL),
-	(136, 1, '2024-10-06', 35, 0, 5600, 1, NULL, '', '2024-10-06 11:14:20', NULL, NULL);
+	(136, 1, '2024-10-06', 35, 0, 5600, 1, NULL, '', '2024-10-06 11:14:20', NULL, NULL),
+	(137, 1, '2024-10-06', 35, 2, 2345, 1, NULL, 'qweqwe', '2024-10-06 23:03:59', NULL, NULL),
+	(138, 2, '2024-10-06', 35, 4, 2345, 1, NULL, 'qweqwe', '2024-10-06 23:04:29', NULL, NULL);
 
 -- tablo yapısı dökülüyor puantoryeni.cgroups
+DROP TABLE IF EXISTS `cgroups`;
 CREATE TABLE IF NOT EXISTS `cgroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(155) NOT NULL,
@@ -200,6 +208,7 @@ INSERT INTO `cgroups` (`id`, `title`, `regdate`, `statu`) VALUES
 /*!40000 ALTER TABLE `cgroups` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.companies
+DROP TABLE IF EXISTS `companies`;
 CREATE TABLE IF NOT EXISTS `companies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `grp` int(11) DEFAULT NULL,
@@ -236,6 +245,7 @@ INSERT INTO `companies` (`id`, `grp`, `user_id`, `company_name`, `yetkili`, `pho
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.defines
+DROP TABLE IF EXISTS `defines`;
 CREATE TABLE IF NOT EXISTS `defines` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
@@ -251,13 +261,14 @@ CREATE TABLE IF NOT EXISTS `defines` (
 -- puantoryeni.defines: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `defines`;
 INSERT INTO `defines` (`id`, `user_id`, `group_type`, `firm_id`, `name`, `type`, `description`, `created_at`) VALUES
-	(2, 60, 2, 8, 'fasfas', 1, 'dfasdfa', 2147483647),
-	(3, 60, 2, 8, 'fasfas', 1, 'dfasdfa', 2147483647),
-	(4, 60, 2, 8, 'Eklenen Veri', 2, 'dfasdfa', 2147483647),
+	(2, 60, 2, 8, 'Gelir 1', 1, 'dfasdfa', 2147483647),
+	(3, 60, 2, 8, 'Gelir 2', 1, 'dfasdfa', 2147483647),
+	(4, 60, 2, 8, 'Gider 1', 2, 'dfasdfa', 2147483647),
 	(5, 60, 2, 15, 'Eklenen Veri', 1, '', 2147483647),
-	(6, 60, 2, 8, 'Eklenen Veri', 1, '', 2147483647);
+	(6, 60, 2, 8, 'Gelir 3', 1, '', 2147483647);
 
 -- tablo yapısı dökülüyor puantoryeni.define_numbers
+DROP TABLE IF EXISTS `define_numbers`;
 CREATE TABLE IF NOT EXISTS `define_numbers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ysc` int(20) NOT NULL,
@@ -281,6 +292,7 @@ INSERT INTO `define_numbers` (`id`, `ysc`, `hst`, `met`, `yas`, `purchase`, `pur
 /*!40000 ALTER TABLE `define_numbers` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.il
+DROP TABLE IF EXISTS `il`;
 CREATE TABLE IF NOT EXISTS `il` (
   `id` tinyint(4) NOT NULL DEFAULT 0,
   `city_name` varchar(20) NOT NULL,
@@ -376,6 +388,7 @@ INSERT INTO `il` (`id`, `city_name`) VALUES
 /*!40000 ALTER TABLE `il` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.ilce
+DROP TABLE IF EXISTS `ilce`;
 CREATE TABLE IF NOT EXISTS `ilce` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `il_id` tinyint(4) NOT NULL,
@@ -1348,6 +1361,7 @@ INSERT INTO `ilce` (`id`, `il_id`, `ilce_adi`) VALUES
 /*!40000 ALTER TABLE `ilce` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.job_groups
+DROP TABLE IF EXISTS `job_groups`;
 CREATE TABLE IF NOT EXISTS `job_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(100) NOT NULL DEFAULT '0',
@@ -1361,6 +1375,7 @@ INSERT INTO `job_groups` (`id`, `group_name`) VALUES
 	(2, 'Fayans');
 
 -- tablo yapısı dökülüyor puantoryeni.maas_gelir_kesinti
+DROP TABLE IF EXISTS `maas_gelir_kesinti`;
 CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
@@ -1374,9 +1389,9 @@ CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   `aciklama` varchar(255) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.maas_gelir_kesinti: ~44 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.maas_gelir_kesinti: ~48 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `maas_gelir_kesinti`;
 INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `gun`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
 	(1, 4, 181, '20240915', 9, 2024, 900.00, 2, '0', '0', '0000-00-00 00:00:00'),
@@ -1422,9 +1437,14 @@ INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `gun`, `ay`, `yi
 	(198, 60, 226, '20240915', 9, 2024, 500.00, 3, 'Bakiye Ödemesi', '', '2024-09-27 23:20:53'),
 	(199, 60, 226, '20240915', 9, 2024, 15000.00, 3, 'Bakiye Ödemesi', '', '2024-09-30 13:26:46'),
 	(200, 60, 226, '20240915', 9, 2024, 1250.00, 3, 'Bakiye Ödemesi', '', '2024-09-30 22:45:35'),
-	(202, 60, 230, '20240915', 9, 2024, 25500.00, 3, 'Bakiye Ödemesi', '', '2024-10-04 08:23:44');
+	(202, 60, 230, '20240915', 9, 2024, 25500.00, 3, 'Bakiye Ödemesi', '', '2024-10-04 08:23:44'),
+	(203, 60, 227, '20240915', 9, 2024, 40645.16, 3, 'Bakiye Ödemesi', '', '2024-10-08 23:31:18'),
+	(204, 60, 226, '20241015', 10, 2024, 20250.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 10:34:04'),
+	(205, 60, 229, '20241015', 10, 2024, 41500.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 10:36:38'),
+	(206, 60, 226, '20241015', 10, 2024, 4000.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 14:21:04');
 
 -- tablo yapısı dökülüyor puantoryeni.menu
+DROP TABLE IF EXISTS `menu`;
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `page_name` varchar(50) NOT NULL DEFAULT '0',
@@ -1435,9 +1455,9 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `isMenu` int(11) DEFAULT 1,
   `index_no` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.menu: ~48 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.menu: ~51 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `menu`;
 INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActive`, `isMenu`, `index_no`) VALUES
 	(1, 'Ana Sayfa', 'home', 'home', 0, 1, 1, 1),
@@ -1486,43 +1506,83 @@ INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActi
 	(47, 'Görev Listesi', 'missions/list', '0', 45, 1, 1, NULL),
 	(48, 'Görevlerim', 'missions/my-missions', '0', 45, 1, 1, NULL),
 	(49, 'Verdiğim Görevler', 'missions/to-missions', '0', 45, 1, 1, NULL),
-	(50, 'Süreç Yönetimi', 'missions/process/list', '0', 45, 1, 1, NULL),
-	(51, 'Süreç Ekle/Güncelle', 'missions/process/manage', '0', 45, 1, 0, 0);
+	(50, 'Süreç Yönetimi', 'missions/process/list', '0', 45, 0, 1, NULL),
+	(51, 'Süreç Ekle/Güncelle', 'missions/process/manage', '0', 45, 0, 0, 0),
+	(52, 'Görev Başlıkları', 'missions/headers/list', '0', 45, 1, 1, NULL),
+	(53, 'Görev Başlıkları Ekle/Güncelle', 'missions/headers/manage', '0', 45, 1, 0, NULL),
+	(54, 'Görev Ekle/Güncelle', 'missions/manage', '0', 45, 1, 0, NULL);
 
 -- tablo yapısı dökülüyor puantoryeni.missions
+DROP TABLE IF EXISTS `missions`;
 CREATE TABLE IF NOT EXISTS `missions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
   `firm_id` int(11) NOT NULL DEFAULT 0,
-  `surec_id` int(11) NOT NULL DEFAULT 0,
+  `header_id` int(11) NOT NULL DEFAULT 0,
   `user_ids` varchar(50) NOT NULL DEFAULT '0',
   `name` varchar(100) NOT NULL DEFAULT '0',
   `priority` int(11) NOT NULL DEFAULT 0,
-  `start_date` varchar(10) NOT NULL DEFAULT '0',
-  `end_date` varchar(10) NOT NULL DEFAULT '0',
+  `start_date` varchar(20) NOT NULL DEFAULT '0',
+  `end_date` varchar(20) NOT NULL DEFAULT '0',
   `description` text NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
   `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.missions: ~13 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.missions: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `missions`;
-INSERT INTO `missions` (`id`, `user_id`, `firm_id`, `surec_id`, `user_ids`, `name`, `priority`, `start_date`, `end_date`, `description`, `created_at`) VALUES
-	(6, 0, 8, 0, '3,60', 'Görev Güncellendi', 3, '0', '0', '                                        <p>Görev altı not</p><p><img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUzOSAzMjgiIHdpZHRoPSI1MzkiIGhlaWdodD0iMzI4Ij4KCTx0aXRsZT5Mb2dvLWFpPC90aXRsZT4KCTxzdHlsZT4KCQkuczAgeyBmaWxsOiAjNTE1MDUxIH0gCgkJLnMxIHsgZmlsbDogIzAwYWRlZSB9IAoJCS5zMiB7IGZpbGw6ICMyNzQzNmYgfSAKCQkuczMgeyBmaWxsOiAjZjdkZTc2IH0gCgk8L3N0eWxlPgoJPGcgaWQ9ImthdG1hbiAxIj4KCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0xNDcuNCAyOTAuOGwtMS45IDUuNC0yLjEgNi4zLTQuMS0xMS43aC0xbC00LjIgMTEuNi0yLjEtNi4yLTEuOS01LjRoLTEuMmw0LjYgMTMuMWgxLjJsMS4zLTMuNyAyLjgtNy43IDIuNyA3LjcgMS4zIDMuN2gxLjJsNC42LTEzLjF6Ii8+CgkJCQk8L2c+CgkJCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCQkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgY2xhc3M9InMwIiBkPSJtMTY5LjIgMjkwLjhsLTEuOSA1LjQtMi4xIDYuMy00LjEtMTEuN2gtMWwtNC4xIDExLjYtMi4yLTYuMi0xLjktNS40aC0xLjJsNC42IDEzLjFoMS4ybDEuNC0zLjcgMi43LTcuNyAyLjcgNy43IDEuMyAzLjdoMS4ybDQuNi0xMy4xeiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMCIgZD0ibTE5MSAyOTAuOGwtMS44IDUuNC0yLjIgNi4zLTQuMS0xMS43aC0xbC00LjEgMTEuNi0yLjItNi4yLTEuOC01LjRoLTEuMmw0LjUgMTMuMWgxLjNsMS4zLTMuNyAyLjctNy43IDIuNyA3LjcgMS4zIDMuN2gxLjJsNC42LTEzLjF6Ii8+CgkJCQk8L2c+CgkJCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCQkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgY2xhc3M9InMwIiBkPSJtMTk1LjUgMzAyLjZxLTAuMy0wLjMtMC43LTAuMy0wLjMgMC0wLjYgMC4zLTAuMyAwLjItMC4zIDAuNiAwIDAuNCAwLjMgMC43IDAuMyAwLjIgMC42IDAuMiAwLjQgMCAwLjctMC4yIDAuMi0wLjMgMC4yLTAuNyAwLTAuNC0wLjItMC42eiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9InMwIiBkPSJtMjEzLjMgMjk3LjNjMCAxLjQtMC40IDIuNi0wLjkgMy42cS0wLjkgMS41LTIuMyAyLjQtMS42IDAuOS0zLjUgMC45LTEuOSAwLTMuNC0wLjktMS40LTAuOC0yLjItMi4zdjkuNGgtMS4xdi0xOS42aDEuMXYyLjljMC40LTEgMS4yLTEuOCAyLjItMi4zcTEuNS0wLjkgMy40LTAuOSAxLjkgMCAzLjUgMC45IDEuNCAwLjkgMi4zIDIuNGMwLjUgMS4xIDAuOSAyLjIgMC45IDMuNXptLTEuMiAwYzAtMS4xLTAuMi0yLjEtMC43LTMtMC41LTAuOS0xLjEtMS41LTEuOS0yLTAuOS0wLjUtMS45LTAuNy0yLjktMC43cS0xLjcgMC0yLjkgMC43LTEuMyAwLjctMiAyYy0wLjUgMC45LTAuNyAxLjktMC43IDMgMCAxLjIgMC4yIDIuMiAwLjcgMy4xcTAuNyAxLjMgMiAyIDEuMiAwLjcgMi45IDAuN2MxIDAgMi0wLjIgMi45LTAuNyAwLjgtMC41IDEuNC0xLjEgMS45LTIgMC41LTAuOSAwLjctMS45IDAuNy0zLjF6Ii8+CgkJCQk8L2c+CgkJCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCQkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgY2xhc3M9InMwIiBkPSJtMjI3LjEgMjkwLjh2Ny4zcTAgMS40LTAuNiAyLjUtMC42IDEuMi0xLjcgMS44LTEuMiAwLjctMi42IDAuN2MtMS40IDAtMi42LTAuNS0zLjMtMS4zLTAuOC0wLjgtMS4yLTEuOS0xLjItMy41di03LjVoLTEuMXY3LjZjMCAxLjggMC41IDMuMiAxLjQgNC4ycTEuNSAxLjUgNC4xIDEuNSAxLjcgMCAzLTAuN2MwLjktMC41IDEuNi0xLjIgMi4xLTIuMXYyLjZoMS4xdi0xMy4xeiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9InMwIiBkPSJtMjQ1LjIgMjkwLjh2MTMuMWgtMS4xdi0yLjljLTAuNSAxLTEuMyAxLjctMi4yIDIuM3EtMS42IDAuOS0zLjUgMC45Yy0xLjMgMC0yLjQtMC4zLTMuNC0wLjlxLTEuNS0wLjktMi4zLTIuNC0wLjktMS42LTAuOS0zLjZjMC0xLjMgMC4zLTIuNCAwLjktMy41cTAuOC0xLjUgMi4zLTIuNGMxLTAuNiAyLjEtMC45IDMuNC0wLjlxMS45IDAgMy41IDAuOSAxLjQgMC44IDIuMiAyLjN2LTIuOXptLTEuMSA2LjVjMC0xLjEtMC4yLTIuMS0wLjctMy0wLjQtMC45LTEuMS0xLjUtMi0ycS0xLjItMC43LTIuOC0wLjdjLTEuMSAwLTIuMSAwLjItMi45IDAuN3EtMS4zIDAuNy0yIDJjLTAuNSAwLjktMC43IDEuOS0wLjcgMyAwIDEuMiAwLjIgMi4yIDAuNyAzLjFxMC43IDEuMyAyIDJjMC44IDAuNSAxLjggMC43IDIuOSAwLjdxMS42IDAgMi44LTAuN2MwLjktMC41IDEuNi0xLjEgMi0yIDAuNS0wLjkgMC43LTEuOSAwLjctMy4xeiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMCIgZD0ibTI2MCAyOTIuMXEtMS41LTEuNS00LjItMS41Yy0xLjEgMC0yLjEgMC4yLTMgMC43cS0xLjQgMC44LTIuMSAydi0yLjVoLTEuMXYxMy4xaDEuMXYtNy4zYzAtMC45IDAuMy0xLjggMC43LTIuNSAwLjQtMC44IDEtMS40IDEuOC0xLjhxMS4xLTAuNyAyLjYtMC43IDIuMiAwIDMuMyAxLjMgMS4yIDEuMiAxLjIgMy41djcuNWgxLjJ2LTcuNnEtMC4xLTIuNy0xLjUtNC4yeiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMCIgZD0ibTI3My4xIDMwMi41Yy0wLjMgMC4yLTAuNyAwLjQtMS4yIDAuNXEtMC42IDAuMi0xIDAuMi0xLjUgMC0yLTAuOC0wLjUtMC44LTAuNS0yLjR2LTguMmg0LjV2LTFoLTQuNXYtNC4xbC0xLjEgMC4xdjRoLTIuOXYxaDIuOXY4LjJxMCAyLjEgMC43IDMuMmMwLjYgMC42IDEuNSAxIDIuOSAxIDAuOCAwIDEuNy0wLjMgMi43LTAuN3oiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzMCIgZD0ibTI4OC43IDI5Ny4zcTAgMi0wLjkgMy42LTAuOSAxLjUtMi40IDIuNGMtMSAwLjYtMi4yIDAuOS0zLjUgMC45cS0xLjkgMC0zLjUtMC45LTEuNS0wLjktMi40LTIuNC0wLjgtMS42LTAuOC0zLjZjMC0xLjIgMC4yLTIuNCAwLjgtMy41cTAuOS0xLjUgMi40LTIuNGMxLjEtMC42IDIuMi0wLjkgMy41LTAuOSAxLjMgMCAyLjUgMC4zIDMuNSAwLjlxMS41IDAuOSAyLjQgMi40YzAuNiAxLjEgMC45IDIuMyAwLjkgMy41em0tMS4yIDBxMC0xLjYtMC43LTIuOS0wLjctMS4zLTItMi4xLTEuMy0wLjctMi45LTAuN2MtMS4xIDAtMiAwLjItMi45IDAuN3EtMS4zIDAuOC0yIDIuMS0wLjcgMS4zLTAuNyAyLjkgMCAxLjcgMC43IDMgMC43IDEuMyAyIDIuMWMwLjkgMC41IDEuOCAwLjcgMi45IDAuN3ExLjYgMCAyLjktMC43IDEuMy0wLjggMi0yLjEgMC43LTEuMyAwLjctM3oiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0yOTcuOCAyOTAuNnEtMS40IDAtMi42IDAuOGMtMC44IDAuNi0xLjQgMS4zLTEuOSAyLjN2LTIuOWgtMS4xdjEzLjFoMS4xdi02LjdxMC4xLTEuNSAwLjYtMi44YzAuNC0wLjggMS0xLjUgMS43LTJxMS0wLjcgMi4yLTAuN2MwLjggMCAxLjYgMC4yIDIuMiAwLjZsMC41LTFxLTEuMS0wLjctMi43LTAuN3oiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0zMDIuNyAzMDIuNnEtMC4zLTAuMy0wLjctMC4zYy0wLjIgMC0wLjUgMC4xLTAuNiAwLjNxLTAuMyAwLjItMC4zIDAuNiAwIDAuNCAwLjMgMC43YzAuMSAwLjEgMC40IDAuMiAwLjYgMC4ycTAuNCAwIDAuNy0wLjIgMC4yLTAuMyAwLjItMC43IDAtMC40LTAuMi0wLjZ6Ii8+CgkJCQk8L2c+CgkJCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCQkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgY2xhc3M9InMwIiBkPSJtMzE2LjUgMzAxLjVjLTAuNiAwLjUtMS4yIDAuOS0xLjkgMS4ycS0xIDAuNC0yLjIgMC40LTEuNiAwLTIuOS0wLjdjLTAuOC0wLjUtMS41LTEuMS0yLjEtMnEtMC43LTEuMy0wLjctMy4xYzAtMS4xIDAuMi0yLjIgMC43LTNxMC44LTEuNCAyLjEtMmMwLjktMC41IDEuOC0wLjcgMi45LTAuN3ExLjEgMCAyLjIgMC40IDEgMC40IDEuOCAxLjJsMC43LTAuN2MtMS4zLTEuMy0yLjktMi00LjctMnEtMS45IDAtMy41IDAuOWMtMSAwLjUtMS44IDEuMy0yLjQgMi40cS0wLjkgMS41LTAuOSAzLjUgMCAyIDAuOSAzLjYgMC45IDEuNiAyLjQgMi40YzEuMSAwLjYgMi4yIDAuOSAzLjUgMC45IDAuOSAwIDEuOC0wLjIgMi42LTAuNXExLjItMC41IDIuMy0xLjR6Ii8+CgkJCQk8L2c+CgkJCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCQkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGFzcz0iczAiIGQ9Im0zMzIuOSAyOTcuM3EwIDItMC45IDMuNi0wLjggMS41LTIuNCAyLjRjLTEgMC42LTIuMiAwLjktMy41IDAuOXEtMS45IDAtMy40LTAuOS0xLjYtMC45LTIuNS0yLjQtMC44LTEuNi0wLjgtMy42YzAtMS4yIDAuMy0yLjQgMC44LTMuNXEwLjktMS41IDIuNS0yLjRjMS0wLjYgMi4xLTAuOSAzLjQtMC45IDEuMyAwIDIuNSAwLjMgMy41IDAuOXExLjYgMC45IDIuNCAyLjRjMC42IDEuMSAwLjkgMi4zIDAuOSAzLjV6bS0xLjEgMHEwLTEuNi0wLjgtMi45LTAuNy0xLjMtMi0yLjEtMS4zLTAuNy0yLjktMC43Yy0xIDAtMiAwLjItMi45IDAuN3EtMS4yIDAuOC0yIDIuMS0wLjcgMS4zLTAuNyAyLjkgMCAxLjcgMC43IDMgMC44IDEuMyAyIDIuMWMwLjkgMC41IDEuOSAwLjcgMi45IDAuN3ExLjYgMCAyLjktMC43IDEuMy0wLjggMi0yLjEgMC44LTEuMyAwLjgtM3oiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0zNTUuNiAyOTIuMWMtMS0xLTIuMi0xLjUtMy45LTEuNXEtMS42IDAtMi45IDAuOC0xLjMgMC45LTIgMi40LTAuNS0xLjYtMS43LTIuNGMtMC45LTAuNi0xLjktMC44LTMuMS0wLjgtMC45IDAtMS44IDAuMi0yLjYgMC43LTAuOCAwLjQtMS40IDEuMS0xLjkgMS45di0yLjRoLTEuMXYxMy4xaDEuMnYtNy40YzAtMC45IDAuMi0xLjcgMC41LTIuNXEwLjYtMS4xIDEuNi0xLjcgMS4xLTAuNyAyLjMtMC43IDIgMCAzLjEgMS4yIDEgMS4zIDEgMy41djcuNmgxLjJ2LTcuNGMwLTAuOSAwLjItMS43IDAuNS0yLjVxMC42LTEuMSAxLjYtMS43YzAuNy0wLjUgMS41LTAuNyAyLjMtMC43cTIgMCAzLjEgMS4yIDEgMS4zIDEgMy41djcuNmgxLjJ2LTcuNnEwLTIuNy0xLjQtNC4yeiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMCIgZD0ibTM2Mi41IDMwMi42cS0wLjMtMC4zLTAuNy0wLjNjLTAuMiAwLTAuNSAwLjEtMC42IDAuM3EtMC4zIDAuMi0wLjMgMC42IDAgMC40IDAuMyAwLjdjMC4xIDAuMSAwLjQgMC4yIDAuNiAwLjJxMC40IDAgMC43LTAuMiAwLjItMC4zIDAuMi0wLjcgMC0wLjQtMC4yLTAuNnoiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0zNzIuOSAzMDIuNWMtMC40IDAuMi0wLjggMC40LTEuMiAwLjVxLTAuNiAwLjItMS4xIDAuMi0xLjQgMC0yLTAuOC0wLjUtMC44LTAuNS0yLjR2LTguMmg0LjZ2LTFoLTQuNnYtNC4xbC0xLjEgMC4xdjRoLTIuOHYxaDIuOHY4LjJxMCAyLjEgMC44IDMuMmMwLjUgMC42IDEuNSAxIDIuOCAxIDAuOSAwIDEuOC0wLjMgMi43LTAuN3oiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0zODEuNyAyOTAuNnEtMS41IDAtMi43IDAuOGMtMC44IDAuNi0xLjQgMS4zLTEuOSAyLjN2LTIuOWgtMXYxMy4xaDEuMXYtNi43cTAtMS41IDAuNi0yLjhjMC40LTAuOCAwLjktMS41IDEuNi0ycTEtMC43IDIuMi0wLjcgMS4yIDAgMi4zIDAuNmwwLjUtMWMtMC44LTAuNC0xLjctMC43LTIuNy0wLjd6Ii8+CgkJCQk8L2c+CgkJCTwvZz4KCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9InMwIiBkPSJtOTIuNCAxOTkuOXY1MC45aC00Ni4zdjEzLjloLTE4LjZ2LTY0Ljh6bS0xOC41IDE4LjVoLTI3Ljh2MTMuOWgyNy44eiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMCIgZD0ibTE0My40IDE5OS45djQ2LjNoLTI3Ljh2LTQ2LjNoLTE4LjV2NjQuOGg2NC44di02NC44eiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9InMwIiBkPSJtMjMxLjUgMTk5Ljl2NjQuOGgtMTguNnYtMTMuOWgtMjcuOHYxMy45aC0xOC41di02NC44em0tMTguNiAxOC41aC0yNy43djEzLjloMjcuN3oiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0yODIuNCAxOTkuOXYzMy4ybC0zMy4yLTMzLjJoLTEzLjF2NjQuOGgxOC41di0zMy4ybDMzLjMgMzMuMmgxMy4xdi02NC44eiIvPgoJCQkJPC9nPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMCIgZD0ibTMwNS42IDE5OS45djE4LjVoMjMuMnY0Ni4zaDE4LjV2LTQ2LjNoMjMuMnYtMTguNXoiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzMCIgZD0ibTQ0MCAxOTkuOXY2NC44aC02NC45di02NC44em0tMTguNSAxOC41aC0yNy44djI3LjhoMjcuOHoiLz4KCQkJCTwvZz4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzMCIgZD0ibTUwOS42IDI2NC43aC0yNi4ybC0yMC4yLTIwLjF2MjAuMWgtMTguNXYtNjQuOGg2NC44djUwLjloLTEzLjh6bS0xOC42LTQ2LjNoLTI3Ljh2MTMuOWgyNy44eiIvPgoJCQkJPC9nPgoJCQk8L2c+CgkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzMSIgZD0ibTI1OS45IDcxLjljMCA0LjMtMS44IDguMi00LjYgMTEuMS0yLjggMi44LTYuNyA0LjYtMTEuMSA0LjYtOC42IDAtMTUuNi03LTE1LjYtMTUuNyAwLTQuMyAxLjctOC4yIDQuNi0xMSAyLjgtMi45IDYuNy00LjYgMTEtNC42IDQuNCAwIDguMyAxLjcgMTEuMSA0LjYgMi44IDIuOCA0LjYgNi43IDQuNiAxMXptLTkuNC0xLjloLTQuNHYtNC40aC0zLjh2NC40aC00LjN2My44aDQuM3Y0LjRoMy44di00LjRoNC40eiIvPgoJCQkJPC9nPgoJCQk8L2c+CgkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzMSIgZD0ibTI1OS45IDEwOC42YzAgNC4zLTEuOCA4LjItNC42IDExLjEtMi44IDIuOC02LjcgNC41LTExLjEgNC41LTguNiAwLTE1LjYtNy0xNS42LTE1LjYgMC00LjMgMS43LTguMiA0LjYtMTEuMSAyLjgtMi44IDYuNy00LjUgMTEtNC41IDQuNCAwIDguMyAxLjcgMTEuMSA0LjUgMi44IDIuOSA0LjYgNi44IDQuNiAxMS4xem0tMTcuNi02LjVjMCAxIDAuOSAxLjkgMS45IDEuOSAxLjEgMCAxLjktMC45IDEuOS0xLjkgMC0xLTAuOC0xLjktMS45LTEuOS0xIDAtMS45IDAuOS0xLjkgMS45em0zLjggMTNjMC0xLjEtMC44LTEuOS0xLjktMS45LTEgMC0xLjkgMC44LTEuOSAxLjkgMCAxIDAuOSAxLjkgMS45IDEuOSAxLjEgMCAxLjktMC45IDEuOS0xLjl6bTQuNC04LjRoLTEyLjV2My44aDEyLjV6Ii8+CgkJCQk8L2c+CgkJCTwvZz4KCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9InMxIiBkPSJtMjk2LjYgNzEuOWMwIDQuMy0xLjcgOC4yLTQuNiAxMS4xLTIuOCAyLjgtNi43IDQuNi0xMSA0LjYtOC42IDAtMTUuNi03LTE1LjYtMTUuNyAwLTQuMyAxLjctOC4yIDQuNi0xMSAyLjgtMi45IDYuNy00LjYgMTEtNC42IDQuMyAwIDguMiAxLjcgMTEgNC42IDIuOSAyLjggNC42IDYuNyA0LjYgMTF6bS0xMi45IDBsMy4xLTMuMS0yLjctMi42LTMuMSAzLTMuMS0zLTIuNyAyLjYgMy4xIDMuMS0zLjEgMy4yIDIuNyAyLjYgMy4xLTMuMSAzLjEgMy4xIDIuNy0yLjZ6Ii8+CgkJCQk8L2c+CgkJCTwvZz4KCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJPGcgaWQ9IiZsdDtHcm91cCZndDsiPgoJCQkJCTxwYXRoIGlkPSImbHQ7UGF0aCZndDsiIGNsYXNzPSJzMSIgZD0ibTI3Mi41IDEwNC45Yy0yLjMgMS45LTQuNiAzLjktNi45IDYuMXEtMC4yLTEuMi0wLjItMi40YzAtNC4zIDEuNy04LjIgNC42LTExLjEgMi44LTIuOCA2LjctNC41IDExLTQuNXEyLjcgMCA1LjIgMC45Yy00LjcgMy41LTkuMSA3LTEzLjMgMTAuNi0wLjIgMC4yLTAuNCAwLjMtMC40IDAuNHoiLz4KCQkJCQk8cGF0aCBpZD0iJmx0O1BhdGgmZ3Q7IiBjbGFzcz0iczEiIGQ9Im0yOTYuNiAxMDguM3YwLjNjMCA0LjMtMS43IDguMi00LjYgMTEuMS0yLjQgMi40LTUuNiA0LTkuMiA0LjQgNC40LTUuNSA5LTEwLjggMTMuOC0xNS44eiIvPgoJCQkJPC9nPgoJCQk8L2c+CgkJCTxnIGlkPSImbHQ7R3JvdXAmZ3Q7Ij4KCQkJCTxwYXRoIGlkPSImbHQ7Q29tcG91bmQgUGF0aCZndDsiIGNsYXNzPSJzMiIgZD0ibTIxOC45IDE1OS4xYy0xLjItMi4yLTIuNS00LjQtMy45LTYuNS0xLjUtMi41LTMuMi00LjktNC44LTcuMWwtMC4zLTAuNGMtMi40LTMuMi00LjktNi4zLTcuNC05LjF2OC4xYzAgNC42IDEuOSA4LjggNSAxMS45IDMgMyA3LjIgNC45IDExLjggNC45aDAuNWMtMC4zLTAuNi0wLjYtMS4yLTAuOS0xLjh6bTEwMC43LTcyLjRjLTEuNSAxLjItMyAyLjUtNC41IDMuNy0wLjMgMC4zLTAuNyAwLjYtMS4xIDAuOXY1Mi44YzAgMi4yLTAuOSA0LjMtMi40IDUuNy0xLjQgMS41LTMuNSAyLjQtNS43IDIuNGgtNDIuOGMtMC4yIDAuMy0wLjQgMC42LTAuNiAwLjlsLTIuNCA0Yy0wLjcgMS4zLTEuNCAyLjUtMi4xIDMuOGg0Ny45YzQuNiAwIDguOC0xLjkgMTEuOS00LjkgMy0zLjEgNC45LTcuMyA0LjktMTEuOXYtNjB6Ii8+CgkJCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzMiIgZD0ibTMyMi41IDU0LjFsMC4yIDAuMnYxNi4ycS0wLjQgMC4yLTAuOCAwLjRjLTIuNCAxLjMtNSAyLjgtNy45IDQuNXYtMTcuM2wtMS4xLTFoLTExLjZjLTQuNiAwLTguOC0yLTExLjgtNS0zLjEtMy00LjktNy4yLTQuOS0xMS44di0xMS40bC0wLjMtMC41aC02NWMtMi4yIDAtNC4yIDAuOS01LjcgMi40LTEuNSAxLjQtMi40IDMuNC0yLjQgNS43djkwLjRxLTIuOC0xLjUtNS43LTIuOGwtMi4zLTFjLTAuMi0wLjEtMC40LTAuMy0wLjctMC40di04Ni4yYzAtNC43IDEuOS04LjkgNS0xMS45IDMtMyA3LjItNC45IDExLjgtNC45aDY5LjhjMSAwIDIgMC40IDIuOCAxLjJsMjkuMiAyOC41YzEgMC44IDEuNiAxLjkgMS42IDMuM3EwIDAuNy0wLjIgMS40em0tMTQuOC01LjdsLTE0LjQtMTQuMXY2YzAgMi4yIDAuOSA0LjIgMi4zIDUuNyAxLjUgMS40IDMuNSAyLjQgNS43IDIuNHoiLz4KCQkJPC9nPgoJCQk8ZyBpZD0iJmx0O0dyb3VwJmd0OyI+CgkJCQk8cGF0aCBpZD0iJmx0O1BhdGgmZ3Q7IiBjbGFzcz0iczMiIGQ9Im0zNDYuOSA2M2MtNi4yIDMuNy0xMi40IDcuOC0xOC4zIDEyLjMtMi4xIDEuNS00LjEgMy01LjkgNC40cS0wLjYgMC41LTEuMSAwLjlsLTQuMiAzLjVxLTEuNyAxLjQtMy40IDIuOGMtMC40IDAuMy0wLjcgMC43LTEuMSAxLTAuNCAwLjItMC43IDAuNS0xLjEgMC44LTEuNiAxLjUtMy4xIDIuOS00LjcgNC40LTEgMC45LTIgMS45LTMuMSAyLjlsLTEuMyAxLjJjLTAuOSAwLjgtMS43IDEuNi0yLjYgMi41bC0zLjYgMy44Yy0wLjIgMC4yLTAuNCAwLjQtMC41IDAuNi0wLjMgMC4yLTAuNSAwLjUtMC44IDAuNy01LjUgNS44LTEwLjkgMTEuOS0xNiAxOC40LTAuMiAwLjMtMC41IDAuNS0wLjcgMC44LTMuMSA0LjEtNi4yIDguMS05IDEyLjEtMS4xIDEuNy0yLjMgMy40LTMuNSA1LjFxLTEuMSAxLjgtMi4zIDMuNmMtMS40IDIuMS0yLjcgNC4zLTQuMSA2LjVsLTAuNSAwLjktMS45IDMuM2MtMC45IDEuNS0xLjggMy0yLjYgNC42LTAuMSAwLjItMC4zIDAuNS0wLjQgMC44cS0wLjUgMC45LTEgMS44Yy0wLjggMS41LTEuNSAyLjktMi4zIDQuNS0wLjQgMC44LTAuOCAxLjYtMS4yIDIuM3EtMC4yIDAuNS0wLjQgMWwtMjIuMi0wLjFxLTEuMi00LjQtMy41LTkuNWMtMC4xLTAuMy0wLjMtMC41LTAuNC0wLjgtMC40LTAuOC0wLjgtMS43LTEuMy0yLjZxLTEuNS0yLjctMy4xLTUuMy0wLjUtMC44LTAuOS0xLjVjLTEuNi0yLjUtMy4zLTQuOS01LTcuMy0wLjItMC4yLTAuMy0wLjQtMC4zLTAuNHEtMC43LTAuOS0xLjQtMS43Yy0yLjQtMy4yLTQuOS02LjItNy40LTlxLTAuNi0wLjgtMS4zLTEuNWwtMC42LTAuN2MtMi4xLTIuNC00LjItNC42LTYuMy02LjdxMyAxLjMgNi4yIDIuOGwwLjcgMC4zIDEuNiAwLjdjMi4xIDEgNC4yIDIgNi4zIDMuMnEwLjUgMC4yIDAuOCAwLjRjMy4yIDEuNiA2LjEgMy4xIDguNyA0LjcgNi4zIDMuOSAxMS4xIDcuMSAxNS4zIDEwLjZsMS40IDEuMSAxLjQtMS44YzEtMS4zIDIuMS0yLjUgMy4xLTMuOCAyLjQtMi45IDQuOS01LjcgNy4zLTguNWwyLjYtMi44YzEuNy0xLjggMy40LTMuNyA1LjEtNS40IDMuNC0zLjUgNy02LjkgMTAuNS0xMC4yIDAuMi0wLjIgMC40LTAuMyAwLjUtMC41IDIuMi0yLjEgNC4zLTQgNi41LTUuOHEwLjUtMC41IDEuMS0xbDAuMy0wLjJxMC44LTAuNyAxLjYtMS4zYzMuOS0zLjQgOC02LjYgMTIuNi0xMC4xbDAuMy0wLjMgNC40LTMuMmMwLjgtMC42IDEuNy0xLjEgMi41LTEuNyAwLjctMC41IDEuNC0wLjkgMi0xLjRsMi42LTEuN3EzLjMtMi4zIDYuNi00LjRsNi40LTMuOGMwLjMtMC4xIDAuNi0wLjMgMC45LTAuNSAyLjgtMS43IDUuNC0zLjIgNy44LTQuNXEwLjQtMC4yIDAuOC0wLjRjMS0wLjUgMi4xLTEuMSAzLjItMS42IDYuNi0zLjYgMTMuNC02LjYgMjAuMi05LjN6Ii8+CgkJCTwvZz4KCQk8L2c+Cgk8L2c+Cjwvc3ZnPg==" data-filename="Logo-ai.svg" style="width: 25%;" class=""></p>                                                                          ', '2024-10-05 23:39:27'),
-	(13, 0, 8, 0, '3,4,61', 'Çoklu görev atama yapıldı', 3, '0', '0', '                                        <p>Eklenecek notu ve resmi buraya yazın</p><p><img src="data:image/svg+xml;base64,PCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIFRyYW5zZm9ybWVkIGJ5OiBTVkcgUmVwbyBNaXhlciBUb29scyAtLT4KPHN2ZyBmaWxsPSIjZjhlODdjIiB3aWR0aD0iODAwcHgiIGhlaWdodD0iODAwcHgiIHZpZXdCb3g9Ii0zLjIgLTMuMiAzOC40MCAzOC40MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBzdHJva2U9IiNmOGU4N2MiIHN0cm9rZS13aWR0aD0iMC40NDgwMDAwMDAwMDAwMDAwNiI+Cg08ZyBpZD0iU1ZHUmVwb19iZ0NhcnJpZXIiIHN0cm9rZS13aWR0aD0iMCI+Cg08cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMy4yLCAtMy4yKSwgc2NhbGUoMi40KSIgZmlsbD0iIzdlZDBlYyIgZD0iTTkuMTY2LjMzYTIuMjUgMi4yNSAwIDAwLTIuMzMyIDBsLTUuMjUgMy4xODJBMi4yNSAyLjI1IDAgMDAuNSA1LjQzNnY1LjEyOGEyLjI1IDIuMjUgMCAwMDEuMDg0IDEuOTI0bDUuMjUgMy4xODJhMi4yNSAyLjI1IDAgMDAyLjMzMiAwbDUuMjUtMy4xODJhMi4yNSAyLjI1IDAgMDAxLjA4NC0xLjkyNFY1LjQzNmEyLjI1IDIuMjUgMCAwMC0xLjA4NC0xLjkyNEw5LjE2Ni4zM3oiIHN0cm9rZXdpZHRoPSIwIi8+Cg08L2c+Cg08ZyBpZD0iU1ZHUmVwb190cmFjZXJDYXJyaWVyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KDTxnIGlkPSJTVkdSZXBvX2ljb25DYXJyaWVyIj4KDTxwYXRoIGQ9Ik0gMTMgNyBMIDEzIDguNDA2MjUgQyA4LjAzNTE1NiA5LjY4NzUgNC40MTAxNTYgMTQuMDgyMDMxIDQuMTI1IDE5LjM3NSBDIDIuOTUzMTI1IDE5Ljc4NTE1NiAyIDIwLjY5NTMxMyAyIDIyIEwgMiAyNSBMIDMwIDI1IEwgMzAgMjIgQyAzMCAyMC42OTUzMTMgMjkuMDQ2ODc1IDE5Ljc4NTE1NiAyNy44NzUgMTkuMzc1IEMgMjcuNTg5ODQ0IDE0LjA4MjAzMSAyMy45NjQ4NDQgOS42ODc1IDE5IDguNDA2MjUgTCAxOSA3IFogTSAxNS4wMzEyNSA5IEwgMTcgOSBDIDE2Ljk4MDQ2OSA5LjExMzI4MSAxNi45ODA0NjkgOS4yMzA0NjkgMTcgOS4zNDM3NSBMIDE3IDE1IEwgMTkgMTUgTCAxOSAxMC41IEMgMjIuNzM4MjgxIDExLjY3OTY4OCAyNS41NjY0MDYgMTQuOTcyNjU2IDI1Ljk2ODc1IDE5IEwgMjQgMTkgTCAyNCAyMSBMIDI3IDIxIEMgMjcuNTY2NDA2IDIxIDI4IDIxLjQzMzU5NCAyOCAyMiBMIDI4IDIzIEwgNCAyMyBMIDQgMjIgQyA0IDIxLjQzMzU5NCA0LjQzMzU5NCAyMSA1IDIxIEwgOCAyMSBMIDggMTkgTCA2LjAzMTI1IDE5IEMgNi40MzM1OTQgMTQuOTcyNjU2IDkuMjYxNzE5IDExLjY3OTY4OCAxMyAxMC41IEwgMTMgMTUgTCAxNSAxNSBMIDE1IDkuNSBDIDE1LjA1MDc4MSA5LjMzOTg0NCAxNS4wNjI1IDkuMTY3OTY5IDE1LjAzMTI1IDkgWiIvPgoNPC9nPgoNPC9zdmc+" data-filename="hard-hat-solid-svgrepo-com.svg" style="width: 25%;"></p>                                     ', '2024-10-05 23:45:04'),
-	(14, 0, 8, 0, '3,60', 'Görev Güncellendi', 1, '0', '0', '\r\n                                     ', '2024-10-05 23:39:27'),
-	(15, 0, 8, 0, '3,60', 'Görev Güncellendi', 1, '0', '0', '\r\n                                     ', '2024-10-05 23:39:27'),
-	(16, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:48:56'),
-	(17, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:49:25'),
-	(18, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:49:42'),
-	(19, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:49:52'),
-	(20, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:51:15'),
-	(21, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:51:30'),
-	(22, 0, 8, 0, '3,61', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 18:52:08'),
-	(23, 0, 8, 0, '3', 'Yeni bir görev eklend,', 3, '0', '0', '                                                                             ', '2024-10-06 20:28:52'),
-	(24, 0, 8, 0, '3', 'Görev Güncellendi', 3, '0', '0', '                                                                             ', '2024-10-06 20:29:35');
+INSERT INTO `missions` (`id`, `user_id`, `firm_id`, `header_id`, `user_ids`, `name`, `priority`, `start_date`, `end_date`, `description`, `status`, `created_at`) VALUES
+	(6, 0, 8, 2, '60', 'Personel ücretleri Tanımı', 3, '01.10.2024', '31.10.2024', 'Personel ücretleri tanımlamaya göre hesaplanacak', 1, '2024-10-05 23:39:27'),
+	(28, 0, 8, 6, '4', 'Bakiye Ödemesi', 1, '08.10.2024', '31.10.2024', 'İşlemler butonunda ödeme yap dediğimizde bakiye tutarını getirmede sorun var', 1, '2024-10-08 23:35:12'),
+	(29, 0, 8, 7, '4', 'Tamamlananları gösterme butonu', 1, '08.10.2024', '31.10.2024', '                                        Ana sayfada, tamamlanan görevleri göster veya gizle butonu eklenecej                                     ', 1, '2024-10-08 23:37:00'),
+	(30, 0, 8, 2, '4', 'Gelir Gider Tablosu arama', 1, '09.10.2024', '09.10.2024', '<p>Personel Yönetimi alanında datatable\'larda arama çalışmıyor</p><p><br></p><p><span style="background-color: rgb(255, 255, 0);">Çözüm</span>: Bir sayfada birden fazla datatable olduğu zaman arama kutularını eklerken ilk datatable\'ı esas aldığı için ikinci tablodaki sütun sayıları tutmuyor ve datatable hata veriyordu<br>initComplete kısmına datatable id\'sini ekleyerek her tablonun kendisi için arama kutuları eklenmesi sağlandı</p>', 1, '2024-10-09 10:32:23'),
+	(31, 0, 8, 2, '4', 'İzin ve Belgeler', 2, '09.10.2024', '31.10.2024', '<p>Personelin izin ve belgeleri sayfası yapılacak,<br>izin sayfası belki kapatılabilir</p>', 0, '2024-10-09 14:11:38'),
+	(32, 0, 8, 1, '4', 'Görev Güncellendi', 1, '02.10.2024', '23.10.2024', '                                                                             ', 0, '2024-10-09 19:14:07'),
+	(33, 0, 8, 2, '3', 'Görev Güncellendi', 1, '09.10.2024', '09.10.2024', '                                                                             ', 0, '2024-10-09 19:15:08');
+
+-- tablo yapısı dökülüyor puantoryeni.mission_headers
+DROP TABLE IF EXISTS `mission_headers`;
+CREATE TABLE IF NOT EXISTS `mission_headers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `firm_id` int(11) NOT NULL DEFAULT 0,
+  `header_name` varchar(255) NOT NULL DEFAULT '0',
+  `header_order` int(3) NOT NULL DEFAULT 0,
+  `description` varchar(255) NOT NULL DEFAULT '0',
+  `status` int(3) NOT NULL DEFAULT 1,
+  `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+
+-- puantoryeni.mission_headers: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
+DELETE FROM `mission_headers`;
+INSERT INTO `mission_headers` (`id`, `user_id`, `firm_id`, `header_name`, `header_order`, `description`, `status`, `created_at`) VALUES
+	(1, 60, 8, 'kasa', 7, '0', 1, '2024-10-07 20:06:24'),
+	(2, 60, 8, 'Personel Yönetimi', 1, '0', 1, '2024-10-07 20:06:24'),
+	(3, 60, 8, 'Projeler', 5, '', 1, '2024-10-07 22:36:09'),
+	(4, 60, 8, 'Firmalar', 4, '', 1, '2024-10-07 22:53:00'),
+	(5, 60, 8, 'Tanımlamalar', 6, '', 1, '2024-10-08 00:18:15'),
+	(6, 60, 8, 'Bordro', 2, '', 1, '2024-10-08 23:34:05'),
+	(7, 60, 8, 'Ana Sayfa', 3, '', 1, '2024-10-08 23:36:04');
+
+-- tablo yapısı dökülüyor puantoryeni.mission_headers_items
+DROP TABLE IF EXISTS `mission_headers_items`;
+CREATE TABLE IF NOT EXISTS `mission_headers_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mission_id` int(11) NOT NULL,
+  `header_id` int(11) NOT NULL,
+  `created_at` varchar(20) DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+
+-- puantoryeni.mission_headers_items: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
+DELETE FROM `mission_headers_items`;
+INSERT INTO `mission_headers_items` (`id`, `mission_id`, `header_id`, `created_at`) VALUES
+	(1, 13, 1, '2024-10-06 11:23:14');
 
 -- tablo yapısı dökülüyor puantoryeni.mission_process
+DROP TABLE IF EXISTS `mission_process`;
 CREATE TABLE IF NOT EXISTS `mission_process` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
@@ -1548,6 +1608,7 @@ INSERT INTO `mission_process` (`id`, `user_id`, `firm_id`, `status`, `process_na
 	(8, 60, 8, 1, 'Başlangıç Süreci', 1, '', '2024-10-06 09:18:52');
 
 -- tablo yapısı dökülüyor puantoryeni.mission_process_mapping
+DROP TABLE IF EXISTS `mission_process_mapping`;
 CREATE TABLE IF NOT EXISTS `mission_process_mapping` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mission_id` int(11) NOT NULL,
@@ -1555,9 +1616,9 @@ CREATE TABLE IF NOT EXISTS `mission_process_mapping` (
   `process_order` int(11) NOT NULL,
   `created_at` varchar(20) DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.mission_process_mapping: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.mission_process_mapping: ~11 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `mission_process_mapping`;
 INSERT INTO `mission_process_mapping` (`id`, `mission_id`, `process_id`, `process_order`, `created_at`) VALUES
 	(1, 13, 8, 0, '2024-10-06 11:23:14'),
@@ -1567,9 +1628,13 @@ INSERT INTO `mission_process_mapping` (`id`, `mission_id`, `process_id`, `proces
 	(6, 15, 3, 0, '2024-10-06 11:23:36'),
 	(7, 22, 1, 0, '2024-10-06 18:52:08'),
 	(8, 23, 8, 0, '2024-10-06 20:28:52'),
-	(9, 24, 8, 0, '2024-10-06 20:29:35');
+	(9, 24, 8, 0, '2024-10-06 20:29:35'),
+	(10, 25, 8, 0, '2024-10-07 22:50:33'),
+	(11, 26, 8, 0, '2024-10-07 22:53:39'),
+	(12, 27, 8, 0, '2024-10-08 00:18:48');
 
 -- tablo yapısı dökülüyor puantoryeni.myfirms
+DROP TABLE IF EXISTS `myfirms`;
 CREATE TABLE IF NOT EXISTS `myfirms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT 0,
@@ -1599,6 +1664,7 @@ INSERT INTO `myfirms` (`id`, `user_id`, `firm_name`, `phone`, `email`, `start_bu
 	(15, 60, 'Solar Enerji', '05079432723', 'beyzade83@hotmail.com', 0, '66ff7cc00f4daLogo-ai.svg', 'Ankara Şantiyesi', '2024-10-04 08:27:28', '0');
 
 -- tablo yapısı dökülüyor puantoryeni.offers
+DROP TABLE IF EXISTS `offers`;
 CREATE TABLE IF NOT EXISTS `offers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `offerNumber` varchar(20) DEFAULT NULL,
@@ -1649,6 +1715,7 @@ INSERT INTO `offers` (`id`, `offerNumber`, `cid`, `company_authors`, `total_pric
 /*!40000 ALTER TABLE `offers` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.offer_products
+DROP TABLE IF EXISTS `offer_products`;
 CREATE TABLE IF NOT EXISTS `offer_products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `xid` int(11) NOT NULL,
@@ -1703,6 +1770,7 @@ INSERT INTO `offer_products` (`id`, `xid`, `oid`, `stokKodu`, `title`, `unit`, `
 /*!40000 ALTER TABLE `offer_products` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.persons
+DROP TABLE IF EXISTS `persons`;
 CREATE TABLE IF NOT EXISTS `persons` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
   `firm_id` varchar(25) DEFAULT NULL,
@@ -1737,6 +1805,7 @@ INSERT INTO `persons` (`id`, `firm_id`, `full_name`, `kimlik_no`, `sigorta_no`, 
 	(232, '12', 'Ümüt Ünal', 22222222222, NULL, '05062895098', 'Yenibatı Mah', NULL, 0, 1500.00, NULL, 2, '01.07.2024', NULL, '', NULL, '', '');
 
 -- tablo yapısı dökülüyor puantoryeni.person_daily_wages
+DROP TABLE IF EXISTS `person_daily_wages`;
 CREATE TABLE IF NOT EXISTS `person_daily_wages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `person_id` int(11) DEFAULT NULL,
@@ -1747,19 +1816,21 @@ CREATE TABLE IF NOT EXISTS `person_daily_wages` (
   `description` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.person_daily_wages: ~6 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.person_daily_wages: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `person_daily_wages`;
 INSERT INTO `person_daily_wages` (`id`, `person_id`, `wage_name`, `start_date`, `end_date`, `amount`, `description`, `created_at`) VALUES
 	(44, 149, 'Güncellendi', '20240912', '20240930', 450.0000, '', '2024-09-22 18:18:01'),
 	(51, 149, 'Eylül 2024 Ücret', '20240901', '20240930', 1450.0000, '', '2024-09-22 21:40:34'),
 	(52, 223, 'Temmuz ücret', '20240901', '20240930', 1000.0000, '', '2024-09-23 21:50:10'),
-	(53, 226, 'Eylül 2024 Ücret', '20240901', '20240930', 1500.0000, '', '2024-09-24 09:16:20'),
+	(53, 226, 'Eylül 2024 Ücret', '20241009', '20241012', 2500.0000, '', '2024-09-24 09:16:20'),
 	(56, 227, 'dsda', '20240904', '20240918', 256.0000, '', '2024-09-24 15:15:53'),
-	(57, 232, 'emmuz', '20240701', '20240731', 1000.0000, '', '2024-09-27 12:10:50');
+	(57, 232, 'emmuz', '20240701', '20240731', 1000.0000, '', '2024-09-27 12:10:50'),
+	(59, 227, 'yeni bir ücret', '20241009', '20241012', 2000.0000, 'açıklama alaı', '2024-10-09 10:55:45');
 
 -- tablo yapısı dökülüyor puantoryeni.products
+DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(29) NOT NULL AUTO_INCREMENT,
   `urun_adi` varchar(89) DEFAULT NULL,
@@ -2178,6 +2249,7 @@ INSERT INTO `products` (`id`, `urun_adi`, `Turu`, `TedarikciID`, `stok_kodu`, `U
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 
 -- tablo yapısı dökülüyor puantoryeni.projects
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` int(2) NOT NULL,
@@ -2217,6 +2289,7 @@ INSERT INTO `projects` (`id`, `type`, `account_id`, `company_id`, `firm_id`, `pr
 	(45, 0, 0, 12, NULL, 'Akka Ges', 4750000.00, 0, 0, '', '', '', '', NULL, NULL, NULL, NULL, '2024-09-27');
 
 -- tablo yapısı dökülüyor puantoryeni.project_gelir_gider
+DROP TABLE IF EXISTS `project_gelir_gider`;
 CREATE TABLE IF NOT EXISTS `project_gelir_gider` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firm_id` int(11) NOT NULL DEFAULT 0,
@@ -2243,6 +2316,7 @@ INSERT INTO `project_gelir_gider` (`id`, `firm_id`, `project_id`, `tarih`, `ay`,
 	(12, 0, 44, '20241001', NULL, NULL, 233, 3, 'Proje Ödemesi', '', '2024-10-01 14:04:02');
 
 -- tablo yapısı dökülüyor puantoryeni.project_person
+DROP TABLE IF EXISTS `project_person`;
 CREATE TABLE IF NOT EXISTS `project_person` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` int(11) DEFAULT NULL,
@@ -2264,6 +2338,7 @@ INSERT INTO `project_person` (`id`, `project_id`, `person_id`, `state`, `create_
 	(95, 45, '232', 1, '2024-09-27 09:07:57');
 
 -- tablo yapısı dökülüyor puantoryeni.puantaj
+DROP TABLE IF EXISTS `puantaj`;
 CREATE TABLE IF NOT EXISTS `puantaj` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `company_id` int(255) NOT NULL,
@@ -2273,113 +2348,126 @@ CREATE TABLE IF NOT EXISTS `puantaj` (
   `gun` varchar(50) DEFAULT NULL,
   `saat` decimal(4,2) DEFAULT NULL,
   `tutar` decimal(20,2) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `created_at` varchar(30) NOT NULL DEFAULT current_timestamp(),
   `updated_at` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1144 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1156 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.puantaj: ~97 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.puantaj: ~108 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `puantaj`;
-INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`, `gun`, `saat`, `tutar`, `created_at`, `updated_at`) VALUES
-	(995, 0, 0, '149', 53, '20240901', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(996, 0, 0, '149', 22, '20240902', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
-	(997, 0, 0, '149', 22, '20240903', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
-	(998, 0, 0, '149', 22, '20240904', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
-	(999, 0, 0, '149', 22, '20240905', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
-	(1000, 0, 0, '149', 22, '20240906', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
-	(1001, 0, 0, '149', 22, '20240907', 8.00, 1900.00, '2024-09-22 19:25:47', ''),
-	(1002, 0, 0, '149', 53, '20240908', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1003, 0, 0, '149', 53, '20240915', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1004, 0, 0, '149', 53, '20240922', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1005, 0, 0, '149', 53, '20240929', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1006, 0, 0, '150', 53, '20240901', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1007, 0, 0, '150', 53, '20240908', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1008, 0, 0, '150', 53, '20240915', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1009, 0, 0, '150', 53, '20240922', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1010, 0, 0, '150', 53, '20240929', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1011, 0, 0, '181', 53, '20240901', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1012, 0, 0, '181', 53, '20240908', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1013, 0, 0, '181', 53, '20240915', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1014, 0, 0, '181', 53, '20240922', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1015, 0, 0, '181', 53, '20240929', 0.00, 0.00, '2024-09-22 19:25:47', ''),
-	(1016, 0, 0, '181', 22, '20240902', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
-	(1017, 0, 0, '181', 22, '20240903', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
-	(1018, 0, 0, '181', 22, '20240904', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
-	(1019, 0, 0, '181', 22, '20240905', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
-	(1020, 0, 0, '181', 22, '20240906', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
-	(1021, 0, 0, '181', 22, '20240907', 8.00, 1000.00, '2024-09-23 08:01:52', ''),
-	(1022, 0, 0, '226', 53, '20240901', 0.00, 0.00, '2024-09-23 22:24:30', ''),
-	(1023, 0, 43, '226', 22, '20240902', 0.00, 0.00, '2024-09-23 22:24:30', ''),
-	(1024, 0, 43, '226', 22, '20240903', 8.00, 1500.00, '2024-09-23 22:24:30', ''),
-	(1025, 0, 43, '226', 22, '20240904', 8.00, 1500.00, '2024-09-23 22:24:30', ''),
-	(1026, 0, 43, '226', 22, '20240905', 8.00, 1500.00, '2024-09-23 22:24:30', ''),
-	(1027, 0, 43, '226', 22, '20240906', 8.00, 1500.00, '2024-09-23 22:24:30', ''),
-	(1028, 0, 43, '226', 22, '20240907', 8.00, 1500.00, '2024-09-23 22:24:30', ''),
-	(1029, 0, 0, '226', 53, '20240908', 0.00, 0.00, '2024-09-23 22:24:30', ''),
-	(1030, 0, 0, '226', 53, '20240915', 0.00, 0.00, '2024-09-23 22:24:30', ''),
-	(1031, 0, 0, '226', 53, '20240922', 0.00, 0.00, '2024-09-23 22:24:30', ''),
-	(1032, 0, 0, '226', 53, '20240929', 0.00, 0.00, '2024-09-23 22:24:30', ''),
-	(1053, 0, 0, '226', 22, '20240909', 8.00, 1500.00, '2024-09-25 09:46:35', ''),
-	(1058, 0, 0, '229', 53, '20240901', 0.00, 0.00, '2024-09-26 10:04:13', ''),
-	(1059, 0, 0, '229', 53, '20240908', 0.00, 0.00, '2024-09-26 10:04:13', ''),
-	(1060, 0, 0, '229', 53, '20240915', 0.00, 0.00, '2024-09-26 10:04:13', ''),
-	(1061, 0, 0, '229', 53, '20240922', 0.00, 0.00, '2024-09-26 10:04:13', ''),
-	(1062, 0, 0, '229', 53, '20240929', 0.00, 0.00, '2024-09-26 10:04:13', ''),
-	(1063, 0, 0, '226', 22, '20240910', 8.00, 1500.00, '2024-09-26 11:48:48', ''),
-	(1064, 0, 0, '226', 22, '20240911', 8.00, 1500.00, '2024-09-26 11:48:48', ''),
-	(1065, 0, 0, '226', 22, '20240912', 8.00, 1500.00, '2024-09-26 11:48:48', ''),
-	(1066, 0, 0, '226', 22, '20240913', 8.00, 1500.00, '2024-09-26 11:48:48', ''),
-	(1067, 0, 0, '226', 22, '20240914', 8.00, 1500.00, '2024-09-26 11:48:48', ''),
-	(1068, 0, 0, '226', 22, '20240916', 8.00, 1500.00, '2024-09-26 11:48:59', ''),
-	(1069, 0, 0, '226', 22, '20241001', 8.00, 1500.00, '2024-09-26 11:58:43', ''),
-	(1070, 0, 0, '226', 22, '20241002', 8.00, 1500.00, '2024-09-26 11:58:43', ''),
-	(1071, 0, 0, '226', 22, '20241003', 8.00, 1500.00, '2024-09-26 11:58:43', ''),
-	(1072, 0, 0, '226', 22, '20241004', 8.00, 1500.00, '2024-09-26 11:58:43', ''),
-	(1073, 0, 0, '226', 22, '20241005', 8.00, 1500.00, '2024-09-26 11:58:43', ''),
-	(1074, 0, 0, '226', 53, '20241006', 0.00, 0.00, '2024-09-26 11:58:43', ''),
-	(1075, 0, 0, '226', 53, '20241013', 0.00, 0.00, '2024-09-26 11:58:43', ''),
-	(1076, 0, 0, '226', 53, '20241020', 0.00, 0.00, '2024-09-26 11:58:43', ''),
-	(1077, 0, 0, '226', 53, '20241027', 0.00, 0.00, '2024-09-26 11:58:43', ''),
-	(1084, 0, 0, '230', 53, '20240901', 0.00, 0.00, '2024-09-26 16:43:28', ''),
-	(1085, 0, 0, '230', 53, '20240908', 0.00, 0.00, '2024-09-26 16:43:28', ''),
-	(1086, 0, 0, '230', 53, '20240915', 0.00, 0.00, '2024-09-26 16:43:28', ''),
-	(1087, 0, 0, '230', 53, '20240922', 0.00, 0.00, '2024-09-26 16:43:28', ''),
-	(1088, 0, 0, '230', 53, '20240929', 0.00, 0.00, '2024-09-26 16:43:28', ''),
-	(1089, 0, 44, '230', 22, '20240902', 8.00, 1500.00, '2024-09-26 16:44:45', ''),
-	(1090, 0, 44, '230', 22, '20240903', 8.00, 1500.00, '2024-09-26 16:44:45', ''),
-	(1091, 0, 0, '230', 22, '20240904', 8.00, 1500.00, '2024-09-26 22:41:23', ''),
-	(1092, 0, 0, '230', 22, '20240905', 8.00, 1500.00, '2024-09-26 22:41:23', ''),
-	(1093, 0, 0, '230', 22, '20240906', 8.00, 1500.00, '2024-09-26 22:41:23', ''),
-	(1094, 0, 0, '230', 22, '20240907', 8.00, 1500.00, '2024-09-26 22:41:23', ''),
-	(1111, 0, 0, '232', 22, '20240701', 8.00, 1500.00, '2024-09-27 12:11:23', ''),
-	(1112, 0, 0, '232', 22, '20240702', 8.00, 1500.00, '2024-09-27 12:11:23', ''),
-	(1113, 0, 0, '232', 22, '20240703', 8.00, 1500.00, '2024-09-27 12:11:23', ''),
-	(1114, 0, 0, '232', 22, '20240704', 8.00, 1500.00, '2024-09-27 12:11:23', ''),
-	(1115, 0, 0, '226', 22, '20240917', 8.00, 1500.00, '2024-09-30 13:16:49', ''),
-	(1116, 0, 0, '226', 22, '20240918', 8.00, 1500.00, '2024-09-30 13:16:49', ''),
-	(1117, 0, 0, '226', 22, '20240919', 8.00, 1500.00, '2024-09-30 13:16:49', ''),
-	(1118, 0, 0, '226', 22, '20240920', 8.00, 1500.00, '2024-09-30 13:16:49', ''),
-	(1119, 0, 0, '226', 22, '20240921', 8.00, 1500.00, '2024-09-30 13:16:49', ''),
-	(1120, 0, 0, '230', 24, '20240909', 16.00, 3000.00, '2024-09-30 22:28:45', ''),
-	(1121, 0, 0, '230', 24, '20240910', 16.00, 3000.00, '2024-09-30 22:28:45', ''),
-	(1122, 0, 0, '230', 24, '20240911', 16.00, 3000.00, '2024-09-30 22:28:45', ''),
-	(1123, 0, 0, '230', 24, '20240912', 16.00, 3000.00, '2024-09-30 22:28:45', ''),
-	(1124, 0, 0, '230', 24, '20240913', 16.00, 3000.00, '2024-09-30 22:28:45', ''),
-	(1125, 0, 0, '230', 24, '20240914', 16.00, 3000.00, '2024-09-30 22:28:45', ''),
-	(1132, 0, 0, '226', 22, '20241007', 8.00, 1500.00, '2024-10-06 11:12:40', ''),
-	(1133, 0, 0, '226', 22, '20241008', 8.00, 1500.00, '2024-10-06 11:12:40', ''),
-	(1134, 0, 0, '226', 22, '20241009', 8.00, 1500.00, '2024-10-06 11:12:40', ''),
-	(1135, 0, 0, '226', 22, '20241010', 8.00, 1500.00, '2024-10-06 11:12:40', ''),
-	(1136, 0, 0, '226', 22, '20241011', 8.00, 1500.00, '2024-10-06 11:12:40', ''),
-	(1137, 0, 0, '226', 22, '20241012', 8.00, 1500.00, '2024-10-06 11:12:40', ''),
-	(1138, 0, 0, '226', 4, '20241014', 10.00, 1875.00, '2024-10-06 11:13:40', ''),
-	(1139, 0, 0, '226', 4, '20241015', 10.00, 1875.00, '2024-10-06 11:13:40', ''),
-	(1140, 0, 0, '226', 4, '20241016', 10.00, 1875.00, '2024-10-06 11:13:40', ''),
-	(1141, 0, 0, '226', 4, '20241017', 10.00, 1875.00, '2024-10-06 11:13:40', ''),
-	(1142, 0, 0, '226', 4, '20241018', 10.00, 1875.00, '2024-10-06 11:13:40', ''),
-	(1143, 0, 0, '226', 4, '20241019', 10.00, 1875.00, '2024-10-06 11:13:40', '');
+INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`, `gun`, `saat`, `tutar`, `description`, `created_at`, `updated_at`) VALUES
+	(995, 0, 0, '149', 53, '20240901', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(996, 0, 0, '149', 22, '20240902', 8.00, 1900.00, NULL, '2024-09-22 19:25:47', ''),
+	(997, 0, 0, '149', 22, '20240903', 8.00, 1900.00, NULL, '2024-09-22 19:25:47', ''),
+	(998, 0, 0, '149', 22, '20240904', 8.00, 1900.00, NULL, '2024-09-22 19:25:47', ''),
+	(999, 0, 0, '149', 22, '20240905', 8.00, 1900.00, NULL, '2024-09-22 19:25:47', ''),
+	(1000, 0, 0, '149', 22, '20240906', 8.00, 1900.00, NULL, '2024-09-22 19:25:47', ''),
+	(1001, 0, 0, '149', 22, '20240907', 8.00, 1900.00, NULL, '2024-09-22 19:25:47', ''),
+	(1002, 0, 0, '149', 53, '20240908', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1003, 0, 0, '149', 53, '20240915', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1004, 0, 0, '149', 53, '20240922', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1005, 0, 0, '149', 53, '20240929', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1006, 0, 0, '150', 53, '20240901', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1007, 0, 0, '150', 53, '20240908', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1008, 0, 0, '150', 53, '20240915', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1009, 0, 0, '150', 53, '20240922', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1010, 0, 0, '150', 53, '20240929', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1011, 0, 0, '181', 53, '20240901', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1012, 0, 0, '181', 53, '20240908', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1013, 0, 0, '181', 53, '20240915', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1014, 0, 0, '181', 53, '20240922', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1015, 0, 0, '181', 53, '20240929', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
+	(1016, 0, 0, '181', 22, '20240902', 8.00, 1000.00, NULL, '2024-09-23 08:01:52', ''),
+	(1017, 0, 0, '181', 22, '20240903', 8.00, 1000.00, NULL, '2024-09-23 08:01:52', ''),
+	(1018, 0, 0, '181', 22, '20240904', 8.00, 1000.00, NULL, '2024-09-23 08:01:52', ''),
+	(1019, 0, 0, '181', 22, '20240905', 8.00, 1000.00, NULL, '2024-09-23 08:01:52', ''),
+	(1020, 0, 0, '181', 22, '20240906', 8.00, 1000.00, NULL, '2024-09-23 08:01:52', ''),
+	(1021, 0, 0, '181', 22, '20240907', 8.00, 1000.00, NULL, '2024-09-23 08:01:52', ''),
+	(1022, 0, 0, '226', 53, '20240901', 0.00, 0.00, NULL, '2024-09-23 22:24:30', ''),
+	(1024, 0, 43, '226', 22, '20240903', 8.00, 1500.00, NULL, '2024-09-23 22:24:30', ''),
+	(1025, 0, 43, '226', 22, '20240904', 8.00, 1500.00, NULL, '2024-09-23 22:24:30', ''),
+	(1026, 0, 43, '226', 22, '20240905', 8.00, 1500.00, NULL, '2024-09-23 22:24:30', ''),
+	(1027, 0, 43, '226', 22, '20240906', 8.00, 1500.00, NULL, '2024-09-23 22:24:30', ''),
+	(1028, 0, 43, '226', 22, '20240907', 8.00, 1500.00, NULL, '2024-09-23 22:24:30', ''),
+	(1029, 0, 0, '226', 53, '20240908', 0.00, 0.00, NULL, '2024-09-23 22:24:30', ''),
+	(1030, 0, 0, '226', 53, '20240915', 0.00, 0.00, NULL, '2024-09-23 22:24:30', ''),
+	(1031, 0, 0, '226', 53, '20240922', 0.00, 0.00, NULL, '2024-09-23 22:24:30', ''),
+	(1032, 0, 0, '226', 53, '20240929', 0.00, 0.00, NULL, '2024-09-23 22:24:30', ''),
+	(1053, 0, 0, '226', 22, '20240909', 8.00, 1500.00, NULL, '2024-09-25 09:46:35', ''),
+	(1058, 0, 0, '229', 53, '20240901', 0.00, 0.00, NULL, '2024-09-26 10:04:13', ''),
+	(1059, 0, 0, '229', 53, '20240908', 0.00, 0.00, NULL, '2024-09-26 10:04:13', ''),
+	(1060, 0, 0, '229', 53, '20240915', 0.00, 0.00, NULL, '2024-09-26 10:04:13', ''),
+	(1061, 0, 0, '229', 53, '20240922', 0.00, 0.00, NULL, '2024-09-26 10:04:13', ''),
+	(1062, 0, 0, '229', 53, '20240929', 0.00, 0.00, NULL, '2024-09-26 10:04:13', ''),
+	(1063, 0, 0, '226', 22, '20240910', 8.00, 1500.00, NULL, '2024-09-26 11:48:48', ''),
+	(1064, 0, 0, '226', 22, '20240911', 8.00, 1500.00, NULL, '2024-09-26 11:48:48', ''),
+	(1065, 0, 0, '226', 22, '20240912', 8.00, 1500.00, NULL, '2024-09-26 11:48:48', ''),
+	(1066, 0, 0, '226', 22, '20240913', 8.00, 1500.00, NULL, '2024-09-26 11:48:48', ''),
+	(1067, 0, 0, '226', 22, '20240914', 8.00, 1500.00, NULL, '2024-09-26 11:48:48', ''),
+	(1068, 0, 0, '226', 22, '20240916', 8.00, 1500.00, NULL, '2024-09-26 11:48:59', ''),
+	(1069, 0, 0, '226', 22, '20241001', 8.00, 1500.00, '0', '2024-09-26 11:58:43', ''),
+	(1070, 0, 0, '226', 22, '20241002', 8.00, 1500.00, '0', '2024-09-26 11:58:43', ''),
+	(1071, 0, 0, '226', 22, '20241003', 8.00, 1500.00, '0', '2024-09-26 11:58:43', ''),
+	(1072, 0, 0, '226', 22, '20241004', 8.00, 1500.00, '0', '2024-09-26 11:58:43', ''),
+	(1073, 0, 0, '226', 22, '20241005', 8.00, 1500.00, '0', '2024-09-26 11:58:43', ''),
+	(1074, 0, 0, '226', 53, '20241006', 0.00, 0.00, '0', '2024-09-26 11:58:43', ''),
+	(1075, 0, 0, '226', 53, '20241013', 0.00, 0.00, '0', '2024-09-26 11:58:43', ''),
+	(1076, 0, 0, '226', 53, '20241020', 0.00, 0.00, '0', '2024-09-26 11:58:43', ''),
+	(1077, 0, 0, '226', 53, '20241027', 0.00, 0.00, '0', '2024-09-26 11:58:43', ''),
+	(1084, 0, 0, '230', 53, '20240901', 0.00, 0.00, NULL, '2024-09-26 16:43:28', ''),
+	(1085, 0, 0, '230', 53, '20240908', 0.00, 0.00, NULL, '2024-09-26 16:43:28', ''),
+	(1086, 0, 0, '230', 53, '20240915', 0.00, 0.00, NULL, '2024-09-26 16:43:28', ''),
+	(1087, 0, 0, '230', 53, '20240922', 0.00, 0.00, NULL, '2024-09-26 16:43:28', ''),
+	(1088, 0, 0, '230', 53, '20240929', 0.00, 0.00, NULL, '2024-09-26 16:43:28', ''),
+	(1089, 0, 44, '230', 22, '20240902', 8.00, 1500.00, NULL, '2024-09-26 16:44:45', ''),
+	(1090, 0, 44, '230', 22, '20240903', 8.00, 1500.00, NULL, '2024-09-26 16:44:45', ''),
+	(1091, 0, 0, '230', 22, '20240904', 8.00, 1500.00, NULL, '2024-09-26 22:41:23', ''),
+	(1092, 0, 0, '230', 22, '20240905', 8.00, 1500.00, NULL, '2024-09-26 22:41:23', ''),
+	(1093, 0, 0, '230', 22, '20240906', 8.00, 1500.00, NULL, '2024-09-26 22:41:23', ''),
+	(1094, 0, 0, '230', 22, '20240907', 8.00, 1500.00, NULL, '2024-09-26 22:41:23', ''),
+	(1111, 0, 0, '232', 22, '20240701', 8.00, 1500.00, NULL, '2024-09-27 12:11:23', ''),
+	(1112, 0, 0, '232', 22, '20240702', 8.00, 1500.00, NULL, '2024-09-27 12:11:23', ''),
+	(1113, 0, 0, '232', 22, '20240703', 8.00, 1500.00, NULL, '2024-09-27 12:11:23', ''),
+	(1114, 0, 0, '232', 22, '20240704', 8.00, 1500.00, NULL, '2024-09-27 12:11:23', ''),
+	(1115, 0, 0, '226', 22, '20240917', 8.00, 1500.00, NULL, '2024-09-30 13:16:49', ''),
+	(1116, 0, 0, '226', 22, '20240918', 8.00, 1500.00, NULL, '2024-09-30 13:16:49', ''),
+	(1117, 0, 0, '226', 22, '20240919', 8.00, 1500.00, NULL, '2024-09-30 13:16:49', ''),
+	(1118, 0, 0, '226', 22, '20240920', 8.00, 1500.00, NULL, '2024-09-30 13:16:49', ''),
+	(1119, 0, 0, '226', 22, '20240921', 8.00, 1500.00, NULL, '2024-09-30 13:16:49', ''),
+	(1120, 0, 0, '230', 24, '20240909', 16.00, 3000.00, NULL, '2024-09-30 22:28:45', ''),
+	(1121, 0, 0, '230', 24, '20240910', 16.00, 3000.00, NULL, '2024-09-30 22:28:45', ''),
+	(1122, 0, 0, '230', 24, '20240911', 16.00, 3000.00, NULL, '2024-09-30 22:28:45', ''),
+	(1123, 0, 0, '230', 24, '20240912', 16.00, 3000.00, NULL, '2024-09-30 22:28:45', ''),
+	(1124, 0, 0, '230', 24, '20240913', 16.00, 3000.00, NULL, '2024-09-30 22:28:45', ''),
+	(1125, 0, 0, '230', 24, '20240914', 16.00, 3000.00, NULL, '2024-09-30 22:28:45', ''),
+	(1132, 0, 0, '226', 22, '20241007', 8.00, 1500.00, '0', '2024-10-06 11:12:40', ''),
+	(1133, 0, 0, '226', 22, '20241008', 8.00, 1500.00, '0', '2024-10-06 11:12:40', ''),
+	(1134, 0, 0, '226', 22, '20241009', 8.00, 2500.00, '2500.0000', '2024-10-06 11:12:40', ''),
+	(1135, 0, 0, '226', 22, '20241010', 8.00, 2500.00, '2500.0000', '2024-10-06 11:12:40', ''),
+	(1136, 0, 0, '226', 22, '20241011', 8.00, 2500.00, '2500.0000', '2024-10-06 11:12:40', ''),
+	(1137, 0, 0, '226', 22, '20241012', 8.00, 2500.00, '2500.0000', '2024-10-06 11:12:40', ''),
+	(1138, 0, 0, '226', 4, '20241014', 10.00, 1875.00, '0', '2024-10-06 11:13:40', ''),
+	(1139, 0, 0, '226', 4, '20241015', 10.00, 1875.00, '0', '2024-10-06 11:13:40', ''),
+	(1140, 0, 0, '226', 4, '20241016', 10.00, 1875.00, '0', '2024-10-06 11:13:40', ''),
+	(1141, 0, 0, '226', 4, '20241017', 10.00, 1875.00, '0', '2024-10-06 11:13:40', ''),
+	(1142, 0, 0, '226', 4, '20241018', 10.00, 1875.00, '0', '2024-10-06 11:13:40', ''),
+	(1143, 0, 0, '226', 4, '20241019', 10.00, 1875.00, '0', '2024-10-06 11:13:40', ''),
+	(1144, 0, 0, '230', 22, '20241001', 8.00, 1500.00, '0', '2024-10-09 14:21:35', ''),
+	(1145, 0, 0, '230', 22, '20241002', 8.00, 1500.00, '0', '2024-10-09 14:21:35', ''),
+	(1146, 0, 0, '230', 22, '20241003', 8.00, 1500.00, '0', '2024-10-09 14:21:35', ''),
+	(1147, 0, 0, '230', 22, '20241004', 8.00, 1500.00, '0', '2024-10-09 14:21:35', ''),
+	(1148, 0, 0, '230', 22, '20241005', 8.00, 1500.00, '0', '2024-10-09 14:21:35', ''),
+	(1149, 0, 44, '230', 22, '20241006', 8.00, 1500.00, '0', '2024-10-09 14:22:05', ''),
+	(1150, 0, 44, '230', 22, '20241007', 8.00, 1500.00, '0', '2024-10-09 14:22:05', ''),
+	(1151, 0, 44, '230', 22, '20241008', 8.00, 1500.00, '0', '2024-10-09 14:22:05', ''),
+	(1152, 0, 44, '230', 22, '20241009', 8.00, 1500.00, '0', '2024-10-09 14:22:05', ''),
+	(1153, 0, 44, '230', 22, '20241010', 8.00, 1500.00, '0', '2024-10-09 14:22:05', ''),
+	(1154, 0, 44, '230', 22, '20241011', 8.00, 1500.00, '0', '2024-10-09 14:22:05', ''),
+	(1155, 0, 44, '230', 22, '20241012', 8.00, 1500.00, '0', '2024-10-09 14:22:05', '');
 
 -- tablo yapısı dökülüyor puantoryeni.puantajturu
+DROP TABLE IF EXISTS `puantajturu`;
 CREATE TABLE IF NOT EXISTS `puantajturu` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `PuantajAdi` varchar(55) DEFAULT NULL,
@@ -2457,6 +2545,7 @@ INSERT INTO `puantajturu` (`id`, `PuantajAdi`, `PuantajKod`, `PuantajSaati`, `Tu
 	(59, 'Yarım Saat Çalışma', 'S05', 0.5, 'Saatlik', '#080808', '#f4fefa', NULL, NULL);
 
 -- tablo yapısı dökülüyor puantoryeni.reports
+DROP TABLE IF EXISTS `reports`;
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `report_number` varchar(50) DEFAULT NULL,
@@ -2511,6 +2600,7 @@ INSERT INTO `reports` (`id`, `report_number`, `report_type`, `isemrino`, `last_c
 	(189, 'YSC0039', '', '12', '', '2024-04-20', '', '12 Ay', '2024-04-20', 59, '                    <span style="background-color: rgb(156, 198, 239);"><font color="#efefef"><b><u>Deneme İçerik Kaydedildi</u></b></font></span>                ', '', '', '', 'Yukarıda kontrol tarihinde teknik özellikleri belirtilen Yangın Söndürme Sistemi ; mevcut şartlar altında 25 Nisan 2013 tarih ve 28628 sayılı resmi gazetede yayınlanan "İş Ekipmanlarının Kullanımında Sağlık Ve Güvenlik Şartları Yönetmeliği" nde belirtilen kriterlere uygun olarak TS ISO 11602-2 standartı 4.2 maddesine göre Periyodik Kontrol\'ü yapılmıştır. Bu kontrol raporu muayene tarihindeki durumunu yansıtır, uygunluğun devamlılığından işveren sorumludur.Yangın söndürme cihazlarının kullanılmasında teknik olarak sakınca yoktur\r\n                ', 3, 3, '', '', NULL, NULL, NULL, NULL, '', 0, '2024-09-13 16:05:04', 0, '');
 
 -- tablo yapısı dökülüyor puantoryeni.report_ysc_content
+DROP TABLE IF EXISTS `report_ysc_content`;
 CREATE TABLE IF NOT EXISTS `report_ysc_content` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `report_id` int(20) NOT NULL,
@@ -2533,7 +2623,7 @@ CREATE TABLE IF NOT EXISTS `report_ysc_content` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4040 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.report_ysc_content: ~808 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.report_ysc_content: ~968 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `report_ysc_content`;
 INSERT INTO `report_ysc_content` (`id`, `report_id`, `cihaz_no`, `bulundugu_bolge`, `cinsi`, `cihaz_dolum_tarihi`, `cihaz_sonkullanma_tarihi`, `kontrol_tarihi_1`, `kontrol_tarihi_2`, `islem_kontrol_tarihi_1`, `islem_kontrol_tarihi_2`, `dis_muhafaza`, `cevre_kontrolu`, `pim_kontrolu`, `manometre_kontrolu`, `hortum_kontrolu`, `talimat_kontrolu`, `agirlik_kontrolu`) VALUES
 	(16, 21, 'YSC4267', '2.kat', NULL, '04-03-2024', '11-03-2024', '04-03-2024', '19-03-2024', '18-03-2024', '25-03-2024', '1', '0', '1', '0', '0', '1', '1'),
@@ -3506,6 +3596,7 @@ INSERT INTO `report_ysc_content` (`id`, `report_id`, `cihaz_no`, `bulundugu_bolg
 	(4039, 186, '2', 'GÜVENLİK', 'TÜP', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- görünüm yapısı dökülüyor puantoryeni.sqlmaas_gelir_kesinti
+DROP VIEW IF EXISTS `sqlmaas_gelir_kesinti`;
 -- VIEW bağımlılık sorunlarını çözmek için geçici tablolar oluşturuluyor
 CREATE TABLE `sqlmaas_gelir_kesinti` (
 	`id` INT(20) NOT NULL,
@@ -3522,6 +3613,7 @@ CREATE TABLE `sqlmaas_gelir_kesinti` (
 ) ENGINE=MyISAM;
 
 -- tablo yapısı dökülüyor puantoryeni.userauths
+DROP TABLE IF EXISTS `userauths`;
 CREATE TABLE IF NOT EXISTS `userauths` (
   `id` int(25) NOT NULL AUTO_INCREMENT,
   `roleID` int(10) NOT NULL,
@@ -3731,6 +3823,7 @@ INSERT INTO `userauths` (`id`, `roleID`, `authID`) VALUES
 	(2291, 1, 27);
 
 -- tablo yapısı dökülüyor puantoryeni.userroles
+DROP TABLE IF EXISTS `userroles`;
 CREATE TABLE IF NOT EXISTS `userroles` (
   `id` int(25) NOT NULL AUTO_INCREMENT,
   `firm_id` int(25) NOT NULL DEFAULT 0,
@@ -3750,6 +3843,7 @@ INSERT INTO `userroles` (`id`, `firm_id`, `roleName`, `roleDescription`, `isActi
 	(22, 8, 'Admin', '', 0);
 
 -- tablo yapısı dökülüyor puantoryeni.users
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firm_id` int(11) NOT NULL DEFAULT 0,

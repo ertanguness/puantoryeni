@@ -72,8 +72,12 @@
   overflow-x: inherit;
 
 }
-
-
+.table.dataTable thead th{
+  text-align: left !important;  
+}
+.form-control-sm::placeholder {
+padding: 0.5rem 0.5rem;
+}
 
 .icon {
   font-size: 20px;
@@ -351,6 +355,7 @@ body.swal2-height-auto {
 }
 
 
+
 .form-control {
   border: 1px solid #c6cbcf !important;
 }
@@ -366,7 +371,6 @@ table tr td {
 [data-tooltip] {
   --arrow-size: 5px;
   position: relative;
-  z-index: 10;
 }
 
 /* Positioning and visibility settings of the tooltip */
@@ -409,6 +413,7 @@ table tr td {
 /* Tooltip arrow */
 [data-tooltip]:after {
   content: "";
+  
   border-style: solid;
   border-width: var(--arrow-size) var(--arrow-size) 0px var(--arrow-size);
   /* CSS triangle */

@@ -39,7 +39,7 @@ $wages = $wagesObj->getWageByPersonId($id);
                     <input type="hidden" class="form-control" value="<?php echo $person->id ?? 0 ?>" name="wage_person_id">
                     <input type="hidden" id="wage_id" name="wage_id">
                     <div class="table-responsive">
-                        <table class="table card-table text-nowrap datatable" id="personWageTable">
+                        <table class="table card-table table-sm text-nowrap datatable table-hover" id="personWageTable">
                             <thead>
                                 <tr>
 
@@ -50,7 +50,9 @@ $wages = $wagesObj->getWageByPersonId($id);
                                     <th class="text-start">Bitiş Tarihi</th>
                                     <th class="text-start">Tutar</th>
                                     <th>Açıklama</th>
+                                    <th style="width:1%">Tarih</th>
                                     <th style="width:1%">İşlem</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,9 +69,9 @@ $wages = $wagesObj->getWageByPersonId($id);
                                     <td class="text-start"><?php echo $wage->wage_name; ?></td>
                                     <td class="text-start"><?php echo Date::dmY($wage->start_date); ?></td>
                                     <td class="text-start"><?php echo Date::dmY($wage->end_date); ?></td>
-                                    <td class="text-start"><?php echo Helper::formattedMoney($wage->amount ?? 0); ?>
-                                    </td>
+                                    <td class="text-start"><?php echo Helper::formattedMoney($wage->amount ?? 0); ?></td>
                                     <td class="text-start"><?php echo $wage->description; ?></td>
+                                    <td class="text-start"><?php echo $wage->created_at; ?></td>
 
                                     <td class="text-end">
                                         <div class="dropdown">

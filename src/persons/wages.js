@@ -22,6 +22,7 @@ $(document).on("click", "#add_wage_row", function () {
             `<input type='text' class='form-control flatpickr' name='wage_end_date' id="wage_end_date" required placeholder='Bitiş Tarihi girin'>`,
             `<input type='text' class='form-control' name='wage_amount' required placeholder='Tutar giriniz'>`,
             `<input type='text' class='form-control' name='wage_description'>`,
+            ``,
             `<button type='button' class='btn me-1 remove_wage_row'><i class='ti ti-trash icon m-0'></i></button>
         <button type='button' class='btn save_wage_row'><i class='ti ti-device-floppy icon m-0'></i><div id="spinner" class="spinner" style="display: none;"></div></button>`,
         ])
@@ -146,6 +147,7 @@ $(document).on("click", ".save_wage_row", function () {
                 data.end_date,
                 data.amount,
                 data.description,
+                data.created_at,
                 `<div class="dropdown">
                                         <button class="btn dropdown-toggle align-text-top"
                                             data-bs-toggle="dropdown">İşlem</button>

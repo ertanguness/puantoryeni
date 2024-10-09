@@ -160,5 +160,22 @@ class Helper
         
     }
 
+    //gelen kelimelerin sadece ilk harflerini döndürür
+    //örnek : Ahmet Yılmaz => AY
+    public static function getInitials($name)
+    {
+        if (empty($name) || $name == null) {
+            return '';
+        }
+        $name = explode(' ', $name);
+        $initials = '';
+        foreach ($name as $n) {
+            if (!empty($n)) { // Boş olup olmadığını kontrol et
+                $initials .= $n[0];
+            }
+        }
+        return strtoupper($initials);
+    }
+
 
 }

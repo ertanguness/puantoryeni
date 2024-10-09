@@ -43,7 +43,7 @@ $companies = $companyObj->allWithUserId();
                                 <th>Yetkili</th>
                                 <th>Şehir</th>
                                 <th>İlçe</th>
-                                <th>Teleforn</th>
+                                <th>Telefon</th>
                                 <th>Email</th>
                                 <th>Adres</th>
                                 <th>İşlem</th>

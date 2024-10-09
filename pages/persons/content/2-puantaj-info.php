@@ -1,59 +1,70 @@
 <?php
 require_once "App/Helper/helper.php";
+require_once "App/Helper/date.php";
 require_once "Model/Bordro.php";
+require_once "Model/Puantaj.php";
+require_once "Model/Projects.php";
 
 
 
 use App\Helper\Helper;
+use App\Helper\Date;
 
 $bordro = new Bordro();
-$income_expense = $bordro->getPersonIncomeExpenseInfo($id);
+$puantajObj = new Puantaj();
+$projects = new Projects();
+$puantaj_info = $puantajObj->getPuantajInfoByPerson($id);
 
-echo $id;
 
 ?>
+<style>
+    table.datatable th,
+    table.datatable td {
+        text-align: left !important;
+    }
+</style>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Gelir Gider Listesi</h3>
+                    <h3 class="card-title">Çalışma Bilgileri</h3>
                     <div class="col-auto ms-auto">
-                        <a href="#" class="btn btn-primary route-link" data-page="defines/service-head/manage">
-                            <i class="ti ti-plus icon me-2"></i> Yeni
-                        </a>
+                        
                     </div>
                 </div>
 
 
                 <div class="table-responsive">
-                    <table class="table card-table text-nowrap datatable">
+                    <table class="table card-table table-hover text-nowrap datatable">
                         <thead>
                             <tr>
+                                <th style="width:7%">id</th>
+                                <th >Proje</th>
+                                <th >Puantaj Türü</th>
+                                <th >Tarih</th>
+                                <th >Saat</th>
+                                <th class="text-start">Tutar</th>
 
                             </tr>
                         </thead>
                         <tbody>
 
 
-                            <?php foreach ($income_expenses as $item) :
-                            ?>
+                            <?php foreach ($puantaj_info as $item):
+                                ?>
                                 <tr>
-
-                                    <td class="text-end">
-                                        <div class="dropdown">
-                                            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link" data-page="reports/ysc&id=<?php echo $item->id ?>" href="#">
-                                                    <i class="ti ti-edit icon me-3"></i> Güncelle
-                                                </a>
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="ti ti-trash icon me-3"></i> Sil
-                                                </a>
-                                            </div>
-                                        </div>
-
+                                    <td><?php echo $item->id ?></td>
+                                    <td><?php echo $projects->find($item->project_id )->project_name ?? '' ?></td>
+                                    <td>
+                                        <?php
+                                        $puantaj_turu = $puantajObj->getPuantajTuruById($item->puantaj_id);
+                                        echo $puantaj_turu->PuantajKod . " - " . $puantaj_turu->PuantajAdi;
+                                        ?>
                                     </td>
+                                    <td><?php echo Date::ymd($item->gun, "d.m.Y") ?></td>
+                                    <td class="text-start"><?php echo $item->saat ?></td>
+                                    <td class="text-start"><?php echo Helper::formattedMoney($item->tutar) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

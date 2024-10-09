@@ -163,19 +163,41 @@ $lastDay = Date::lastDay($month, $year);
                                     <td><?php echo $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka'; ?></td>
                                     <td><?php echo $person->job; ?></td>
                                     <td><?php echo $person->job_start_date; ?></td>
-                                    <td class="text-center "><?php echo Helper::formattedMoney(($gelir) ?? 0) ?></td>
-                                    <td class="text-center"><?php echo Helper::formattedMoney($wage_cut ?? 0); ?></td>
-                                    <td class="text-center">
-                                        <?php echo Helper::formattedMoney(($hakedis) ?? 0); ?>
+                                    
+                                    <!-- Gelir -->
+                                    <td class="text-end ">
+                                        <?php echo Helper::formattedMoney(($gelir) ?? 0) ?>
+                                        <i class="ti ti-download icon text-green"></i>
+                                    
                                     </td>
-                                    <td class="text-center"><?php echo Helper::formattedMoney($odeme ?? 0); ?></td>
-                                    <td class="text-center <?php echo Helper::balanceColor($bakiye->toplam) ?>">
-                                        <?php echo Helper::formattedMoney($bakiye->toplam)  ; ?></td>
+                                    <td class="text-end">
+                                        <?php echo Helper::formattedMoney($wage_cut ?? 0); ?>
+                                        <i class="ti ti-upload icon text-danger"></i>
+                                    </td>
+                                    
+                                    <td class="text-end">
+                                        <?php echo Helper::formattedMoney(($hakedis) ?? 0); ?>
+                                        <i class="ti ti-switch-vertical icon text-blue"></i>
+                                    </td>
+                                    
+                                    <td class="text-end">
+                                        <?php echo Helper::formattedMoney($odeme ?? 0); ?>
+                                        <i class="ti ti-cash-register icon text-green"></i>
+                                        
+                                    </td>
+                                    
+                                    <td class="text-end <?php echo Helper::balanceColor($bakiye->toplam) ?>">
+                                        <?php echo Helper::formattedMoney($bakiye->toplam)  ; ?>
+                                        <i class="ti ti-repeat icon"></i>
+                                    </td>
+
                                     <!-- Bakiye rengini belirle ve göster -->
-                                    <td class="text-center <?php echo Helper::balanceColor($alacak) ?>">
+                                    <td class="text-end <?php echo Helper::balanceColor($alacak) ?>">
                                         <!-- //Bakiyesini yazdır -->
                                         <?php echo Helper::formattedMoney($alacak ?? 0); ?>
+                                        <i class="ti ti-credit-card-pay icon"></i>
                                     </td>
+                                    
                                  
                                     <td class="text-end">
                                         <div class="dropdown">

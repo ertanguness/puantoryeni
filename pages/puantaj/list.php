@@ -65,6 +65,7 @@ $dates = Date::generateDates($year, $month, $days);
 
     .table {
         padding-bottom: 15px !important;
+        overflow: auto !important;
 
     }
 

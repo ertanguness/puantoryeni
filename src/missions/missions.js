@@ -1,5 +1,5 @@
-var form = $("#missionForm");
 $(document).on("click", "#saveMission", function () {
+  var form = $("#missionForm");
   let formData = new FormData(form[0]);
 
   for (var pair of formData.entries()) {
@@ -14,6 +14,7 @@ $(document).on("click", "#saveMission", function () {
     .then((data) => {
         title = data.status =="success" ? "Başarılı!" : "Hata!";
         Swal.fire({ title: title, text: data.message, icon: data.status });
+        $("#mission_id").val(data.lastInsertId);
     })
     .catch((error) => {
       console.error("Error:", error);

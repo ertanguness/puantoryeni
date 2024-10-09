@@ -2,6 +2,7 @@
 require_once '../Database/require.php';
 require_once '../Model/Puantaj.php';
 require_once '../Model/Persons.php';
+require_once '../Model/Wages.php';
 require_once '../Database/db.php';
 require_once '../App/Helper/date.php';
 
@@ -9,17 +10,20 @@ use App\Helper\Date;
 
 $puantajObj = new Puantaj();
 $person = new Persons();
+$wages = new Wages();
 
 if ($_POST['action'] == 'savePuantaj') {
     $status = '';
     $message = '';
 
+    //Gelen data json formatında olduğu için decode edilir
     $json_data = json_decode($_POST['data'], true);
     $error_wages = [];
     foreach ($json_data as $person_key => $person_item) {
         // puantajId'nin boş olmadığını kontrol et
+        //personelin tanımlı ücreti var ise o ücretten hesaplama yapılacak
+        
         $ucret = $person->getDailyWages($person_key)->daily_wages / 8;
-        // Eğer personelin günlük ücreti 0 ise error_wages dizisine ekle
         if ($ucret == 0 || $ucret == '') {
             $error_wages[] = $person->getPersonById($person_key, 'full_name')->full_name;
         }
@@ -30,9 +34,18 @@ if ($_POST['action'] == 'savePuantaj') {
                 // hesaplama yapılmaması için o kayıt silinir
                 $puantajObj->delete($id);
             } else if (!empty($puantaj_item['puantajId'])) {
-                $saat = $puantajObj->getPuantajSaati($puantaj_item['puantajId']);
 
-                $tutar = $saat * $ucret;
+
+                // Eğer personelin günlük ücreti tanımlı ise o ücretten hesaplama yapılır
+                $defined_wage = $wages->getWageByPersonIdAndDate($person_key,$puantaj_key)->amount ?? 0;
+                //tanımlı ücret yoksa günlük ücretten hesaplama yapılır
+                $daily_wages = ($defined_wage > 0) ?  ($defined_wage / 8) : $ucret;
+                
+                //puantajın saati, puantaj id'sine göre getirilir
+                $saat = $puantajObj->getPuantajSaati($puantaj_item['puantajId']);
+                
+                //Günlük hakediş tutarı hesaplanır
+                $tutar = $saat * $daily_wages;
 
                 $data = [
                     'id' => $id, // Puantaj tablosundaki id,
@@ -41,7 +54,8 @@ if ($_POST['action'] == 'savePuantaj') {
                     'puantaj_id' => $puantaj_item['puantajId'], // Puantaj id
                     'gun' => $puantaj_key,  // Tarih
                     'saat' => $saat, // Puantaj saati
-                    'tutar' => $tutar, // Tutar
+                    'tutar' => $tutar, // Tutar,
+                    "description" => $defined_wage, // tanımlı ücret
                 ];
 
                 try {

@@ -36,7 +36,7 @@ class Model extends Db
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE $this->primaryKey = ?");
         $sql->execute(array($id));
-        return $sql->fetch(PDO::FETCH_OBJ);
+        return $sql->fetch(PDO::FETCH_OBJ) ?? null;
     }
 
     public function save()

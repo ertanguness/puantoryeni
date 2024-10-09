@@ -4,10 +4,14 @@ require_once ROOT . "/Model/Missions.php";
 require_once ROOT . "/Model/MissionHeaders.php";
 require_once ROOT . "/Model/User.php";
 require_once ROOT . "/App/Helper/helper.php";
+require_once ROOT . "/App/Helper/users.php";
 
 use App\Helper\Helper;
 
-$users = new User();
+$userHelper = new UserHelper();
+
+
+$userObj = new User();
 
 $missionObj = new Missions();
 $headerObj = new MissionHeaders();
@@ -32,16 +36,9 @@ $missionHeaders = $missionObj->getHeaderFromMissionsFirm($firm_id);
                     </div>
                     <!-- Page title actions -->
                     <div class="col-auto ms-auto d-print-none">
-                        <a href="#" class="btn btn-primary">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="icon">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12 5l0 14"></path>
-                                <path d="M5 12l14 0"></path>
-                            </svg>
-                            Add board
+                        <a href="#" class="btn btn-primary" id="done-show">
+                            <i class="ti ti-eye-off icon me-1"></i>
+                            Gizle
                         </a>
                     </div>
                 </div>
@@ -72,6 +69,27 @@ $missionHeaders = $missionObj->getHeaderFromMissionsFirm($firm_id);
             .pointer {
                 cursor: pointer;
             }
+
+            .card-title {
+                display: flex;
+                align-items: center;
+            }
+
+            .form-colorinput {
+                margin-right: 10px;
+            }
+
+            .avatar-xs {
+                padding: 0 0.9rem;
+            }
+
+            .done {
+                color: #28a745
+            }
+
+            .no-done {
+                color: #EF5A6F
+            }
         </style>
         <!-- Page body -->
         <div class="page-body">
@@ -84,36 +102,42 @@ $missionHeaders = $missionObj->getHeaderFromMissionsFirm($firm_id);
 
                         ?>
 
-                        <div class="col-md-2 col-lg-2 me-3 header-item" id="item-<?php echo $item->header_id; ?>">
+                        <div class="col-md-2 col-lg-2 me-3 header-item" id="<?php echo $item->header_id; ?>">
                             <div class="d-flex pointer">
                                 <i class="ti ti-drag-drop icon me-1 "></i>
-                                <h2 class="mb-3"> <?php echo $mission_header_name; ?></h2>
+                                <h3 class="mb-3"> <?php echo $mission_header_name; ?></h3>
                             </div>
                             <?php
                             $missions = $missionObj->getMissionsByHeader($item->header_id);
 
                             ?>
-                            <?php foreach ($missions as $mission) { ?>
+                            <?php foreach ($missions as $mission) {
+                                $checked = $mission->status == 1 ? "checked" : "";
+                                $color = $mission->status == 1 ? "done" : "no-done";
+                            ?>
 
-                                <div class="mb-2 mission-items">
+
+                                <div class="mb-2 mission-items" id="<?php echo $mission->id; ?>">
                                     <div class="row row-cards">
                                         <div class="col-12">
                                             <div class="card card-sm">
                                                 <div class="card-body">
-                                                   
-                                                    <h3 class="card-title">
-                                                        <label class="form-colorinput form-colorinput-light"
-                                                        data-tooltip="Tamamlandı yap" 
-                                                        >
-                                                            <input name="color-rounded" type="radio" value="white"
-                                                                class="form-colorinput-input" checked="">
-                                                            <span class="form-colorinput-color bg-white rounded-circle"></span>
-                                                        </label>
-                                                   
 
+                                                    <h3 class="card-title <?php echo $color ?>">
+                                                        <label class="form-colorinput form-colorinput-light"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            data-bs-custom-class="custom-tooltip"
+                                                            data-bs-title="Tamamlandı Yap">
+
+                                                            <input name="color" type="checkbox" value="white"
+                                                                data-mission-id="<?php echo $mission->id; ?>"
+                                                                class="form-colorinput-input done-mission"
+                                                                <?php echo $checked; ?>>
+                                                            <span class="form-colorinput-color bg-white"></span>
+                                                        </label>
                                                         <?php echo $mission->name; ?>
                                                     </h3>
-                                                   
+
                                                     <div class="card-subtitle text-muted">
                                                         <span><?php echo $mission->start_date . "-" . $mission->end_date; ?></span>
                                                     </div>
@@ -124,30 +148,33 @@ $missionHeaders = $missionObj->getHeaderFromMissionsFirm($firm_id);
                                                         <div class="row">
                                                             <div class="col">
                                                                 <div class="avatar-list avatar-list-stacked">
-                                                                    <span class="avatar avatar-xs rounded">EP</span>
-                                                                    <span class="avatar avatar-xs rounded"
-                                                                        style="background-image: url(./static/avatars/002f.jpg)"></span>
-                                                                    <span class="avatar avatar-xs rounded"
-                                                                        style="background-image: url(./static/avatars/003f.jpg)"></span>
-                                                                    <span class="avatar avatar-xs rounded">HS</span>
+                                                                    <?php
+                                                                    $user_ids = $mission->user_ids;
+                                                                    $user_ids = explode(",", $user_ids);
+                                                                    $user_names = $userHelper->getUsersName($mission->user_ids);
+
+
+                                                                    foreach ($user_ids as $user_id) {
+                                                                        $user = $userObj->getUser($user_id);
+                                                                    ?>
+                                                                        <span class="avatar avatar-xs rounded"
+                                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                            data-bs-custom-class="custom-tooltip"
+                                                                            data-bs-title="<?php echo $user->full_name ?>">
+                                                                            <?php echo Helper::getInitials($user->full_name ?? ''); ?>
+                                                                        </span>
+
+
+                                                                    <?php } ?>
                                                                 </div>
+
+
                                                             </div>
                                                             <div class="col-auto text-secondary">
                                                                 <button class="switch-icon switch-icon-scale"
                                                                     data-bs-toggle="switch-icon">
                                                                     <span class="switch-icon-a text-muted">
-                                                                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none"
-                                                                            stroke="currentColor" stroke-width="2"
-                                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                                            class="icon">
-                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                            </path>
-                                                                            <path
-                                                                                d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572">
-                                                                            </path>
-                                                                        </svg>
+                                                                        <i class="ti ti-send icon"></i>
                                                                     </span>
                                                                     <span class="switch-icon-b text-red">
                                                                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
@@ -164,47 +191,9 @@ $missionHeaders = $missionObj->getHeaderFromMissionsFirm($firm_id);
                                                                         </svg>
                                                                     </span>
                                                                 </button>
-                                                                7
+
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <a href="#"
-                                                                    class="link-muted"><!-- Download SVG icon from http://tabler-icons.io/i/message -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                        height="24" viewBox="0 0 24 24" fill="none"
-                                                                        stroke="currentColor" stroke-width="2"
-                                                                        stroke-linecap="round" stroke-linejoin="round"
-                                                                        class="icon">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                        </path>
-                                                                        <path d="M8 9h8"></path>
-                                                                        <path d="M8 13h6"></path>
-                                                                        <path
-                                                                            d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z">
-                                                                        </path>
-                                                                    </svg>
-                                                                    2</a>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <a href="#"
-                                                                    class="link-muted"><!-- Download SVG icon from http://tabler-icons.io/i/share -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                        height="24" viewBox="0 0 24 24" fill="none"
-                                                                        stroke="currentColor" stroke-width="2"
-                                                                        stroke-linecap="round" stroke-linejoin="round"
-                                                                        class="icon">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                        </path>
-                                                                        <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0">
-                                                                        </path>
-                                                                        <path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0">
-                                                                        </path>
-                                                                        <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0">
-                                                                        </path>
-                                                                        <path d="M8.7 10.7l6.6 -3.4"></path>
-                                                                        <path d="M8.7 13.3l6.6 3.4"></path>
-                                                                    </svg>
-                                                                </a>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>

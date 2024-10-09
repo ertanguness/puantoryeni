@@ -40,20 +40,22 @@ $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
                 <div class="card card-sm">
                     <div class="card-body">
                         <div class="row align-items-center">
-                            
+
                             <div class="col-auto">
                                 <?php
-                                    $noback_shape = '';
-                                    $wage_type = $person->wage_type ?? 1;
-                                    if ($wage_type == 1) {
-                                        $noback_shape = '-noback-shape';
-                                    };
+                                $noback_shape = '';
+                                $wage_type = $person->wage_type ?? 1;
+                                if ($wage_type == 1) {
+                                    $noback_shape = '-noback-shape';
+                                }
+                                ;
                                 ?>
-                                <span class="avatar" style="background-image: url('./static/hard-hat<?php echo $noback_shape; ?>.svg')"></span>
+                                <span class="avatar"
+                                    style="background-image: url('./static/hard-hat<?php echo $noback_shape; ?>.svg')"></span>
                             </div>
                             <div class="col">
                                 <div class="font-weight-700">
-                                <?php echo $pageTitle; ?>
+                                    <?php echo $pageTitle; ?>
                                 </div>
                                 <div class="text-secondary full-name">
                                     <?php echo $person->full_name ?? ''; ?>
@@ -150,18 +152,17 @@ $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
                                     <?php include_once 'content/1-payment-info.php' ?>
                                 </div>
                                 <div class="tab-pane" id="tabs-puantaj-3" role="tabpanel">
-                                <?php include_once 'content/3-puantaj-info.php' ?>
-                            </div>
-                            <div class="tab-pane" id="tabs-leave-3" role="tabpanel">
-                                
-                                <?php include_once 'content/4-leave-info.php' ?>
-                            </div>
-                            <div class="tab-pane" id="tabs-documents-3" role="tabpanel">
-                                <?php include_once 'content/5-documents.php' ?>
-                                
+                                    <?php include_once 'content/2-puantaj-info.php' ?>
+                                </div>
+                                <div class="tab-pane" id="tabs-leave-3" role="tabpanel">
+
+                                    <?php include_once 'content/3-leave-info.php' ?>
+                                </div>
+                                <div class="tab-pane" id="tabs-documents-3" role="tabpanel">
+                                    <?php include_once 'content/4-documents.php' ?>
                                 </div>
                                 <div class="tab-pane" id="tabs-wages-3" role="tabpanel">
-                                    <?php include_once 'content/6-wage-defines.php' ?>
+                                    <?php include_once 'content/5-wage-defines.php' ?>
                                 </div>
                             </div>
                         </div>

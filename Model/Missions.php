@@ -39,4 +39,19 @@ class Missions extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
+    //görev Tamamlandı veya tamamlanmadı olarak işaretlenir
+    public function updateMissionStatus($id, $status)
+    {
+        $sql =  $this->db->prepare("UPDATE $this->table SET status = ? WHERE id = ?");
+        return $sql->execute([$status, $id]);
+    }
+
+    //Görevin ait olduğu bağlığı değiştir
+    public function updateMissionHeader($id, $header_id)
+    {
+        $sql =  $this->db->prepare("UPDATE $this->table SET header_id = ? WHERE id = ?");
+        return $sql->execute([$header_id, $id]);
+    }
+    
+
 }

@@ -4688,6 +4688,9 @@ textarea.form-control-lg {
   display: flex !important;
   flex-basis: auto;
 }
+.navbar-expand-lg .navbar-toggler {
+  display: none;
+}
 .navbar-expand .navbar-toggler {
   display: none;
 }
@@ -17294,6 +17297,7 @@ Navbar vertical
   overflow-y: scroll;
   padding: 0;
 }
+
 @media (prefers-reduced-motion: reduce) {
   .navbar-vertical.navbar-expand {
     transition: none;

@@ -10,28 +10,40 @@ $currentUrl = $_SERVER['REQUEST_URI'];
 
 // URL'de '?' karakteri var mı diye kontrol et
 if (strpos($currentUrl, '?') !== false) {
-  // Eğer '?' varsa, URL zaten bir sorgu dizesi içeriyor demektir
-  $newUrl = $currentUrl . '&theme=dark';
+    // Eğer '?' varsa, URL zaten bir sorgu dizesi içeriyor demektir
+    $newUrl = $currentUrl . '&theme=dark';
 } else {
-  // Eğer '?' yoksa, URL henüz bir sorgu dizesi içermiyor demektir
-  $newUrl = $currentUrl . '?theme=dark';
+    // Eğer '?' yoksa, URL henüz bir sorgu dizesi içermiyor demektir
+    $newUrl = $currentUrl . '?theme=dark';
 }
 ?>
 
 <header class="navbar-expand-md">
     <div class="collapse navbar-collapse" id="navbar-menu">
+
         <div class="navbar">
 
 
-            <div class="navbar-nav flex-row order-md-last ms-auto me-3">
-                <div class="nav-item ms-auto">
+            <div class="col-auto align-bottom" style="margin-left:250px;">
 
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+                    <i class="ti ti-menu-2"></i>
+                </button>
+               
+            </div>
+
+
+
+            <div class="navbar-nav flex-row order-md-last ms-auto me-3">
+
+
+                <div class="nav-item ms-auto">
                     <?php
-               //http://localhost:3000/company-list.php
-          if ($currentUrl !== '/company-list.php') {
-            echo $company->myCompanySelect("myFirm", $firm_id);
-          }
-          ?>
+                    //http://localhost:3000/company-list.php
+                    if ($currentUrl !== '/company-list.php') {
+                        echo $company->myCompanySelect("myFirm", $firm_id);
+                    }
+                    ?>
                 </div>
                 <div class="d-none d-md-flex">
 

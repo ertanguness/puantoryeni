@@ -26,8 +26,9 @@ class UserHelper extends Db
 
     public function userSelectMultiple($name = "users[]", $selectedIds = [])
     {
-        $query = $this->db->prepare("SELECT * FROM users"); // Tüm sütunları seç
-        $query->execute();
+        $firm_id = $_SESSION["firm_id"];
+        $query = $this->db->prepare("SELECT * FROM users where firm_id = ?"); // Tüm sütunları seç
+        $query->execute([$firm_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
 
         $id = str_replace('[]', ' ', $name);
@@ -42,11 +43,17 @@ class UserHelper extends Db
         return $select;
     }
 
+
+//Get user info
+   
+
+    
+
     //user id'leri aralarında virgül olan bir string alır ve bu id'lerin karşılık geldiği kullanıcıların isimlerini döndürür    
     public function getUsersName($user_ids)
     {
         $user_ids = explode(',', $user_ids);
-        $users = [];
+              $users = [];
         foreach ($user_ids as $id) {
             $query = $this->db->prepare("SELECT * FROM users WHERE id = :id");
             $query->execute(['id' => $id]);
