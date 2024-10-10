@@ -136,6 +136,11 @@ if ($page == 'missions/headers/manage') {
     echo '<script src="./src/missions/headers.js"></script>';
 }
 
+if ($page == 'bordro/xls/payment-load-from-xls') {
+    echo '<script src="./src/bordro/payment-load.js"></script>';
+}
+
+
 
 
 ?>
@@ -158,7 +163,7 @@ if ($page == 'home') {
     echo '<script src="./src/home/missions.js"></script>';
 }
 ?>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>

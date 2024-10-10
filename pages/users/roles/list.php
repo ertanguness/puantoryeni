@@ -21,7 +21,7 @@ $roles = $roleObj->getRolesByFirm($firm_id);
                 </div>
 
                 <div class="table-responsive">
-                    <table id="roleTable" class="table card-table text-nowrap datatable">
+                    <table id="roleTable" class="table card-table table-responsive text-nowrap datatable">
                         <thead>
                             <tr>
                                 <th style="width:7%">id</th>

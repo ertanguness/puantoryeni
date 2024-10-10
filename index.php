@@ -23,7 +23,7 @@ $user_role = $_SESSION['user_role'];
 $active_page = isset($_GET["p"]) ? $_GET["p"] : "";
 $menus = new Menus();
 $menu_name = $menus->getMenusByLink($active_page);
-
+$firm_id = $_SESSION['firm_id'];
 ?>
 
 

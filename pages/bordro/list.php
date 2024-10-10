@@ -61,9 +61,9 @@ $lastDay = Date::lastDay($month, $year);
                         <i class="ti ti-list-details icon me-2"></i>
                         İşlemler</button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item add-income"
+                        <a class="dropdown-item add-income route-link" href="#"
                             data-tooltip="Personellere yapılan ödemeleri excelden yükleyin" data-tooltip-location="left"
-                            href="#" data-bs-toggle="modal" data-bs-target="#load-payment-modal">
+                            data-page="bordro/xls/payment-load-from-xls" >
                             <i class="ti ti-table-import icon me-3"></i> Ödeme Yükle
                         </a>
                         <a class="dropdown-item add-income" data-tooltip="Günlük Ücretleri güncelleyin"
@@ -172,17 +172,17 @@ $lastDay = Date::lastDay($month, $year);
                                     </td>
                                     <td class="text-end">
                                         <?php echo Helper::formattedMoney($wage_cut ?? 0); ?>
-                                        <i class="ti ti-upload icon text-danger"></i>
+                                        <i class="ti ti-upload icon color-red"></i>
                                     </td>
                                     
                                     <td class="text-end">
                                         <?php echo Helper::formattedMoney(($hakedis) ?? 0); ?>
-                                        <i class="ti ti-switch-vertical icon text-blue"></i>
+                                        <i class="ti ti-switch-vertical icon color-blue"></i>
                                     </td>
                                     
                                     <td class="text-end">
                                         <?php echo Helper::formattedMoney($odeme ?? 0); ?>
-                                        <i class="ti ti-cash-register icon text-green"></i>
+                                        <i class="ti ti-cash-register icon color-green"></i>
                                         
                                     </td>
                                     

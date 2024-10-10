@@ -7,6 +7,7 @@ $company = new CompanyHelper();
 
 // Mevcut URL'yi al
 $currentUrl = $_SERVER['REQUEST_URI'];
+$page = isset($_GET["p"]) ? $_GET["p"] : "";
 
 // URL'de '?' karakteri var mı diye kontrol et
 if (strpos($currentUrl, '?') !== false) {
@@ -29,7 +30,7 @@ if (strpos($currentUrl, '?') !== false) {
                 <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
                     <i class="ti ti-menu-2"></i>
                 </button>
-               
+
             </div>
 
 
@@ -39,10 +40,13 @@ if (strpos($currentUrl, '?') !== false) {
 
                 <div class="nav-item ms-auto">
                     <?php
-                    //http://localhost:3000/company-list.php
-                    if ($currentUrl !== '/company-list.php') {
+
+
+                    // Sayfa adını kontrol et
+                    if (basename($_SERVER['PHP_SELF']) != 'company-list.php') {
                         echo $company->myCompanySelect("myFirm", $firm_id);
                     }
+
                     ?>
                 </div>
                 <div class="d-none d-md-flex">
@@ -207,8 +211,8 @@ if (strpos($currentUrl, '?') !== false) {
                         aria-label="Open user menu">
                         <span class="avatar avatar-sm" style="background-image: url()"></span>
                         <div class="d-none d-xl-block ps-2">
-                            <div>admin</div>
-                            <div class="mt-1 small text-secondary">Yönetici</div>
+                            <div><?php echo $_SESSION["user"]->full_name; ?></div>
+                            <div class="mt-1 small text-secondary"><?php echo $_SESSION["user"]->job; ?></div>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" data-bs-theme="light">
@@ -219,6 +223,5 @@ if (strpos($currentUrl, '?') !== false) {
                 </div>
             </div>
         </div>
-
     </div>
 </header>

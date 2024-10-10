@@ -14,6 +14,10 @@ $companyObj = new Company();
 $companies = $companyObj->allWithUserId();
 
 ?>
+
+<style>
+ 
+</style>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">
 
@@ -34,7 +38,7 @@ $companies = $companyObj->allWithUserId();
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive" style="overflow:auto">
                     <table class="table card-table table-hover datatable ">
                         <thead>
                             <tr>

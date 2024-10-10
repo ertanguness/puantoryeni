@@ -68,10 +68,10 @@
   /* İlk başlık satırının yüksekliğine bağlı olarak ayarlayın */
 }
 
-.table-responsive {
+/* .table-responsive {
   overflow-x: inherit;
 
-}
+} */
 .table.dataTable thead th{
   text-align: left !important;  
 }
@@ -103,6 +103,9 @@ padding: 0.5rem 0.5rem;
 
 .color-yellow{
   color: #fd7e14 !important;
+}
+.color-blue{
+  color : #6439FF 
 }
 
 .dt-layout-row.ui-helper-clearfix:not(.dt-layout-table) {

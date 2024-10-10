@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `auths` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.auths: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.auths: ~9 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `auths`;
 INSERT INTO `auths` (`id`, `name`, `title`, `value`, `is_active`, `parent_id`, `tooltip_1`, `tooltip_2`, `tooltip_3`, `tooltip_4`) VALUES
 	(1, 'mainpage', 'Ana Sayfa Bilgileri', 1, 1, 0, NULL, NULL, NULL, NULL),
@@ -1389,9 +1389,9 @@ CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   `aciklama` varchar(255) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=243 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.maas_gelir_kesinti: ~48 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.maas_gelir_kesinti: ~52 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `maas_gelir_kesinti`;
 INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `gun`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
 	(1, 4, 181, '20240915', 9, 2024, 900.00, 2, '0', '0', '0000-00-00 00:00:00'),
@@ -1441,7 +1441,11 @@ INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `gun`, `ay`, `yi
 	(203, 60, 227, '20240915', 9, 2024, 40645.16, 3, 'Bakiye Ödemesi', '', '2024-10-08 23:31:18'),
 	(204, 60, 226, '20241015', 10, 2024, 20250.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 10:34:04'),
 	(205, 60, 229, '20241015', 10, 2024, 41500.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 10:36:38'),
-	(206, 60, 226, '20241015', 10, 2024, 4000.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 14:21:04');
+	(206, 60, 226, '20241015', 10, 2024, 4000.00, 3, 'Bakiye Ödemesi', '', '2024-10-09 14:21:04'),
+	(239, 0, 226, '20241009', 10, 2024, 1500.00, 2, '0', 'Excel yükleme', '2024-10-09 23:47:07'),
+	(240, 0, 227, '20241009', 10, 2024, 1500.00, 2, '0', 'Excel yükleme', '2024-10-09 23:47:07'),
+	(241, 0, 229, '20241009', 10, 2024, 1500.00, 2, '0', 'Excel yükleme', '2024-10-09 23:47:07'),
+	(242, 0, 230, '20241009', 10, 2024, 2500.00, 2, '0', 'Excel yükleme', '2024-10-09 23:47:07');
 
 -- tablo yapısı dökülüyor puantoryeni.menu
 DROP TABLE IF EXISTS `menu`;
@@ -1530,15 +1534,14 @@ CREATE TABLE IF NOT EXISTS `missions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.missions: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.missions: ~3 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `missions`;
 INSERT INTO `missions` (`id`, `user_id`, `firm_id`, `header_id`, `user_ids`, `name`, `priority`, `start_date`, `end_date`, `description`, `status`, `created_at`) VALUES
-	(6, 0, 8, 2, '60', 'Personel ücretleri Tanımı', 3, '01.10.2024', '31.10.2024', 'Personel ücretleri tanımlamaya göre hesaplanacak', 1, '2024-10-05 23:39:27'),
+	(6, 0, 8, 2, '60', 'Personel ücretleri Tanımı', 3, '01.10.2024', '31.10.2024', '                                        Personel ücretleri tanımlamaya göre <span style="background-color: rgb(181, 214, 165);">hesaplanacak                                     </span>', 1, '2024-10-05 23:39:27'),
 	(28, 0, 8, 6, '4', 'Bakiye Ödemesi', 1, '08.10.2024', '31.10.2024', 'İşlemler butonunda ödeme yap dediğimizde bakiye tutarını getirmede sorun var', 1, '2024-10-08 23:35:12'),
 	(29, 0, 8, 7, '4', 'Tamamlananları gösterme butonu', 1, '08.10.2024', '31.10.2024', '                                        Ana sayfada, tamamlanan görevleri göster veya gizle butonu eklenecej                                     ', 1, '2024-10-08 23:37:00'),
 	(30, 0, 8, 2, '4', 'Gelir Gider Tablosu arama', 1, '09.10.2024', '09.10.2024', '<p>Personel Yönetimi alanında datatable\'larda arama çalışmıyor</p><p><br></p><p><span style="background-color: rgb(255, 255, 0);">Çözüm</span>: Bir sayfada birden fazla datatable olduğu zaman arama kutularını eklerken ilk datatable\'ı esas aldığı için ikinci tablodaki sütun sayıları tutmuyor ve datatable hata veriyordu<br>initComplete kısmına datatable id\'sini ekleyerek her tablonun kendisi için arama kutuları eklenmesi sağlandı</p>', 1, '2024-10-09 10:32:23'),
 	(31, 0, 8, 2, '4', 'İzin ve Belgeler', 2, '09.10.2024', '31.10.2024', '<p>Personelin izin ve belgeleri sayfası yapılacak,<br>izin sayfası belki kapatılabilir</p>', 0, '2024-10-09 14:11:38'),
-	(32, 0, 8, 1, '4', 'Görev Güncellendi', 1, '02.10.2024', '23.10.2024', '                                                                             ', 0, '2024-10-09 19:14:07'),
 	(33, 0, 8, 2, '3', 'Görev Güncellendi', 1, '09.10.2024', '09.10.2024', '                                                                             ', 0, '2024-10-09 19:15:08');
 
 -- tablo yapısı dökülüyor puantoryeni.mission_headers
@@ -1555,7 +1558,7 @@ CREATE TABLE IF NOT EXISTS `mission_headers` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.mission_headers: ~7 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.mission_headers: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `mission_headers`;
 INSERT INTO `mission_headers` (`id`, `user_id`, `firm_id`, `header_name`, `header_order`, `description`, `status`, `created_at`) VALUES
 	(1, 60, 8, 'kasa', 7, '0', 1, '2024-10-07 20:06:24'),
@@ -1595,7 +1598,7 @@ CREATE TABLE IF NOT EXISTS `mission_process` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- puantoryeni.mission_process: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.mission_process: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `mission_process`;
 INSERT INTO `mission_process` (`id`, `user_id`, `firm_id`, `status`, `process_name`, `process_order`, `description`, `created_at`) VALUES
 	(1, 60, 8, 1, 'Yapılacak', 3, 'adfasdf', '2024-10-05 08:51:29'),
@@ -2354,7 +2357,7 @@ CREATE TABLE IF NOT EXISTS `puantaj` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1156 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.puantaj: ~108 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.puantaj: ~55 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `puantaj`;
 INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`, `gun`, `saat`, `tutar`, `description`, `created_at`, `updated_at`) VALUES
 	(995, 0, 0, '149', 53, '20240901', 0.00, 0.00, NULL, '2024-09-22 19:25:47', ''),
@@ -2623,7 +2626,7 @@ CREATE TABLE IF NOT EXISTS `report_ysc_content` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4040 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.report_ysc_content: ~968 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.report_ysc_content: ~942 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `report_ysc_content`;
 INSERT INTO `report_ysc_content` (`id`, `report_id`, `cihaz_no`, `bulundugu_bolge`, `cinsi`, `cihaz_dolum_tarihi`, `cihaz_sonkullanma_tarihi`, `kontrol_tarihi_1`, `kontrol_tarihi_2`, `islem_kontrol_tarihi_1`, `islem_kontrol_tarihi_2`, `dis_muhafaza`, `cevre_kontrolu`, `pim_kontrolu`, `manometre_kontrolu`, `hortum_kontrolu`, `talimat_kontrolu`, `agirlik_kontrolu`) VALUES
 	(16, 21, 'YSC4267', '2.kat', NULL, '04-03-2024', '11-03-2024', '04-03-2024', '19-03-2024', '18-03-2024', '25-03-2024', '1', '0', '1', '0', '0', '1', '1'),
@@ -3846,6 +3849,7 @@ INSERT INTO `userroles` (`id`, `firm_id`, `roleName`, `roleDescription`, `isActi
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_user_id` int(11) NOT NULL DEFAULT 0,
   `firm_id` int(11) NOT NULL DEFAULT 0,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -3863,19 +3867,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- puantoryeni.users: ~8 rows (yaklaşık) tablosu için veriler indiriliyor
+-- puantoryeni.users: ~11 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `users`;
-INSERT INTO `users` (`id`, `firm_id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `ekipnet_no`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `created_at`) VALUES
-	(3, 0, 'Bilge Kazaz', 'bilgekazaz@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '507', 'Mühendis', '', 1, 1, NULL, NULL, NULL, NULL, NULL, '2024-08-30 16:00:31'),
-	(4, 0, 'Mehmet Ali Gökmen', 'beyzade83@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '539', '', '', 9, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:56:13'),
-	(60, 8, 'Mehmet Ali Gökmen', 'beyzade83@hotmail.com', '$2y$10$AT6jUkLr/nAgKkEQm3wqqOIAi0u6ey7FnFiR/8AHl1Y0r9l4awwJe', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-23 19:18:25'),
-	(61, 0, 'Avni Akgöz ', 'avniiakgoz@gmail.com', '$2y$10$81U50qIwKRyuudnpah4IL.zu95ZExgD0lO23PNYglLrKbpA2MlaO6', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-26 19:29:00'),
-	(63, 11, 'Ümüt Ünal', 'umutunal.91@gmail.com', '$2y$10$yip0iyY8brgrIKShtU5omeVcdOCm1cqSLtOTdicQX2.QiisOvyu7a', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-27 08:57:57'),
-	(64, 12, 'Ümüt Ünal', 'yngsolarenerji@gmail.com', '$2y$10$kBeDnGUrJyuXJ.o3NFdVhOOQZbB36ikTf7EqcLtWvNbwnjVQTCNiq', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-27 08:59:24'),
-	(65, 0, 'gokmen', 'admin@puantor.com.tr', '$2y$10$/LY27auC2qYCf0LN8zBjUe6dUXeMJw3vvxAUVyB.xVBRAaDE9P2Iy', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-29 19:50:08'),
-	(66, 14, 'Avni Akgöz', 'avniakgoz01@gmail.com', '$2y$10$A1BmQH024cciv6DGrkMcaewilM06P93Xk4LGJ1LBW2h4ZdCphXLq.', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-10-01 10:01:56');
+INSERT INTO `users` (`id`, `parent_user_id`, `firm_id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `ekipnet_no`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `created_at`) VALUES
+	(3, 0, 0, 'Bilge Kazaz', 'bilgekazaz@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '507', 'Mühendis', '', 1, 1, NULL, NULL, NULL, NULL, NULL, '2024-08-30 16:00:31'),
+	(4, 0, 0, 'Mehmet Ali Gökmen', 'beyzade83@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '539', '', '', 9, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:56:13'),
+	(60, 0, 8, 'Mehmet Ali Gökmen', 'beyzade83@hotmail.com', '$2y$10$AT6jUkLr/nAgKkEQm3wqqOIAi0u6ey7FnFiR/8AHl1Y0r9l4awwJe', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-23 19:18:25'),
+	(61, 0, 0, 'Avni Akgöz ', 'avniiakgoz@gmail.com', '$2y$10$81U50qIwKRyuudnpah4IL.zu95ZExgD0lO23PNYglLrKbpA2MlaO6', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-26 19:29:00'),
+	(63, 0, 11, 'Ümüt Ünal', 'umutunal.91@gmail.com', '$2y$10$yip0iyY8brgrIKShtU5omeVcdOCm1cqSLtOTdicQX2.QiisOvyu7a', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-27 08:57:57'),
+	(64, 0, 12, 'Ümüt Ünal', 'yngsolarenerji@gmail.com', '$2y$10$kBeDnGUrJyuXJ.o3NFdVhOOQZbB36ikTf7EqcLtWvNbwnjVQTCNiq', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-27 08:59:24'),
+	(65, 0, 0, 'gokmen', 'admin@puantor.com.tr', '$2y$10$/LY27auC2qYCf0LN8zBjUe6dUXeMJw3vvxAUVyB.xVBRAaDE9P2Iy', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-29 19:50:08'),
+	(66, 0, 14, 'Avni Akgöz', 'avniakgoz01@gmail.com', '$2y$10$A1BmQH024cciv6DGrkMcaewilM06P93Xk4LGJ1LBW2h4ZdCphXLq.', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-10-01 10:01:56'),
+	(67, 0, 8, 'Bilge Kazaz', 'bilgekazaz@hotmail.com', '$2y$10$7OuJe1yqObkFdb0LjJ0jW.EnhL.N9IHoiKgRkhKJLfI6n/auODqk2', '5079432723', '', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, '2024-10-10 12:43:34'),
+	(70, 60, 8, 'Bilge Kazaz', 'bilgekazaz33@gmail.com', '$2y$10$r.2Ftox4ZI.bO.WaUtdk6.yq6ZYSDKBlAf3MYD.ASR5MEotaZYBB2', '5079432723', '', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, '2024-10-10 12:44:24'),
+	(71, 60, 8, 'Gökmen', 'beyzade5433@hotmail.com', '$2y$10$HfYyqInpJBxSiDcP9K0p2.tgO.bn5hZNbCP8wvk8lUOz8wrNeK8.6', '05079432723', 'Merkez', NULL, 10, 1, NULL, NULL, NULL, NULL, NULL, '2024-10-10 12:46:16');
 
 -- Geçici tablolar temizlenerek final VIEW oluşturuluyor
 DROP TABLE IF EXISTS `sqlmaas_gelir_kesinti`;

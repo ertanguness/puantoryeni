@@ -36,8 +36,10 @@ class CompanyHelper extends Db
 
     public function myCompanySelect($name = 'companies', $id = null)
     {
+
+        $user_id = $_SESSION['user']->parent_user_id > 0 ? $_SESSION['user']->parent_user_id : $_SESSION['user']->id;
         $query = $this->db->prepare('SELECT * FROM myfirms WHERE user_id = ?');  // Tüm sütunları seç
-        $query->execute([$_SESSION['user']->id]);
+        $query->execute([$user_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);  // Tüm sonuçları al
 
         $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="min-width:200px">';

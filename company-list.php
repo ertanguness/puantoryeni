@@ -2,6 +2,8 @@
 session_start();
 
 $user_id = $_SESSION['user']->id;
+$user_id = $_SESSION['user']->parent_user_id > 0 ? $_SESSION['user']->parent_user_id : $user_id;
+
 
 require_once "Model/Company.php";
 $companyObj = new Company();

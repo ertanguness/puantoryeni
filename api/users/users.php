@@ -13,6 +13,8 @@ $user = new User();
 if ($_POST["action"] == "userSave") {
     $id = $_POST["id"];
     $lastInsertId = 0;
+    $parent_user_id = $_SESSION["user"]->parent_user_id > 0 ? $_SESSION["user"]->parent_user_id : $_SESSION["user"]->id;
+
 
     try {
         $data = [
@@ -24,6 +26,8 @@ if ($_POST["action"] == "userSave") {
             "phone" => $_POST["phone"],
             "user_roles" => $_POST["user_roles"],
             "job" => $_POST["job"],
+            "status" => 1,
+            "parent_user_id" => $parent_user_id,
 
         ];
 
@@ -39,7 +43,7 @@ if ($_POST["action"] == "userSave") {
         if ($e->errorInfo[1] == 1062) {
             $message = 'Bu e-posta adresi zaten kayıtlı.';
         } else {
-            $message =  $e->getMessage();
+            $message = $e->getMessage();
         }
     }
     $res = [
@@ -59,7 +63,7 @@ if ($_POST["action"] == "deleteUser") {
         $message = "Kullanıcı başarıyla silindi.";
     } catch (PDOException $e) {
         $status = "error";
-        $message =  $e->getMessage();
+        $message = $e->getMessage();
     }
     $res = [
         "status" => $status,
