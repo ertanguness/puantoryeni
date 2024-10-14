@@ -80,3 +80,4 @@ $(document).on('click', '.default-case', function() {
     });
 
 });
+

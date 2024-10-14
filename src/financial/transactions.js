@@ -12,15 +12,15 @@ $(document).on("click", "#saveTransaction", function () {
     rules: {
       amount: {
         required: true,
-        inputPattern: true,
-      },
+        inputPattern: true
+      }
     },
     messages: {
       amount: {
         required: "Lütfen tutar giriniz",
-        inputPattern: "Tutar sayısal değer olmalıdır",
-      },
-    },
+        inputPattern: "Tutar sayısal değer olmalıdır"
+      }
+    }
   });
   if (!form.valid()) {
     return;
@@ -30,13 +30,13 @@ $(document).on("click", "#saveTransaction", function () {
 
   formData.append("action", "saveTransaction");
 
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
+  }
 
   fetch("/api/financial/transaction.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
@@ -67,15 +67,15 @@ $(document).on("click", "#saveTransaction", function () {
                     <i class="ti ti-trash icon me-3"></i> Sil
                 </a>
             </div>
-        </div>`,
+        </div>`
         ])
         .draw(false);
-      
-        Swal.fire({
+
+      Swal.fire({
         title: title,
         text: data.message,
         icon: data.status,
-        confirmButtonText: "Tamam",
+        confirmButtonText: "Tamam"
       });
     })
     .catch((error) => {
@@ -95,31 +95,39 @@ $(document).on("click", ".delete-transaction", function () {
 $('input[name="amount"]').keypress(function (e) {
   if ((e.which < 48 || e.which > 57) && e.which != 46) {
     return false;
-}
+  }
 });
 
+$(document).on("click", ".transaction_type", function () {
+  var type = $(this).val();
+  var formData = new FormData();
+  formData.append("action", "getSubTypes");
+  formData.append("type", type);
 
-$(document).on('click', '.transaction_type', function() {
-    var type = $(this).val();
-     var formData = new FormData();
-    formData.append("action", "getSubTypes");
-    formData.append("type", type);
+  fetch("api/financial/transaction.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      var options = "<option value=''>Tür Seçiniz</option>";
+      data = data.subTypes;
 
-    fetch("api/financial/transaction.php", {
-        method: "POST",
-        body: formData,
+      data.forEach((element) => {
+        options += `<option value="${element.id}">${element.name}</option>`;
+      });
+      $("#inc_exp_type").html(options);
     })
-        .then((response) => response.json())
-        .then((data) => {
-            var options = "<option value=''>Tür Seçiniz</option>";
-            data = data.subTypes;
-            
-            data.forEach((element) => {
-                options += `<option value="${element.id}">${element.name}</option>`;
-            });
-            $("#inc_exp_type").html(options);
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
+$(document).on("change", "#firm_cases", function () {
+  //case_id'yi al sayfayı post ile yenile
+  var case_id = $(this).val();
+  var form = $("#caseForm");
+  //case_id'yi form'a ekle
+  form.append(`<input type="hidden" name="case_id" value="${case_id}">`);
+  form.submit();
 });

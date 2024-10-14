@@ -21,7 +21,7 @@ if ($_POST["action"] == "payment-load-from-xls") {
     $month = $_POST["months"];
     $year = $_POST["year"];
     $project_id = $_POST["projects"];
-    // $category = $_POST["category"];
+    $type = $_POST["inc_exp_type"];
     $file = $_FILES["payment-load-file"];
     $file_name = $file["name"];
     $file_tmp = $file["tmp_name"];
@@ -48,14 +48,15 @@ if ($_POST["action"] == "payment-load-from-xls") {
                     "tutar" => $row["D"],
                     "ay" => $month,
                     "yil" => $year,
-                    "kategori" => 2,
+                    "kategori" => 3,
+                    "turu" => $type,
                     "aciklama" => "Excel yükleme",
                 ];
-                $lastInsertedId =  $bordro->saveWithAttr($data) ?? 0;
+                $lastInsertedId = $bordro->saveWithAttr($data) ?? 0;
             }
-            
+
             $status = "success";
-            $message = "Dosya başarıyla yüklendi" ;
+            $message = "Dosya başarıyla yüklendi";
         } catch (PDOException $ex) {
             $status = "error";
             $message = $ex->getMessage();

@@ -3849,7 +3849,6 @@ INSERT INTO `userroles` (`id`, `firm_id`, `roleName`, `roleDescription`, `isActi
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_user_id` int(11) NOT NULL DEFAULT 0,
   `firm_id` int(11) NOT NULL DEFAULT 0,
   `full_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -3871,7 +3870,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- puantoryeni.users: ~11 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `users`;
-INSERT INTO `users` (`id`, `parent_user_id`, `firm_id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `ekipnet_no`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `created_at`) VALUES
+INSERT INTO `users` (`id`,  `firm_id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `ekipnet_no`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `created_at`) VALUES
 	(3, 0, 0, 'Bilge Kazaz', 'bilgekazaz@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '507', 'Mühendis', '', 1, 1, NULL, NULL, NULL, NULL, NULL, '2024-08-30 16:00:31'),
 	(4, 0, 0, 'Mehmet Ali Gökmen', 'beyzade83@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '539', '', '', 9, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-04 15:56:13'),
 	(60, 0, 8, 'Mehmet Ali Gökmen', 'beyzade83@hotmail.com', '$2y$10$AT6jUkLr/nAgKkEQm3wqqOIAi0u6ey7FnFiR/8AHl1Y0r9l4awwJe', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-09-23 19:18:25'),

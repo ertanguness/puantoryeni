@@ -1,6 +1,6 @@
 <div class="empty">
     <div class="empty-img">
-        <img src="static/unauthorized.svg" alt="" style="width:250px;height:250px">
+        <img src="static/unauthorize-red.svg" alt="" style="width:250px;height:250px">
 
 
     </div>

@@ -16,7 +16,7 @@ $companies = $companyObj->allWithUserId();
 ?>
 
 <style>
- 
+
 </style>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">
@@ -29,12 +29,16 @@ $companies = $companyObj->allWithUserId();
                         <h2 class="card-title">Firma Listesi </h2>
                     </div>
                     <div class="col-auto ms-auto">
-                    <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
-                    <i class="ti ti-file-excel icon"></i>
-                </a>
-                        <a href="#" class="btn btn-primary route-link" data-page="companies/manage">
-                            <i class="ti ti-plus icon me-2"></i> Yeni
+                        <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                            <i class="ti ti-file-excel icon"></i>
                         </a>
+                        <!-- Firma Ekleme ve güncelleme yetkisi -->
+                        <?php if ($Auths->hasPermission('company_add_update')) { ?>
+                            <a href="#" class="btn btn-primary route-link" data-page="companies/manage">
+                                <i class="ti ti-plus icon me-2"></i> Yeni
+                            </a>
+                        <?php } ?>
+                    
                     </div>
                 </div>
 
@@ -42,15 +46,15 @@ $companies = $companyObj->allWithUserId();
                     <table class="table card-table table-hover datatable ">
                         <thead>
                             <tr>
-                                <th>id</th>
+                                <th style="width:7%">id</th>
                                 <th>Firma Adı</th>
                                 <th>Yetkili</th>
-                                <th>Şehir</th>
-                                <th>İlçe</th>
-                                <th>Telefon</th>
-                                <th>Email</th>
+                                <th style="width:10%">Şehir</th>
+                                <th style="width:10%">İlçe</th>
+                                <th style="width:10%">Telefon</th>
+                                <th style="width:15%">Email</th>
                                 <th>Adres</th>
-                                <th>İşlem</th>
+                                <th style="width:7%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,7 +63,8 @@ $companies = $companyObj->allWithUserId();
                                 <tr>
                                     <td><span class="text-secondary"><?php echo $company->id; ?></span></td>
                                     <td>
-                                        <a href="invoice.html" class="text-reset" tabindex="-1">
+                                        <a href="#" class="btn route-link"
+                                            data-page="companies/manage&id=<?php echo $company->id ?>">
                                             <?php echo Helper::short($company->company_name, 32) ?>
                                         </a>
                                     </td>
@@ -86,12 +91,15 @@ $companies = $companyObj->allWithUserId();
 
                                     <td class="text-end">
                                         <div class="dropdown">
-                                            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
+                                            <button class="btn dropdown-toggle align-text-top"
+                                                data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link" data-page="companies/manage&id=<?php echo $company->id ?>" href="#">
+                                                <a class="dropdown-item route-link"
+                                                    data-page="companies/manage&id=<?php echo $company->id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
-                                                <a class="dropdown-item delete-company" data-id="<?php echo $company->id ?>" href="#">
+                                                <a class="dropdown-item delete-company" data-id="<?php echo $company->id ?>"
+                                                    href="#">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
                                             </div>
@@ -109,9 +117,3 @@ $companies = $companyObj->allWithUserId();
         </div>
     </div>
 </div>
-
-<script>
-
-
-
-</script>

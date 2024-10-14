@@ -2,12 +2,16 @@
 session_start();
 
 $user_id = $_SESSION['user']->id;
-$user_id = $_SESSION['user']->parent_user_id > 0 ? $_SESSION['user']->parent_user_id : $user_id;
+$email = $_SESSION['user']->email;
 
 
-require_once "Model/Company.php";
-$companyObj = new Company();
-$myCompanies = $companyObj->getMyCompanies($user_id);
+// require_once "Model/Company.php";
+require_once "Model/MyFirmModel.php";
+// $companyObj = new Company();
+$myFirmObj = new MyFirmModel();
+
+// $myCompanies = $companyObj->getMyCompanies($user_id);
+$myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
 
 
 ?>
@@ -131,11 +135,11 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
                                 <div class="space-y">
                                     <?php
 
-                                    foreach ($myCompanies as $myCompany) { ?>
+                                    foreach ($myFirms as $myfirm) { ?>
                                         <form action="#" method="post">
 
 
-                                            <div class="card list-item" data-id="<?php echo $myCompany->id ?>">
+                                            <div class="card list-item" data-id="<?php echo $myfirm->id ?>">
                                                 <div class="row g-0">
                                                     <div class="col-auto">
                                                         <div class="card-body">
@@ -150,9 +154,9 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <input type="text" class="d-none" name="firm_id"
-                                                                        value="<?php echo $myCompany->id ?>">
+                                                                        value="<?php echo $myfirm->id ?>">
                                                                     <h3 class="mb-0">
-                                                                        <a><?php echo $myCompany->firm_name; ?></a>
+                                                                        <a><?php echo $myfirm->firm_name; ?></a>
                                                                     </h3>
                                                                 </div>
                                                             </div>
@@ -178,7 +182,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
                                                                                 <path d="M17 11l0 .01"></path>
                                                                                 <path d="M17 15l0 .01"></path>
                                                                             </svg>
-                                                                            <?php echo $myCompany->phone; ?>
+                                                                            <!-- <?php echo $myCompany->phone; ?> -->
                                                                         </div>
                                                                         <div class="list-inline-item">
                                                                             <!-- Download SVG icon from http://tabler-icons.io/i/license -->
@@ -196,7 +200,7 @@ $myCompanies = $companyObj->getMyCompanies($user_id);
                                                                                 <path d="M9 7l4 0"></path>
                                                                                 <path d="M9 11l4 0"></path>
                                                                             </svg>
-                                                                            <?php echo $myCompany->description; ?>
+                                                                            <!-- <?php echo $myCompany->description; ?> -->
                                                                         </div>
 
                                                                     </div>

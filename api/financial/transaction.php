@@ -1,18 +1,20 @@
 <?php
 require_once "../../Database/require.php";
+require_once "../../Model/Cases.php";
 require_once "../../Model/CaseTransactions.php";
 require_once "../../App/Helper/date.php";
 require_once "../../App/Helper/helper.php";
 require_once "../../App/Helper/financial.php";
-require_once "../../Model/Defines.php";
+require_once "../../Model/DefinesModel.php";
 
 
 use App\Helper\Helper;
 use App\Helper\Date;
 
+$cases = new Cases();
 $ct = new CaseTransactions();
 $financial = new Financial();
-$define = new Defines();
+$define = new DefinesModel();
 
 if ($_POST["action"] == "saveTransaction") {
     $id = $_POST["transaction_id"];
@@ -47,7 +49,7 @@ if ($_POST["action"] == "saveTransaction") {
             } elseif ($key == "type_id") {
                 $transaction->$key = $value == 1 ? "Gelir" : "Gider";
             } elseif ($key == "case_id") {
-                $transaction->$key = $financial->getCaseName($value);
+                $transaction->$key = $cases->find($value)->case_name;
             } elseif ($key == "amount") {
                 $transaction->$key = Helper::formattedMoney($value, $transaction->amount_money ?? 1);
             }

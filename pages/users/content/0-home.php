@@ -49,12 +49,10 @@ $userHelper = new UserHelper();; ?>
     </div>
 
     <div class="col-md-2">
-        <label for="" class="align-middle">Unvanı / Mesleği</label>
+        <label for="" class="align-middle">Mesleği</label>
     </div>
-    <div class="col-md-2 col-sm-6">
-        <input type="text" class="form-control" name="title" value="<?php echo $user->title ?? '' ?>" >
-    </div>
-    <div class="col-md-2 col-sm-6">
+
+    <div class="col-md-4 col-sm-6">
         <input type="text" class="form-control" name="job" value="<?php echo $user->job ?? '' ?>" id="job" >
     </div>
 

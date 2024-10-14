@@ -266,7 +266,7 @@ $dates = Date::generateDates($year, $month, $days);
                 <label for="projects" class="form-label">İşlem</label>
                 <input type="radio" class="btn-check" name="btn-radio-toolbar" id="btn-radio-toolbar-1"
                     autocomplete="off">
-                <label for="btn-radio-toolbar-1" data-tooltip="İndir" class="btn btn-icon">
+                <label for="btn-radio-toolbar-1" data-tooltip="İndir" class="btn btn-icon" id="export_excel_puantaj">
                     <i class="ti ti-file-type-xls icon"></i>
                 </label>
 
@@ -282,9 +282,11 @@ $dates = Date::generateDates($year, $month, $days);
                     <i class="ti ti-send icon"></i>
                 </label>
 
-                <button href="" type="button" class="btn btn-primary float-end" onclick="puantaj_olustur()">
-                    <i class="ti ti-device-floppy icon me-2"></i> Kaydet
-                </button>
+                <?php if ($Auths->hasPermission('puantaj_data_entry')) { ?>
+                    <button href="" type="button" class="btn btn-primary float-end" onclick="puantaj_olustur()">
+                        <i class="ti ti-device-floppy icon me-2"></i> Kaydet
+                    </button>
+                <?php } ?>
 
 
 
@@ -343,7 +345,7 @@ $dates = Date::generateDates($year, $month, $days);
                                     }
                                     echo ' <th class="gunadi" style="' . $style . '">' . Date::gunadi($date);
                                     '.</th>'
-                                    ?>
+                                        ?>
                                 <?php endforeach; ?>
 
                             </tr>
@@ -353,13 +355,13 @@ $dates = Date::generateDates($year, $month, $days);
                                 <th class="ld">Unvanı</th>
                                 <th class="ld" style="display:none">Seç</th>
                                 <?php
-                                    foreach ($dates as $date):
-                                        $style = '';
-                                        if (Date::isWeekend($date)) {
-                                            $style = 'background-color:#99A98F;color:white';
-                                        }
-                                        echo '<th class="head-date" style="' . $style . '"><span>' . date('d', strtotime($date)) . '</span></th>';
-                                ?>
+                                foreach ($dates as $date):
+                                    $style = '';
+                                    if (Date::isWeekend($date)) {
+                                        $style = 'background-color:#99A98F;color:white';
+                                    }
+                                    echo '<th class="head-date" style="' . $style . '"><span>' . date('d', strtotime($date)) . '</span></th>';
+                                    ?>
 
                                 <?php endforeach; ?>
                             </tr>
@@ -367,9 +369,9 @@ $dates = Date::generateDates($year, $month, $days);
                         </thead>
                         <tbody>
                             <?php
-                                foreach ($persons as $item):
-                                    $person = $personObj->find($item->id);
-                            ?>
+                            foreach ($persons as $item):
+                                $person = $personObj->find($item->id);
+                                ?>
                                 <tr>
                                     <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $person->id ?>"><a
                                             class="btn-user-modal" type="button">
@@ -393,14 +395,14 @@ $dates = Date::generateDates($year, $month, $days);
                                         $jobStartDate = str_replace('-', '', Date::Ymd($person->job_start_date));
                                         $month_date = $gun = $date;
 
-                                                                    ?>
+                                        ?>
                                         <?php
 
                                         if ($jobStartDate <= $month_date) {
                                             $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
 
 
-                                            if ($puantaj_id >= 0 ) {
+                                            if ($puantaj_id >= 0) {
                                                 $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);
                                                 $puantajHelper->puantajClass($puantaj_id, $project_id, $puantaj_project);
                                             } else {
@@ -413,7 +415,7 @@ $dates = Date::generateDates($year, $month, $days);
                                         } else {
                                             echo "<td class='noselect text-center' style='background:#ddd'>---</td>";
                                         }
-                                                                        ?>
+                                        ?>
 
                                     <?php endforeach; ?>
                                 </tr>

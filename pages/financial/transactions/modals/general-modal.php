@@ -14,9 +14,9 @@ use App\Helper\Helper;
             <div class="modal-body">
                 <form action="" id="transactionModalForm">
                     <input type="hidden" class="form-control" id="transaction_id" name="transaction_id" value="0">
-                    <div class="mb-3">
+                    <div class="mb-3 w-100">
                         <label class="form-label">Kasa</label>
-                        <?php echo $financial->getCasesSelect('case_id', $firm_id) ?>
+                        <?php echo $financial->getCasesSelectByFirm('case_id',$case_id) ?>
                     </div>
 
                     <label class="form-label">Türü</label>

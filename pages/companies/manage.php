@@ -110,7 +110,7 @@ $pageTitle = $id > 0 ? "Firma Güncelle" : "Yeni Firma";
                                     <label for="" class="form-label">İlçe</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <select name="firm_towns" id="firm_towns" class="form-control select2">
+                                    <select name="firm_towns" id="firm_towns" class="form-control select2" style="width:100%">
                                         <option value="">İlçe Seçiniz</option>
                                         <option selected value="<?php echo $company->town ?? '';?>"><?php echo $cities->getTownName($company->town ?? ''); ?></option>
                                     </select>

@@ -1,7 +1,7 @@
 <?php
-require_once "Model/User.php";
+require_once "Model/UserModel.php";
 
-$userObj = new User();
+$userObj = new UserModel();
 $id = $_GET["id"] ?? 0;
 $user = $userObj->find($id);
 ?>

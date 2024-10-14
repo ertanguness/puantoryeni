@@ -13,7 +13,7 @@ class Jobs extends Db
             $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
 
             $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="width:100%">';
-            $select .= '<option value="">Firma Seçiniz</option>';
+            $select .= '<option value="">İş Grubu Seçiniz</option>';
             foreach ($results as $row) { // $results üzerinde döngü
                 $selected = $id == $row->id ? ' selected' : ''; // Eğer id varsa seçili yap
                 $select .= '<option value="' . $row->id . '"'  . $selected . '>' . $row->group_name . '</option>'; // $row->title yerine $row->name kullanıldı

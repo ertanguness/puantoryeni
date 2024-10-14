@@ -27,7 +27,7 @@ $company = new CompanyHelper();
                     <a href="/pages/persons/to-pdf.php" class="btn btn-icon me-2" data-page="" data-tooltip="Pdf'e Aktar">
                             <i class="ti ti-file-type-pdf icon"></i>
                         </a>
-                        <a href="pages/persons/to-xls.php" id="export" class="btn btn-icon me-2" data-page="" data-tooltip="Excele Aktar">
+                        <a href="#" id="export_excel" class="btn btn-icon me-2" data-page="" data-tooltip="Excele Aktar">
                             <i class="ti ti-file-excel icon"></i>
                         </a>
                         <div class="dropdown me-2">
@@ -62,7 +62,7 @@ $company = new CompanyHelper();
                     <table class="table card-table table-hover text-nowrap datatable" id="persons">
                         <thead>
                             <tr>
-                                <th style="width:1%">ID</th>
+                                <th style="width:5%">ID</th>
                                 <th>Adı Soyadı</th>
                                 <th>Firma Adı</th>
                                 <th>Ücret Türü</th>
@@ -72,7 +72,7 @@ $company = new CompanyHelper();
                                 <th>Günlük/Aylık Ücretİ</th>
                                 <th>Durumu</th>
                                 <th>Güncel Bakiyesi</th>
-                                <th style="width:1%">İşlem</th>
+                                <th style="width:7%" class="no-export">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,7 +87,7 @@ $company = new CompanyHelper();
 
                             ?>
                                 <tr>
-                                    <td><?php echo $person->id; ?></td>
+                                    <td class="text-center"><?php echo $person->id; ?></td>
                                     <td> <a href="#" data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
                                     <td><?php echo $company->getcompanyName($person->company_id); ?></td>
                                     <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>

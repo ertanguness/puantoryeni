@@ -2,6 +2,8 @@
 require_once "Model/Cases.php";
 require_once "App/Helper/company.php";
 
+$Auths->checkAuthorize("cash_register_add_update");
+
 $company = new CompanyHelper();
 $caseObj = new Cases();
 $id = $_GET['id'] ?? 0;
@@ -74,7 +76,6 @@ $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
                                 <div class="tab-pane" id="tabs-payment-3" role="tabpanel">
                                     <?php include_once 'content/1-payment-info.php' ?>
                                 </div>
-                               
                             </div>
                         </div>
                     </div>

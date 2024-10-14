@@ -24,7 +24,7 @@ class CaseTransactions extends Model
     //firmanın kasalarının işlemlerini getirir
     public function allTransactionByFirm($firm_id)
     {   
-        $cases = $this->caseObj->allWithFirmId($firm_id);
+        $cases = $this->caseObj->allCaseWithFirmId();
         $case_ids = array_map(function ($case) {
             return $case->id;
         }, $cases);
@@ -36,6 +36,19 @@ class CaseTransactions extends Model
         $case_ids = implode(",", $case_ids);
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id IN ($case_ids)");
         $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    //All transactions by case id
+    public function allTransactionByCase($case_id)
+    {
+        //case_id boş ise firmanın varsayılan kasa id'sini al
+        if (empty($case_id)) {
+            $case_id = $this->caseObj->getDefaultCaseIdByFirm();
+        }
+
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id = ?");
+        $sql->execute([$case_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 }

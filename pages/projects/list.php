@@ -12,6 +12,7 @@ $cities = new Cities();
 $projects = $projectObj->allWithFirm($firm_id);
 
 ?>
+
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">
         <div class="col-12">
@@ -54,10 +55,10 @@ $projects = $projectObj->allWithFirm($firm_id);
 
 
                 <div class="table-responsive">
-                    <table class="table card-table text-nowrap datatable">
+                    <table class="table card-table text-nowrap table-hover datatable" id="projectTable">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width:10%">Id</th>
+                                <th style="width:7%">Id</th>
                                 <th>Türü</th>
                                 <th>Firma Adı</th>
                                 <th>Proje Adı</th>
@@ -66,7 +67,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                                 <th>İlçe</th>
                                 <th style="width:10%">Başlama Tarihi</th>
                                 <th>Güncel Bakiye</th>
-                                <th style="width:1%">İşlem</th>
+                                <th style="width:7%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,6 +103,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle align-text-top"
                                             data-bs-toggle="dropdown">İşlem</button>
+                                            
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <a class="dropdown-item route-link"
                                                 data-page="projects/manage&id=<?php echo $project->id ?>" href="#">

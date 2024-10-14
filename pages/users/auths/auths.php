@@ -1,9 +1,34 @@
 <?php
 
 require_once 'Model/Auths.php';
+require_once 'Model/Roles.php';
+require_once 'Model/RoleAuthsModel.php';
+
+ob_start(); // Çıktı tamponlamasını başlatın
+
+$id = $_GET['id'] ?? 0;
+if (!isset($_GET['id']) ) {   
+    header('Location: index.php?p=users/roles/list');
+    exit();
+}
 
 $authObj = new Auths();
+$roleObj = new Roles();
+$roleAuthsObj = new RoleAuthsModel();
+
+
+
 $auths = $authObj->auths();
+$role = $roleObj->find($id);
+$roleAuths = $roleAuthsObj->getAuthsByRoleId($id);
+$auth_id = $roleAuths->id ?? 0;
+
+
+// Yetki kontrolü yapılır
+//$perm->checkAuthorize( "transaction_permissions");
+
+
+
 ?>
 
 <div class="page-wrapper">
@@ -15,17 +40,22 @@ $auths = $authObj->auths();
                     <h2 class="page-title">
                         Yetkileri Düzenle
                     </h2>
+                    <div class="sub-title">
+                        
+                    </div>
+
+
                 </div>
 
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-outline-secondary route-link" data-page="users/list">
+                    <button type="button" class="btn btn-outline-secondary route-link" data-page="users/roles/list">
                         <i class="ti ti-list icon me-2"></i>
                         Listeye Dön
                     </button>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-primary" id="kullanici_kaydet">
+                    <button type="button" class="btn btn-primary" id="authsSave">
                         <i class="ti ti-device-floppy icon me-2"></i>
                         Kaydet
                     </button>
@@ -35,145 +65,100 @@ $auths = $authObj->auths();
     </div>
 
     <style>
-        .perm-border {
-            /* display: flex;
-            flex-wrap: wrap; */
-            gap: 5px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
-            margin: 5px;
-
+        .form-check-label {
+            display: inline-block;
+            white-space: nowrap;
         }
+        /* .datagrid-item{
+            max-height: 800px;
+            overflow: auto;
+            scrollbar-width: thin;
+        } */
     </style>
     <div class="page-body">
         <div class="container-xl">
             <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><?php echo $role->roleName ?? ''; ?></h3>
+                </div>
                 <div class="card-body">
-                    <div class="row g-2 mt-3">
-                        <?php
-                        foreach ($auths as $auth) {
-                        ?>
-                            <div class="col-auto">
-                                <label class="form-colorinput fw-bold">
-                                    <?php echo $auth->title ?>
-                                </label>
-                            </div>
-                            <div class="perm-border">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <label class="form-colorinput">
-                                            <input name="color<?php echo $auth->id; ?>" type="radio" value="red" class="form-colorinput-input">
-                                            <span class="form-colorinput-color bg-red"></span>
-                                        </label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <label class="form-colorinput">
-                                            <input name="color<?php echo $auth->id; ?>" type="radio" value="orange" class="form-colorinput-input">
-                                            <span class="form-colorinput-color bg-orange" style="color:orange"></span>
-                                        </label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <label class="form-colorinput">
-                                            <input name="color<?php echo $auth->id; ?>" type="radio" value="yellow" class="form-colorinput-input">
-                                            <span class="form-colorinput-color bg-yellow"></span>
-                                        </label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <label class="form-colorinput">
-                                            <input name="color<?php echo $auth->id; ?>" type="radio" value="lime" class="form-colorinput-input">
-                                            <span class="form-colorinput-color bg-lime"></span>
-                                        </label>
-                                    </div>
+                    <form action="" id="authsForm">
+                        <div class="row d-none">
+                            <input type="text" name="role_id" class="form-control" value="<?php echo $role->id; ?>">
+                            <input type="text" name="action" class="form-control" value="saveAuths">
+                            <input type="text" name="auth_id" id="auth_id" class="form-control"
+                                value="<?php echo $auth_id; ?>">
+                        </div>
 
-                                </div>
-
-
+                        <div class="row g-2 mt-3">
+                            <div class="datagrid">
                                 <?php
-                                $sub_auths = $authObj->subAuths($auth->id);
-                                foreach ($sub_auths as $sub_auth) {
+                                foreach ($auths as $auth) {
+                                    // role_id ile auths_id'leri getir
+                                    $auth_ids = $roleAuths->auth_ids ?? '';
+                                    // auths_ids içinde varsa checked yap
+                                    $checked = in_array($auth->id, explode(',', $auth_ids)) ? 'checked' : '';
+                                    ?>
 
-                                ?>
-                                    <div class="row ps-3 pe-4 pt-2">
-                                        <div class="perm-border">
-                                        <div class="col-auto">
-                                            <label class="form-colorinput">
-                                                <?php echo $sub_auth->title ?>
+                                    <div class="datagrid-item">
+                                        <div class="datagrid-title font-weight-900 mb-3">
+                                            <label class="form-check main-check">
+                                                <input class="form-check-input main" name="auths[]"
+                                                    value="<?php echo $auth->id; ?>" type="checkbox" <?php echo $checked; ?>
+                                                    id="auth_<?php echo $auth->id; ?>">
+                                                <span class="form-check-label"
+                                                    data-tooltip="<?php echo $auth->description; ?> "><?php echo $auth->title; ?>
+                                                </span>
                                             </label>
                                         </div>
-                                            <div class="row">
+                                        <div class="datagrid-content">
+                                            <?php
+                                            $sub_auths = $authObj->subAuths($auth->id);
+                                            foreach ($sub_auths as $sub_auth) {
+                                                $checked = in_array($sub_auth->id, explode(',', $auth_ids)) ? 'checked' : '';
+                                                ?>
+                                                <div class="form-color">
+                                                    <div>
+
+                                                        <label class="form-selectgroup-item flex-fill mb-2">
+                                                            <input type="checkbox" name="auths[]" <?php echo $checked; ?>
+                                                                value="<?php echo $sub_auth->id; ?>"
+                                                                class="form-selectgroup-input">
+                                                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                                                <div class="me-3">
+                                                                    <span class="form-selectgroup-check"></span>
+                                                                </div>
+                                                                <div class="form-selectgroup-label-content d-flex text-start">
+
+                                                                    <div>
+                                                                        <div class="font-weight-500">
+                                                                            <?php echo $sub_auth->title; ?>
+                                                                        </div>
+                                                                        <div class="form-check-description">
+                                                                            <?php echo $sub_auth->description; ?>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </label>
 
 
-                                                <div class="col-auto">
-                                                    <label class="form-colorinput">
-                                                        <input name="color<?php echo $sub_auth->id; ?>" 
-                                                        data-desc="<?php echo $sub_auth->tooltip_1; ?>"
-                                                        type="radio" value="red" class="form-colorinput-input">
-                                                        <span class="form-colorinput-color bg-red"></span>
-                                                    </label>
+                                                    </div>
+
                                                 </div>
-                                                <div class="col-auto">
-                                                    <label class="form-colorinput">
-                                                        <input name="color<?php echo $sub_auth->id; ?>" 
-                                                         data-desc="<?php echo $sub_auth->tooltip_2; ?>"
-                                                        type="radio" value="orange" class="form-colorinput-input">
-                                                        <span class="form-colorinput-color bg-orange" style="color:orange"></span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <label class="form-colorinput">
-                                                        <input name="color<?php echo $sub_auth->id; ?>" 
-                                                         data-desc="<?php echo $sub_auth->tooltip_3; ?>"
-                                                        type="radio" value="yellow" class="form-colorinput-input">
-                                                        <span class="form-colorinput-color bg-yellow"></span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <label class="form-colorinput">
-                                                        <input name="color<?php echo $sub_auth->id; ?>" 
-                                                         data-desc="<?php echo $sub_auth->tooltip_4; ?>"
-                                                        type="radio" value="lime" class="form-colorinput-input">
-                                                        <span class="form-colorinput-color bg-lime"></span>
-                                                    </label>
-                                                </div>
-                                                                                            
-                                                <div class="col-auto">
-                                                    <label class="input-tooltip">
-                                                   
-                                                    </label>
-                                                </div>
-                                            </div>
+
+                                            <?php } ?>
                                         </div>
 
                                     </div>
+
                                 <?php } ?>
-
                             </div>
-
-                        <?php } ?>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Include jQuery library -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    $('.form-colorinput-input').on('click', function() {
-        let tooltip_data = $(this).attr('data-desc');
-
-        console.log(tooltip_data);
-        
-        // .input-tooltip öğesine ulaşın
-        var tooltip = $(this).closest('.col-auto').siblings().find('.input-tooltip');
-        
-        // .input-tooltip üzerinde işlem yapın (örneğin, metni değiştirin)
-        tooltip.text(tooltip_data);
-    });
-});
-</script>

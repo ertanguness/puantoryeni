@@ -14,6 +14,7 @@ if ($_POST["action"] == "saveCase") {
         "start_budget" => $_POST["start_budget"],
         "bank_name" => $_POST["bank_name"],
         "branch_name" => $_POST["branch_name"],
+        "case_money_unit" => $_POST["case_money_unit"],
         "description" => $_POST["description"],
     ];
     try {
@@ -52,7 +53,7 @@ if ($_POST["action"] == "deleteCase") {
     echo json_encode($res);
 }
 
-if($_POST["action"] == "defaultCase"){
+if ($_POST["action"] == "defaultCase") {
     $id = $_POST["case_id"];
 
     $caseObj->setDefaultCase($id);
@@ -61,5 +62,5 @@ if($_POST["action"] == "defaultCase"){
         "message" => "Varsayılan kasa başarıyla ayarlandı."
     ];
     echo json_encode($res);
-    
+
 }

@@ -2,7 +2,7 @@
 
 require_once "BaseModel.php";
 
-class User extends Model
+class UserModel extends Model
 {
     protected $table = 'users';
     public function __construct()
@@ -24,6 +24,15 @@ class User extends Model
         $sql->execute(array($email, $password));
         return $sql->fetch(PDO::FETCH_OBJ);
     }
+
+    // is there a user with this email and firm_id
+    public function getUserByEmailandFirm($email, $firm_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ? AND firm_id = ?");
+        $sql->execute(array($email, $firm_id));
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
 
     public function getUser($id)
     {
@@ -61,17 +70,7 @@ class User extends Model
     }
 
 
- 
 
-    public function saveUser($data)
-    {
-        $this->attributes = $data;
-        $this->isNew = true;
-        if (isset($data["id"]) && $data["id"] > 0) {
-            $this->isNew = false;
-        }
-        return parent::save();
-    }
 
     public function roleName($id)
     {
@@ -79,6 +78,14 @@ class User extends Model
         $sql->execute(array($id));
         $result = $sql->fetch(PDO::FETCH_OBJ);
         return $result->roleName ?? "Bilinmiyor";
+    }
+
+    //Email adresi ve Firma İd'si ile kullanıcıyı getirir
+    public function getUserByEmailAndFirmId($email, $firm_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ? AND firm_id = ?");
+        $sql->execute([$email, $firm_id]);
+        return $sql->fetch(PDO::FETCH_OBJ);
     }
 
 

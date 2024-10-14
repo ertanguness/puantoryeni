@@ -1,7 +1,7 @@
 <?php
-require_once "Model/Defines.php";
+require_once "Model/DefinesModel.php";
 
-$defineObj = new Defines();
+$defineObj = new DefinesModel();
 $defines = $defineObj->getServiceHeads();
 
 

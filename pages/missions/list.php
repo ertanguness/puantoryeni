@@ -49,7 +49,7 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                             <?php foreach ($missions as $item) :
                             ?>
                                 <tr>
-                                    <td><?php echo $item->id; ?></td>
+                                    <td class="text-center"><?php echo $item->id; ?></td>
                                     <td>
                                         <?php
                                         $header = $headers->getMissionHeader($item->header_id);

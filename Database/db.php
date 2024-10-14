@@ -8,7 +8,7 @@ class Db {
     protected $db;
 
     public function __construct() {
-        // $this->db = new PDO("mysql:host=localhost;dbname=mbeyazil_puantoryeni", "mbeyazil_root", "KT308WuD*ge+");
+        // $this->db = new PDO("mysql:host=localhost;dbname=mbeyazil_puantoryeni", "mbeyazil_root", "{bEb1}l#S*m5");
         $this->db = new PDO("mysql:host=localhost;dbname=puantoryeni", "root", "");
     }
 
@@ -19,5 +19,21 @@ class Db {
 
     public function disconnect() {
         $this->db = null;
+    }
+
+    
+    // Transaction başlatma
+    public function beginTransaction() {
+        return $this->db->beginTransaction();
+    }
+
+    // Transaction commit etme
+    public function commit() {
+        return $this->db->commit();
+    }
+
+    // Transaction rollback etme
+    public function rollBack() {
+        return $this->db->rollBack();
     }
 }

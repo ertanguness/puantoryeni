@@ -27,13 +27,13 @@ $myfirms = $companyObj->getMyCompanies($user_id);
                     <table class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th style="width:1%">id</th>
+                                <th style="width:7%">id</th>
                                 <th>Firma Adı</th>
-                                <th>telefon</th>
+                                <th style="width:10%" >Telefon</th>
                                 <th>Mail Adresi</th>
                                 <th>Açıklama</th>
-                                <th>Oluşturulma Tarihi</th>
-                                <th style="width:1%">İşlem</th>
+                                <th style="width:10%" >Oluşturulma Tarihi</th>
+                                <th style="width:7%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,11 +42,11 @@ $myfirms = $companyObj->getMyCompanies($user_id);
                             <?php foreach ($myfirms as $myfirm) :
                             ?>
                                 <tr>
-                                    <td><?php echo $myfirm->id; ?></td>
+                                    <td class="text-center"><?php echo $myfirm->id; ?></td>
                                     <td><a class="btn route-link" data-page="mycompany/manage&id=<?php echo $myfirm->id ?>" href="#">
                                             <?php echo $myfirm->firm_name; ?>
                                         </a></td>
-                                    <td><?php echo $myfirm->phone; ?></td>
+                                    <td class="text-start"><?php echo $myfirm->phone; ?></td>
                                     <td><?php echo $myfirm->email; ?></td>
                                     <td><?php echo $myfirm->description; ?></td>
                                     <td><?php echo $myfirm->created_at; ?></td>

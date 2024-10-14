@@ -12,26 +12,35 @@ class Cases extends Model
         parent::__construct($this->table);
     }
 
-    public function allWithUserId($user_id)
+    public function allCaseWithUserId($user_id)
     {
-        $query = $this->db->prepare("SELECT * FROM cases WHERE account_id = :user_id");
+        $query = $this->db->prepare("SELECT * FROM $this->table WHERE account_id = :user_id");
         $query->execute(array("user_id" => $user_id));
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
-    public function allWithFirmId($firm_id)
+    public function allCaseWithFirmId()
     {
-        $query = $this->db->prepare("SELECT * FROM cases WHERE firm_id = ?");
+        $firm_id = $_SESSION['firm_id'];
+        $query = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ?");
         $query->execute([$firm_id]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function setDefaultCase($id)
     {
-        $query = $this->db->prepare("UPDATE cases SET isDefault = 0");
+        $query = $this->db->prepare("UPDATE $this->table SET isDefault = 0");
         $query->execute();
-        $query = $this->db->prepare("UPDATE cases SET isDefault = 1 WHERE id = ?");
+        $query = $this->db->prepare("UPDATE $this->table SET isDefault = 1 WHERE id = ?");
         $query->execute([$id]);
         return $query->rowCount();
+    }
+
+    public function getDefaultCaseIdByFirm()
+    {
+        $query = $this->db->prepare("SELECT id FROM $this->table WHERE firm_id = ? and isDefault = 1");
+        $query->execute([$_SESSION['firm_id']]);
+        $result = $query->fetch(PDO::FETCH_OBJ);
+        return $result->id ?? 0;
     }
 
    

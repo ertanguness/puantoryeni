@@ -35,6 +35,11 @@ class Date
         );
     }
 
+    // Yarının tarihini d.m.Y formatında döndürür
+    public static function getTomorrowDate($format = 'Ymd')
+    {
+        return date($format, strtotime('+1 day'));
+    }
     public static function getDay($date = null, $leadingZero = true)
     {
         $format = $leadingZero ? 'd' : 'j';

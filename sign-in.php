@@ -1,9 +1,9 @@
 <?php
 
 require_once 'configs/require.php';
-require_once 'Model/User.php';
+require_once 'Model/UserModel.php';
 
-$userObj = new User();
+$userObj = new UserModel();
 // if ($_POST && isset($_POST['submitForm'])) {
 //   $email = $_POST['email'];
 //   $password = MD5($_POST['password']);
@@ -27,6 +27,8 @@ $userObj = new User();
   <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/style.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+
   <style>
     @import url('https://rsms.me/inter/inter.css');
 
@@ -63,46 +65,46 @@ $userObj = new User();
                 <img src="./static/logo-ai.svg" height="120" alt=""></a>
             </div>
             <?php
-              if ($_POST && isset($_POST['submitForm'])) {
-                $email = $_POST['email'];
-                $password = $_POST['password'];
+            if ($_POST && isset($_POST['submitForm'])) {
+              $email = $_POST['email'];
+              $password = $_POST['password'];
 
-                // Email adresi boş ise
-                if (empty($email)) {
-                  echo alertdanger('Email adresi boş bırakılamaz');
-                } elseif (empty($password)) {
-                  echo alertdanger('Şifre boş bırakılamaz');
+              // Email adresi boş ise
+              if (empty($email)) {
+                echo alertdanger('Email adresi boş bırakılamaz');
+              } elseif (empty($password)) {
+                echo alertdanger('Şifre boş bırakılamaz');
+              } else {
+                $user = $userObj->getUserByEmail($email);
+                // Kullanıcı bulunamadıysa
+                if (!$user) {
+                  echo alertdanger('Kullanıcı bulunamadı');
+                  // Kullanıcı aktif değilse
+                } else if (isset($user) && $user->status == 0) {
+                  echo alertdanger('Kullanıcı henüz aktif değil');
                 } else {
-                  $user = $userObj->getUserByEmail($email);
-                  // Kullanıcı bulunamadıysa
-                  if (!$user) {
-                    echo alertdanger('Kullanıcı bulunamadı');
-                    // Kullanıcı aktif değilse
-                  } else if (isset($user) && $user->status == 0) {
-                    echo alertdanger('Kullanıcı henüz aktif değil');
+                  $verified = password_verify($password, $user->password);
+
+                  if ($verified) {
+
+                    $_SESSION['user'] = $user;
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    $_SESSION['full_name'] = $user->full_name;
+                    $_SESSION['user_role'] = $user->user_roles;
+
+                    // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
+                    $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';
+                    header("Location: company-list.php?returnUrl={$returnUrl}");
+                    //header("Location:company-list.php");
+                    // header("Location: company-list.php");
+                    exit();
+
                   } else {
-                    $verified = password_verify($password, $user->password);
-
-                    if ($verified) {
-                
-                      $_SESSION['user'] = $user;
-                      $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                      $_SESSION['full_name'] = $user->full_name;
-                      $_SESSION['user_role'] = $user->user_roles;
-
-                      // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
-                      $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';
-                       header("Location: company-list.php?returnUrl={$returnUrl}");
-                      //header("Location:company-list.php");
-                     // header("Location: company-list.php");
-                      exit();
-                      
-                    } else {
-                      echo alertdanger('Hatalı şifre veya email adresi');
-                    }
+                    echo alertdanger('Hatalı şifre veya email adresi');
                   }
                 }
               }
+            }
             ?>
             <div class="card card-md">
               <div class="card-body">
@@ -125,16 +127,9 @@ $userObj = new User();
                       <input type="password" class="form-control" name="password" placeholder="Şifrenizi giriniz"
                         autocomplete="off">
                       <span class="input-group-text">
-                        <a href="#" class="link-secondary" title="Göster" data-bs-toggle="tooltip">
+                        <a href="#" class="link-secondary show-pass" data-bs-toggle="tooltip">
                           <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                            <path
-                              d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                          </svg>
+                          <i class="ti ti-eye icon ms-2"></i>
                         </a>
                       </span>
                     </div>
@@ -170,6 +165,24 @@ $userObj = new User();
   <!-- Tabler Core -->
   <script src="./dist/js/tabler.min.js?1692870487" defer></script>
   <script src="./dist/js/demo.min.js?1692870487" defer></script>
+  <script src="./dist/js/jquery.3.7.1.min.js"></script>
+
+  <script>
+    $(document).on('click', '.show-pass', function () {
+      var input = $(this).closest('.input-group').find('input');
+      var icon = $(this).find('i');
+      var placeholder = $(this).attr('title');
+      if (input.attr('type') == 'password') {
+        input.attr('type', 'text');
+        icon.removeClass('ti-eye').addClass('ti-eye-off');
+        } else {
+        input.attr('type', 'password');
+        icon.removeClass('ti-eye-off').addClass('ti-eye');
+       
+      }
+     
+    });
+  </script>
 </body>
 
 </html>

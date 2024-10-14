@@ -129,7 +129,27 @@ $(document).on('click', '#done-show', function() {
   var button = $(this);
   if (button.text().trim() === "Göster") {
     button.html('<i class="ti ti-eye-off icon me-1"></i> Gizle');
+    var visible= 1;
   } else {
     button.html('<i class="ti ti-eye-check icon me-1"></i> Göster');
+    var visible = 0;
+   
   }
+  updateIsDoneVisibility(visible)
 });
+
+function updateIsDoneVisibility(visible) {
+  var formData = new FormData();
+  formData.append("visible", visible);
+  formData.append("action", "updateIsDoneVisibility");
+
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
+  }
+
+  fetch("/api/missions/missions.php", {
+    method: "POST",
+    body: formData,
+  })
+
+}

@@ -1,7 +1,7 @@
 <?php
 require_once "../../Database/require.php";
-require_once "../../Model/Defines.php";
-$incexp = new Defines();
+require_once "../../Model/DefinesModel.php";
+$incexp = new DefinesModel();
 
 if ($_POST["action"] == "saveIncExpType") {
     $id = $_POST["id"];

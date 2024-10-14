@@ -2642,10 +2642,10 @@ progress {
   border-color: var(--tblr-table-border-color);
 }
 
-.table-responsive {
+/* .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-}
+} */
 
 @media (max-width: 575.98px) {
   .table-responsive-sm {
@@ -23619,12 +23619,12 @@ a.step-item:hover {
   }
 }
 
-.table-responsive .table, .table-responsive .markdown > table {
+/* .table-responsive .table, .table-responsive .markdown > table {
   margin-bottom: 0;
 }
 .table-responsive + .card-footer {
   border-top: 0;
-}
+} */
 
 .table-transparent thead th {
   background: transparent;

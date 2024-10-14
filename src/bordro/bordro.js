@@ -4,11 +4,8 @@ $(document).on("click", "#wage_cut_addButton", function () {
 });
 $(document).on("click", "#income_addButton", function () {
   let form = $("#income_modalForm");
-  addWageCutorIncome(form,"saveIncome","income");
+  addWageCutorIncome(form, "saveIncome", "income");
 });
-
-
-
 
 $(document).on("click", ".add-wage-cut", function () {
   let personel_id = $(this).data("id");
@@ -24,17 +21,21 @@ $(document).on("click", ".add-income", function () {
   $("#person_name_income").text(personel_name);
 });
 
-function addWageCutorIncome(form  ,action ="saveWageCut",apiLink="wage_cut" ){ 
+function addWageCutorIncome(
+  form,
+  action = "saveWageCut",
+  apiLink = "wage_cut"
+) {
   let formData = new FormData(form[0]);
   formData.append("action", action);
 
-  for(let pair of formData.entries()) {
-    console.log(pair[0]+ ', '+ pair[1]); 
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
   }
 
   fetch("api/bordro/" + apiLink + ".php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
@@ -48,7 +49,7 @@ function addWageCutorIncome(form  ,action ="saveWageCut",apiLink="wage_cut" ){
         title: title,
         text: data.message,
         icon: data.status,
-        confirmButtonText: "Tamam",
+        confirmButtonText: "Tamam"
       }).then((result) => {
         if (result.isConfirmed) {
           location.reload();
@@ -57,7 +58,6 @@ function addWageCutorIncome(form  ,action ="saveWageCut",apiLink="wage_cut" ){
       form[0].reset();
     });
 }
-
 
 $("#projects").on("change", function () {
   Route();

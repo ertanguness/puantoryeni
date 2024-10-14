@@ -53,11 +53,11 @@ $(document).on("click", "#kullanici_kaydet", function () {
   formData.append("id", id);
   formData.append("action", "userSave");
 
-  //   for (data of formData.entries()) {
-  //     console.log(data);
-  //   }
+    for (data of formData.entries()) {
+      console.log(data);
+    }
 
-  fetch("api/users/users.php", {
+  fetch("/api/users/users.php", {
     method: "POST",
     body: formData,
   })

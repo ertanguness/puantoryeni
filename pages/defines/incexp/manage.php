@@ -2,8 +2,8 @@
 require_once "App/Helper/helper.php";
 use App\Helper\Helper;
 
-require_once 'Model/Defines.php';
-$defineObj = new Defines();
+require_once 'Model/DefinesModel.php';
+$defineObj = new DefinesModel();
 $id = $_GET['id'] ?? 0;
 $incexp = $defineObj->find($id);
 

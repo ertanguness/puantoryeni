@@ -63,3 +63,15 @@ if ($_POST["action"] == "deleteRole") {
 
     echo json_encode($res);
 }
+
+
+if ($_POST["action"] == "copyRoles") {
+    $id = $_POST["id"];
+    $roles = $roles->getRolesByFirmExceptId($id);
+    $res = [
+
+        "roles" => $roles
+    ];
+    echo json_encode($res);
+}
+

@@ -46,13 +46,23 @@ class Helper
         '2' => 'Orta',
         '3' => 'Yüksek',
     ];
-    
+
+  
+
     public static function getPriority($priority)
     {
         $priorities = self::PRIORITY;
         return $priorities[$priority];
     }
 
+    //Get transaction type
+
+
+    public static function getTransactionType($type)
+    {
+        $types = self::INC_EXP;
+        return $types[$type];
+    }
     public static function getIncomeExpenseType($type)
     {
         $types = self::INCOME_EXPENSE_TYPE;
@@ -67,6 +77,12 @@ class Helper
     public static function formattedMoney($value, $currency = 1)
     {
         return number_format($value, 2, ',', '.') . ' ' . self::MONEY_UNIT[$currency];
+    }
+
+    //Para birim formatında TRY olmadan
+    public static function formattedMoneyWithoutCurrency($value)
+    {
+        return number_format($value, 2, ',', '.');
     }
 
     public static function moneySelect($name = 'moneys', $selected = '1')
@@ -107,6 +123,9 @@ class Helper
         return self::UNITS[$unit];
     }
 
+
+  
+  
     public static function kdvSelect($name = 'kdv', $selected = '20')
     {
         $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
@@ -157,7 +176,7 @@ class Helper
         echo '<pre>';
         print_r($data);
         echo '</pre>';
-        
+
     }
 
     //gelen kelimelerin sadece ilk harflerini döndürür
@@ -176,6 +195,24 @@ class Helper
         }
         return strtoupper($initials);
     }
+
+    //authorize sayfasını include eder
+    public static function authorizePage()
+    {
+        echo '<div class="empty">
+                <div class="empty-img">
+                    <img src="static/unauthorize-red.svg" alt="" style="width:200px;height:200px">
+
+
+                </div>
+                <p class="empty-title">Yetkiniz Yok!!!</p>
+                <p class="empty-subtitle text-secondary">
+                    Bu alanı görüntüleme yetkiniz bulunmamaktadır!
+                </p>
+            
+            </div>';
+    }
+
 
 
 }

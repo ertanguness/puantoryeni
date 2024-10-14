@@ -6,18 +6,30 @@ require_once "App/Helper/company.php";
 $company = new CompanyHelper();
 
 // Mevcut URL'yi al
-$currentUrl = $_SERVER['REQUEST_URI'];
-$page = isset($_GET["p"]) ? $_GET["p"] : "";
+$current_url = $_SERVER['REQUEST_URI'];
 
-// URL'de '?' karakteri var mı diye kontrol et
-if (strpos($currentUrl, '?') !== false) {
-    // Eğer '?' varsa, URL zaten bir sorgu dizesi içeriyor demektir
-    $newUrl = $currentUrl . '&theme=dark';
+// URL'yi parse et
+$url_parts = parse_url($current_url);
+
+// Query string'i al ve parse et
+parse_str($url_parts['query'] ?? '', $query_params);
+
+// theme parametresini kontrol et ve değiştir
+if (isset($query_params['theme']) && $query_params['theme'] === 'dark') {
+    $query_params['theme'] = 'light';
 } else {
-    // Eğer '?' yoksa, URL henüz bir sorgu dizesi içermiyor demektir
-    $newUrl = $currentUrl . '?theme=dark';
+    $query_params['theme'] = 'dark';
 }
+
+
+// Yeni query string oluştur
+$new_query_string = http_build_query($query_params);
+
+// Yeni URL oluştur
+$new_url = $url_parts['path'] . '?' . $new_query_string;
+
 ?>
+
 
 <header class="navbar-expand-md">
     <div class="collapse navbar-collapse" id="navbar-menu">
@@ -25,13 +37,13 @@ if (strpos($currentUrl, '?') !== false) {
         <div class="navbar">
 
 
-            <div class="col-auto align-bottom" style="margin-left:250px;">
+            <!-- <div class="col-auto align-bottom" style="margin-left:250px;">
 
-                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+                 <button class="btn" type="button">
                     <i class="ti ti-menu-2"></i>
-                </button>
+                </button> 
 
-            </div>
+            </div> -->
 
 
 
@@ -51,7 +63,7 @@ if (strpos($currentUrl, '?') !== false) {
                 </div>
                 <div class="d-none d-md-flex">
 
-                    <a href="&theme=dark" class="nav-link px-0 hide-theme-dark" data-bs-toggle="tooltip"
+                    <a href="<?php echo htmlspecialchars($new_url); ?>" class="nav-link px-0 hide-theme-dark" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" aria-label="Enable dark mode"
                         data-bs-original-title="Enable dark mode">
                         <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
@@ -63,7 +75,7 @@ if (strpos($currentUrl, '?') !== false) {
                             </path>
                         </svg>
                     </a>
-                    <a href="&theme=light" class="nav-link px-0 hide-theme-light" data-bs-toggle="tooltip"
+                    <a href="<?php echo htmlspecialchars($new_url); ?>" class="nav-link px-0 hide-theme-light" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" aria-label="Enable light mode"
                         data-bs-original-title="Enable light mode">
                         <!-- Download SVG icon from http://tabler-icons.io/i/sun -->

@@ -1,19 +1,18 @@
 <?php
-
-require_once "../../Database/require.php";
-require_once "../../Model/User.php";
-require_once "../../App/Helper/date.php";
+define('ROOT', $_SERVER['DOCUMENT_ROOT']);
+require_once ROOT ."/Database/require.php";
+require_once ROOT . "/Model/UserModel.php";
+require_once ROOT . "/App/Helper/date.php";
 
 
 use App\Helper\Date;
 
 
-$user = new User();
+$user = new UserModel();
 
 if ($_POST["action"] == "userSave") {
     $id = $_POST["id"];
-    $lastInsertId = 0;
-    $parent_user_id = $_SESSION["user"]->parent_user_id > 0 ? $_SESSION["user"]->parent_user_id : $_SESSION["user"]->id;
+  
 
 
     try {
@@ -27,11 +26,11 @@ if ($_POST["action"] == "userSave") {
             "user_roles" => $_POST["user_roles"],
             "job" => $_POST["job"],
             "status" => 1,
-            "parent_user_id" => $parent_user_id,
+           
 
         ];
 
-        $lastInsertId = $user->saveUser($data) ?? $id;
+        $lastInsertId = $user->saveWithAttr($data) ?? $id;
         $status = "success";
         if ($id == 0) {
             $message = "Kullanıcı başarıyla kaydedildi.";

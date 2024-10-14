@@ -88,8 +88,9 @@ class UserHelper extends Db
 
     public function userRoles($name = "user_roles", $id = null)
     {
-        $query = $this->db->prepare("SELECT * FROM userroles"); // Tüm sütunları seç
-        $query->execute();
+        $firm_id = $_SESSION["firm_id"];
+        $query = $this->db->prepare("SELECT * FROM userroles where firm_id = ? "); // Tüm sütunları seç
+        $query->execute([$firm_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
 
         // Benzersiz bir ID oluşturmak için uniqid() kullanılıyor.

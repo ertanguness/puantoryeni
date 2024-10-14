@@ -1,7 +1,7 @@
 <?php
 
 require_once "../Database/db.php";
-require_once "../Model/Defines.php";
+require_once "../Model/DefinesModel.php";
 
 use Database\Db;
 
@@ -9,7 +9,7 @@ use Database\Db;
 $dbInstance = new Db(); // Db sınıfının bir örneğini oluşturuyoruz.
 $db = $dbInstance->connect(); // Veritabanı bağlantısını alıyoruz.
 
-$define = new Defines();
+$define = new DefinesModel();
 
 //Servis Konusu Tanımlama
 if ($_POST["action"] == "saveServiceHead") {

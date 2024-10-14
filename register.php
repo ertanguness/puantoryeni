@@ -1,10 +1,20 @@
 <?php
 require_once 'Database/require.php';
-require_once 'Model/User.php';
+require_once 'Model/UserModel.php';
+require_once 'Model/Roles.php';
+require_once 'Model/Auths.php';
+require_once 'Model/RoleAuthsModel.php';
 require_once 'Model/Company.php';
 
-$user = new User();
+use Database\Db;
+
+$db = new Db();
+
+$user = new UserModel();
 $company = new Company();
+$Roles = new Roles();
+$Auths = new Auths();
+$RoleAuths = new RoleAuthsModel();
 
 function alertdanger($message)
 {
@@ -40,88 +50,117 @@ function alertdanger($message)
     <link href="./dist/css/style.css?1726507346" rel="stylesheet">
     <link href="./dist/css/demo.min.css?1726507346" rel="stylesheet">
     <style>
-    @import url('https://rsms.me/inter/inter.css');
+        @import url('https://rsms.me/inter/inter.css');
 
-    :root {
-        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-    }
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
 
-    body {
-        font-feature-settings: "cv03", "cv04", "cv11";
-    }
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
     </style>
 
 </head>
 
 <body class=" d-flex flex-column">
     <script>
-    setTimeout(function() {
-        $('.alert-danger').each(function() {
-            $(this).fadeOut(500, function() {
-                $(this).remove();
+        setTimeout(function () {
+            $('.alert-danger').each(function () {
+                $(this).fadeOut(500, function () {
+                    $(this).remove();
+                });
             });
-        });
-    }, 3000);
+        }, 3000);
     </script>
     <script src="./dist/js/demo-theme.min.js?1726507346"></script>
     <div class="page page-center register">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
                 <a href="." class="navbar-brand navbar-brand-autodark">
-                <img src="./static/logo-ai.svg" height="120" alt=""></a>
+                    <img src="./static/logo-ai.svg" height="120" alt=""></a>
                 </a>
 
 
                 <?php
 
-                    if (isset($_POST['action']) && $_POST['action'] == 'saveUser') {
-                        $full_name = $_POST['full_name'];
-                        $company_name = $_POST['company_name'];
-                        $email = $_POST['email'];
-                        $password = $_POST['password'];
+                if (isset($_POST['action']) && $_POST['action'] == 'saveUser') {
+                    $full_name = $_POST['full_name'];
+                    $company_name = $_POST['company_name'];
+                    $email = $_POST['email'];
+                    $password = $_POST['password'];
 
-                        if (empty($full_name)) {
-                            echo alertdanger('Ad Soyad alanı boş bırakılamaz.');
-                        } elseif (empty($company_name)) {
-                            echo alertdanger('Firma adı boş bırakılamaz.');
-                        } elseif (empty($email)) {
-                            echo alertdanger('Email alanı boş bırakılamaz.');
-                        } elseif (empty($password)) {
-                            echo alertdanger('Şifre alanı boş bırakılamaz.');
-                        } else {
+                    if (empty($full_name)) {
+                        echo alertdanger('Ad Soyad alanı boş bırakılamaz.');
+                    } elseif (empty($company_name)) {
+                        echo alertdanger('Firma adı boş bırakılamaz.');
+                    } elseif (empty($email)) {
+                        echo alertdanger('Email alanı boş bırakılamaz.');
+                    } elseif (empty($password)) {
+                        echo alertdanger('Şifre alanı boş bırakılamaz.');
+                    } else {
+                        $data = [
+                            'full_name' => $_POST['full_name'],
+                            'email' => $_POST['email'],
+                            'status' => 0,
+                            'user_roles' => 1,
+                            'is_main_user' => 1,
+                            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                        ];
+                        try {
+                            $db->beginTransaction();
+
+                            //Kullanıcı kaydı yapılır
+                            $lastInsertUserId = $user->saveWithAttr($data);
+
+                            //Girdiği firma adı ile yeni bir firma kaydedilir
                             $data = [
-                                'full_name' => $_POST['full_name'],
-                                'email' => $_POST['email'],
-                                'status' => 0,
-                                'user_roles' => 1,
-                                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                                'firm_name' => $_POST['company_name'],
+                                'user_id' => $lastInsertUserId,
                             ];
-                            try {
-                                $db->beginTransaction();
-                                $lastInsertUserId = $user->saveWithAttr($data);
+                            $lastInsertFirmId = $company->saveMyFirms($data);
 
-                                $data = [
-                                    'firm_name' => $_POST['company_name'],
-                                    'user_id' => $lastInsertUserId,
-                                ];
-                                $lastInsertFirmId = $company->saveMyFirms($data);
+                            //Firmaya Admin isimli bir Kullanıcı grubu atanır
+                            $data = [
+                                "id" => 0,
+                                "firm_id" => $lastInsertFirmId,
+                                "roleName" => 'Admin',
+                                "main_role" => 1
+                            ];
+                            $lastInsertRoleId = $Roles->saveWithAttr($data);
 
-                                $data = [
-                                    "id" => $lastInsertUserId,
-                                    'firm_id' => $lastInsertFirmId,
-                                ];
-                                $user->saveWithAttr($data);
+                            //Kaydedilen Yetki grubuna tüm yetkiler atanır
+                           
+                            //yetki tablosundaki tüm id'ler alınır
+                            $auths = $Auths->all();
+                            //id'leri aralarında virgül olacak şekilde birleştirilir
+                            $auths = implode(',', array_column($auths, 'id'));
+                            //oluşturulan yetki grubuna yetkiler atanır
+                            $data = [
+                                "role_id" => $lastInsertRoleId,
+                                "auth_ids" => $auths
+                            ];
+                            $RoleAuths->saveWithAttr($data);
 
-                                $db->commit();
-                                header('Location: register-success.php');
-                            } catch (PDOException $exh) {
-                                if ($exh->errorInfo[1] == 1062) {
-                                    $db->rollBack();
-                                    echo alertdanger('Bu email adresi ile daha önce kayıt olunmuş.');
-                                }
+
+                            //kaydedilen firma ve role kullanıcıya atanır
+                            $data = [
+                                "id" => $lastInsertUserId,
+                                'firm_id' => $lastInsertFirmId,
+                                'user_roles' => $lastInsertRoleId
+                            ];
+                            $user->saveWithAttr($data);
+
+                            $db->commit();
+                            header('Location: register-success.php');
+                        } catch (PDOException $exh) {
+                            if ($exh->errorInfo[1] == 1062) {
+                                $db->rollBack();
+                                echo alertdanger('Bu email adresi ile daha önce kayıt olunmuş.');
                             }
                         }
                     }
+                }
 
                 ?>
 

@@ -1,12 +1,12 @@
 <?php
 require_once "App/Helper/helper.php";
 require_once "App/Helper/date.php";
-require_once "Model/Defines.php";
+require_once "Model/DefinesModel.php";
 
 use App\Helper\Helper;
 use App\Helper\Date;
 
-$defines = new Defines();
+$defines = new DefinesModel();
 
 $items = $defines->getIncExpTypesByFirm();
 

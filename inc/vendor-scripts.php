@@ -32,7 +32,8 @@ if (
     $page == 'bordro/list' ||
     $page == 'defines/incexp/list' ||
     $page == 'missions/list' || $page == 'missions/process/list' ||
-    $page == 'missions/headers/manage' || $page == 'missions/headers/list'
+    $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
+    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage'
 ) {
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
@@ -55,6 +56,12 @@ if ($page == 'users/list' || $page == 'users/manage') {
 if ($page == 'users/roles/list' || $page == 'users/roles/manage') {
     echo '<script src="./src/users/roles.js"></script>';
 }
+
+//Role Yetkileri ekleme ve düzenleme sayfası
+if ($page == 'users/auths/auths') {
+    echo '<script src="./src/users/auths.js"></script>';
+}
+
 // Ürün ekleme ve düzenleme sayfası
 if ($page == 'products/list' || $page == 'products/manage') {
     echo '<script src="./src/product.js"></script>';
@@ -124,9 +131,6 @@ if ($page == 'missions/process/manage') {
     echo '<script src="./src/missions/process.js"></script>';
 }
 
-// Misyon Başlığı Ekleme,güncelleme ve listeleme sayfası
-
-//Jquery UI eklenecek sayfalar
 if ($page == 'missions/headers/manage' || $page == "home") {
     echo '<script src="./dist/js/jquery-ui.js"></script>';
 }
@@ -140,6 +144,10 @@ if ($page == 'bordro/xls/payment-load-from-xls') {
     echo '<script src="./src/bordro/payment-load.js"></script>';
 }
 
+
+if ($page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage') {
+    echo '<script src="./src/defines/job-groups.js"></script>';
+}
 
 
 

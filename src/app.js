@@ -1,102 +1,126 @@
 if ($(".datatable").length > 0) {
-  $(".datatable:not(#puantajTable)").DataTable({
+  var table = $(".datatable:not(#puantajTable)").DataTable({
     autoWidth: false,
     order: false,
     language: {
-      url: "src/tr.json",
+      url: "src/tr.json"
     },
+    //dom: "Bfrtip",
+    buttons: [
+      {
+        extend: "excelHtml5",
+        className: "d-none", // Butonu gizliyoruz
+        exportOptions: {
+          columns: ":visible:not(.no-export)" // .no-export sınıfına sahip sütunları dışa aktarma
+        }
+      }
+    ],
     layout: {
-      bottomStart: 'pageLength',
-      bottom2Start: 'info',
+      bottomStart: "pageLength",
+      bottom2Start: "info",
       topStart: null,
       topEnd: null
     },
-    initComplete: function(settings, json) {
+    initComplete: function (settings, json) {
       var api = this.api();
       var tableId = settings.sTableId;
-      $('#' + tableId + ' thead').append('<tr class="search-input-row"></tr>');
-      
+      $("#" + tableId + " thead").append('<tr class="search-input-row"></tr>');
+
       api.columns().every(function () {
         let column = this;
         let title = column.header().textContent;
-        
+
         if (title != "İşlem") {
           // Create input element
-          let input = document.createElement('input');
+          let input = document.createElement("input");
           input.placeholder = title;
-          input.classList.add('form-control');
-          input.classList.add('form-control-sm');
+          input.classList.add("form-control");
+          input.classList.add("form-control-sm");
           input.setAttribute("autocomplete", "off");
 
           // Append input element to the new row
-          $('#' + tableId + ' .search-input-row').append($('<th class="search">').append(input));
+          $("#" + tableId + " .search-input-row").append(
+            $('<th class="search">').append(input)
+          );
 
           // Event listener for user input
-          $(input).on('keyup change', function() {
+          $(input).on("keyup change", function () {
             if (column.search() !== this.value) {
               column.search(this.value).draw();
             }
           });
         } else {
           // Eğer "İşlem" sütunuysa, boş bir th ekleyin
-          $('#' + tableId + ' .search-input-row').append('<th></th>');
+          $("#" + tableId + " .search-input-row").append("<th></th>");
         }
       });
     }
   });
+  $("#export_excel").on("click", function () {
+    table.button(".buttons-excel").trigger();
+  });
 
- 
 
-
-  $("#yscTable").DataTable({});
-
-  $("#puantajTable").DataTable({
+  var puantaj_table = $("#puantajTable").DataTable({
     ordering: false,
     language: {
-      url: "src/tr.json",
+      url: "src/tr.json"
     },
+    buttons: [
+      {
+        extend: "excelHtml5",
+        className: "d-none", // Butonu gizliyoruz
+        exportOptions: {
+          columns: ":visible:not(.no-export)" // .no-export sınıfına sahip sütunları dışa aktarma
+        }
+      }
+    ]
   });
+
+   $("#export_excel_puantaj").on("click", function () {
+    puantaj_table.button(".buttons-excel").trigger();
+  });
+  
 }
 
 if ($(".select2").length > 0) {
   $(".select2").select2();
 
   $("#products").select2({
-    dropdownParent: $(".modal"),
+    dropdownParent: $(".modal")
   });
   $(".modal .select2").select2({
-    dropdownParent: $(".modal"),
+    dropdownParent: $(".modal")
   });
   $("#amount_money").select2({
-    dropdownParent: $(".modal"),
+    dropdownParent: $(".modal")
   });
   $(
     "#wage_cut_month, #wage_cut_year,#income_month, #income_year, #payment_month, #payment_year"
   ).select2({
-    dropdownParent: $(".modal"),
+    dropdownParent: $(".modal")
   });
 }
-$(document).ready(function() {
-if ($(".summernote").length > 0) {
-  var summernoteHeight = $(window).height() * 0.37; // Set height to 30% of window height
-  $(".summernote").summernote({
-    height: summernoteHeight,
-    callbacks: {
-      onInit: function() {
-        $('.summernote').summernote('height', summernoteHeight);
+$(document).ready(function () {
+  if ($(".summernote").length > 0) {
+    var summernoteHeight = $(window).height() * 0.37; // Set height to 30% of window height
+    $(".summernote").summernote({
+      height: summernoteHeight,
+      callbacks: {
+        onInit: function () {
+          $(".summernote").summernote("height", summernoteHeight);
+        }
       }
-    }
-  });
-}
+    });
+  }
 });
 
 if ($(".flatpickr").length > 0) {
   $(".flatpickr").flatpickr({
     dateFormat: "d.m.Y",
-    locale: "tr", // locale for this instance only
+    locale: "tr" // locale for this instance only
   });
 }
-
 
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
@@ -110,16 +134,11 @@ $(document).on("click", ".route-link", function () {
 });
 if ($(".select2").length > 0) {
   $(".select2.islem").select2({
-    tags: true,
+    tags: true
   });
 }
 
-
-function dtSearchInput(tableId, column, value) {
- 
-
-}
-
+function dtSearchInput(tableId, column, value) {}
 
 //Geri dönüş yapmadan kayıt silme işlemi
 function deleteRecord(
@@ -151,7 +170,7 @@ function deleteRecord(
   AlertConfirm(confirmMessage).then((result) => {
     fetch(url, {
       method: "POST",
-      body: formData,
+      body: formData
     })
       //Gelen yanıtı json'a çevir
       .then((response) => response.json())
@@ -170,7 +189,7 @@ function deleteRecord(
         Swal.fire({
           title: title,
           text: data.message,
-          icon: icon,
+          icon: icon
         }).then((result) => {
           if (result.isConfirmed) {
             if (data.status == "success") tableRow.remove().draw(false);
@@ -214,7 +233,7 @@ async function deleteRecordByReturn(
     try {
       const response = await fetch(url, {
         method: "POST",
-        body: formData,
+        body: formData
       });
       const data = await response.json();
 
@@ -230,7 +249,7 @@ async function deleteRecordByReturn(
       await Swal.fire({
         title: title,
         text: data.message,
-        icon: icon,
+        icon: icon
       });
 
       if (data.status == "success") {
@@ -254,7 +273,7 @@ function AlertConfirm(confirmMessage = "Emin misiniz?") {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Evet, Sil!",
+      confirmButtonText: "Evet, Sil!"
     }).then((result) => {
       if (result.isConfirmed) {
         resolve(true); // Kullanıcı onayladı, işlemi devam ettir
@@ -289,14 +308,14 @@ function fadeOut(element, duration) {
 }
 
 //İl seçildiğinde ilçeleri getir
-function getTowns(cityId , targetElement) {
+function getTowns(cityId, targetElement) {
   let formData = new FormData();
   formData.append("city_id", cityId);
   formData.append("action", "getTowns");
 
   fetch("/api/il-ilce.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
@@ -314,10 +333,9 @@ function checkPersonId(id) {
     swal.fire({
       title: "Hata",
       icon: "warning",
-      text: "Öncelikle personeli kaydetmeniz gerekir!",
+      text: "Öncelikle personeli kaydetmeniz gerekir!"
     });
     return false;
   }
   return true;
 }
-

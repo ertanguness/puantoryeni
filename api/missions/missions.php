@@ -4,6 +4,7 @@ require_once "../../Database/require.php";
 
 require_once "../../Model/Missions.php";
 require_once "../../Model/MissionProcess.php";
+require_once "../../Model/SettingsModel.php";
 
 require_once "../../Model/MissionProcessMapping.php";
 
@@ -13,6 +14,7 @@ $firm_id = $_SESSION["firm_id"];
 $mission = new Missions();
 $process = new MissionProcess();
 $mapping = new MissionProcessMapping();
+$settings = new SettingsModel();
 $first_map = $process->getMissionProcessFirst($firm_id);
 
 //Göörevi kaydetme veya güncellemek için
@@ -117,3 +119,28 @@ if ($_POST["action"] == "updateMissionHeader") {
     ];
     echo json_encode($res);
 }
+
+//Tamamlanmış görevlerin açılışta görünüp görünmeyeceğini güncellemek için
+if($_POST["action"] == "updateIsDoneVisibility"){
+    $firm_id = $_SESSION["firm_id"];
+    $visible = $_POST["visible"];
+    try {
+        $data = [
+
+            "firm_id" => $firm_id,
+            "completed_tasks_visible" => $visible
+        ];
+        $result = $settings->updateShowCompletedMissions($firm_id, $visible);
+        $status = "success";
+        $message = "Tamamlanmış görevler başarıyla güncellendi." . $result;
+    } catch (PDOException $e) {
+        $status = "error";
+        $message = $e->getMessage();
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message
+    ];
+    echo json_encode($res);
+}
+
