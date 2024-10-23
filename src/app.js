@@ -95,6 +95,9 @@ if ($(".select2").length > 0) {
   $("#amount_money").select2({
     dropdownParent: $(".modal")
   });
+  // $("#firm_cases").select2({
+  //   dropdownParent: $(".modal")
+  // });
   $(
     "#wage_cut_month, #wage_cut_year,#income_month, #income_year, #payment_month, #payment_year"
   ).select2({
@@ -287,6 +290,7 @@ function AlertConfirm(confirmMessage = "Emin misiniz?") {
 $(document).on("change", "#myFirm", function () {
   var page = new URLSearchParams(window.location.search).get("p");
   window.location = "set-session.php?p=" + page + "&firm_id=" + $(this).val();
+  
 });
 
 function fadeOut(element, duration) {
@@ -334,6 +338,18 @@ function checkPersonId(id) {
       title: "Hata",
       icon: "warning",
       text: "Öncelikle personeli kaydetmeniz gerekir!"
+    });
+    return false;
+  }
+  return true;
+}
+//Personeli kaydedip kaydetmediğimize bakarız
+function checkId(id,item) {
+  if (id == 0) {
+    swal.fire({
+      title: "Hata",
+      icon: "warning",
+      text: "Öncelikle "+ item +" kaydetmeniz gerekir!"
     });
     return false;
   }

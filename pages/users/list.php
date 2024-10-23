@@ -38,7 +38,7 @@ $users = $userObj->getUsersByFirm($firm_id);
                 <div class="card-header">
                     <h3 class="card-title">Kullanıcı Listesi</h3>
                     <div class="col-auto ms-auto">
-                        <a href="#" class="btn btn-primary route-link" data-page="users/manage">
+                        <a href="#" class="btn btn-primary add-user">
                             <i class="ti ti-plus icon me-2"></i> Yeni
                         </a>
 
@@ -70,7 +70,14 @@ $users = $userObj->getUsersByFirm($firm_id);
                                     <td><?php echo $user->full_name; ?></td>
                                     <td><?php echo $user->email; ?></td>
                                     <td class="text-start"><?php echo $user->phone; ?></td>
-                                    <td class="text-start"><?php echo $user->is_main_user; ?></td>
+                                    <td class="text-center">
+                                        <?php 
+                                        if($user->is_main_user == 1 ){
+                                            echo "<i class='ti ti-check text-success fs-24'></i>";
+                                        }
+                                        
+                                        ?>
+                                    </td>
                                     <td><?php echo $user->status; ?></td>
                                     <td class="text-end">
                                         <div class="dropdown">

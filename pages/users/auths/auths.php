@@ -1,32 +1,36 @@
 <?php
 
 require_once 'Model/Auths.php';
-require_once 'Model/Roles.php';
+require_once 'Model/RolesModel.php';
 require_once 'Model/RoleAuthsModel.php';
-
+require_once 'App/Helper/security.php';
+use App\Helper\Security;
+$authObj = new Auths();
+$roleObj = new Roles();
+$roleAuthsObj = new RoleAuthsModel();
 ob_start(); // Çıktı tamponlamasını başlatın
 
-$id = $_GET['id'] ?? 0;
-if (!isset($_GET['id']) ) {   
+
+
+$id = Security::decrypt($_GET['id']) ?? 0;
+// echo "manuel yazılan id :" . $id;
+if (!isset($_GET['id']) || $id == 0) {
     header('Location: index.php?p=users/roles/list');
     exit();
 }
 
-$authObj = new Auths();
-$roleObj = new Roles();
-$roleAuthsObj = new RoleAuthsModel();
 
 
 
 $auths = $authObj->auths();
 $role = $roleObj->find($id);
-$roleAuths = $roleAuthsObj->getAuthsByRoleId($id);
-$auth_id = $roleAuths->id ?? 0;
+
+$roleAuths = $roleAuthsObj->getAuthsByRoleId($id);//Güncelleme yapılacak 
+$auth_id = Security::encrypt($roleAuths->id) ?? 0;
 
 
 // Yetki kontrolü yapılır
-//$perm->checkAuthorize( "transaction_permissions");
-
+$perm->checkAuthorize( "transaction_permissions");
 
 
 ?>
@@ -40,9 +44,7 @@ $auth_id = $roleAuths->id ?? 0;
                     <h2 class="page-title">
                         Yetkileri Düzenle
                     </h2>
-                    <div class="sub-title">
-                        
-                    </div>
+
 
 
                 </div>
@@ -69,6 +71,7 @@ $auth_id = $roleAuths->id ?? 0;
             display: inline-block;
             white-space: nowrap;
         }
+
         /* .datagrid-item{
             max-height: 800px;
             overflow: auto;
@@ -80,14 +83,27 @@ $auth_id = $roleAuths->id ?? 0;
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"><?php echo $role->roleName ?? ''; ?></h3>
+                    <div class="col-auto ms-auto">
+                        <!-- Tümünü seç -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="checkAll">
+                            <label class="form-check-label" for="checkAll">Tümünü Seç</label>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form action="" id="authsForm">
                         <div class="row d-none">
+                            <?php 
+                            $csrf_token = Security::csrf();
+                            ?>
                             <input type="text" name="role_id" class="form-control" value="<?php echo $role->id; ?>">
                             <input type="text" name="action" class="form-control" value="saveAuths">
                             <input type="text" name="auth_id" id="auth_id" class="form-control"
                                 value="<?php echo $auth_id; ?>">
+                            <input type="text" name="csrf_token" class="form-control"
+                                value="<?php echo $csrf_token; ?>">
                         </div>
 
                         <div class="row g-2 mt-3">
@@ -161,4 +177,3 @@ $auth_id = $roleAuths->id ?? 0;
         </div>
     </div>
 </div>
-

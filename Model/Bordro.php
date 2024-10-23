@@ -3,8 +3,8 @@ require_once 'BaseModel.php';
 require_once 'Bordro.php';
 require_once 'Puantaj.php';
 require_once 'Persons.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/App/Helper/helper.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/App/Helper/date.php';
+require_once ROOT . '/App/Helper/helper.php';
+require_once ROOT . '/App/Helper/date.php';
 
 use App\Helper\Date;
 use App\Helper\Helper;
@@ -59,7 +59,7 @@ class Bordro extends Model
 
 
     //Devreden Bakiye Hesaplama
-    public function getCarryOverBalance($person_id, $start_date =null)
+    public function getCarryOverBalance($person_id, $start_date = null)
     {
 
         //start_date boş ise içinde olduğumuz ayın son günü al
@@ -131,7 +131,7 @@ class Bordro extends Model
         return $result->total_income - $result->total_expense - $result->total_payment;
     }
 
-
+    //Personelin maaşı eklenmiş mi kontrol eder
     public function isPersonMonthlyIncomeAdded($person_id, $month, $year)
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE person_id = :person_id AND ay = :month AND yil = :year AND kategori = 4");
@@ -141,9 +141,12 @@ class Bordro extends Model
 
     public function addPersonMonthlyIncome($person_id, $month, $year, $tutar, $turu)
     {
-        $person = new Persons();
-        $gun = sprintf('%2d%02d15', $year, $month);
-        $job_start_date = Date::ymd($person->getPersonById($person_id, 'job_start_date')->job_start_date);
+        $Persons = new Persons();
+
+        $person = $Persons->find($person_id);
+        $gun = sprintf('%2d%02d01', $year, $month);
+        $job_start_date = Date::ymd($person->job_start_date);
+        $job_end_date = Date::ymd($person->job_end_date);
         // ayın son gününe kadar olan gün sayısı
         $last_day = Date::lastDay($month, $year);
 
@@ -151,6 +154,10 @@ class Bordro extends Model
         $month_day = Date::getDay($last_day);
 
         // personelin işe başladığı tarihten itibaren geçen gün sayısı
+        //eğer personelin işten ayrılması ayın son gününden önceyse işten ayrıldığı tarihe kadar olan gün sayısını al
+        if (!empty($job_end_date) && $job_end_date < $last_day) {
+            $last_day = $job_end_date;
+        }
         $work_day = $last_day - $job_start_date + 1;
 
         // personelin işe başladığı tarihten itibaren geçen gün sayısı ayın gün sayısından küçükse,
@@ -165,6 +172,44 @@ class Bordro extends Model
         $sql = $this->db->prepare("INSERT INTO $this->table SET person_id = :person_id, gun = :gun, ay = :month, yil = :year, tutar = :tutar, kategori = 4 , turu = :turu , aciklama = :aciklama");
         $sql->execute([':person_id' => $person_id, ':gun' => $gun, ':month' => $month, ':year' => $year, ':tutar' => $tutar, ':turu' => $turu, ':aciklama' => $description]);
         return $this->db->lastInsertId();
+    }
+
+    function updatePersonMonthlyIncome($person_id, $montly_income_id, $month, $year)
+    {
+        $Persons = new Persons();
+        $person = $Persons->find($person_id);
+        $gun = sprintf('%2d%02d01', $year, $month);
+        $job_start_date = Date::ymd($person->job_start_date);
+        $job_end_date = Date::ymd($person->job_end_date);
+        // ayın son gününe kadar olan gün sayısı
+        $last_day = Date::lastDay($month, $year);
+
+        // O ayın gün sayısı
+        $month_day = Date::getDay($last_day);
+
+        // personelin işe başladığı tarihten itibaren geçen gün sayısı
+        //işten ayrılma tarihi dolu ve o ayın son gününden küçükse
+        //işten ayrıldığı tarihe kadar olan gün sayısını al
+        if (!empty($job_end_date) && $job_end_date < $last_day) {
+            $last_day = $job_end_date;
+        }
+
+        $work_day = $last_day - $job_start_date + 1;
+
+        //tutar bilgisini getir
+        $tutar = $person->daily_wages;
+
+
+        // personelin işe başladığı tarihten itibaren geçen gün sayısı ayın gün sayısından küçükse,
+        // o ayın maaşını günlük olarak hesapla
+        if ($work_day < $month_day) {
+            $tutar = $tutar * $work_day / $month_day;
+            $description = "$work_day günlük Maaş";
+        } else {
+            $description = 'Aylık Maaş';
+        }
+        $sql = $this->db->prepare("UPDATE $this->table SET tutar = :tutar,aciklama = :description WHERE id = :id");
+        $sql->execute([':tutar' => $tutar, ':id' => $montly_income_id, ':description' => $description]);
     }
 
     public static function getIncomeExpenseData($person_id)
@@ -184,5 +229,13 @@ class Bordro extends Model
         $income_expense->balance = $balance;
 
         return $income_expense;
+    }
+
+    //Personelin işe başlama tarihinden önceki tüm maaşları sil
+    public function deleteAllSalaries($person_id, $job_start_date)
+    {
+        $job_start_date = Date::Ymd($job_start_date);
+        $sql = $this->db->prepare("DELETE FROM $this->table WHERE person_id = :person_id AND gun <= :job_start_date");
+        $sql->execute([':person_id' => $person_id, ':job_start_date' => $job_start_date]);
     }
 }

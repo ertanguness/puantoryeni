@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 use App\Helper\Date;
 
-
-?> 
+$case_id = $_POST['case_id'] ?? 0;
+?>
 
 
 <div class="modal modal-blur fade" id="payment-modal" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -26,7 +26,7 @@ use App\Helper\Date;
                     <small class="text-success">Ödeme yapmak için aşağıdaki bilgileri doldurunuz</small>
                 </p>
                 <h3 class="link" data-tooltip="Tümünü Öde">
-                    <span id="person_payment_balance"></span> 
+                    <span id="person_payment_balance"></span>
                 </h3>
             </div>
             <div class="container ps-4 pe-4 py-4">
@@ -39,11 +39,19 @@ use App\Helper\Date;
                         <input type="text" name="payment_type" id="payment_type" class="form-control mt-1">
                     </div>
                     <div class="text-secondary mt-3">
+                        <label for="">Ödeme Tutarı</label>
+                        <input type="text" name="payment_amount" id="payment_amount" class="form-control mt-1">
+                    </div>
+                    <div class="text-secondary mt-3">
+                        <label for="">Ödeme Yapılacak Kasa</label>
+                    </div>
+                    <div class="text-secondary mt-3">
+
                         <label for="">Ödeme Dönemi</label>
                         <div class="row d-flex">
                             <div class="col-6">
 
-                                <?php echo Date::getMonthsSelect("payment_month",$month); ?>
+                                <?php echo Date::getMonthsSelect("payment_month", $month); ?>
                             </div>
                             <div class="col-6">
 
@@ -52,10 +60,7 @@ use App\Helper\Date;
                             </div>
                         </div>
                     </div>
-                    <div class="text-secondary mt-3">
-                        <label for="">Ödeme Tutarı</label>
-                        <input type="text" name="payment_amount" id="payment_amount" class="form-control mt-1">
-                    </div>
+
                     <div class="text-secondary mt-3">
                         <label for="">Açıklama</label>
                         <textarea name="payment_description" class="form-control mt-1"

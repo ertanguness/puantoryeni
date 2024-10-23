@@ -87,35 +87,13 @@ $pageTitle = $id > 0 ? "Görev Başlığı Güncelleme" : "Yeni Görev Başlığ
                                         }
                                     </style>
 
-                                    <div class="headers" id="sortable">
-                                        <div class="row d-flex mb-3">
-                                            <div class="col-md-8">
-                                                <strong>Süreç Adı</strong>
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <strong>Sırası</strong>
-                                            </div>
-                                        </div>
-                                        <?php
-                                        foreach ($headers as $item) { ?>
-                                            <div class="row d-flex mb-1 header-item" id="item-<?php echo $item->id; ?>">
-                                                <div class="col-md-8">
-                                                    <span ><?php echo $item->header_name; ?></span>
-                                                </div>
-                                                <div class="col-md-4 text-center">
-                                                    <span class="header-order"><?php echo $item->header_order; ?></span>
-                                                </div>
-                                            </div>
-
-                                        <?php } ?>
-
-                                    </div>
+                                    <!--  -->
 
 
 
                                 </div>
 
-                                <div class="col-md-9">
+                                <div class="col-md-12">
 
                                     <div class="row mb-3">
                                         <?php $status = $header->status ?? 1; ?>
@@ -148,19 +126,9 @@ $pageTitle = $id > 0 ? "Görev Başlığı Güncelleme" : "Yeni Görev Başlığ
                                         <div class="col-md-2">
                                             <label class="form-label">Süreç Adı</label>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-10">
                                             <input type="text" name="header_name" class="form-control"
                                                 value="<?php echo $header->header_name ?? '' ?>">
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label class="form-label">Sırası</label>
-
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" name="header_order" id="header_order"
-                                                class="form-control"
-                                                value="<?php echo $header->header_order ?? '' ?>">
                                         </div>
 
                                     </div>

@@ -58,7 +58,7 @@ $Auths->checkAuthorize('upload_payment_permission');
                     <i class="ti ti-file-excel icon"></i> Yükle
                 </a>
                 <label for="İndir"></label>
-                <a href="pages/bordro/xls/payment-load.php" class="btn me-2" data-tooltip="Yüklenecek Şablonu indirin">
+                <a href="pages/payroll/xls/payment-load.php" class="btn me-2" data-tooltip="Yüklenecek Şablonu indirin">
                     <i class="ti ti-file-excel icon"></i> Örnek Dosya İndir
                 </a>
             </div>

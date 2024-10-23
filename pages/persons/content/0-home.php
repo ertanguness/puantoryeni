@@ -3,20 +3,40 @@ require_once "App/Helper/jobs.php";
 
 $jobGroups = new Jobs();
 
-if(isset($person->wage_type) && $person->wage_type == 1){
+if (isset($person->wage_type) && $person->wage_type == 1) {
     $wage_type_label = 'Aylık Maaş';
-    $white_checked = 'checked' ;
-}else{
+    $white_checked = 'checked';
+} else {
     $wage_type_label = 'Günlük Ücret';
-    $blue_checked = 'checked' ;
+    $blue_checked = 'checked';
 }
 ?>
+<div class="row mb-3">
+
+    <div class="col-auto d-flex ms-auto">
+        <!-- Page title actions -->
+        <div class="col-auto d-print-none me-2">
+            <a href="#" class="btn btn-teal route-link" data-page="persons/manage">
+                <i class="ti ti-plus icon me-2"></i> Yeni
+            </a>
+        </div>
+           <div class="col-auto d-print-none">
+            <button type="button" class="btn btn-primary" id="savePerson">
+                <i class="ti ti-device-floppy icon me-2"></i>
+                Kaydet
+            </button>
+        </div>
+    </div>
+</div>
+
+
 
 <form action="" id="personForm">
 
     <div class="row d-none">
         <div class="col-4">
-            <input type="text" class="form-control" name="id" id="person_id" value="<?php echo $person->id ?? 0; ?>" required>
+            <input type="text" class="form-control" name="id" id="person_id" value="<?php echo $person->id ?? 0; ?>"
+                required>
         </div>
         <div class="col-4">
             <input type="text" class="form-control" name="action" value="savePerson" required>
@@ -44,11 +64,15 @@ if(isset($person->wage_type) && $person->wage_type == 1){
     </div>
     <div class="row mt-2">
         <div class="col-md-2">
-            <label for="">İşe Başlama Tarihi (*)</label>
+            <label for="">İşe Başlama/Ayrılma Tarihi (*)</label>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <input type="text" class="form-control flatpickr" name="job_start_date"
                 value="<?php echo $person->job_start_date ?? ''; ?>" required>
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control flatpickr" name="job_end_date"placeholder="İşten Ayrılma Tarihi"
+                value="<?php echo $person->job_end_date ?? ''; ?>">
         </div>
         <div class="col-md-2 mt-2">
             <label id="wage_type_label" for=""><?php echo $wage_type_label; ?></label>
@@ -63,7 +87,7 @@ if(isset($person->wage_type) && $person->wage_type == 1){
 
                 <label class="form-check form-check-inline">
                     <input class="form-check-input wage_type" type="radio" value="2" name="wage_type" id="blue_collar"
-                        <?php echo $blue_checked ?? ''; ?> >
+                        <?php echo $blue_checked ?? ''; ?>>
                     <span class="form-check-label">Mavi Yaka</span>
                 </label>
                 <label class="form-check form-check-inline">

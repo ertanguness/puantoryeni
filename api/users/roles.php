@@ -1,7 +1,7 @@
 <?php
 
 require_once "../../Database/require.php";
-require_once "../../Model/Roles.php";
+require_once "../../Model/RolesModel.php";
 
 
 $roles = new Roles();

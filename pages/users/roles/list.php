@@ -1,8 +1,13 @@
 <?php
-require_once "Model/Roles.php";
+require_once "Model/RolesModel.php";
+require_once "App/Helper/security.php";
 
+
+
+use App\Helper\Security;
 $roleObj = new Roles();
 $roles = $roleObj->getRolesByFirm($firm_id);
+$perm->checkAuthorize( "permission_groups");
 
 
 ?>
@@ -79,7 +84,8 @@ $roles = $roleObj->getRolesByFirm($firm_id);
 
                                                 <?php if ($Auths->hasPermission('transaction_permissions')) { ?>
                                                     <a class="dropdown-item route-link"
-                                                        data-page="users/auths/auths&id=<?php echo $role->id ?>" href="#">
+                                                        data-page="users/auths/auths&id=<?php echo 
+                                                        Security::encrypt($role->id) ?>" href="#">
                                                         <i class="ti ti-lock icon me-3"></i> Yetkileri Düzenle
                                                     </a>
                                                     <!-- Başka yetkilerin ana kullanıcı rölüne kopyalanmasını engellemek için -->

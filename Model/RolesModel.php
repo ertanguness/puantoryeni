@@ -26,5 +26,10 @@ class Roles extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
-    
+    //Role grubunu say
+    public function countRolesByFirm(){
+        $sql = $this->db->prepare("SELECT COUNT(*) as total FROM $this->table WHERE firm_id = ?");
+        $sql->execute([$this->firm_id]);
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
 }

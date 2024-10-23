@@ -49,7 +49,7 @@ $user_id = $_SESSION['user']->id;
                                 <tr>
                                     <td><?php echo $item->id; ?></td>
                                     <td><?php echo $item->name; ?></td>
-                                    <td><?php echo Helper::getIncExpTypeName($item->type); ?></td>
+                                    <td><?php echo Helper::getIncExpTypeName($item->type_id); ?></td>
                                     <td><?php echo $item->description; ?></td>
                                     <td><?php echo Date::dmY($item->created_at); ?></td>
 

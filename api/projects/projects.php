@@ -39,3 +39,24 @@ if ($_POST['action'] == "saveProject") {
     ];
     echo json_encode($res);
 }
+
+if ($_POST['action'] == "deleteProject") {
+    $id = $_POST['id'] ?? 0;
+    try {
+        $db->beginTransaction();
+        $project->delete($id);
+        $status = "success";
+        $message = "Proje başarıyla silindi";
+        $db->commit();
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+        $db->rollBack();
+    }
+
+    $res = [
+        'status' => $status,
+        'message' => $message,
+    ];
+    echo json_encode($res);
+}

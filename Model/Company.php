@@ -53,4 +53,13 @@ class Company extends Model
         parent::__construct($table);
         $this->delete($id);
     }
+
+    //Firmayı say
+    public function countMyFirms($user_id)
+    {
+        $query = $this->db->prepare("SELECT COUNT(*) as count FROM myfirms WHERE user_id = ?");
+        $query->execute([$user_id]);
+        $result = $query->fetch(PDO::FETCH_OBJ)->count;
+        return $result;
+    }
 }

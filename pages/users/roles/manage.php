@@ -1,5 +1,5 @@
 <?php
-require_once "Model/Roles.php";
+require_once "Model/RolesModel.php";
 
 $roleObj = new Roles();
 $id = $_GET["id"] ?? 0;

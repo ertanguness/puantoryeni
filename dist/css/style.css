@@ -762,7 +762,12 @@ div:where(.swal2-icon-content) {
   font-weight: 700 !important;
 }
 
-.btn-close {
+.alert .btn-close {
   top: 50% !important;
   transform: translateY(-50%) !important;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+  border-color: var(--tblr-form-invalid-border-color) !important;
+
 }

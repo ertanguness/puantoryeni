@@ -1,5 +1,4 @@
 <?php
-define("ROOT", $_SERVER["DOCUMENT_ROOT"]);
 require_once ROOT . "/Database/db.php";
 require_once ROOT . "/Model/Cases.php";
 
@@ -19,11 +18,11 @@ class Financial extends Db
 
 
     //firma id'ye göre gelir veya gider türlerini getirir
-    public function getIncExpTypeSelect($name = "inc_exp_type", $type = 1)
+    public function getIncExpTypeSelect($name = "inc_exp_type", $type_id = 1)
     {
         $firm_id = $_SESSION['firm_id'];
-        $query = $this->db->prepare("SELECT * FROM defines WHERE firm_id = ? AND type = ?");
-        $query->execute([$firm_id, $type]);
+        $query = $this->db->prepare("SELECT * FROM defines WHERE firm_id = ? AND type_id = ?");
+        $query->execute([$firm_id, $type_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
 
         $select = "<select name=\"{$name}\" class=\"form-select modal-select select2\" id=\"{$name}\" style=\"width:100%\">";
@@ -45,7 +44,8 @@ class Financial extends Db
         }
     
         $cases = $this->caseObj->allCaseWithFirmId();
-        $select = "<select name=\"{$name}\" class=\"form-control select2\" id=\"{$name}\" style='width:100%'>";
+        $select = "<select name='".$name."' class=\"form-control select2\" id='".$name."' style='width:100%'>";
+        $select .= "<option value=''>Kasa Seçiniz</option>";
         
         foreach ($cases as $case) {
             $selectedAttr = $case_id == $case->id ? 'selected' : '';

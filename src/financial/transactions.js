@@ -30,9 +30,9 @@ $(document).on("click", "#saveTransaction", function () {
 
   formData.append("action", "saveTransaction");
 
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
+  // for (var pair of formData.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   fetch("/api/financial/transaction.php", {
     method: "POST",

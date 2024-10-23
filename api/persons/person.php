@@ -1,9 +1,13 @@
 
 <?php
+define("ROOT", $_SERVER['DOCUMENT_ROOT']);
 require_once "../../Database/db.php";
 require_once "../../Model/Persons.php";
+require_once  ROOT . "/Model/Bordro.php";
 
 use Database\Db;
+
+$Bordro = new Bordro();
 
 $dbInstance = new Db(); // Db sınıfının bir örneğini oluşturuyoruz.
 $db = $dbInstance->connect(); // Veritabanı bağlantısını alıyoruz.
@@ -13,7 +17,11 @@ $person = new Persons();
 
 if ($_POST["action"] == "savePerson") {
     $id = $_POST["id"];
-
+    if($id > 0 ){
+        //personelin göreve başlama tarihinden önceki tüm maaşları sil
+        $Bordro->deleteAllSalaries($id, $_POST["job_start_date"]);
+    }
+    $lastInsertId = 0;
     $data = [
         "id" => $id,
         "full_name" => $_POST["full_name"],
@@ -29,12 +37,12 @@ if ($_POST["action"] == "savePerson") {
         // "salary" => $_POST["salary"],
         "daily_wages" => $_POST["daily_wages"],
         "job_start_date" => $_POST["job_start_date"],
-        // "end_date" => $_POST["end_date"],
+        "job_end_date" => $_POST["job_end_date"],
         // "status" => $_POST["status"],
     ];
 
     try {
-        $lastInsertId = $person->saveWithAttr($data);
+        $lastInsertId = $person->saveWithAttr($data) ?? $id;
         $status = "success";
         if ($id == 0) {
             $message = "Personel başarıyla kaydedildi.";
@@ -48,9 +56,9 @@ if ($_POST["action"] == "savePerson") {
             preg_match('/Duplicate entry .* for key \'(.*)\'/', $e->getMessage(), $matches);
             $violatedField = $matches[1] ?? 'Bilinmeyen alan';
             if ($violatedField == 'kimlik_no') {
-                $message = "Bu kimlik numarası adresi zaten kayıtlı.";
+                $message = "Bu kimlik numarası zaten kayıtlı.";
             } elseif ($violatedField == 'phone') {
-                $message = "Bu telefon numarası adresi zaten kayıtlı.";
+                $message = "Bu telefon numarası zaten kayıtlı.";
             } else {
                 $message =  $e->getMessage();
             }
@@ -61,7 +69,7 @@ if ($_POST["action"] == "savePerson") {
     $res = [
         "status" => $status,
         "message" => $message,
-        "lastid" => $lastInsertId ?? 0
+        "lastid" => $lastInsertId 
     ];
     echo json_encode($res);
 }

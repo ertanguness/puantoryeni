@@ -11,7 +11,10 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
 $wagesObj = new Wages();
 $wages = $wagesObj->getWageByPersonId($id);
 
-
+if(!$Auths->Authorize("person_page_wage_defines_info")) {
+    Helper::authorizePage();
+    return;
+}
 ?>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">

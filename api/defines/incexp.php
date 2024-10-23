@@ -12,8 +12,7 @@ if ($_POST["action"] == "saveIncExpType") {
             "name" => $_POST["incexp_name"],
             "user_id" => $_SESSION["user"]->id,
             "firm_id" => $_SESSION["firm_id"],
-            "group_type" => 2,
-            "type" => $_POST["incexp_type"],
+            "type_id" => $_POST["incexp_type"],
             "description" => $_POST["description"]
         ];
 

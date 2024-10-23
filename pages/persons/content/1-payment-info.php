@@ -33,6 +33,11 @@ $total_income =  $incomes ;
 // Bakiye hesaplanacak
 $balance = $total_income - $total_expense - $total_payment;
 
+if(!$Auths->Authorize("person_page_income_expence_info")) {
+    Helper::authorizePage();
+    return;
+}
+
 ?>
 <div class="container-xl">
     <div class="row row-deck row-cards">
@@ -244,6 +249,6 @@ $balance = $total_income - $total_expense - $total_payment;
         </div>
     </div>
 </div>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/bordro/content/wage_cut-modal.php' ?>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/bordro/content/income-modal.php' ?>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/bordro/content/payment-modal.php' ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/payroll/content/wage_cut-modal.php' ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/payroll/content/income-modal.php' ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/pages/payroll/content/payment-modal.php' ?>

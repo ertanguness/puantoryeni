@@ -50,6 +50,7 @@ $(document).on("click", "#savePerson", function () {
 
       }
     },
+ 
   });
   if (!form.valid()) return false;
 
@@ -62,9 +63,10 @@ $(document).on("click", "#savePerson", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       if (data.status == "success") {
         title = "Başarılı!";
+      $("#person_id").val(data.lastid);
       } else {
         title = "Hata!";
       }

@@ -5,8 +5,10 @@ require_once 'App/Helper/company.php';
 require_once 'App/Helper/helper.php';
 require_once 'App/Helper/date.php';
 
+
 use App\Helper\Helper;
 use App\Helper\Date;
+use App\Helper\Security;
 
 $person = new Persons();
 $bordro = new Bordro();
@@ -15,7 +17,10 @@ $persons = $person->getPersonsByFirm($firm_id);
 $company = new CompanyHelper();
 
 
-// firma id'sini almak için $firm_id
+//Yetki Kontrolü yapılır
+$perm->checkAuthorize("personnel_page");
+
+
 ?>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">
@@ -24,10 +29,12 @@ $company = new CompanyHelper();
                 <div class="card-header">
                     <h3 class="card-title">Personel Listesi</h3>
                     <div class="d-flex col-auto ms-auto">
-                    <a href="/pages/persons/to-pdf.php" class="btn btn-icon me-2" data-page="" data-tooltip="Pdf'e Aktar">
+                        <a href="/pages/persons/to-pdf.php" class="btn btn-icon me-2" data-page=""
+                            data-tooltip="Pdf'e Aktar">
                             <i class="ti ti-file-type-pdf icon"></i>
                         </a>
-                        <a href="#" id="export_excel" class="btn btn-icon me-2" data-page="" data-tooltip="Excele Aktar">
+                        <a href="#" id="export_excel" class="btn btn-icon me-2" data-page=""
+                            data-tooltip="Excele Aktar">
                             <i class="ti ti-file-excel icon"></i>
                         </a>
                         <div class="dropdown me-2">
@@ -35,10 +42,10 @@ $company = new CompanyHelper();
                                 <i class="ti ti-list-details icon me-2"></i>
                                 İşlemler</button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item add-wage-cut"
-                                    data-tooltip="Personelleri yükleyin veya güncelleyin" data-tooltip-location="left"
-                                    href="api/bordro/toexcel.php">
-                                    <i class="ti ti-upload icon me-3"></i> Excelden Aktar
+                                <a class="dropdown-item route-link"
+                                    data-tooltip="Personelleri Excel dosyasından yükleyin" data-tooltip-location="left"
+                                    href="#" data-page="persons/xls/person-load">
+                                    <i class="ti ti-upload icon me-3"></i> Excelden Yükle
                                 </a>
                                 <a class="dropdown-item add-income" data-tooltip="Günlük Ücretleri güncelleyin"
                                     data-tooltip-location="left" href="#" data-bs-toggle="modal"
@@ -84,11 +91,14 @@ $company = new CompanyHelper();
                                 $wage_type_color = $person->wage_type == 2 ? "style='color:blue'" : '';
                                 $balance = $bordro->getBalance($person->id);
                                 $color = Helper::balanceColor($balance);
+                                $id=Security::encrypt($person->id);
 
-                            ?>
+                                ?>
                                 <tr>
                                     <td class="text-center"><?php echo $person->id; ?></td>
-                                    <td> <a href="#" data-tooltip="Detay/Güncelle" data-page="persons/manage&id=<?php echo $person->id ?>" class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                    <td> <a href="#" data-tooltip="Detay/Güncelle"
+                                            data-page="persons/manage&id=<?php echo $id ?>"
+                                            class="btn route-link"><?php echo $person->full_name; ?></a></td>
                                     <td><?php echo $company->getcompanyName($person->company_id); ?></td>
                                     <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
                                     <td><?php echo $person->sigorta_no; ?></td>
@@ -103,7 +113,7 @@ $company = new CompanyHelper();
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a class="dropdown-item route-link"
-                                                    data-page="persons/manage&id=<?php echo $person->id ?>" href="#">
+                                                    data-page="persons/manage&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
                                                 </a>
 

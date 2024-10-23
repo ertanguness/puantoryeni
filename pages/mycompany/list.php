@@ -1,9 +1,9 @@
 <?php
 $user_id = $_SESSION['user']->id;
-require_once "Model/Company.php";
+require_once "Model/MyFirmModel.php";
 
-$companyObj = new Company();
-$myfirms = $companyObj->getMyCompanies($user_id);
+$MyFirmModel = new MyFirmModel();
+$myfirms = $MyFirmModel->getMyFirmByUserId();
 
 ?>
 <div class="container-xl mt-3">

@@ -34,3 +34,15 @@ $(document).on("click", "#authsSave", function () {
       $("#auth_id").val(data.id);
     });
 });
+
+
+//checkAll
+$(document).on("click", "#checkAll", function () {
+  if ($(this).is(":checked")) {
+    $(".form-selectgroup-input").prop("checked", true);
+    $(".form-check-input").prop("checked", true);
+  } else {
+    $(".form-selectgroup-input").prop("checked", false);
+    $(".form-check-input").prop("checked", false);
+  }
+});

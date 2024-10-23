@@ -29,7 +29,7 @@ if (
     $page == 'projects/list' || $page == 'projects/manage' ||
     $page == 'projects/add-person' ||
     $page == 'puantaj/list' ||
-    $page == 'bordro/list' ||
+    $page == 'payroll/list' ||
     $page == 'defines/incexp/list' ||
     $page == 'missions/list' || $page == 'missions/process/list' ||
     $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
@@ -42,7 +42,7 @@ if (
 
 
 //Summernote eklenecek sayfalar 
-if ($page == "missions/manage") {
+if ($page == "missions/manage" || $page == "feedback/list") {
     echo '<script src="./dist/libs/summernote/summernote-lite.min.js?1692870487"></script>';
 }
 
@@ -111,7 +111,7 @@ if ($page == 'puantaj/list') {
     echo '<script src="./src/puantaj/puantaj.js"></script>';
 }
 // Bordro sayfası
-if ($page == 'bordro/list') {
+if ($page == 'payroll/list') {
     echo '<script src="./src/bordro/bordro.js"></script>';
     echo '<script src="./src/bordro/payment.js"></script>';
 }
@@ -140,16 +140,25 @@ if ($page == 'missions/headers/manage') {
     echo '<script src="./src/missions/headers.js"></script>';
 }
 
-if ($page == 'bordro/xls/payment-load-from-xls') {
+if ($page == 'payroll/xls/payment-load-from-xls') {
     echo '<script src="./src/bordro/payment-load.js"></script>';
 }
-
+//personlleri excel dosyasından yükleme
+if ($page == 'persons/xls/person-load') {
+    echo '<script src="./src/persons/persons-load.js"></script>';
+}
 
 if ($page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage') {
     echo '<script src="./src/defines/job-groups.js"></script>';
 }
 
+if($page == 'settings/manage'){
+    echo '<script src="./src/settings/settings.js"></script>';
+}
 
+if($page == 'feedback/list'){
+    echo '<script src="./src/feedback.js"></script>';
+}
 
 ?>
 

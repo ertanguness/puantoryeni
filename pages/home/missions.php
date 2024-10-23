@@ -1,5 +1,4 @@
 <?php
-define("ROOT", $_SERVER['DOCUMENT_ROOT']);
 require_once ROOT . "/Model/Missions.php";
 require_once ROOT . "/Model/MissionHeaders.php";
 require_once ROOT . "/Model/SettingsModel.php";

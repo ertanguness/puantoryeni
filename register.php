@@ -1,16 +1,19 @@
 <?php
 require_once 'Database/require.php';
 require_once 'Model/UserModel.php';
-require_once 'Model/Roles.php';
+require_once 'Model/RolesModel.php';
 require_once 'Model/Auths.php';
 require_once 'Model/RoleAuthsModel.php';
 require_once 'Model/Company.php';
+require_once 'App/Helper/security.php';
 
 use Database\Db;
+use App\Helper\Security;
+
 
 $db = new Db();
 
-$user = new UserModel();
+$User = new UserModel();
 $company = new Company();
 $Roles = new Roles();
 $Auths = new Auths();
@@ -18,12 +21,20 @@ $RoleAuths = new RoleAuthsModel();
 
 function alertdanger($message)
 {
-    echo '<div class="alert alert-important alert-danger alert-dismissible">
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <strong>Hata!</strong> ' . $message . '
-  </div>';
-}
+    echo '<div class="alert alert-danger bg-white text-start font-weight-600" role="alert">
+            <div class="d-flex">
+                <div>
+                    
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon alert-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                </div>
+                    <div>
+                        <h4 class="alert-title">Hata!</h4>
+                    <div class="text-secondary">' . $message . '</div>
+                </div>
+            </div>
+        </div>';
 
+}
 ?>
 <html lang="tr">
 
@@ -49,6 +60,10 @@ function alertdanger($message)
     <link href="./dist/css/tabler-vendors.min.css?1726507346" rel="stylesheet">
     <link href="./dist/css/style.css?1726507346" rel="stylesheet">
     <link href="./dist/css/demo.min.css?1726507346" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js?hl=tr" async defer></script>
+    <link rel="icon" href="./static/favicon.ico" type="image/x-icon" />
+
+
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
@@ -61,6 +76,7 @@ function alertdanger($message)
         }
     </style>
 
+
 </head>
 
 <body class=" d-flex flex-column">
@@ -71,12 +87,12 @@ function alertdanger($message)
                     $(this).remove();
                 });
             });
-        }, 3000);
+        }, 8000);
     </script>
     <script src="./dist/js/demo-theme.min.js?1726507346"></script>
     <div class="page page-center register">
         <div class="container container-tight py-4">
-            <div class="text-center mb-4">
+            <div class="text-center mb-1">
                 <a href="." class="navbar-brand navbar-brand-autodark">
                     <img src="./static/logo-ai.svg" height="120" alt=""></a>
                 </a>
@@ -85,24 +101,78 @@ function alertdanger($message)
                 <?php
 
                 if (isset($_POST['action']) && $_POST['action'] == 'saveUser') {
-                    $full_name = $_POST['full_name'];
-                    $company_name = $_POST['company_name'];
-                    $email = $_POST['email'];
-                    $password = $_POST['password'];
+                    $recaptchaSecret = '6LfHuWYqAAAAAI4GfJIXZxpeoQGKDFN-Tr24766z';
+                    $recaptchaResponse = $_POST['g-recaptcha-response'];
 
+                    // reCAPTCHA doğrulama isteği
+                    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaSecret&response=$recaptchaResponse");
+                    $responseKeys = json_decode($response, true);
+
+
+
+                    $full_name = preg_replace('/\s+/', ' ', trim($_POST['full_name']));
+                    $company_name = preg_replace('/\s+/', ' ', trim($_POST['company_name']));
+                    $email = preg_replace('/\s+/', ' ', trim($_POST['email']));
+                    $password = preg_replace('/\s+/', ' ', trim($_POST['password']));
+
+                    //Ad Soyad alanı boş bırakıldıysa hata mesajı verilir
                     if (empty($full_name)) {
                         echo alertdanger('Ad Soyad alanı boş bırakılamaz.');
+                        //ad soyad 3 karakterden az ise hata mesajı verilir
+                    } elseif (strlen($full_name) < 3) {
+                        echo alertdanger('Ad Soyad en az 3 karakter olmalıdır.');
+
+                        //firma adı alanı boş bırakıldıysa hata mesajı verilir
                     } elseif (empty($company_name)) {
                         echo alertdanger('Firma adı boş bırakılamaz.');
+
+                        //firma adı 3 karakterden az ise hata mesajı verilir
+                    } elseif (strlen($company_name) < 3) {
+                        echo alertdanger('Firma adı en az 3 karakter olmalıdır.');
+
+                        //email alanı boş bırakıldıysa hata mesajı verilir
                     } elseif (empty($email)) {
                         echo alertdanger('Email alanı boş bırakılamaz.');
+
+                        //şifre alanı boş bırakıldıysa hata mesajı verilir
                     } elseif (empty($password)) {
                         echo alertdanger('Şifre alanı boş bırakılamaz.');
+
+                        //şifre alanı en az 6 karakter olmalıdır
+                    } elseif (strlen($password) < 6) {
+                        echo alertdanger('Şifre en az 6 karakter olmalıdır.');
+
+                        //şifre alanında büyük harf, küçük harf ve rakam olmalıdır
+                    } elseif (!preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+                        echo alertdanger('Şifre en az bir büyük harf, bir küçük harf ve bir rakam içermelidir.');
+
+
+                        //email adresi geçerli bir email adresi olup olmadığı kontrol edilir
+                    } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        echo alertdanger('Geçerli bir email adresi giriniz.');
+
+                        //şartlar ve koşullar kabul edilmediyse hata mesajı verilir
+                    } else if (!isset($_POST['terms_of_service'])) {
+                        echo alertdanger('Şartlar ve koşulları kabul etmelisiniz.');
+
+                        //Tüm kontrollerden geçildiyse kullanıcı kaydı yapılır
+                    } else if (intval($responseKeys["success"]) !== 1) {
+                        echo alertdanger('Lütfen reCAPTCHA doğrulamasını yapınız.');
+
+                        //Email ile daha önce kayıt olunmuşsa hata mesajı verilir
+                    } else if ($User->isEmailExists($email)) {
+                        echo alertdanger('Bu email adresi ile daha önce kayıt olunmuş.');
+
+                        //Tüm kontrollerden geçildiyse kullanıcı kaydı yapılır
+                
+
                     } else {
+
+
                         $data = [
-                            'full_name' => $_POST['full_name'],
-                            'email' => $_POST['email'],
-                            'status' => 0,
+                            'full_name' => Security::escape($_POST['full_name']),
+                            'email' => Security::escape($_POST['email']),
+                            'status' => 1,
                             'user_roles' => 1,
                             'is_main_user' => 1,
                             'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
@@ -115,7 +185,7 @@ function alertdanger($message)
 
                             //Girdiği firma adı ile yeni bir firma kaydedilir
                             $data = [
-                                'firm_name' => $_POST['company_name'],
+                                'firm_name' => Security::escape($_POST['company_name']),
                                 'user_id' => $lastInsertUserId,
                             ];
                             $lastInsertFirmId = $company->saveMyFirms($data);
@@ -130,7 +200,7 @@ function alertdanger($message)
                             $lastInsertRoleId = $Roles->saveWithAttr($data);
 
                             //Kaydedilen Yetki grubuna tüm yetkiler atanır
-                           
+                
                             //yetki tablosundaki tüm id'ler alınır
                             $auths = $Auths->all();
                             //id'leri aralarında virgül olacak şekilde birleştirilir
@@ -161,6 +231,8 @@ function alertdanger($message)
                         }
                     }
                 }
+
+
 
                 ?>
 
@@ -193,8 +265,8 @@ function alertdanger($message)
                             <input type="password" name="password" class="form-control"
                                 value="<?php echo $password ?? '' ?>" placeholder="Password" autocomplete="off">
                             <span class="input-group-text">
-                                <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Show password"
-                                    data-bs-original-title="Show password">
+                                <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Şifreyi göster"
+                                    data-bs-original-title="Şifreyi göster">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -211,13 +283,26 @@ function alertdanger($message)
                     </div>
                     <div class="mb-3">
                         <label class="form-check">
-                            <input type="checkbox" class="form-check-input">
-                            <span class="form-check-label"><a href="./terms-of-service.html" tabindex="-1">Şartlar ve
-                                    Koşulları</a> kabul ediyorum.</span>
+                            <?php
+                            //Eğer post ile gelen terms_of_service varsa checked yap
+                            if (isset($_POST['terms_of_service'])) {
+                                $checked = 'checked';
+                            } else {
+                                $checked = '';
+                            }
+                            ?>
+                            <input type="checkbox" name="terms_of_service" class="form-check-input" <?php echo $checked; ?>>
+                            <span class="form-check-label"><a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#modal-scrollable" tabindex="-1">Üyelik Sözleşmesi ve Kişisel
+                                    Verilerin İşlenmesine İlişkin Aydınlatma ve Rıza Metni</a>'ni' okudum ve kabul
+                                ediyorum.</span>
                         </label>
                     </div>
+                    <div class="g-recaptcha" data-sitekey="6LfHuWYqAAAAAMPWjmbVJVLDRi7_IAeY0of0REAk"
+                        data-callback="enableSubmitButton"></div>
                     <div class="form-footer">
-                        <button type="submit" class="btn btn-primary w-100">Hesap Oluştur</button>
+                        <button type="submit" id="submitButton" disabled="disabled" class="btn btn-primary w-100">Hesap
+                            Oluştur</button>
                     </div>
                 </div>
             </form>
@@ -229,9 +314,153 @@ function alertdanger($message)
     <!-- Libs JS -->
     <!-- Tabler Core -->
 
+
+    <!-- Üyelik Sözleşmesi Modal -->
+    <div class="modal modal-blur fade" id="modal-scrollable" tabindex="-1" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Üyelik sözleşmesi ve KVK'ya ilişkin aydınlatma metni</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>ÜYELİK SÖZLEŞMESİ</h2>
+
+                    <h3>1. Taraflar</h3>
+                    <p>İşbu Sözleşme, www.puantor.com.tr internet sitesinin faaliyetlerini yürüten [puantor.com.tr]
+                        (Bundan
+                        böyle “PUANTOR” olarak anılacaktır) ve www.puantor.com.tr internet sitesine üye olan internet
+                        kullanıcısı ("Üye") arasında akdedilmiştir.</p>
+
+                    <h3>2. Sözleşmenin Konusu</h3>
+                    <p>İşbu Sözleşme’nin konusu, Üyenin www.puantor.com.tr internet sitesinden faydalanma şartlarının
+                        belirlenmesidir.</p>
+
+                    <h3>3. Tarafların Hak ve Yükümlülükleri</h3>
+                    <ol>
+                        <li>Üyelik statüsünün kazanılması için, Üye olmak isteyen kullanıcının, web sitesinde bulunan
+                            işbu Üyelik Sözleşmesi'ni onaylayarak, burada talep edilen bilgileri doğru ve güncel
+                            bilgilerle doldurması gerekmektedir. Üye olmak isteyen kullanıcının 18 (on sekiz) yaşını
+                            doldurmuş olması aranacaktır.</li>
+                        <li>Üye, verdiği kişisel bilgilerin doğru olduğunu, PUANTOR’un bu bilgilerin gerçeğe aykırılığı
+                            nedeniyle uğrayacağı zararları tazmin edeceğini beyan eder.</li>
+                        <li>Üye, kendisine verilen şifreyi başka kişilerle paylaşmamayı taahhüt eder. Şifre
+                            kullanımından kaynaklanan sorumluluk tamamen üyeye aittir.</li>
+                        <li>Üye, siteyi yasal mevzuata uygun olarak kullanmayı ve başkalarını rahatsız edici
+                            davranışlardan kaçınmayı kabul eder.</li>
+                        <li>PUANTOR, üye verilerinin güvenliği için gerekli önlemleri alır, ancak üyenin bu verilerin
+                            korunması konusunda da dikkatli olmasını bekler.</li>
+                        <li>Üye, diğer kullanıcıların verilerine izinsiz ulaşmamayı ve bu verileri kullanmamayı kabul
+                            eder.</li>
+                        <li>Üyelik sözleşmesinin ihlali durumunda PUANTOR, üyenin üyeliğini iptal etme hakkına sahiptir.
+                        </li>
+                        <li>PUANTOR, her zaman tek taraflı olarak üyelikleri sonlandırma hakkını saklı tutar.</li>
+                        <li>www.puantor.com.tr internet sitesi yazılım ve tasarımı PUANTOR’a aittir. Bu içeriklerin
+                            izinsiz kullanımı yasaktır.</li>
+                        <li>Üye, web sitesi üzerinde herhangi bir otomatik program veya sistem kullanmamayı taahhüt
+                            eder.</li>
+                    </ol>
+
+                    <h3>4. Sözleşmenin Feshi</h3>
+                    <p>Üye, üyeliğini iptal edebilir. PUANTOR, üyenin sözleşme hükümlerini ihlal etmesi durumunda
+                        üyeliği iptal edebilir. Üyelik iptal edildikten sonra, üyenin bilgileri 15 takvim günü
+                        içerisinde silinecektir.</p>
+
+                    <h3>5. İhtilafların Halli</h3>
+                    <p>İhtilaf durumunda TC Mahkemeleri ve İcra Daireleri yetkilidir.</p>
+
+                    <h3>6. Yürürlük</h3>
+                    <p>Üyenin, üyelik kaydı yapması, sözleşme şartlarını kabul ettiği anlamına gelir. İşbu Sözleşme,
+                        üyenin üye olması anında yürürlüğe girmiştir.</p>
+
+                    <h2>KİŞİSEL VERİLERİN İŞLENMESİNE İLİŞKİN AYDINLATMA VE RIZA METNİ</h2>
+
+                    <h3>1. Aydınlatma Metninin Amacı ve PUANTOR’un Veri Sorumlusu Konumu:</h3>
+                    <p>PUANTOR, kişisel verilerin korunmasına ilişkin yükümlülüklerini yerine getirmek amacıyla
+                        aşağıdaki açıklamaları sunar. Bu metin, güncellemeler doğrultusunda değiştirilebilir.</p>
+
+                    <h3>2. Kişisel Verilerin İşlenme Amacı:</h3>
+                    <p>Kişisel verileriniz, aşağıdaki amaçlarla işlenmektedir:</p>
+                    <ul>
+                        <li>Kimlik bilgilerinizi teyit etmek,</li>
+                        <li>İletişim bilgilerini kaydetmek,</li>
+                        <li>Üyelerle iletişime geçmek ve gerekli bilgilendirmeleri yapmak,</li>
+                        <li>Yasal yükümlülükleri yerine getirmek.</li>
+                    </ul>
+
+                    <h3>3. Kişisel Verilerin Toplanma Yöntemi:</h3>
+                    <p>Kişisel verileriniz, web sitemiz üzerinden rızanız ile toplanmakta ve yukarıda belirtilen
+                        amaçlarla işlenmektedir.</p>
+
+                    <h3>4. Kişisel Veri Sahibi Olarak Haklarınız:</h3>
+                    <p>KVKK’nın 11. maddesi uyarınca, kişisel veri sahipleri:</p>
+                    <ul>
+                        <li>Kişisel verilerin işlenip işlenmediğini öğrenme,</li>
+                        <li>İşlenen veriler hakkında bilgi talep etme,</li>
+                        <li>Yanlış veya eksik verilerin düzeltilmesini isteme,</li>
+                        <li>Verilerin silinmesini isteme,</li>
+                        <li>Yasal yollara başvurma hakkına sahiptir.</li>
+                    </ul>
+
+                    <p>Taleplerinizi <a href="mailto:info@puantor.com.tr">info@puantor.com.tr</a> adresine
+                        iletebilirsiniz. PUANTOR, taleplerinizi 30 gün içinde değerlendirecektir.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okudum</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="./dist/js/tabler.min.js?1692870487" defer></script>
     <script src="./dist/js/demo.min.js?1692870487" defer></script>
     <script src="./dist/js/jquery.3.7.1.min.js"></script>
+    <script>
+
+        //inpuları isimlendir
+        let full_name = $('input[name="full_name"]');
+        let company_name = $('input[name="company_name"]');
+        let email = $('input[name="email"]');
+        let password = $('input[name="password"]');
+        let terms_of_service = $('input[name="terms_of_service"]');
+        let submitButton = $('#submitButton');
+
+        //formda tüm alanlar doldurulduğunda buton aktif edilir
+        $('input').on('input', function () {
+            enableSubmitButton();
+        });
+        function enableSubmitButton() {
+            //tüm alanlar doldurulduysa ve recaptcha doğrulandıysa buton aktif edilir
+            if (full_name.val() && company_name.val() && email.val() && password.val() && terms_of_service.is(':checked') && grecaptcha.getResponse()) {
+                submitButton.removeAttr('disabled');
+            } else {
+                submitButton.attr('disabled', 'disabled');
+            }
+
+
+
+        }
+    </script>
+    <script>
+        //Şifre gösterme
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+            $('.input-group-text').on('click', function () {
+                let input = $(this).prev();
+                if (input.attr('type') == 'password') {
+                    input.attr('type', 'text');
+                    //tooltip texti değiştir
+                    $(this).find("a").attr('data-bs-original-title', 'Şifreyi gizle').attr('aria-label', 'Şifreyi gizle');
+                } else {
+                    input.attr('type', 'password');
+                    //tooltip texti değiştir
+                    $(this).find("a").attr('data-bs-original-title', 'Şifreyi göster').attr('aria-label', 'Şifreyi göster');
+                }
+            });
+        });
+
+    </script>
 
 </body>
 

@@ -12,6 +12,11 @@
 
   ?>
   <title><?php echo $title; ?></title>
+
+
+  <link rel="icon" href="./static/favicon.ico" type="image/x-icon" />
+ 
+  <!-- Your code -->
   <!-- CSS files -->
   <!-- Meta Başlık -->
 
@@ -39,10 +44,14 @@
   <!-- jQuery UI CSS -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+  <!-- manifest.json -->
+  <link rel="manifest" href="/manifest.json">
+
+
   <?php
   $page = isset($_GET["p"]) ? $_GET["p"] : "";
 
-  if ($page == "missions/manage") {
+  if ($page == "missions/manage" || $page == "feedback/list") {
 
     echo '<link href="./dist/libs/summernote/summernote-lite.min.css" rel="stylesheet">';
   }
@@ -56,7 +65,7 @@
     || $page == "mycompany/list" || $page == "financial/case/list"
     || $page == "financial/transactions/list" || $page == "financial/transactions/manage"
     || $page == "projects/list" || $page == "projects/add-person" || $page == 'projects/manage'
-    || $page == "puantaj/list" || $page == "bordro/list" || $page == "defines/incexp/list"
+    || $page == "puantaj/list" || $page == "payroll/list" || $page == "defines/incexp/list"
     || $page == "missions/list" || $page == "missions/process/list" ||
     $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
     $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage'  

@@ -1,11 +1,13 @@
 <?php
 require_once "../../Database/db.php";
 require_once "../../Model/Company.php";
+require_once "../../Model/UserModel.php";
 
 use Database\Db;
 session_start();
 
 $dbInstance = new Db();
+$User = new UserModel();
 $db = $dbInstance->connect();
 
 $company = new Company();
@@ -13,19 +15,22 @@ $company = new Company();
 if ($_POST["action"] == "saveMyCompany") {
     $id = $_POST["id"];
 
+
+    $parent_id = $_SESSION["user"]->parent_id == 0 ? $_SESSION["user"]->id : $_SESSION["user"]->parent_id;
     $data = [
         "id" => $id,
-        "user_id" => $_SESSION["user"]->id,
+        "user_id" => $parent_id,
         "firm_name" => $_POST["firm_name"],
         "phone" => $_POST["phone"],
         "email" => $_POST["email"],
         "description" => $_POST["description"],
+        "creator" => $_SESSION["user"]->id,
     ];
 
     $brand_logo = $_FILES["brand_logo"];
     $file_path = $brand_logo["tmp_name"];
     $path = "../../uploads/";
-    $file_name =  uniqid() . $brand_logo["name"];
+    $file_name = uniqid() . $brand_logo["name"];
 
     if (move_uploaded_file($file_path, $path . $file_name)) {
         //Onceki yüklenen dosyayı bul 
@@ -44,7 +49,7 @@ if ($_POST["action"] == "saveMyCompany") {
             }
         }
 
-        $data["brand_logo"] =  $file_name;
+        $data["brand_logo"] = $file_name;
     }
 
     try {
@@ -57,7 +62,7 @@ if ($_POST["action"] == "saveMyCompany") {
         }
     } catch (PDOException $e) {
         $status = "error";
-        $message =  $e->getMessage();
+        $message = $e->getMessage();
     }
 
     $res = [
@@ -69,8 +74,29 @@ if ($_POST["action"] == "saveMyCompany") {
 }
 
 if ($_POST["action"] == "deleteMyCompany") {
+    $user_id = $_SESSION["user"]->id;
     $id = $_POST["id"];
 
+
+    //parent_id = 0 ise sil
+    if ($_SESSION["user"]->parent_id != 0) {
+        $res = [
+            "status" => "error",
+            "message" => "Sadece ana kullanıcılar firma silebilir!",
+        ];
+        echo json_encode($res);
+        exit;
+    }
+
+    //eğer sadece bir firma varsa silmeyi engelle
+    if ($company->countMyFirms($user_id) == 1) {
+        $res = [
+            "status" => "error",
+            "message" => "Silmek için en az bir firma olmalıdır." ,
+        ];
+        echo json_encode($res);
+        exit;
+    }
     $old_brand_logo = $company->findMyFirmLogoName($id);
 
     if ($old_brand_logo) {
@@ -84,12 +110,12 @@ if ($_POST["action"] == "deleteMyCompany") {
     }
 
     try {
-         $company->deleteMyFirm($id);
+        $company->deleteMyFirm($id);
         $status = "success";
         $message = "Firma başarıyla silindi.!!!";
     } catch (PDOException $e) {
         $status = "error";
-        $message =  $e->getMessage();
+        $message = $e->getMessage();
     }
 
     $res = [

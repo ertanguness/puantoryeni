@@ -1,7 +1,25 @@
 <?php
+
+use App\Helper\Security;
+
 require_once 'Model/Persons.php';
 
-$id = $_GET['id'] ?? 0;
+
+// Yetki kontrolü yapılır
+$perm->checkAuthorize("personnel_add_update");
+
+$id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
+
+//Eğer manuel id yazılmışsa personel sayfasına gönder
+if ($id == null && $id != 0) {
+    echo "manuel yazılan id :" . $id;
+    //echo "<script>console.log('" . $_GET["id"] . "');</script>";
+   // header('Location: index.php?p=persons/list');
+    //exit();
+}
+
+
+
 $personObj = new Persons();
 $person = $personObj->find($id);
 
@@ -13,29 +31,6 @@ $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
     <!-- Page header -->
     <div class="page-header d-print-none">
         <div class="container-xl">
-
-
-            <div class="row g-2 align-items-center mb-3">
-                <!-- <div class="col">
-                    <h2 class="page-title">
-                        
-                    </h2>
-                </div> -->
-
-                <!-- Page title actions
-                <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-outline-secondary route-link" data-page="persons/list">
-                        <i class="ti ti-list icon me-2"></i>
-                        Listeye Dön
-                    </button>
-                </div>
-                <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-primary" id="savePerson">
-                        <i class="ti ti-device-floppy icon me-2"></i>
-                        Kaydet
-                    </button>
-                </div> -->
-            </div>
             <div class="col-12">
                 <div class="card card-sm">
                     <div class="card-body">
@@ -63,6 +58,11 @@ $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
                             </div>
                             <div class="col-auto d-flex">
                                 <!-- Page title actions -->
+                                <!-- <div class="col-auto ms-auto d-print-none me-2">
+                                    <a href="#" class="btn btn-teal route-link" data-page="persons/manage">
+                                        <i class="ti ti-plus icon me-2"></i> Yeni
+                                    </a>
+                                </div> -->
                                 <div class="col-auto ms-auto d-print-none me-2">
                                     <button type="button" class="btn btn-outline-secondary route-link"
                                         data-page="persons/list">
@@ -70,12 +70,12 @@ $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
                                         Listeye Dön
                                     </button>
                                 </div>
-                                <div class="col-auto ms-auto d-print-none">
+                                <!-- <div class="col-auto ms-auto d-print-none">
                                     <button type="button" class="btn btn-primary" id="savePerson">
                                         <i class="ti ti-device-floppy icon me-2"></i>
                                         Kaydet
                                     </button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

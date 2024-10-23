@@ -4,9 +4,9 @@ $(document).on("click", "#urun_kaydet", function () {
   let formData = new FormData(form[0]);
   formData.append("action", "saveProduct");
 
-  for (data of formData.entries()) {
-    console.log(data);
-  }
+  // for (data of formData.entries()) {
+  //   console.log(data);
+  // }
   fetch("api/products.php", {
     method: "POST",
     body: formData,

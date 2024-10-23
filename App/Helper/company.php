@@ -1,11 +1,22 @@
 <?php
 
 require_once 'Database/db.php';
+require_once 'Model/MyFirmModel.php';
+require_once "App\Helper\security.php";
 
 use Database\Db;
+use App\Helper\Security;
 
 class CompanyHelper extends Db
 {
+    protected $table = 'companies';
+    protected $MyFirmModel = null;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->MyFirmModel = new MyFirmModel();
+
+    }
     public function companySelect($name = 'companies', $id = null)
     {
         $query = $this->db->prepare('SELECT * FROM companies');  // Tüm sütunları seç
@@ -16,7 +27,7 @@ class CompanyHelper extends Db
         $select .= '<option value="">Firma Seçiniz</option>';
         foreach ($results as $row) {  // $results üzerinde döngü
             $selected = $id == $row->id ? ' selected' : '';  // Eğer id varsa seçili yap
-            $select .= '<option value="' . $row->id . '"' . $selected . '>' . $row->company_name . '</option>';  // $row->title yerine $row->name kullanıldı
+            $select .= '<option value="' . Security::encrypt($row->id) . '"' . $selected . '>' . $row->company_name . '</option>';  // $row->title yerine $row->name kullanıldı
         }
         $select .= '</select>';
         return $select;
@@ -34,28 +45,17 @@ class CompanyHelper extends Db
         }
     }
 
-    public function myCompanySelect($name = 'companies', $id = null)
+    public function myCompanySelect($name = 'companies', $id = null, $disabled = null)
     {
 
 
-        
-        $email = $_SESSION['user']->email;
-        $query = $this->db->prepare('SELECT DISTINCT id,firm_name FROM (
-                                                SELECT id, user_id, firm_name, "" AS email FROM myfirms 
-                                                WHERE email = :email
-                                                UNION ALL
-                                            SELECT firm_id,u.id,firm_name,u.email FROM users u
-                                            LEFT JOIN myfirms mf ON mf.id = u.firm_id
-                                            WHERE u.email = :email
-                                            ) AS authorize_firm;');  // Tüm sütunları seç
-        $query->execute(['email' => $email]);
-        $results = $query->fetchAll(PDO::FETCH_OBJ);  // Tüm sonuçları al
 
-        $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="min-width:200px">';
+        $results = $this->MyFirmModel->getMyFirmByUserId();
+        $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="min-width:200px;width:100%" '. $disabled . '>';
         $select .= '<option value="">Firma Seçiniz</option>';
         foreach ($results as $row) {  // $results üzerinde döngü
             $selected = $id == $row->id ? ' selected' : '';  // Eğer id varsa seçili yap
-            $select .= '<option value="' . $row->id . '"' . $selected . '>' . $row->firm_name . '</option>';  // $row->title yerine $row->name kullanıldı
+            $select .= '<option value="' . Security::encrypt($row->id) . '"' . $selected . '>' . $row->firm_name . '</option>';  // $row->title yerine $row->name kullanıldı
         }
         $select .= '</select>';
         return $select;

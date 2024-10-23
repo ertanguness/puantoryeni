@@ -8,7 +8,7 @@
           <div class="modal-body">
             <div class="row mb-3 align-items-end">
               <div class="col-auto">
-                <a href="pages/bordro/content/payment-load.xlsx" class="avatar avatar-upload rounded" >
+                <a href="pages/payroll/content/payment-load.xlsx" class="avatar avatar-upload rounded" >
              
                 <i class="ti ti-file-excel icon"></i>
                   <span class="avatar-upload-text">İndir</span>

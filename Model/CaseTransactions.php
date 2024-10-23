@@ -51,4 +51,10 @@ class CaseTransactions extends Model
         $sql->execute([$case_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
+
+    public function deleteCaseTransactions($case_id)
+    {
+        $sql = $this->db->prepare("DELETE FROM $this->table WHERE case_id = ?");
+        $sql->execute([$case_id]);
+    }
 }

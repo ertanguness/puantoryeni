@@ -13,7 +13,6 @@ if ($_POST["action"] == "saveMissionHeaders") {
             "id" => $id,
             "header_name" => $_POST["header_name"],
             "firm_id" => $_SESSION["firm_id"],
-            "header_order" => $_POST["header_order"],
             "status" => $_POST["status"],
             "user_id" => $_SESSION["user"]->id,
             "description" => $_POST["description"]

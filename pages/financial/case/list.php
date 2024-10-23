@@ -15,8 +15,8 @@ $cases = $caseObj->allCaseWithFirmId();
 
 
 ?>
-<div class="container-xl mt-3">
-    <div class="alert alert-info bg-white alert-dismissible" role="alert">
+<div class="container-xl">
+    <div class="alert alert-info bg-white alert-dismissible mt-3" role="alert">
         <div class="d-flex">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -64,6 +64,7 @@ $cases = $caseObj->allCaseWithFirmId();
                                 <th>Bankası</th>
                                 <th>Şubesi</th>
                                 <th>Para Birimi</th>
+                                <th>Varsayılan mı?</th>
                                 <th>Başlangıç Bütçesi</th>
                                 <th>Güncel Bakiye</th>
                                 <th>Açıklama</th>
@@ -86,6 +87,12 @@ $cases = $caseObj->allCaseWithFirmId();
                                     <td><?php echo $case->bank_name; ?></td>
                                     <td><?php echo $case->branch_name; ?></td>
                                     <td><?php echo Helper::money($case->case_money_unit); ?></td>
+                                    <td class="text-center"><?php
+
+                                    if($case->isDefault == 1 ){
+                                        echo '<i class="ti ti-check icon color-green"></i>';
+                                    }
+                                    ?></td>
                                     <td><?php echo Helper::formattedMoney($case->start_budget); ?></td>
                                     <td>1</td>
                                     <td><?php echo $case->description; ?></td>

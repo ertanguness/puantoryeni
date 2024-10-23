@@ -43,5 +43,13 @@ class Cases extends Model
         return $result->id ?? 0;
     }
 
+    public function countCaseByFirm(){
+        $query = $this->db->prepare("SELECT count(id) as count FROM $this->table WHERE firm_id = ?");
+        $query->execute([$_SESSION['firm_id']]);
+        $result = $query->fetch(PDO::FETCH_OBJ);
+        return $result->count;
+    }
+
+
    
 }

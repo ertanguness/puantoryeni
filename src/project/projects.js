@@ -1,19 +1,37 @@
 $(document).on("click", "#saveProject", function () {
   var form = $("#projectForm");
-
   let formData = new FormData(form[0]);
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
+  // for (var pair of formData.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
+
+ 
+  form.validate({
+    rules: {
+      project_name: {
+        required: true
+      }
+    },
+    messages: {
+      project_name: {
+        required: "Proje adı zorunludur."
+      }
+    }
+  });
+
+  if (!form.valid()) {
+    return false;
   }
 
   fetch("/api/projects/projects.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       if (data.status == "success") {
+        $("#id").val(data.lastInsertId);
         title = "Başarılı!";
       } else {
         title = "Hata!";
@@ -22,7 +40,7 @@ $(document).on("click", "#saveProject", function () {
         title: title,
         text: data.message,
         icon: data.status,
-        confirmButtonText: "Tamam",
+        confirmButtonText: "Tamam"
       });
     })
     .catch((error) => {
@@ -44,17 +62,15 @@ $(document).on("click", "#savePersontoProject", function () {
   formData.append("person_id", checkedItems);
   formData.append("action", "addPersonToProject");
 
-
-
-
   fetch("/api/projects/project-person.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       if (data.status == "success") {
+        
         title = "Başarılı!";
       } else {
         title = "Hata!";
@@ -63,7 +79,7 @@ $(document).on("click", "#savePersontoProject", function () {
         title: title,
         text: data.message,
         icon: data.status,
-        confirmButtonText: "Tamam",
+        confirmButtonText: "Tamam"
       });
     })
     .catch((error) => {
@@ -80,9 +96,17 @@ $(document).ready(function () {
   });
 });
 
-
 $(document).on("change", "#project_city", function () {
   //İl id'si alınır ilce selectine ilceler yüklenir
-  getTowns($(this).val(),"#project_town");
+  getTowns($(this).val(), "#project_town");
 });
 
+
+$(document).on("click", ".delete-project", function () {
+  //Tablo adı butonun içinde bulunduğu tablo
+  let action = "deleteProject";
+  let confirmMessage = "Proje silinecektir!";
+  let url = "/api/projects/projects.php";
+
+  deleteRecord(this, action, confirmMessage, url);
+});

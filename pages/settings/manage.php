@@ -16,13 +16,13 @@ $pageTitle = 'Ayarlar';
                         <?php echo $pageTitle; ?>
                     </h2>
                 </div>
-
                 <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-primary" id="saveCase">
+                    <button type="button" class="btn btn-primary" id="userSave">
                         <i class="ti ti-device-floppy icon me-2"></i>
                         Kaydet
                     </button>
                 </div>
+               
             </div>
         </div>
     </div>
@@ -30,15 +30,14 @@ $pageTitle = 'Ayarlar';
     <div class="page-body">
         <div class="container-xl">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="" id="caseForm">
+               
+                        <form action="" id="userForm">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <a href="#tabs-home-7" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                <a href="#tabs-home-7" id="tabs-home" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                         <path d="M5 12l-2 0l9 -9l9 9l-2 0"></path>
@@ -48,7 +47,7 @@ $pageTitle = 'Ayarlar';
                                                     Genel Bilgiler</a>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <a href="#tabs-profile-7" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                                <a href="#tabs-profile-7" id="tabs-profile" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -83,8 +82,13 @@ $pageTitle = 'Ayarlar';
                             </div>
                         </form>
                     </div>
-                </div>
-            </div>
+             
         </div>
     </div>
 </div>
+
+
+<!-- Get ile gelen parametre edit-profile ise ikinci sekmeyi aç -->
+<script>
+  
+</script>

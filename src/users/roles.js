@@ -6,9 +6,9 @@ $(document).on("click", "#rol_kaydet", function () {
   formData.append("id", $("#role_id").val());
   formData.append("action", "saveRoles");
 
-  for (data of formData.entries()) {
-    console.log(data);
-  }
+  // for (data of formData.entries()) {
+  //   console.log(data);
+  // }
 
   fetch("api/users/roles.php", {
     method: "POST",

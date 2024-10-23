@@ -47,42 +47,52 @@ $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
             <div class="col-md-12">
 
                 <form action="" id="projectForm">
+                    <!-- HIDDEN ROW -->
                     <div class="row d-none">
                         <div class="col-md-4">
-                            <input type="text" name="id" class="form-control" value="<?php echo $id ?>">
+                            <input type="text" name="id" id="id" class="form-control" value="<?php echo $id ?>">
                         </div>
                         <div class="col-md-4">
                             <input type="text" name="action" value="saveProject" class="form-control">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="firm_id" value="<?php echo $firm_id ;?>" class="form-control">
+                            <input type="text" name="firm_id" value="<?php echo $firm_id; ?>" class="form-control">
                         </div>
                     </div>
+                    <!-- HIDDEN ROW -->
 
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
                                 <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-home-3" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                        <a href="#tabs-home-3" class="nav-link active" data-bs-toggle="tab"
+                                            aria-selected="true"
+                                            role="tab">
                                             <i class="ti ti-home icon me-1"></i>
                                             Genel Bilgiler
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-profile-3" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <a href="#tabs-profile-3" class="nav-link" data-bs-toggle="tab"
+                                            aria-selected="false" tabindex="-1"
+                                            role="tab">
                                             <i class="ti ti-clipboard-text icon me-1"></i>
                                             Diğer Bilgiler
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-payment-3" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <a href="#tabs-payment-3" class="nav-link" data-bs-toggle="tab"
+                                            aria-selected="false" tabindex="-1"
+                                            role="tab">
                                             <i class="ti ti-cash-register icon me-1"></i>
                                             Hakediş/Ödeme Bilgileri
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-puantaj-3" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <a href="#tabs-puantaj-3" class="nav-link" data-bs-toggle="tab"
+                                            aria-selected="false" tabindex="-1"
+                                            role="tab">
                                             <i class="ti ti-calendar-month icon me-1"></i>
                                             Çalışma/Puantaj Bilgileri
                                         </a>
@@ -100,11 +110,11 @@ $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
                                     </div>
                                     <div class="tab-pane" id="tabs-payment-3" role="tabpanel">
                                         <?php include_once "content/2-payment-info.php" ?>
-                                        
+
                                     </div>
                                     <div class="tab-pane" id="tabs-puantaj-3" role="tabpanel">
                                         <?php include_once "content/3-works-puantaj-info.php" ?>
-                                        
+
                                     </div>
                                 </div>
                             </div>

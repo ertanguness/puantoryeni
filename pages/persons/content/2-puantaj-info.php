@@ -16,6 +16,11 @@ $projects = new Projects();
 $puantaj_info = $puantajObj->getPuantajInfoByPerson($id);
 
 
+if(!$Auths->Authorize("person_page_puantaj_info")) {
+    Helper::authorizePage();
+    return;
+}
+
 ?>
 <style>
     table.datatable th,

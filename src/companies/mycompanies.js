@@ -2,9 +2,9 @@ $(document).on("click", "#saveMyFirm", function () {
   var form = $("#myFirmForm");
 
   let formData = new FormData(form[0]);
-  for (data of formData.entries()) {
-    console.log(data);
-  }
+  // for (data of formData.entries()) {
+  //   console.log(data);
+  // }
 
   fetch("/api/companies/mycompanies.php", {
     method: "POST",

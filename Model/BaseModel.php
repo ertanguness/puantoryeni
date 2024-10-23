@@ -1,6 +1,7 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Database/db.php';
+// require_once $_SERVER['DOCUMENT_ROOT'] . '/Database/db.php';
+require_once __DIR__ . '/../Database/db.php';
 
 use Database\Db;
 

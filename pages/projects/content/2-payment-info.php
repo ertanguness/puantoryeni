@@ -10,10 +10,10 @@ use App\Helper\Helper;
 $incexp = new ProjectIncomeExpense();
 
 // Gelir gider bilgierini getir
-$income_expenses = $incexp->getAllIncomeExpenseByProject($project->id);
+$income_expenses = $incexp->getAllIncomeExpenseByProject($id);
 
 // Özet Bilgileri getir
-$summary = $incexp->sumAllIncomeExpense($project->id);
+$summary = $incexp->sumAllIncomeExpense($id);
 $total_income = $summary->hakedis;
 $total_expense = $summary->kesinti;
 $total_payment = $summary->odeme;
@@ -43,17 +43,15 @@ $balance = $total_income - $total_expense - $total_payment;
                                 <i class="ti ti-list-details icon me-2"></i>
                                 İşlemler</button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item add-payment" data-bs-toggle="modal"
-                                    data-bs-target="#payment-modal" data-tooltip="Projeye Ödeme yapın"
-                                    data-tooltip-location="left" data-id="<?php echo $project->id; ?>" href="#">
+                                <a class="dropdown-item add-payment"  data-tooltip="Projeye Ödeme yapın"
+                                    data-tooltip-location="left" data-id="<?php echo $id; ?>" href="#">
                                     <i class="ti ti-upload icon me-3"></i> Ödeme Yap
                                 </a>
-                                <a class="dropdown-item add-income" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#progress-payment-modal" data-id="<?php echo $project->id; ?>">
+                                <a class="dropdown-item add-progress-payment" href="#"  data-id="<?php echo $id; ?>">
                                     <i class="ti ti-download icon me-3"></i> Hakediş Ekle
                                 </a>
                                 <a class="dropdown-item add-deduction" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#deduction_modal" data-id="<?php echo $project->id; ?>">
+                                    data-bs-target="#deduction_modal" data-id="<?php echo $id; ?>">
                                     <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
                                 </a>
 

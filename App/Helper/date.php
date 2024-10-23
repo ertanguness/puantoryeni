@@ -81,6 +81,10 @@ class Date
         return ($dayOfWeek == 7);
     }
 
+    public static function isDate($date)
+    {
+        return (bool)strtotime($date);
+    }
     
     public static function isBetween($date, $startDate, $endDate)
     {
@@ -88,6 +92,13 @@ class Date
         $startDate = strtotime($startDate);
         $endDate = strtotime($endDate);
         return ($date >= $startDate && $date <= $endDate);
+    }
+
+    public static function isBefore($date, $compareDate)
+    {
+        $date = self::Ymd($date);
+        $compareDate = self::Ymd($compareDate);
+        return ($date < $compareDate);
     }
 
     public static function gunAdi($gun)
@@ -160,4 +171,6 @@ class Date
         $select .= '</select>';
         return $select;
     }
+
+
 }

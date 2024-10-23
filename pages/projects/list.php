@@ -122,7 +122,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                                                 <i class="ti ti-cash-register icon me-3"></i> Ödeme Yap
                                             </a>
 
-                                            <a class="dropdown-item" href="#">
+                                            <a class="dropdown-item delete-project" href="#" data-id="<?php echo $project->id; ?>">
                                                 <i class="ti ti-trash icon me-3"></i> Sil
                                             </a>
                                         </div>

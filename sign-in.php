@@ -2,8 +2,10 @@
 
 require_once 'configs/require.php';
 require_once 'Model/UserModel.php';
+require_once 'App/Helper/security.php';
 
-$userObj = new UserModel();
+$User = new UserModel();
+use App\Helper\Security;
 // if ($_POST && isset($_POST['submitForm'])) {
 //   $email = $_POST['email'];
 //   $password = MD5($_POST['password']);
@@ -28,6 +30,8 @@ $userObj = new UserModel();
   <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/style.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <link rel="icon" href="./static/favicon.ico" type="image/x-icon" />
+
 
   <style>
     @import url('https://rsms.me/inter/inter.css');
@@ -75,7 +79,7 @@ $userObj = new UserModel();
               } elseif (empty($password)) {
                 echo alertdanger('Şifre boş bırakılamaz');
               } else {
-                $user = $userObj->getUserByEmail($email);
+                $user = $User->getUserByEmail($email);
                 // Kullanıcı bulunamadıysa
                 if (!$user) {
                   echo alertdanger('Kullanıcı bulunamadı');
@@ -91,6 +95,7 @@ $userObj = new UserModel();
                     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                     $_SESSION['full_name'] = $user->full_name;
                     $_SESSION['user_role'] = $user->user_roles;
+                    $User->setToken($user->id, $_SESSION['csrf_token']);
 
                     // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
                     $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';

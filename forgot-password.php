@@ -26,7 +26,7 @@
       <div class="container container-tight py-4">
         <div class="text-center mb-4">
             <a href="." class="navbar-brand navbar-brand-autodark">
-                <img src="./static/logo.svg" height="36" alt="">
+                <img src="./static/logo-ai.svg" height="120" alt="">
             </a>
         </div>
         <form class="card card-md" action="./" method="get" autocomplete="off" novalidate="">

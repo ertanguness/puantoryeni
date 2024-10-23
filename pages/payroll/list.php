@@ -5,14 +5,20 @@ require_once 'Model/Bordro.php';
 require_once 'Model/Projects.php';
 require_once 'App/Helper/date.php';
 require_once 'App/Helper/projects.php';
+require_once "App/Helper/financial.php";
+require_once "App/Helper/security.php";
 
+use App\Helper\Security;
 use App\Helper\Date;
 use App\Helper\Helper;
+
+
 
 $projects = new Projects();
 $projectHelper = new ProjectHelper();
 $personObj = new Persons();
 $bordro = new Bordro();
+$FinancialHelper = new Financial();
 
 $year = isset($_POST['year']) ? $_POST['year'] : date('Y');
 $month = isset($_POST['months']) ? $_POST['months'] : date('m');
@@ -84,7 +90,7 @@ $lastDay = Date::lastDay($month, $year);
                         <?php if ($Auths->hasPermission('payroll_export_excel')) { ?>
                             <a class="dropdown-item add-income"
                                 data-tooltip="Personellere yapılacak ödeme listesini indirin" data-tooltip-location="left"
-                                href="pages/bordro/xls/bank-list-for-payments.php">
+                                href="pages/payroll/xls/bank-list-for-payments.php">
                                 <i class="ti ti-checklist icon me-3"></i> Banka Listesi İndir
                             </a>
                         <?php } ?>
@@ -144,11 +150,26 @@ $lastDay = Date::lastDay($month, $year);
                                     // Personelin aylık maaşı eklenmemişse
                                     // Personelin işe başlama tarihi o ay içindeyse
                             
-                                    if (Date::isBetween($person->job_start_date, $firstDay, $lastDay)) {
-                                        // Personelin aylık maaşını ekleyelim
-                                        if (!$bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)) {
-                                            // Personelin aylık maaşını ekleyelim
-                                            $bordro->addPersonMonthlyIncome($person->id, $month, $year, $person->daily_wages, $description);
+                                    //veya personelin işe başlama tarihi o aydan önceyse
+                                    //Eğer ayın ilk günü bugünden küçükse
+                                    if ($firstDay <= Date::Ymd(date('Y-m-d'))) {
+                                        if (
+                                            Date::isBetween($person->job_start_date, $firstDay, $lastDay) ||
+                                            Date::isBefore($person->job_start_date, $firstDay)
+                                        ) {
+
+
+                                            $montly_income = $bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)->id ?? 0;
+                                         
+                                            // Personelin aylık maaşı ekle mi diye kontrol et
+                                            if ($montly_income == 0) {
+                                                // Personelin aylık maaşını ekleyelim
+                                                $bordro->addPersonMonthlyIncome($person->id, $month, $year, $person->daily_wages, $description);
+                                            } else {
+                                                //echo $montly_income;
+                                                // Personelin aylık maaşını güncelleyelim,işe başlaama tarihinde değişiklik olduğu zaman maaş güncellenir
+                                                $bordro->updatePersonMonthlyIncome($person->id, $montly_income, $month, $year);
+                                            }
                                         }
                                     }
                                 }
@@ -219,7 +240,7 @@ $lastDay = Date::lastDay($month, $year);
                                                         <i class="ti ti-cash-register icon me-3"></i> Ödeme Yap
                                                     </a>
                                                 <?php } ?>
-                                                
+
                                                 <a class="dropdown-item add-wage-cut" data-id="<?php echo $person->id ?>"
                                                     data-tooltip="Avans,Ceza veya Bes gibi" data-tooltip-location="left"
                                                     href="#" data-bs-toggle="modal" data-bs-target="#wage_cut_modal">
@@ -230,8 +251,10 @@ $lastDay = Date::lastDay($month, $year);
                                                     href="#" data-bs-toggle="modal" data-bs-target="#income_modal">
                                                     <i class="ti ti-download icon me-3"></i> Gelir Ekle
                                                 </a>
+
+                                                <?php $enc_id = Security::encrypt($person->id); ?>
                                                 <a class="dropdown-item route-link"
-                                                    data-page="bordro/pay-slip&id=<?php echo $person->id ?>" href="#">
+                                                    data-page="bordro/pay-slip&id=<?php echo $enc_id ?>" href="#">
                                                     <i class="ti ti-file-dollar icon me-3"></i> Bordro Göster
                                                 </a>
                                                 <a class="dropdown-item" href="#">

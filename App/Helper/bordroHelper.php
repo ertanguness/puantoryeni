@@ -11,7 +11,7 @@ class BordroHelper extends Db
     public function getIncExpSelectByFirmAndType($name = "inc_exp_type",$type = 1, $id = null) 
     {
         $firm_id = $_SESSION['firm_id'];
-        $query = $this->db->prepare("SELECT * FROM defines where firm_id = ? and  type = ?");
+        $query = $this->db->prepare("SELECT * FROM defines where firm_id = ? and  type_id = ?");
         $query->execute([$firm_id, $type]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
 

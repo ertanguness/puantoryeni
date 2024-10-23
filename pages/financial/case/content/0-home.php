@@ -3,6 +3,7 @@
 require_once "App/Helper/helper.php";
 
 use App\Helper\Helper;
+$selected_firm = $case->firm_id ?? $_SESSION['firm_id'];
 
 ?>
 
@@ -10,7 +11,7 @@ use App\Helper\Helper;
 <form action="" id="caseForm">
     <div class="row d-none">
         <div class="col-md-4">
-            <input type="text" name="id" class="form-control" value="<?php echo $case->id ?? 0 ?>">
+            <input type="text" name="id" id="id" class="form-control" value="<?php echo $case->id ?? 0 ?>">
         </div>
         <div class="col-md-4">
             <input type="text" name="action" value="saveCase" class="form-control">
@@ -21,7 +22,7 @@ use App\Helper\Helper;
             <label for="case_name" class="form-label">Firması</label>
         </div>
         <div class="col-md-4">
-            <?php echo $company->myCompanySelect("firm_company", $case->firm_id ?? ''); ?>
+            <?php echo $company->myCompanySelect("firm_company", $selected_firm ,"disabled" ); ?>
         </div>
         <div class="col-md-2">
             <label for="case_name" class="form-label">Kasa Adı</label>

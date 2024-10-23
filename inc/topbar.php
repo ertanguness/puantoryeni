@@ -63,8 +63,8 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
                 </div>
                 <div class="d-none d-md-flex">
 
-                    <a href="<?php echo htmlspecialchars($new_url); ?>" class="nav-link px-0 hide-theme-dark" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" aria-label="Enable dark mode"
+                    <a href="<?php echo htmlspecialchars($new_url); ?>" class="nav-link px-0 hide-theme-dark"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Enable dark mode"
                         data-bs-original-title="Enable dark mode">
                         <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -75,8 +75,8 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
                             </path>
                         </svg>
                     </a>
-                    <a href="<?php echo htmlspecialchars($new_url); ?>" class="nav-link px-0 hide-theme-light" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" aria-label="Enable light mode"
+                    <a href="<?php echo htmlspecialchars($new_url); ?>" class="nav-link px-0 hide-theme-light"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Enable light mode"
                         data-bs-original-title="Enable light mode">
                         <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -229,7 +229,7 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" data-bs-theme="light">
 
-                        <a href="./settings.php" class="dropdown-item">Ayarlar</a>
+                        <a href="index.php?p=settings/manage&tab=edit-profile" class="dropdown-item">Profili Güncelle</a>
                         <a href="./logout.php" class="dropdown-item">Çıkış Yap</a>
                     </div>
                 </div>

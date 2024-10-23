@@ -11,7 +11,9 @@ require_once "Model/MyFirmModel.php";
 $myFirmObj = new MyFirmModel();
 
 // $myCompanies = $companyObj->getMyCompanies($user_id);
-$myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
+//$myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
+
+$myFirms = $myFirmObj->getMyFirmByUserId();
 
 
 ?>
@@ -28,6 +30,8 @@ $myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
     <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet" />
     <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" />
     <link href="./dist/css/style.css?1692870487" rel="stylesheet" />
+  <link rel="icon" href="./static/favicon.ico" type="image/x-icon" />
+
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
@@ -77,62 +81,51 @@ $myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
             <div class="page-header d-print-none">
                 <div class="container-xl">
                     <div class="row g-2 align-items-center">
-                        <div class="col-md-3">
-                            <h2 class="page-title">
-                                Filtre
-                            </h2>
-                        </div>
-                        <div class="col">
-                            <h2 class="page-title">
-                                Firma Listesi
-                            </h2>
+
+                        <div class="col text-center">
+                            <h1 class="text-muted">
+                                Firma Seçiniz
+                            </h1>
                         </div>
                         <!-- Page title actions -->
 
                     </div>
                 </div>
             </div>
+            <style>
+                .img-fluid {
+                    max-width: 400px;
+                    height: auto;
+                }
+            </style>
             <!-- Page body -->
             <div class="page-body">
                 <div class="container-xl">
                     <div class="row g-4">
-
                         <div class="col-md-3">
-                            <form action="./" method="get" autocomplete="off" novalidate class="sticky-top">
-
-                                <div class="form-label">Pasifleri de getir</div>
-                                <div class="mb-4">
-                                    <label class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox">
-                                        <span class="form-check-label form-check-label-on">Açık</span>
-                                        <span class="form-check-label form-check-label-off">Kapalı</span>
-                                    </label>
-                                    <div class="small text-secondary">Seçili olduğu zaman tüm siteler getirilir</div>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="subheader">Last checked at</div>
+                                    <div class="h3 m-0">27 seconds ago</div>
                                 </div>
-                                <div class="form-label">İl</div>
-                                <div class="mb-4">
-                                    <select class="form-select">
-                                        <option>Tümü</option>
-                                        <option>London</option>
-                                        <option>San Francisco</option>
-                                        <option>New York</option>
-                                        <option>Berlin</option>
-                                    </select>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="subheader">Last checked at</div>
+                                    <div class="h3 m-0">27 seconds ago</div>
                                 </div>
-                                <div class="mt-5">
-                                    <button class="btn btn-primary w-100">
-                                        Filtreyi Uygula
-                                    </button>
-                                    <a href="#" class="btn btn-link w-100">
-                                        Tüm Kayıtlar
-                                    </a>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="subheader">Last checked at</div>
+                                    <div class="h3 m-0">27 seconds ago</div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="row row-cards">
-                                <div class="space-y">
+                                <div class="space-y ">
+
                                     <?php
 
                                     foreach ($myFirms as $myfirm) { ?>
@@ -182,7 +175,6 @@ $myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
                                                                                 <path d="M17 11l0 .01"></path>
                                                                                 <path d="M17 15l0 .01"></path>
                                                                             </svg>
-                                                                            <!-- <?php echo $myCompany->phone; ?> -->
                                                                         </div>
                                                                         <div class="list-inline-item">
                                                                             <!-- Download SVG icon from http://tabler-icons.io/i/license -->
@@ -221,31 +213,22 @@ $myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
                                             </div>
                                         </form>
                                     <?php } ?>
+                                    <div class="row justify-content-center">
+
+                                        <img src="static/illustrations/loading.avif" alt="Your Image Description"
+                                            class="img-fluid text-center">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-lg-3">
                             <div class="card">
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-yellow">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" class="icon">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6">
-                                            </path>
-                                            <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                                        </svg>
-                                    </div>
-                                </div>
+                                <div class="ribbon bg-red">NEW</div>
                                 <div class="card-body">
-                                    <h3 class="card-title">Özet Bilgi</h3>
-                                    <p class="text-secondary">
-                                        Bakiye bilgileri buraya gelecek
-                                    </p>
+                                    <h3 class="card-title">Card with text ribbon</h3>
+                                    <p class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                        Architecto at consectetur culpa ducimus eum fuga fugiat, ipsa iusto, modi
+                                        nostrum recusandae reiciendis saepe.</p>
                                 </div>
                             </div>
                         </div>
@@ -307,9 +290,9 @@ $myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
     <script src="./dist/js/demo.min.js?1692870487" defer></script>
     <script src="./dist/js/jquery.3.7.1.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.list-item').each(function() {
-                $(this).click(function() {
+        $(document).ready(function () {
+            $('.list-item').each(function () {
+                $(this).click(function () {
                     $(this).closest("form").submit();
                 });
             });

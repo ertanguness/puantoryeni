@@ -50,12 +50,23 @@ class UserModel extends Model
 
     function getUsersByFirm($firm_id)
     {
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? ");
-        $sql->execute(array($firm_id));
+        $user_id = $_SESSION["user"]->id;
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE (firm_id = ? or id = ?) and parent_id != 0");
+        $sql->execute(array($firm_id, $user_id));
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function getUserByToken($token)
+   
+    //Kullanıcı girişinde bir token oluştur ve kullanıcıya kaydet
+    public function setToken($id,$token)
+    {
+        //$token = bin2hex(random_bytes(32));
+        $sql = $this->db->prepare("UPDATE $this->table SET session_token = ? WHERE id = ?");
+        $sql->execute(array($token, $id));
+        return $token;
+    }
+
+    public function getToken($token)
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE token = ? ");
         $sql->execute(array($token));
@@ -85,6 +96,13 @@ class UserModel extends Model
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ? AND firm_id = ?");
         $sql->execute([$email, $firm_id]);
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function isEmailExists($email)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ?");
+        $sql->execute([$email]);
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 

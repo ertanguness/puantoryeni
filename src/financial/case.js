@@ -23,9 +23,10 @@ $(document).on("click", "#saveCase", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+
       if (data.status == "success") {
         title = "Başarılı!";
+        $("#id").val(data.lastid);
       } else {
         title = "Hata!";
       }
