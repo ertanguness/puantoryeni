@@ -73,7 +73,7 @@ if ($page == 'defines/service-head/list' || $page == 'defines/service-head/manag
 }
 // Personel Liste, ekleme ve düzenleme sayfası
 if ($page == 'persons/list' || $page == 'persons/manage') {
-    echo '<script src="./src/persons/persons.js"></script>';
+    echo '<script src="./src/persons/persons.min.js"></script>';
 }
 // Personel diğer bilgileri ekleme ve düzenleme sayfası
 if ($page == 'persons/manage') {
@@ -192,4 +192,4 @@ if ($page == 'home') {
 
 
 
-<script src="./src/app.js" defer??></script>
+<script src="./src/app.min.js" defer??></script>

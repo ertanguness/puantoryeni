@@ -9,9 +9,9 @@ $selected_firm = $case->firm_id ?? $_SESSION['firm_id'];
 
 
 <form action="" id="caseForm">
-    <div class="row d-none">
+    <div class="row">
         <div class="col-md-4">
-            <input type="text" name="id" id="id" class="form-control" value="<?php echo $case->id ?? 0 ?>">
+            <input type="text" name="id" id="id" class="form-control" value="<?php echo $new_id ?>">
         </div>
         <div class="col-md-4">
             <input type="text" name="action" value="saveCase" class="form-control">

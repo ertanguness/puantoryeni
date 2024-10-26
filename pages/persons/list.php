@@ -6,6 +6,9 @@ require_once 'App/Helper/helper.php';
 require_once 'App/Helper/date.php';
 
 
+//Yetki Kontrolü yapılır
+$perm->checkAuthorize("personnel_page");
+
 use App\Helper\Helper;
 use App\Helper\Date;
 use App\Helper\Security;
@@ -17,8 +20,7 @@ $persons = $person->getPersonsByFirm($firm_id);
 $company = new CompanyHelper();
 
 
-//Yetki Kontrolü yapılır
-$perm->checkAuthorize("personnel_page");
+
 
 
 ?>
@@ -69,7 +71,7 @@ $perm->checkAuthorize("personnel_page");
                     <table class="table card-table table-hover text-nowrap datatable" id="persons">
                         <thead>
                             <tr>
-                                <th style="width:5%">ID</th>
+                                <th style="width:5%">Sıra</th>
                                 <th>Adı Soyadı</th>
                                 <th>Firma Adı</th>
                                 <th>Ücret Türü</th>
@@ -86,47 +88,54 @@ $perm->checkAuthorize("personnel_page");
 
 
                             <?php
+                            $i = 1;
                             foreach ($persons as $person):
                                 $wage_type = $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka';
                                 $wage_type_color = $person->wage_type == 2 ? "style='color:blue'" : '';
                                 $balance = $bordro->getBalance($person->id);
                                 $color = Helper::balanceColor($balance);
-                                $id=Security::encrypt($person->id);
+                                $id = Security::encrypt($person->id);
 
                                 ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $person->id; ?></td>
-                                    <td> <a href="#" data-tooltip="Detay/Güncelle"
-                                            data-page="persons/manage&id=<?php echo $id ?>"
-                                            class="btn route-link"><?php echo $person->full_name; ?></a></td>
-                                    <td><?php echo $company->getcompanyName($person->company_id); ?></td>
-                                    <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
-                                    <td><?php echo $person->sigorta_no; ?></td>
-                                    <td><?php echo $person->phone; ?></td>
-                                    <td><?php echo $person->address; ?></td>
-                                    <td><?php echo Helper::formattedMoney($person->daily_wages ?? 0); ?></td>
-                                    <td><?php echo $person->state ?></td>
-                                    <td class="<?php echo $color ?>"><?php echo Helper::formattedMoney($balance) ?></td>
-                                    <td class="text-end">
-                                        <div class="dropdown">
-                                            <button class="btn dropdown-toggle align-text-top"
-                                                data-bs-toggle="dropdown">İşlem</button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link"
-                                                    data-page="persons/manage&id=<?php echo $id ?>" href="#">
-                                                    <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
-                                                </a>
+                                <?php if ($person->firm_id == $_SESSION["firm_id"]) { ?>
+                                    <tr>
+                                        <td class="text-center"><?php echo $i; ?></td>
+                                        <td> <a href="#" data-tooltip="Detay/Güncelle"
+                                                data-page="persons/manage&id=<?php echo $id ?>"
+                                                class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                        <td><?php echo $company->getcompanyName($person->company_id); ?></td>
+                                        <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
+                                        <td><?php echo $person->sigorta_no; ?></td>
+                                        <td><?php echo $person->phone; ?></td>
+                                        <td><?php echo $person->address; ?></td>
+                                        <td><?php echo Helper::formattedMoney($person->daily_wages ?? 0); ?></td>
+                                        <td><?php echo $person->state ?></td>
+                                        <td class="<?php echo $color ?>"><?php echo Helper::formattedMoney($balance) ?></td>
+                                        <td class="text-end">
+                                            <div class="dropdown">
+                                                <button class="btn dropdown-toggle align-text-top"
+                                                    data-bs-toggle="dropdown">İşlem</button>
+                                                <div class="dropdown-menu dropdown-menu-end">
 
-                                                <a class="dropdown-item delete-person" data-id="<?php echo $person->id ?>"
-                                                    href="#">
-                                                    <i class="ti ti-trash icon me-3"></i> Sil
-                                                </a>
+
+                                                    <a class="dropdown-item route-link"
+                                                        data-page="persons/manage&id=<?php echo $id ?>" href="#">
+                                                        <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
+                                                    </a>
+
+                                                    <a class="dropdown-item delete-person" data-id="<?php echo $person->id ?>"
+                                                        href="#">
+                                                        <i class="ti ti-trash icon me-3"></i> Sil
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <?php
+                                $i++;
+                            endforeach; ?>
                         </tbody>
                     </table>
                 </div>

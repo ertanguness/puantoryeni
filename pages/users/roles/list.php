@@ -7,7 +7,7 @@ require_once "App/Helper/security.php";
 use App\Helper\Security;
 $roleObj = new Roles();
 $roles = $roleObj->getRolesByFirm($firm_id);
-$perm->checkAuthorize( "permission_groups");
+$perm->checkAuthorize("permission_groups");
 
 
 ?>
@@ -56,7 +56,7 @@ $perm->checkAuthorize( "permission_groups");
                     <table id="roleTable" class="table card-table table-responsive text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th style="width:7%">id</th>
+                                <th style="width:7%">Sıra</th>
                                 <th style="width:27%">Pozisyon Adı</th>
                                 <th>Açıklama</th>
                                 <th style="width:7%">Durumu</th>
@@ -66,63 +66,67 @@ $perm->checkAuthorize( "permission_groups");
                         <tbody>
 
 
-                            <?php foreach ($roles as $role):
-                                ?>
-                                <tr>
-                                    <td><?php echo $role->id; ?></td>
-                                    <td><?php echo $role->roleName; ?></td>
-                                    <td><?php echo $role->roleDescription; ?></td>
-                                    <td><?php echo $role->isActive; ?></td>
+                            <?php
+                            $i = 1;
+                            if ($Auths->checkFirm()) {
+                                foreach ($roles as $role):
+                                    $id = Security::encrypt($role->id);
+                                    ?>
+                                    <tr>
+                                        <td class="text-center"><?php echo $i; ?></td>
+                                        <td><?php echo $role->roleName; ?></td>
+                                        <td><?php echo $role->roleDescription; ?></td>
+                                        <td><?php echo $role->isActive; ?></td>
 
-                                    <td class="text-end">
-                                        <div class="dropdown">
-                                            <button class="btn dropdown-toggle align-text-top"
-                                                data-bs-toggle="dropdown">İşlem</button>
-                                            <div class="dropdown-menu dropdown-menu-end">
+                                        <td class="text-end">
+                                            <div class="dropdown">
+                                                <button class="btn dropdown-toggle align-text-top"
+                                                    data-bs-toggle="dropdown">İşlem</button>
+                                                <div class="dropdown-menu dropdown-menu-end">
 
-                                                <!-- İşlem Yetkilerini düzenleme ve başka bir yetki grubuna kopyalama işlemleri  -->
+                                                    <!-- İşlem Yetkilerini düzenleme ve başka bir yetki grubuna kopyalama işlemleri  -->
 
-                                                <?php if ($Auths->hasPermission('transaction_permissions')) { ?>
-                                                    <a class="dropdown-item route-link"
-                                                        data-page="users/auths/auths&id=<?php echo 
-                                                        Security::encrypt($role->id) ?>" href="#">
-                                                        <i class="ti ti-lock icon me-3"></i> Yetkileri Düzenle
-                                                    </a>
-                                                    <!-- Başka yetkilerin ana kullanıcı rölüne kopyalanmasını engellemek için -->
+                                                    <?php if ($Auths->hasPermission('transaction_permissions')) { ?>
+                                                        <a class="dropdown-item route-link"
+                                                            data-page="users/auths/auths&id=<?php echo $id ?>" href="#">
+                                                            <i class="ti ti-lock icon me-3"></i> Yetkileri Düzenle
+                                                        </a>
+                                                        <!-- Başka yetkilerin ana kullanıcı rölüne kopyalanmasını engellemek için -->
+                                                        <?php if ($role->main_role != 1) { ?>
+                                                            <a class="dropdown-item copy-roles" data-bs-toggle="modal"
+                                                                data-id="<?php echo $id ?>" data-name="<?php echo $role->roleName ?>"
+                                                                data-bs-target="#modal-small" href="#">
+                                                                <i class="ti ti-copy icon me-3"></i> Yetkileri Kopyala
+                                                            </a>
+                                                        <?php } ?>
+                                                    <?php } ?>
+
+                                                    <!-- Yetki grubunu güncelleme işlemleri -->
+                                                    <?php if ($Auths->hasPermission('permission_group_add_update')) { ?>
+                                                        <a class="dropdown-item route-link"
+                                                            data-page="users/roles/manage&id=<?php echo $id ?>" href="#">
+                                                            <i class="ti ti-edit icon me-3"></i> Güncelle
+                                                        </a>
+                                                    <?php } ?>
+
                                                     <?php if ($role->main_role != 1) { ?>
-                                                        <a class="dropdown-item copy-roles" data-bs-toggle="modal"
-                                                            data-id="<?php echo $role->id ?>"
-                                                            data-name="<?php echo $role->roleName ?>" data-bs-target="#modal-small"
-                                                            href="#">
-                                                            <i class="ti ti-copy icon me-3"></i> Yetkileri Kopyala
-                                                        </a>
+                                                        <!-- Yetki grubunu silme işlemleri -->
+                                                        <?php if ($Auths->hasPermission('permission_group_delete')) { ?>
+                                                            <a class="dropdown-item delete_role" href="#" data-id="<?php echo $id ?>">
+                                                                <i class="ti ti-trash icon me-3"></i> Sil
+                                                            </a>
+                                                        <?php } ?>
                                                     <?php } ?>
-                                                <?php } ?>
 
-                                                <!-- Yetki grubunu güncelleme işlemleri -->
-                                                <?php if ($Auths->hasPermission('permission_group_add_update')) { ?>
-                                                    <a class="dropdown-item route-link"
-                                                        data-page="users/roles/manage&id=<?php echo $role->id ?>" href="#">
-                                                        <i class="ti ti-edit icon me-3"></i> Güncelle
-                                                    </a>
-                                                <?php } ?>
-
-                                                <?php if ($role->main_role != 1) { ?>
-                                                    <!-- Yetki grubunu silme işlemleri -->
-                                                    <?php if ($Auths->hasPermission('permission_group_delete')) { ?>
-                                                        <a class="dropdown-item delete_role" href="#"
-                                                            data-id="<?php echo $role->id ?>">
-                                                            <i class="ti ti-trash icon me-3"></i> Sil
-                                                        </a>
-                                                    <?php } ?>
-                                                <?php } ?>
+                                                </div>
 
                                             </div>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $i++;
+                                endforeach;
+                            } ?>
                         </tbody>
                     </table>
                 </div>

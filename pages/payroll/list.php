@@ -76,7 +76,7 @@ $lastDay = Date::lastDay($month, $year);
                         <?php if ($Auths->hasPermission('upload_payment_permission')) { ?>
                             <a class="dropdown-item add-income route-link" href="#"
                                 data-tooltip="Personellere yapılan ödemeleri excelden yükleyin" data-tooltip-location="left"
-                                data-page="bordro/xls/payment-load-from-xls">
+                                data-page="payroll/xls/payment-load-from-xls">
                                 <i class="ti ti-table-import icon me-3"></i> Ödeme Yükle
                             </a>
                         <?php } ?>
@@ -142,6 +142,7 @@ $lastDay = Date::lastDay($month, $year);
                             foreach ($persons as $item):
                                 // Personel id'sine göre personel bilgilerini getirir
                                 $person = $personObj->find($item->id);
+                                $person_id = Security::encrypt($person->id);
 
                                 // Personel Beyaz Yaka ise
                                 if ($person->wage_type == 1) {
@@ -188,7 +189,7 @@ $lastDay = Date::lastDay($month, $year);
                                 <tr>
                                     <td><?php echo $person->id; ?></td>
                                     <td> <a href="#" data-tooltip="Detay/Güncelle"
-                                            data-page="persons/manage&id=<?php echo $person->id ?>"
+                                            data-page="persons/manage&id=<?php echo $person_id ?>"
                                             class="btn route-link"><?php echo $person->full_name; ?></a></td>
                                     <td><?php echo $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka'; ?></td>
                                     <td><?php echo $person->job; ?></td>

@@ -2,9 +2,9 @@
 require_once '../../Model/Bordro.php';
 require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
+require_once '../../Model/Auths.php';
 
 
-define('ROOT', $_SERVER["DOCUMENT_ROOT"]);
 $firm_id = $_SESSION['firm_id'];
 
 require ROOT . '/vendor/autoload.php';
@@ -14,6 +14,17 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use App\Helper\Date;
+use App\Helper\Security;
+
+$Auths = new Auths();
+
+
+//Giriş yapan kullanıcı ile kullanıcının firmasını kontrol et
+$Auths->checkFirmReturn();
+
+//Kullanıcının yetkisini kontrol et
+$Auths->hasPermissionReturn('upload_payment_permission');
+
 
 $bordro = new Bordro();
 

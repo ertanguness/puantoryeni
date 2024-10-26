@@ -1,4 +1,7 @@
 <?php
+
+use App\Helper\Security;
+
 require_once "Model/Projects.php";
 require_once "App/Helper/company.php";
 require_once "App/Helper/cities.php";
@@ -6,9 +9,23 @@ require_once "App/Helper/cities.php";
 $companyHelper = new CompanyHelper();
 $cityHelper = new Cities();
 
+$perm->checkAuthorize("project_add_update");
 
 $projectObj = new Projects();
-$id = $_GET['id'] ?? 0;
+
+//id decrypt edilir
+$id = isset($_GET['id']) ? Security::decrypt($_GET['id']) : 0;
+
+//yeni kayıt için id 0 olmalı
+$new_id=isset($_GET["id"]) ? ($_GET['id']) : 0;
+
+//Eğer url'den id yazılmışsa veya id boş ise projeler sayfasına gider
+if($id == null && isset($_GET['id'])) {
+    header("Location: /index.php?p=projects/list");
+    exit;
+}
+
+//id'ye göre kayıt getirilir
 $project = $projectObj->find($id);
 
 $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
@@ -48,15 +65,12 @@ $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
 
                 <form action="" id="projectForm">
                     <!-- HIDDEN ROW -->
-                    <div class="row d-none">
+                    <div class="row d-none ">
                         <div class="col-md-4">
-                            <input type="text" name="id" id="id" class="form-control" value="<?php echo $id ?>">
+                            <input type="text" name="id" id="id" class="form-control" value="<?php echo $new_id ?>">
                         </div>
                         <div class="col-md-4">
                             <input type="text" name="action" value="saveProject" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="firm_id" value="<?php echo $firm_id; ?>" class="form-control">
                         </div>
                     </div>
                     <!-- HIDDEN ROW -->

@@ -14,7 +14,11 @@ $myFirmObj = new MyFirmModel();
 //$myFirms = $myFirmObj->getAuthorizedMyFirmsByEmail($email);
 
 $myFirms = $myFirmObj->getMyFirmByUserId();
-
+if(count($myFirms) == 1){
+    $_SESSION['firm_id'] = $myFirms[0]->id;
+    header('Location: /index.php?p=home');
+    exit();
+}
 
 ?>
 <!doctype html>
@@ -128,7 +132,10 @@ $myFirms = $myFirmObj->getMyFirmByUserId();
 
                                     <?php
 
-                                    foreach ($myFirms as $myfirm) { ?>
+                                    foreach ($myFirms as $myfirm) { 
+                                        
+                                        
+                                        ?>
                                         <form action="#" method="post">
 
 
@@ -192,7 +199,7 @@ $myFirms = $myFirmObj->getMyFirmByUserId();
                                                                                 <path d="M9 7l4 0"></path>
                                                                                 <path d="M9 11l4 0"></path>
                                                                             </svg>
-                                                                            <!-- <?php echo $myCompany->description; ?> -->
+                                                                            <!-- <?php //echo $myCompany->description; ?> -->
                                                                         </div>
 
                                                                     </div>

@@ -53,6 +53,9 @@ public static function encrypt($data)
     $iv = openssl_random_pseudo_bytes(12); // GCM için 12 byte IV kullanılır
     $tag = null;
     $encrypted_data = openssl_encrypt($data, $method, $key, OPENSSL_RAW_DATA, $iv, $tag);
+    //içinde + varsa onu değiştir
+    $result = str_replace('+', '-', $encrypted_data);
+    $result = str_replace('/', '_', $encrypted_data);
     $result = base64_encode($iv . $tag . $encrypted_data);
     return rawurlencode($result); // URL kodlaması ekle
 }

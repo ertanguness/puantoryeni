@@ -88,6 +88,7 @@ $(document).on("click", ".delete-person", function () {
   let url = "/api/persons/person.php";
 
   deleteRecord(this, action, confirmMessage, url);
+  // deleteRecord(this, action, confirmMessage, url);
 });
 
 $('input[name="kimlik_no"]').keypress(function (e) {

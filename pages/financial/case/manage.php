@@ -1,4 +1,7 @@
 <?php
+
+use App\Helper\Security;
+
 require_once "Model/Cases.php";
 require_once "App/Helper/company.php";
 
@@ -6,7 +9,8 @@ $Auths->checkAuthorize("cash_register_add_update");
 
 $company = new CompanyHelper();
 $caseObj = new Cases();
-$id = $_GET['id'] ?? 0;
+$id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
+$new_id = isset($_GET["id"]) ? $_GET['id'] : 0;
 $case = $caseObj->find($id);
 
 $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";

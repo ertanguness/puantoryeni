@@ -2,7 +2,7 @@
 
 
 require_once "BaseModel.php";
-require_once "App/Helper/helper.php";
+require_once ROOT ."/App/Helper/helper.php";
 
 use App\Helper\Helper;
 
@@ -104,10 +104,51 @@ class Auths extends Model
 
     function checkAuthorize($auth_name)
     {
-
+        //user'in firm_id'si ve Session firm_id'si aynı mı kontrolü yapılır
+        if ($_SESSION['user']->firm_id != $_SESSION['firm_id']) {
+            header("Location: index.php?p=authorize");
+            exit();
+        }
         if (!$this->Authorize($auth_name)) {
             header("Location: index.php?p=authorize");
             exit();
         }
+    }
+
+    //Kullanıcının firm_id'si ve sessiondaki firmayı karşılaştır
+    function checkFirm()
+    {
+        if ($_SESSION['user']->firm_id != $_SESSION['firm_id']) {
+            header("Location: index.php?p=authorize");
+            exit();
+        }
+        return true;
+    }
+
+    //Kullanıcının firm_id'si ve sessiondaki firmayı karşılaştır, eğer farklı ise false döner
+    function checkFirmReturn()
+    {
+        if ($_SESSION['user']->firm_id != $_SESSION['firm_id']) {
+            $res = [
+                "status" => "error",
+                "message" => "Yetkiniz yok"
+            ];
+            echo json_encode($res);
+            exit;
+        }
+        return true;
+    }
+
+    public function hasPermissionReturn($auth_name)
+    {
+        if (!$this->Authorize($auth_name)) {
+            $res = [
+                "status" => "error",
+                "message" => "Yetkiniz yok"
+            ];
+            echo json_encode($res);
+            exit;
+        }
+        return true;
     }
 }

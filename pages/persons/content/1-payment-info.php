@@ -3,6 +3,9 @@ require_once 'App/Helper/helper.php';
 require_once 'Model/Bordro.php';
 require_once 'Model/Puantaj.php';
 require_once 'App/Helper/date.php';
+require_once 'App/Helper/security.php';
+
+use App\Helper\Security;
 
 $puantaj = new Puantaj();
 $bordro = new Bordro();
@@ -28,12 +31,12 @@ $total_payment = $summary->total_payment;
 // ********************************************************************************* */
 
 // Toplam Gelir(Puantaj + Eklenen Gelirler+ veya maaş)
-$total_income =  $incomes ;
+$total_income = $incomes;
 
 // Bakiye hesaplanacak
 $balance = $total_income - $total_expense - $total_payment;
 
-if(!$Auths->Authorize("person_page_income_expence_info")) {
+if (!$Auths->Authorize("person_page_income_expence_info")) {
     Helper::authorizePage();
     return;
 }
@@ -48,7 +51,7 @@ if(!$Auths->Authorize("person_page_income_expence_info")) {
                     <div class="d-flex col-auto ms-auto">
 
 
-                        <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                        <a href="#" class="btn btn-icon me-2" id="export_excel" data-tooltip="Excele Aktar">
                             <i class="ti ti-file-excel icon"></i>
                         </a>
 
@@ -58,13 +61,13 @@ if(!$Auths->Authorize("person_page_income_expence_info")) {
                                 İşlemler</button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item add-payment" data-tooltip="Personellere Ödeme yapın"
-                                    data-tooltip-location="left" data-id="<?php echo $id ; ?>" href="#">
+                                    data-tooltip-location="left" data-id="<?php echo $id; ?>" href="#">
                                     <i class="ti ti-upload icon me-3"></i> Ödeme Yap
                                 </a>
                                 <a class="dropdown-item add-income" href="#" data-id="<?php echo $id; ?>">
                                     <i class="ti ti-download icon me-3"></i> Gelir Ekle
                                 </a>
-                                <a class="dropdown-item add-wage-cut" href="#"  data-id="<?php echo $id; ?>">
+                                <a class="dropdown-item add-wage-cut" href="#" data-id="<?php echo $id; ?>">
                                     <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
                                 </a>
 
@@ -191,7 +194,7 @@ if(!$Auths->Authorize("person_page_income_expence_info")) {
                                 <th>Tutar</th>
                                 <th>Açıklama</th>
                                 <th>İşlem Tarihi</th>
-                                <th style="width:2%">İşlem</th>
+                                <th class="no-export" style="width:2%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -199,47 +202,57 @@ if(!$Auths->Authorize("person_page_income_expence_info")) {
 
                             <?php
                             foreach ($income_expenses as $item):
+                                $id = Security::encrypt($item->id);
                                 ?>
-                            <tr>
-                                <td><?php echo $item->id; ?></td>
-                                <td><?php echo Date::dmY($item->gun); ?></td>
-                                <td><?php echo $item->turu; ?></td>
-                                <td><?php echo $item->ay; ?></td>
-                                <td><?php echo $item->yil; ?></td>
-                         
-                                <td><?php 
-                                 if($item->kategori == 1 || $item->kategori == 4){
-                                     echo "<i class='ti ti-download icon color-green me-1' ></i>";
-                                 }elseif($item->kategori == 2){
-                                     echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
-                                 }elseif($item->kategori == 3){
-                                     echo "<i class='ti ti-upload icon color-yellow me-1' ></i> ";
-                                 };
-                                 echo Helper::getIncomeExpenseType($item->kategori); ?>
-                                 
-                                 </td>
-                                <td><?php echo Helper::formattedMoney($item->tutar); ?></td>
-                                <td><?php echo Helper::short($item->aciklama); ?></td>
-                                <td><?php echo $item->created_at; ?></td>
+                                <tr>
+                                    <td><?php echo $item->id; ?></td>
+                                    <td><?php echo Date::dmY($item->gun); ?></td>
+                                    <td><?php echo $item->turu; ?></td>
+                                    <td><?php echo $item->ay; ?></td>
+                                    <td><?php echo $item->yil; ?></td>
 
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle align-text-top"
-                                            data-bs-toggle="dropdown">İşlem</button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item edit-payment" 
-                                                >
-                                                <i class="ti ti-edit icon me-3"></i> Güncelle
-                                            </a>
-                                            <a class="dropdown-item delete-payment" href="#"
-                                                data-id="<?php echo $item->id ?>">
-                                                <i class="ti ti-trash icon me-3"></i> Sil
-                                            </a>
+                                    <td><?php
+                                    if ($item->kategori == 1 || $item->kategori == 4) {
+                                        echo "<i class='ti ti-download icon color-green me-1' ></i>";
+                                    } elseif ($item->kategori == 2) {
+                                        echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
+                                    } elseif ($item->kategori == 3) {
+                                        echo "<i class='ti ti-upload icon color-yellow me-1' ></i> ";
+                                    }
+                                    ;
+                                    echo Helper::getIncomeExpenseType($item->kategori); ?>
+
+                                    </td>
+                                    <td><?php echo Helper::formattedMoney($item->tutar); ?></td>
+                                    <td><?php echo Helper::short($item->aciklama); ?></td>
+                                    <td><?php echo $item->created_at; ?></td>
+
+
+
+
+
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <?php
+                                            //Eğer ödeme, gelir veya kesinti ise işlem yapılabilir
+                                            if (in_array($item->kategori, [1, 2, 3, 4])): ?>
+                                                <button class="btn dropdown-toggle align-text-top"
+                                                    data-bs-toggle="dropdown">İşlem</button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item edit-payment">
+                                                        <i class="ti ti-edit icon me-3"></i> Güncelle
+                                                    </a>
+                                                    <a class="dropdown-item delete-payment" href="#"
+                                                        data-id="<?php echo $id ?>">
+                                                        <i class="ti ti-trash icon me-3"></i> Sil
+                                                    </a>
+                                                </div>
+                                            <?php endif ?>
                                         </div>
-                                    </div>
 
-                                </td>
-                            </tr>
+                                    </td>
+
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

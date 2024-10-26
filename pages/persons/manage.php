@@ -4,18 +4,16 @@ use App\Helper\Security;
 
 require_once 'Model/Persons.php';
 
-
 // Yetki kontrolü yapılır
 $perm->checkAuthorize("personnel_add_update");
 
 $id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
 
+
 //Eğer manuel id yazılmışsa personel sayfasına gönder
-if ($id == null && $id != 0) {
-    echo "manuel yazılan id :" . $id;
-    //echo "<script>console.log('" . $_GET["id"] . "');</script>";
-   // header('Location: index.php?p=persons/list');
-    //exit();
+if ($id == null && isset($_GET["id"])) {
+    header('Location: index.php?p=persons/list');
+    exit();
 }
 
 

@@ -89,7 +89,8 @@ $menu_name = $menus->getMenusByLink($active_page);
 
 <?php include_once "inc/head.php" ?>
 
-<body class=" layout-fluid">
+<body class="layout-fluid">
+
     <div class="page">
 
         <!-- Preloader -->
@@ -166,6 +167,18 @@ $menu_name = $menus->getMenusByLink($active_page);
             });
         }
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.collapse-button').on('click', function () {
+                var $button = $(this);
+                var $navbar = $('#navbar');
+                var $pageWrapper = $('.page-wrapper');
+                $button.toggleClass('active');
+                $navbar.toggleClass('collapsed');
+                $pageWrapper.toggleClass('page-collapse');
+            });
+        });
     </script>
 
 </body>

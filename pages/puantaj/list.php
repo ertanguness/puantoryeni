@@ -393,12 +393,13 @@ $dates = Date::generateDates($year, $month, $days);
                                     <?php
                                     foreach ($dates as $date):
                                         $jobStartDate = str_replace('-', '', Date::Ymd($person->job_start_date));
+                                        $jonEndDate = str_replace('-', '', Date::Ymd($person->job_end_date));
                                         $month_date = $gun = $date;
 
                                         ?>
                                         <?php
 
-                                        if ($jobStartDate <= $month_date) {
+                                        if ($jobStartDate <= $month_date && $jonEndDate >= $month_date) {
                                             $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
 
 

@@ -11,7 +11,7 @@ class UserModel extends Model
     }
 
 
-    
+
     public function allByFirms($firm_id)
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = :firm_id");
@@ -56,9 +56,9 @@ class UserModel extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
-   
+
     //Kullanıcı girişinde bir token oluştur ve kullanıcıya kaydet
-    public function setToken($id,$token)
+    public function setToken($id, $token)
     {
         //$token = bin2hex(random_bytes(32));
         $sql = $this->db->prepare("UPDATE $this->table SET session_token = ? WHERE id = ?");
@@ -106,5 +106,30 @@ class UserModel extends Model
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 
+    //Giriş işlemleri kayıt altına alınıyor
+    public function loginLog($user_id)
+    {
+        $ip_address = $_SERVER['REMOTE_ADDR'];
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
+        $sql = $this->db->prepare("INSERT INTO login_logs (user_id, ip_address, user_agent) VALUES (?, ?, ?)");
+        $sql->execute([$user_id, $ip_address, $user_agent]);
+        return $this->db->lastInsertId();
+    }
+
+    //Çıkış işlemi yapıldığında log kaydı yapılır
+    public function logoutLog($id)
+    {
+        $sql = $this->db->prepare("UPDATE login_logs SET logout_time = NOW() WHERE id = ?");
+        $sql->execute([$id]);
+    }
+
+    //Token sorgulama
+   
+
+    public function updateUserPassword($email, $password)
+    {
+        $sql = $this->db->prepare("UPDATE $this->table SET password = ? WHERE email = ?");
+        $sql->execute([$password, $email]);
+    }
 }

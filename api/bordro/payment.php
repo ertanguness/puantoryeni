@@ -4,9 +4,11 @@ require_once '../../Model/Puantaj.php';
 require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
 require_once '../../App/Helper/helper.php';
+require_once '../../App/Helper/security.php';
 
 use App\Helper\Date;
 use App\Helper\Helper;
+use App\Helper\Security;
 
 $payment = new Bordro();
 $puantaj = new Puantaj();
@@ -76,27 +78,35 @@ if ($_POST['action'] == 'deletePayment') {
         $db->beginTransaction();
 
         // Ödeme bilgilerini getirir
-        $paymentInfo = $payment->getPersonIncomeExpensePayment($id);
-
-        $payment->delete($id);
-        $status = 'success';
-        $message = 'Başarıyla silindi.';
+        $paymentInfo = $payment->getPersonIncomeExpensePayment(Security::decrypt($id));
+       
+        //Gelen id'nin encrypt edilmiş olup olmadığını kontrol edin
+        if($payment->delete($id)){
+            $status = 'success';
+            $message = 'Başarıyla silindi.';
+        } else {
+            $status = 'error';
+            $message = 'Silinirken bir hata oluştu.';
+        };
 
         // Ödeme bilgilerindeki person_id alınır,
         // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
         $income_expense = $payment->sumAllIncomeExpense($paymentInfo->person_id);
 
-        // Puantaj tablosundaki toplam hakediş toplamlarını getirir
-        $income_puantaj = $puantaj->getPuantajIncomeByPerson($paymentInfo->person_id);
-
-        // Toplam gelir ve puantajdaki toplam hakediş toplamını alır
-        $total_income_puantaj = $income_expense->total_income + $income_puantaj->total_income;
-
-        $balance = Helper::formattedMoney($total_income_puantaj - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
-        $income_expense->total_income = Helper::formattedMoney($total_income_puantaj ?? 0);  // Toplam gelir
-        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
-        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
-        $income_expense->balance = $balance;  // Bakiye
+        //Bakiye hesaplanır
+        $balance = Helper::formattedMoney($income_expense->total_income - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
+        
+        //Toplam Gelir
+        $income_expense->total_income = Helper::formattedMoney($income_expense->total_income ?? 0); 
+        
+        // Toplam ödeme 
+        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  
+        
+        // Toplam gider
+        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  
+        
+        // Bakiye, değişkenine atama yapılır
+        $income_expense->balance = $balance;  
 
         $db->commit();
     } catch (PDOException $e) {

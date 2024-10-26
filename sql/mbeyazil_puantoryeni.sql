@@ -1466,7 +1466,23 @@ INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActi
 	(40, 'Firma Ekle/Güncelle', 'mycompany/manage', '0', 39, 1, 0, NULL),
 	(41, 'Proje Ekle/Güncelle', 'projects/manage', '0', 35, 1, 0, NULL),
 	(42, 'Firmalar Ekle/Düzenle', 'companies/manage', '0', 7, 1, 0, NULL),
-	(43, 'Ayarlar', 'settings/manage', 'settings', 0, 1, 1, 11);
+	(43, 'Ayarlar', 'settings/manage', 'settings', 0, 1, 1, 11),
+	(44, 'Gelir-Gider Türü Tanımlama', 'defines/incexp/list', '0', 27, 1, 1, NULL, 1),
+	(45, 'Görev Yönetimi', '0', 'mist', 0, 1, 1, 8, 1),
+	(46, 'Gelir-Gider Türü Ekle/Güncelle', 'defines/incexp/manage', '0', 27, 1, 0, NULL, 1),
+	(47, 'Görev Listesi', 'missions/list', '0', 45, 1, 1, NULL, 1),
+	(48, 'Görevlerim', 'missions/my-missions', '0', 45, 1, 1, NULL, 1),
+	(49, 'Verdiğim Görevler', 'missions/to-missions', '0', 45, 1, 1, NULL, 1),
+	(50, 'Süreç Yönetimi', 'missions/process/list', '0', 45, 0, 1, NULL, 1),
+	(51, 'Süreç Ekle/Güncelle', 'missions/process/manage', '0', 45, 0, 0, 0, 1),
+	(52, 'Görev Başlıkları', 'missions/headers/list', '0', 45, 1, 1, NULL, 1),
+	(53, 'Görev Başlıkları Ekle/Güncelle', 'missions/headers/manage', '0', 45, 1, 0, NULL, 1),
+	(54, 'Görev Ekle/Güncelle', 'missions/manage', '0', 45, 1, 0, NULL, 1),
+	(55, 'Ödemeleri Excelden Yükle', 'bordro/xls/payment-load-from-xls', '0', 31, 1, 0, NULL, 1),
+	(56, 'Yetki Grubu Yetkilerini düzenle', 'users/auths/auths', '0', 17, 1, 0, NULL, 1),
+	(57, 'İş Grubu Tanımlama', 'defines/job-groups/list', '0', 27, 1, 1, NULL, 1),
+	(58, 'İş Grubu Ekle/Güncelle', 'defines/job-groups/manage', '0', 27, 1, 0, NULL, 1),
+	(59, 'Görüş & Öneri', 'feedback/send', 'brand-feedly', 0, 1, 1, 11, 0);
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.myfirms
 DROP TABLE IF EXISTS `myfirms`;

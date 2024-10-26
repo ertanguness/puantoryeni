@@ -5,6 +5,10 @@ require_once 'App/Helper/helper.php';
 require_once 'App/Helper/cities.php';
 
 use App\Helper\Helper;
+use App\Helper\Security;
+use Random\Engine\Secure;
+
+$perm->checkAuthorize("project_add_update");
 
 $projectObj = new Projects();
 $incexpObj = new ProjectIncomeExpense();
@@ -58,7 +62,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                     <table class="table card-table text-nowrap table-hover datatable" id="projectTable">
                         <thead>
                             <tr>
-                                <th style="width:7%">Id</th>
+                                <th style="width:7%">Sıra</th>
                                 <th>Türü</th>
                                 <th>Firma Adı</th>
                                 <th>Proje Adı</th>
@@ -74,17 +78,19 @@ $projects = $projectObj->allWithFirm($firm_id);
 
 
                             <?php
+                            $i = 1;
                                 foreach ($projects as $project):
+                                    $id=Security::encrypt($project->id);
                                     // Projenin bakiyesini hesapla
                                     $balance = $incexpObj->getBalance($project->id);
                             ?>
                             <tr>
-                                <td class="text-center"><?php echo $project->id ?></td>
+                                <td class="text-center"><?php echo $i ?></td>
                                 <td><?php echo $project->type == 1 ? 'Alınan' : 'Verilen' ?></td>
                                 <td><?php echo $project->firm_id ?></td>
                                 <td > 
                                     <a class="route-link btn" data-tooltip="Detay" 
-                                        data-page="projects/manage&id=<?php echo $project->id ?>" 
+                                        data-page="projects/manage&id=<?php echo $id ?>" 
                                         data-tooltip-location="top">
                                      <?php echo $project->project_name ?>
                                     </a>
@@ -105,24 +111,26 @@ $projects = $projectObj->allWithFirm($firm_id);
                                             data-bs-toggle="dropdown">İşlem</button>
                                             
                                         <div class="dropdown-menu dropdown-menu-end">
+                                            <?php if($perm->hasPermission("project_add_update")){ ?>
                                             <a class="dropdown-item route-link"
-                                                data-page="projects/manage&id=<?php echo $project->id ?>" href="#">
+                                                data-page="projects/manage&id=<?php echo $id ?>" href="#">
                                                 <i class="ti ti-edit icon me-3"></i> Güncelle/Detay
                                             </a>
+                                            <?php } ?>
                                             <a class="dropdown-item route-link"
-                                                data-page="projects/add-person&id=<?php echo $project->id ?>" href="#">
+                                                data-page="projects/add-person&id=<?php echo $id ?>" href="#">
                                                 <i class="ti ti-users-plus icon me-3"></i> Projeye Personel Ekle
                                             </a>
                                             <a class="dropdown-item add-progress-payment" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#progress-payment-modal" data-id="<?php echo $project->id; ?>">
+                                                data-bs-target="#progress-payment-modal" data-id="<?php echo $id; ?>">
                                                 <i class="ti ti-upload icon me-3"></i> Hakediş Ekle
                                             </a>
                                             <a class="dropdown-item add-payment" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#payment-modal" data-id="<?php echo $project->id; ?>">
+                                                data-bs-target="#payment-modal" data-id="<?php echo $id; ?>">
                                                 <i class="ti ti-cash-register icon me-3"></i> Ödeme Yap
                                             </a>
 
-                                            <a class="dropdown-item delete-project" href="#" data-id="<?php echo $project->id; ?>">
+                                            <a class="dropdown-item delete-project" href="#" data-id="<?php echo $id; ?>">
                                                 <i class="ti ti-trash icon me-3"></i> Sil
                                             </a>
                                         </div>
@@ -130,7 +138,9 @@ $projects = $projectObj->allWithFirm($firm_id);
 
                                 </td>
                             </tr>
-                            <?php endforeach; ?>
+                            <?php 
+                            $i++;
+                        endforeach; ?>
                         </tbody>
                     </table>
                 </div>

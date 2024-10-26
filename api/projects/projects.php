@@ -1,26 +1,34 @@
 <?php
+
+
 require_once "../../Database/require.php";
 require_once "../../Model/Projects.php";
+require_once "../../App/Helper/security.php";
 
+use App\Helper\Security;
 $project = new Projects();
 
 if ($_POST['action'] == "saveProject") {
-    $id = $_POST['id'] ?? 0;
+    $id =$_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
 
     $data = [
         "id" => $id,
-        "company_id" => $_POST['firm_id'],
-        'project_name' => $_POST['project_name'],
-        'budget' => $_POST['budget'],
-        'city' => $_POST['project_city'],
-        'town' => $_POST['project_town'],
-        'email' => $_POST['email'],
-        'phone' => $_POST['phone'],
-        'account_number' => $_POST['account_number'],
-        'address' => $_POST['address'],
+        "company_id" => $_SESSION['firm_id'],
+        'project_name' => Security::escape($_POST['project_name']),
+        'start_date' => Security::escape($_POST['start_date']),
+        'city' => Security::escape($_POST['project_city']),
+        'town' => Security::escape($_POST['project_town']),
+        'email' => Security::escape($_POST['email']),
+        'phone' => Security::escape($_POST['phone']),
+        'account_number' => Security::escape($_POST['account_number']),
+        'address' => Security::escape($_POST['address']),
     ];
+    //Yeni kayıt esnasında başlangıç bütçesi alınır
+    if(isset($_POST["budget"])){
+        $data["budget"] = $_POST["budget"];
+    };
     try {
-        $lastInsertId = $project->saveWithAttr($data);
+        $lastInsertId = $project->saveWithAttr($data) ?? $_POST['id'];
         $status = "success";
         if ($id > 0) {
             $message = "Proje başarıyla güncellendi";
@@ -41,7 +49,7 @@ if ($_POST['action'] == "saveProject") {
 }
 
 if ($_POST['action'] == "deleteProject") {
-    $id = $_POST['id'] ?? 0;
+    $id = Security::decrypt($_POST['id']) ;
     try {
         $db->beginTransaction();
         $project->delete($id);

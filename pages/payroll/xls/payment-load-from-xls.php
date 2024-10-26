@@ -24,7 +24,10 @@ $Auths->checkAuthorize('upload_payment_permission');
 
 
         <div class="row">
-
+            <div class="col-md-3">
+                <label for="projects" class="form-label">Proje:</label>
+                <?php echo $projectHelper->getProjectSelect('projects', $project_id); ?>
+            </div>
             <div class="col-3">
                 <label for="months" class="form-label">Ay:</label>
                 <?php echo Date::getMonthsSelect('months', $month); ?>
@@ -39,7 +42,7 @@ $Auths->checkAuthorize('upload_payment_permission');
             </div>
             <div class="col-auto me-auto mt-auto d-flex">
 
-                
+
             </div>
 
 

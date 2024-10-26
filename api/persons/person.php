@@ -1,23 +1,19 @@
-
 <?php
 define("ROOT", $_SERVER['DOCUMENT_ROOT']);
-require_once "../../Database/db.php";
+require_once "../../Database/require.php";
 require_once "../../Model/Persons.php";
-require_once  ROOT . "/Model/Bordro.php";
+require_once ROOT . "/Model/Bordro.php";
+require_once ROOT . "/App/Helper/security.php";
 
-use Database\Db;
+use App\Helper\Security;
 
 $Bordro = new Bordro();
-
-$dbInstance = new Db(); // Db sınıfının bir örneğini oluşturuyoruz.
-$db = $dbInstance->connect(); // Veritabanı bağlantısını alıyoruz.
-
-$person = new Persons();
+$Persons = new Persons();
 
 
 if ($_POST["action"] == "savePerson") {
-    $id = $_POST["id"];
-    if($id > 0 ){
+    $id = Security::decrypt($_POST["id"]);
+    if ($id > 0) {
         //personelin göreve başlama tarihinden önceki tüm maaşları sil
         $Bordro->deleteAllSalaries($id, $_POST["job_start_date"]);
     }
@@ -31,7 +27,7 @@ if ($_POST["action"] == "savePerson") {
         "address" => $_POST["address"],
         "job" => $_POST["job"],
         "job_group" => $_POST["job_groups"],
-        "firm_id" => $_POST["firm_id"],
+        "firm_id" => $_SESSION["firm_id"],
         "wage_type" => $_POST["wage_type"],
         "iban_number" => $_POST["iban_number"],
         // "salary" => $_POST["salary"],
@@ -42,7 +38,7 @@ if ($_POST["action"] == "savePerson") {
     ];
 
     try {
-        $lastInsertId = $person->saveWithAttr($data) ?? $id;
+        $lastInsertId = $Persons->saveWithAttr($data) ?? $_POST["id"];
         $status = "success";
         if ($id == 0) {
             $message = "Personel başarıyla kaydedildi.";
@@ -60,24 +56,35 @@ if ($_POST["action"] == "savePerson") {
             } elseif ($violatedField == 'phone') {
                 $message = "Bu telefon numarası zaten kayıtlı.";
             } else {
-                $message =  $e->getMessage();
+                $message = $e->getMessage();
             }
         } else {
-            $message =  $e->getMessage();
+            $message = $e->getMessage();
         }
     }
     $res = [
         "status" => $status,
         "message" => $message,
-        "lastid" => $lastInsertId 
+        "lastid" => $lastInsertId
     ];
     echo json_encode($res);
 }
 
 if ($_POST["action"] == "deletePerson") {
     $id = $_POST["id"];
+    $person = $Persons->find($id);
+
+    //İşlem yapan kullanıcı ile personelin firm id'si aynı olmalı
+    if ($person->firm_id == $_SESSION["firm_id"]) {
+        $res = [
+            "status" => "error",
+            "message" => "Bu işlemi yapmaya yetkiniz yok."
+        ];
+        echo json_encode($res);
+        exit();
+    }
     try {
-        $person->delete($id);
+        $Persons->delete($id);
         $status = "success";
         $message = "Personel başarıyla silindi.";
     } catch (PDOException $e) {

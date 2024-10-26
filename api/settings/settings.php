@@ -3,20 +3,22 @@ define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 require_once ROOT . "/Database/require.php";
 require_once ROOT . "/Model/UserModel.php";
 require_once ROOT . "/App/Helper/date.php";
+require_once ROOT . "/Model/SettingsModel.php";
 
 
 use App\Helper\Date;
 
 
 $User = new UserModel();
+$Settings = new SettingsModel();
 
 if ($_POST["action"] == "userSave") {
     $id = $_SESSION["user"]->id;
     $lastInsertId = 0;
-    
+
     try {
         //Email adresi ile kayıtlı ana kullanıcı varsa kayıt yapılmaz
-             $data = [
+        $data = [
             "id" => $id,
             "full_name" => $_POST["full_name"],
             "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
@@ -46,6 +48,43 @@ if ($_POST["action"] == "userSave") {
         "status" => $status,
         "message" => $message,
         "lastid" => $lastInsertId
+    ];
+    echo json_encode($res);
+}
+
+//Kullanıcı girişinde mail göndermek için
+if ($_POST["action"] == "send_email_on_login") {
+    //Eğer birden fazla kayıt varsa son kayıt üzerinden işlem yapılır,diğerleri silinir
+    $record = $Settings->getSettingIdByUserAndActionAll($_SESSION["user"]->id, "loginde_mail_gonder");
+    if (count($record) > 1) {
+        foreach ($record as $key => $value) {
+            if ($key != 0) {
+                $Settings->deleteByUserAndAction($value->user_id, $value->set_name);
+            }
+        }
+    }
+
+    //Kayıt yoksa yeni kayıt oluşturulur
+    $id = $Settings->getSettingIdByUserAndAction($_SESSION["user"]->id, "loginde_mail_gonder")->id ?? 0;
+
+    $input_val = isset($_POST["send_email_on_login"]) ? 1 : 0;
+    $data = [
+        "id" => $id,
+        "user_id" => $_SESSION["user"]->id,
+        "set_name" => "loginde_mail_gonder",
+        "set_value" => $input_val
+    ];
+    try {
+        $lastInsertId = $Settings->saveWithAttr($data) ?? $id;
+        $status = "success";
+        $message = "Ayarlar başarıyla tamamlandı.";
+    } catch (PDOException $e) {
+        $status = "error";
+        $message = $e->getMessage();
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message
     ];
     echo json_encode($res);
 }

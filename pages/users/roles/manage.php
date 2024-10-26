@@ -1,8 +1,21 @@
 <?php
 require_once "Model/RolesModel.php";
+require_once "App/Helper/security.php";
 
+use App\Helper\Security;
 $roleObj = new Roles();
-$id = $_GET["id"] ?? 0;
+
+//Sayfa başlarında eklenecek alanlar
+$perm->checkAuthorize("permission_group_add_update");
+$id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
+$new_id = isset($_GET["id"]) ? $_GET['id'] : 0;
+
+//Eğer url'den id yazılmışsa veya id boş ise projeler sayfasına gider
+if($id == null && isset($_GET['id'])) {
+    header("Location: /index.php?p=users/roles/list");
+    exit;
+}
+
 $roles = $roleObj->find($id);
 
 $pageTitle = $id > 0 ? "Yetki Grubu Düzenle" : "Yeni Yetki Grubu";
@@ -43,7 +56,7 @@ $pageTitle = $id > 0 ? "Yetki Grubu Düzenle" : "Yeni Yetki Grubu";
                     <div class="card-body">
                         <form action="" id="roleForm">
                             <div class="row mt-3">
-                                <input type="hidden" class="form-control mb-3" id="role_id" value="<?php echo $id ?>">
+                                <input type="hidden" class="form-control mb-3" id="role_id" value="<?php echo $new_id ?>">
                                 <div class="col-md-2">
                                     <label class="form-label">Pozisyon Adı</label>
                                 </div>

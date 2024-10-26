@@ -1,7 +1,9 @@
 <?php
 require_once "App/Helper/helper.php";
 require_once "Model/UserModel.php";
+require_once "App/Helper/security.php";
 
+use App\Helper\Security;
 use App\Helper\Helper;
 
 $userObj = new UserModel();
@@ -49,7 +51,7 @@ $users = $userObj->getUsersByFirm($firm_id);
                     <table id="userTable" class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th style="width:7%">id</th>
+                                <th style="width:7%">Sıra</th>
                                 <th style="width:10%">Pozisyon</th>
                                 <th>Adı Soyadı</th>
                                 <th style="width:20%">Email</th>
@@ -62,20 +64,23 @@ $users = $userObj->getUsersByFirm($firm_id);
                         <tbody>
 
 
-                            <?php foreach ($users as $user):
+                            <?php
+                            $i = 1;
+                            foreach ($users as $user):
+                                $id = Security::encrypt($user->id);
                                 ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $user->id; ?></td>
+                                    <td class="text-center"><?php echo $i; ?></td>
                                     <td><?php echo $userObj->roleName($user->user_roles ?? ''); ?></td>
                                     <td><?php echo $user->full_name; ?></td>
                                     <td><?php echo $user->email; ?></td>
                                     <td class="text-start"><?php echo $user->phone; ?></td>
                                     <td class="text-center">
-                                        <?php 
-                                        if($user->is_main_user == 1 ){
+                                        <?php
+                                        if ($user->is_main_user == 1) {
                                             echo "<i class='ti ti-check text-success fs-24'></i>";
                                         }
-                                        
+
                                         ?>
                                     </td>
                                     <td><?php echo $user->status; ?></td>
@@ -85,12 +90,11 @@ $users = $userObj->getUsersByFirm($firm_id);
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a class="dropdown-item route-link"
-                                                    data-page="users/manage&id=<?php echo $user->id ?>" href="#">
+                                                    data-page="users/manage&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
                                                 <?php if ($user->is_main_user != 1) { ?>
-                                                    <a class="dropdown-item delete_user" data-id="<?php echo $user->id ?>"
-                                                        href="#">
+                                                    <a class="dropdown-item delete_user" data-id="<?php echo $id ?>" href="#">
                                                         <i class="ti ti-trash icon me-3"></i> Sil
                                                     </a>
                                                 <?php } ?>
@@ -99,7 +103,9 @@ $users = $userObj->getUsersByFirm($firm_id);
 
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                                <?php
+                                $i++;
+                            endforeach; ?>
                         </tbody>
                     </table>
                 </div>

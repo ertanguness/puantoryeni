@@ -35,16 +35,12 @@ if (isset($person->wage_type) && $person->wage_type == 1) {
 
     <div class="row d-none">
         <div class="col-4">
-            <input type="text" class="form-control" name="id" id="person_id" value="<?php echo $person->id ?? 0; ?>"
+            <input type="text" class="form-control" name="id" id="person_id" value="<?php echo $_GET["id"]; ?>"
                 required>
         </div>
         <div class="col-4">
             <input type="text" class="form-control" name="action" value="savePerson" required>
         </div>
-        <div class="col-4">
-            <input type="text" class="form-control" name="firm_id" value="<?php echo $firm_id ?? '' ?>" required>
-        </div>
-
     </div>
     <div class="row mt-2">
         <div class="col-md-2">

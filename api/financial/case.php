@@ -1,31 +1,38 @@
 <?php
+
+
 require_once "../../Database/require.php";
 require_once "../../Model/Cases.php";
 require_once "../../Model/CaseTransactions.php";
+require_once "../../App/Helper/security.php";
+
+use App\Helper\Security;
+
 
 $caseObj = new Cases();
 $CaseTransactions = new CaseTransactions();
 
 if ($_POST["action"] == "saveCase") {
-    $id = $_POST["id"];
+    $id =$_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+
     //eğer id 0 ve firmanın hiç kasası yoksa varsayılan kasa yap
     if ($id == 0 && $caseObj->countCaseByFirm() == 0) {
         $_POST["default_case"] = 1;
     }
     $data = [
         "id" => $id,
-        "case_name" => $_POST["case_name"],
-        "account_id" => $_SESSION["user"]->id,
-        "firm_id" => $_SESSION["firm_id"],
-        "start_budget" => $_POST["start_budget"],
-        "bank_name" => $_POST["bank_name"],
-        "branch_name" => $_POST["branch_name"],
-        "case_money_unit" => $_POST["case_money_unit"],
-        "description" => $_POST["description"],
-        "isDefault" => $_POST["default_case"] ?? 0,
+        "case_name" => Security::escape($_POST["case_name"]),
+        "account_id" => Security::escape($_SESSION["user"]->id),
+        "firm_id" => Security::escape($_SESSION["firm_id"]),
+        "start_budget" => Security::escape($_POST["start_budget"]),
+        "bank_name" => Security::escape($_POST["bank_name"]),
+        "branch_name" => Security::escape($_POST["branch_name"]),
+        "case_money_unit" => Security::escape($_POST["case_money_unit"]),
+        "description" => Security::escape($_POST["description"]),
+        "isDefault" => Security::escape($_POST["default_case"] ?? 0),
     ];
     try {
-        $lastInsertId = $caseObj->saveWithAttr($data);
+        $lastInsertId = ($caseObj->saveWithAttr($data)) ?? $_POST["id"];
         $status = "success";
         if ($id == 0) {
             $message = "Kasa başarıyla kaydedildi.";

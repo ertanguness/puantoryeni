@@ -67,11 +67,6 @@ $Auths = new Auths();
                     //Menü altında başka menüler var mı kontrol edilir
                     $sub_menus = $menus->getSubMenusisMenu($menu->id);
 
-
-
-
-
-
                     //Menü altında başka menüler var ve menü olarak görünür ise 
                     //üst menü için aşağı açılan ok oluşturulur
                     if (count($sub_menus) > 0) {
@@ -111,8 +106,8 @@ $Auths = new Auths();
                             href="index.php?p=<?php echo $menu->page_link ?>" data-bs-toggle="<?php echo $dropdown; ?>"
                             data-bs-auto-close="false" role="button" aria-expanded="false">
 
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <i class="ti ti-<?php echo $menu->icon; ?> icon"></i>
+                            <span class="nav-link-icon d-md-none d-lg-inline-block"  data-tooltip-location="right">
+                                <i class="ti ti-<?php echo $menu->icon; ?> icon" ></i>
                             </span>
                             <span class="nav-link-title">
                                 <?php echo $menu->page_name; ?>

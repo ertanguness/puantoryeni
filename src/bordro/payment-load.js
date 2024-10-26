@@ -86,7 +86,6 @@ $(document).on("click", "#paymentLoadButton", function () {
   $("#paymentLoadButton").prepend(spinner);
   $("#paymentLoadButton").prop("disabled", true);
 
-
   var form = $("#paymentLoadForm");
   var formData = new FormData(form[0]);
   formData.append("action", "payment-load-from-xls");
@@ -101,15 +100,16 @@ $(document).on("click", "#paymentLoadButton", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       if (data.status === "success") {
         swalAlert("Başarılı!", "Ödemeler başarıyla yüklendi.", "success");
         $("#payment-load-file").val("");
         $("#result tbody").html("");
         $("#paymentLoadButton").prop("disabled", false);
         $("#paymentLoadButton .spinner-border").remove();
-
       } else {
+        $("#paymentLoadButton").prop("disabled", false);
+        $("#paymentLoadButton .spinner-border").remove();
         swalAlert("Hata!", data.message, "error");
       }
     })

@@ -19,7 +19,7 @@ $(document).on("click", "#userSave", function () {
       password: {
         required: true
       },
-      user_roles :{required: true}
+      user_roles: { required: true }
     },
     messages: {
       name: {
@@ -28,24 +28,22 @@ $(document).on("click", "#userSave", function () {
       password: {
         required: "Lütfen şifrenizi giriniz"
       },
-        user_roles :{
-            required: "Lütfen kullanıcı rolünü seçiniz"
-        }
+      user_roles: {
+        required: "Lütfen kullanıcı rolünü seçiniz"
+      }
     },
     errorElement: "em",
     errorPlacement: function (error, element) {
-      if(element.hasClass("select2")) {
-        error.insertAfter(element.next('span'));
+      if (element.hasClass("select2")) {
+        error.insertAfter(element.next("span"));
       } else {
         error.insertAfter(element);
       }
-    },
+    }
     // highlight: function (element, errorClass, validClass) {
     //   $(element).addClass("is-invalid").removeClass("is-valid");
     // },
-   
   });
-
 
   if (!form.valid()) {
     return;
@@ -71,6 +69,27 @@ $(document).on("click", "#userSave", function () {
         icon: data.status,
         confirmButtonText: "Ok"
       });
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
+$(document).on("change", "#send_email_on_login", function () {
+  var form = $("#notificationsForm");
+  var formData = new FormData(form[0]);
+  formData.append("action", "send_email_on_login");
+
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
+  }
+  fetch("/api/settings/settings.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      title = data.status == "success" ? "Başarılı!" : "Hata!";
     })
     .catch((error) => {
       console.error("Error:", error);

@@ -1,8 +1,11 @@
 <?php
-
+//Root tanımlı değilse tanımla
+!defined("ROOT") ? define("ROOT" ,$_SERVER["DOCUMENT_ROOT"]) : false;
 // require_once $_SERVER['DOCUMENT_ROOT'] . '/Database/db.php';
-require_once __DIR__ . '/../Database/db.php';
+require_once ROOT . '/Database/db.php';
+require_once ROOT . '/App/Helper/security.php';
 
+use App\Helper\Security;
 use Database\Db;
 
 class Model extends Db
@@ -74,7 +77,7 @@ class Model extends Db
         $this->isNew = false;
         $this->attributes[$this->primaryKey] = $this->db->lastInsertId();
 
-        return $this->attributes[$this->primaryKey];
+        return Security::encrypt($this->attributes[$this->primaryKey]);
     }
 
     protected function update()
@@ -116,9 +119,11 @@ class Model extends Db
 
     public function delete($id)
     {
+
+        $id = Security::decrypt($id);
         $sql = $this->db->prepare("DELETE FROM $this->table WHERE $this->primaryKey = ?");
         $sql->execute(array($id));
-        
+
         if ($sql->rowCount() === 0) {
             return new Exception('Kayıt bulunamadı veya silinemedi.');
         }

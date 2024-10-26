@@ -1,4 +1,6 @@
 <?php
+//tanımlı değilse tanımla
+!defined("ROOT") ? define("ROOT" ,$_SERVER["DOCUMENT_ROOT"]) : false;
 require_once 'BaseModel.php';
 require_once 'Bordro.php';
 require_once 'Puantaj.php';
@@ -114,9 +116,10 @@ class Bordro extends Model
     function sumAllIncomeExpense($person_id)
     {
         $sql = $this->db->prepare('SELECT 
-                                                COALESCE(SUM(CASE WHEN (kategori = 1 or kategori = 4) THEN tutar END), 0) AS total_income,
+                                                COALESCE(SUM(CASE WHEN (kategori = 1 or kategori = 4 or kategori = 5) THEN tutar END), 0) AS total_income,
                                                 COALESCE(SUM(CASE WHEN kategori = 2 THEN tutar END), 0) AS total_expense,
                                                 COALESCE(SUM(CASE WHEN kategori = 3 THEN tutar END), 0) AS total_payment
+
                                             FROM sqlmaas_gelir_kesinti 
                                             WHERE person_id = :person_id
                                             ORDER BY created_at desc;');

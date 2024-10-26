@@ -2,14 +2,17 @@
 
 require_once "../../Database/require.php";
 require_once "../../Model/RolesModel.php";
+require_once "../../App/Helper/security.php";
+
+use App\Helper\Security;
 
 
 $roles = new Roles();
 
 
 if ($_POST["action"] == "saveRoles") {
- 
-$id = $_POST["id"];
+    
+    $id =$_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
     try {
         $data = [
             "id" => $id,
@@ -66,7 +69,7 @@ if ($_POST["action"] == "deleteRole") {
 
 
 if ($_POST["action"] == "copyRoles") {
-    $id = $_POST["id"];
+    $id = Security::decrypt($_POST["id"]);
     $roles = $roles->getRolesByFirmExceptId($id);
     $res = [
 

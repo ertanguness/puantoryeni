@@ -35,7 +35,11 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
     <div class="collapse navbar-collapse" id="navbar-menu">
 
         <div class="navbar">
-
+        <div class="collapse-button text-muted" onclick="toggleNavbar()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
 
             <!-- <div class="col-auto align-bottom" style="margin-left:250px;">
 
@@ -49,7 +53,6 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
 
             <div class="navbar-nav flex-row order-md-last ms-auto me-3">
 
-
                 <div class="nav-item ms-auto">
                     <?php
 
@@ -60,6 +63,7 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
                     }
 
                     ?>
+                    
                 </div>
                 <div class="d-none d-md-flex">
 
@@ -229,7 +233,8 @@ $new_url = $url_parts['path'] . '?' . $new_query_string;
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" data-bs-theme="light">
 
-                        <a href="index.php?p=settings/manage&tab=edit-profile" class="dropdown-item">Profili Güncelle</a>
+                        <a href="index.php?p=settings/manage&tab=edit-profile" class="dropdown-item">Profili
+                            Güncelle</a>
                         <a href="./logout.php" class="dropdown-item">Çıkış Yap</a>
                     </div>
                 </div>

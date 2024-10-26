@@ -125,7 +125,7 @@ $(document).on("click", "#person_payment_balance", function () {
 });
 
 $(document).on("click", ".delete-payment", async function () {
-  let type = $(this).closest("tr").find("td:eq(4)").text();
+  let type = $(this).closest("tr").find("td:eq(2)").text();
   //Tablo adı butonun içinde bulunduğu tablo
   let action = "deletePayment";
   let confirmMessage = type + " silinecektir!";

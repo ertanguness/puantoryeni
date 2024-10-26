@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 
 <head>
   <meta charset="utf-8" />
@@ -35,6 +35,7 @@
   <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/style.css?1692870487" rel="stylesheet" />
+  <link href="./dist/css/menu.css?1692870487" rel="stylesheet" />
   <link href="./dist/libs/select2/css/select2.min.css?1692870487" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <!-- <link href="./dist/libs/tabler-icon/tabler-icons.min.css?1692870487" rel="stylesheet" /> -->

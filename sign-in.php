@@ -1,8 +1,11 @@
 <?php
-
+define("ROOT", $_SERVER["DOCUMENT_ROOT"]);
 require_once 'configs/require.php';
 require_once 'Model/UserModel.php';
 require_once 'App/Helper/security.php';
+require_once 'Model/SettingsModel.php';
+
+$Settings = new SettingsModel();
 
 $User = new UserModel();
 use App\Helper\Security;
@@ -18,7 +21,7 @@ use App\Helper\Security;
 
 <!doctype html>
 
-<html lang="en">
+<html lang="tr">
 
 <head>
   <meta charset="utf-8" />
@@ -97,11 +100,58 @@ use App\Helper\Security;
                     $_SESSION['user_role'] = $user->user_roles;
                     $User->setToken($user->id, $_SESSION['csrf_token']);
 
+                    //Giriş işlemleri kayıt altına alınıyor
+                    $_SESSION["log_id"] = $User->loginLog($user->id);
+
+
+
+                    //Eğer ayarlarda mail gönderme seçeneği açıksa
+                    $send_email_on_login = $Settings->getSettingIdByUserAndAction($user->id, "loginde_mail_gonder")->set_value ?? 0;
+                    if ($send_email_on_login == 1) {
+
+                      //mail gönderilecek kullanıcının mail adresini al
+                      $email = $user->parent_id == 0 ? $user->email : $User->find($user->id);
+
+                      //Kullanıcıya email gönder
+                      try {
+
+                        require_once "mail-settings.php";
+
+                        $body = 'Merhaba ' . $user->full_name . ',<br><br>
+
+                                Bu e-mail, hesabınıza giriş yapıldığını bildirmek amacıyla gönderilmiştir. 
+                                Kayıtlı mail adresiniz ile www.puantor.com.tr müşteri hesabınıza giriş yapılmıştır. <br><br>
+
+                                Giriş Zamanı: ' . date("Y-m-d H:i:s") . '<br>
+                                Giriş yapan IP Adresi: ' . $_SERVER['REMOTE_ADDR'] . '<br>
+                                Giriş yapan Kullanıcı: ' . $email . '<br>
+
+                                Eğer bu işlem bilginiz dışındaysa, lütfen en kısa sürede bizimle iletişime geçiniz: 0507 943 27 23<br><br>
+
+                                İyi Çalışmalar,<br><br>
+                                www.puantor.com.tr';
+
+                        // Alıcılar
+                        $mail->setFrom('bilgi@puantor.com.tr', 'Puantor');
+                        $mail->addAddress($email);
+                        $mail->isHTML(true);
+
+                        $mail->Subject = 'Hesabınıza giriş yapıldı';
+                        $mail->Body = $body;
+                        $mail->AltBody = strip_tags($body);
+                        //Karakter seti
+                        $mail->CharSet = 'UTF-8';
+
+                        $mail->send();
+                      } catch (Exception $e) {
+                        echo "E-posta gönderilemedi. Hata: {$mail->ErrorInfo}";
+                      }
+                    }
+
                     // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
                     $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';
                     header("Location: company-list.php?returnUrl={$returnUrl}");
-                    //header("Location:company-list.php");
-                    // header("Location: company-list.php");
+
                     exit();
 
                   } else {
@@ -180,12 +230,12 @@ use App\Helper\Security;
       if (input.attr('type') == 'password') {
         input.attr('type', 'text');
         icon.removeClass('ti-eye').addClass('ti-eye-off');
-        } else {
+      } else {
         input.attr('type', 'password');
         icon.removeClass('ti-eye-off').addClass('ti-eye');
-       
+
       }
-     
+
     });
   </script>
 </body>
