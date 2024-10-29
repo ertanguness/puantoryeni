@@ -57,7 +57,7 @@ class Puantaj extends Model
     {
         $sql = $this->db->prepare("SELECT puantaj_id FROM puantaj WHERE person = ? and gun = ?");
         $sql->execute([$person_id, $date]);
-        return $sql->fetch(PDO::FETCH_OBJ)->puantaj_id ?? 0;
+        return $sql->fetch(PDO::FETCH_OBJ)->puantaj_id ?? '';
     }
 
     //Puantaj tablosundan kayıtlı proje id'sini bul

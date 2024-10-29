@@ -1,7 +1,27 @@
 <?php
 require_once "Model/Company.php";
+require_once "App/Helper/security.php";
+
+use App\Helper\Security;
+
 $companyObj = new Company();
-$id = $_GET['id'] ?? 0;
+
+
+
+
+
+//Sayfa başlarında eklenecek alanlar
+$perm->checkAuthorize("company_add_update");
+$id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
+$new_id = isset($_GET["id"]) ? $_GET['id'] : 0;
+
+//Eğer url'den id yazılmışsa veya id boş ise projeler sayfasına gider
+if($id == null && isset($_GET['id'])) {
+    header("Location: /index.php?p=mycompany/list");
+    exit;
+}
+
+
 $pageTitle = $id > 0 ? "Firma Güncelle" : "Yeni Firma";
 $myfirm = $companyObj->findMyFirm($id);
 ?>
@@ -56,7 +76,7 @@ $myfirm = $companyObj->findMyFirm($id);
                             <div class="tab-content">
                                 <div class="row d-none">
                                     <div class="col-md-4">
-                                        <input type="text" name="id" class="form-control" value="<?php echo $id ?>">
+                                        <input type="text" name="id" class="form-control" value="<?php echo $new_id ?>">
                                     </div>
                                     <div class="col-md-4">
                                         <input type="text" name="action" class="form-control" value="saveMyCompany">

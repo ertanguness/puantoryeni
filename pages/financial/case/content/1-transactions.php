@@ -1,37 +1,33 @@
 <?php
 require_once 'App/Helper/helper.php';
-require_once 'Model/Bordro.php';
-require_once 'Model/Puantaj.php';
 require_once 'App/Helper/date.php';
+require_once 'App/Helper/financial.php';
+require_once 'Model/Cases.php';
+require_once 'Model/CaseTransactions.php';
 
-$puantaj = new Puantaj();
-$bordro = new Bordro();
 
+use App\Helper\Security;
 use App\Helper\Date;
 // Eğer personel beyaz yaka ise ve içinde bulunduğu ayda gelir tablosuna maaş eklenmediyse git o tabloya personelin aylık ücretini ekle
 use App\Helper\Helper;
 
+$Cases = new Cases();
+$Actions = new CaseTransactions();
+
 // Gelir gider bilgierini getir
-$income_expenses = $bordro->getPersonWorkTransactions($id);
-
-$month = Date::getMonth();
-
+$actions = $Actions->allTransactionByCaseId($id);
 
 
 // maas_gelir_gider tablosunda personelin toplam gelir, gider ve ödeme bilgilerini getir
 // ********************************************************************************* */
-$summary = $bordro->sumAllIncomeExpense($id);
+$summary = $Actions->sumAllIncomeExpense($id);
 
-$incomes = $summary->total_income;
-$total_expense = $summary->total_expense;
-$total_payment = $summary->total_payment;
+$incomes = $summary->income;
+$expense = $summary->expense;
 // ********************************************************************************* */
 
-// Toplam Gelir(Puantaj + Eklenen Gelirler+ veya maaş)
-$total_income =  $incomes ;
-
 // Bakiye hesaplanacak
-$balance = $total_income - $total_expense - $total_payment;
+$balance = $incomes - $expense;
 
 ?>
 <div class="container-xl">
@@ -43,7 +39,7 @@ $balance = $total_income - $total_expense - $total_payment;
                     <div class="d-flex col-auto ms-auto">
 
 
-                        <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                        <a href="#" class="btn btn-icon me-2" id="export_excel" data-tooltip="Excele Aktar">
                             <i class="ti ti-file-excel icon"></i>
                         </a>
 
@@ -53,13 +49,13 @@ $balance = $total_income - $total_expense - $total_payment;
                                 İşlemler</button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item add-payment" data-tooltip="Personellere Ödeme yapın"
-                                    data-tooltip-location="left" data-id="<?php echo $id ; ?>" href="#">
+                                    data-tooltip-location="left" data-id="<?php echo $id; ?>" href="#">
                                     <i class="ti ti-upload icon me-3"></i> Ödeme Yap
                                 </a>
                                 <a class="dropdown-item add-income" href="#" data-id="<?php echo $id; ?>">
                                     <i class="ti ti-download icon me-3"></i> Gelir Ekle
                                 </a>
-                                <a class="dropdown-item add-wage-cut" href="#"  data-id="<?php echo $id; ?>">
+                                <a class="dropdown-item add-wage-cut" href="#" data-id="<?php echo $id; ?>">
                                     <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
                                 </a>
 
@@ -71,7 +67,7 @@ $balance = $total_income - $total_expense - $total_payment;
                 <div class="card-header">
                     <div class="row row-cards">
 
-                        <div class="col-md-6 col-xl-3">
+                        <div class="col-md-4 col-sm-12">
                             <div class="card card-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -86,7 +82,7 @@ $balance = $total_income - $total_expense - $total_payment;
                                             </div>
                                             <div class="text-secondary">
                                                 <label for="" id="total_income">
-                                                    <?php echo Helper::formattedMoney($total_income ?? 0); ?>
+                                                    <?php echo Helper::formattedMoney($incomes ?? 0); ?>
                                                 </label>
                                             </div>
                                         </div>
@@ -95,7 +91,7 @@ $balance = $total_income - $total_expense - $total_payment;
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-xl-3">
+                        <div class="col-md-4 col-sm-12">
                             <div class="card card-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -110,7 +106,7 @@ $balance = $total_income - $total_expense - $total_payment;
                                             </div>
                                             <div class="text-secondary">
                                                 <label for="" id="total_expense">
-                                                    <?php echo Helper::formattedMoney($total_expense ?? 0); ?>
+                                                    <?php echo Helper::formattedMoney($expense ?? 0); ?>
                                                 </label>
                                             </div>
                                         </div>
@@ -119,34 +115,7 @@ $balance = $total_income - $total_expense - $total_payment;
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-xl-3">
-                            <div class="card card-sm">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-yellow text-white avatar">
-                                                <i class="ti ti-upload icon"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="font-weight-medium">
-                                                Ödeme Toplamı
-                                            </div>
-                                            <div class="text-secondary">
-                                                <label for="" id="total_payment">
-                                                    <?php echo Helper::formattedMoney($total_payment ?? 0); ?>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-                        <div class="col-md-6 col-xl-3">
+                        <div class="col-md-4 col-sm-12">
                             <div class="card card-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -177,66 +146,64 @@ $balance = $total_income - $total_expense - $total_payment;
                     <table class="table card-table text-nowrap datatable" id="person_paymentTable">
                         <thead>
                             <tr>
-                                <th style="width:2%">id</th>
+                                <th style="width:2%">Sıra</th>
                                 <th>Tarih</th>
                                 <th>Adı</th>
-                                <th>Ay</th>
-                                <th>Yıl</th>
-                          
                                 <th>İşlem Türü</th>
                                 <th>Tutar</th>
                                 <th>Açıklama</th>
                                 <th>İşlem Tarihi</th>
-                                <th style="width:2%">İşlem</th>
+                                <th class="no-export" style="width:2%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
 
 
                             <?php
-                            foreach ($income_expenses as $item):
+                            $i = 1;
+                            foreach ($actions as $item):
                                 ?>
-                            <tr>
-                                <td><?php echo $item->id; ?></td>
-                                <td><?php echo Date::dmY($item->gun); ?></td>
-                                <td><?php echo $item->turu; ?></td>
-                                <td><?php echo $item->ay; ?></td>
-                                <td><?php echo $item->yil; ?></td>
-                         
-                                <td><?php 
-                                 if($item->kategori == 1 || $item->kategori == 4){
-                                     echo "<i class='ti ti-download icon color-green me-1' ></i>";
-                                 }elseif($item->kategori == 2){
-                                     echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
-                                 }elseif($item->kategori == 3){
-                                     echo "<i class='ti ti-upload icon color-yellow me-1' ></i> ";
-                                 };
-                                 echo Helper::getIncomeExpenseType($item->kategori); ?>
-                                 
-                                 </td>
-                                <td><?php echo Helper::formattedMoney($item->tutar); ?></td>
-                                <td><?php echo Helper::short($item->aciklama); ?></td>
-                                <td><?php echo $item->created_at; ?></td>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><?php echo Date::dmY($item->date); ?></td>
+                                    <td><?php echo $item->type_id; ?></td>
 
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle align-text-top"
-                                            data-bs-toggle="dropdown">İşlem</button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item edit-payment" 
-                                                >
-                                                <i class="ti ti-edit icon me-3"></i> Güncelle
-                                            </a>
-                                            <a class="dropdown-item delete-payment" href="#"
-                                                data-id="<?php echo $item->id ?>">
-                                                <i class="ti ti-trash icon me-3"></i> Sil
-                                            </a>
+
+                                    <td><?php
+                                    if ($item->type_id == 1) {
+                                        echo "<i class='ti ti-download icon color-green me-1' ></i>";
+                                    } elseif ($item->type_id == 2) {
+                                        echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
+                                    }
+                                    ;
+                                    ;
+                                    echo Helper::getIncomeExpenseType($item->type_id); ?>
+
+                                    </td>
+                                    <td><?php echo Helper::formattedMoney($item->amount); ?></td>
+                                    <td><?php echo Helper::short($item->description); ?></td>
+                                    <td><?php echo $item->created_at; ?></td>
+
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle align-text-top"
+                                                data-bs-toggle="dropdown">İşlem</button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item edit-payment">
+                                                    <i class="ti ti-edit icon me-3"></i> Güncelle
+                                                </a>
+                                                <a class="dropdown-item delete-payment" href="#"
+                                                    data-id="<?php echo $item->id ?>">
+                                                    <i class="ti ti-trash icon me-3"></i> Sil
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                                    </td>
+                                </tr>
+                                <?php
+                                $i++;
+                            endforeach; ?>
                         </tbody>
                     </table>
                 </div>

@@ -56,6 +56,7 @@ public static function encrypt($data)
     //içinde + varsa onu değiştir
     $result = str_replace('+', '-', $encrypted_data);
     $result = str_replace('/', '_', $encrypted_data);
+    $result = str_replace('=', '*', $encrypted_data);
     $result = base64_encode($iv . $tag . $encrypted_data);
     return rawurlencode($result); // URL kodlaması ekle
 }

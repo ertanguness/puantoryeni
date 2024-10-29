@@ -69,7 +69,8 @@
     || $page == "puantaj/list" || $page == "payroll/list" || $page == "defines/incexp/list"
     || $page == "missions/list" || $page == "missions/process/list" ||
     $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
-    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage'  
+    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage'  ||
+    $page == "financial/case/manage"
   ) {
     echo '<link href="./dist/libs/datatable/datatables.min.css" rel="stylesheet" />';
   }

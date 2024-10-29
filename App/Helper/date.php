@@ -83,7 +83,7 @@ class Date
 
     public static function isDate($date)
     {
-        return (bool)strtotime($date);
+        return strtotime($date);
     }
     
     public static function isBetween($date, $startDate, $endDate)

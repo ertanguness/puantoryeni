@@ -393,20 +393,33 @@ $dates = Date::generateDates($year, $month, $days);
                                     <?php
                                     foreach ($dates as $date):
                                         $jobStartDate = str_replace('-', '', Date::Ymd($person->job_start_date));
-                                        $jonEndDate = str_replace('-', '', Date::Ymd($person->job_end_date));
+                                        $jobEndDate = str_replace('-', '', Date::Ymd($person->job_end_date));
+                                        if ($jobEndDate == '') {
+                                            $jobEndDate = 99999999;
+                                        }
                                         $month_date = $gun = $date;
 
                                         ?>
                                         <?php
 
-                                        if ($jobStartDate <= $month_date && $jonEndDate >= $month_date) {
+                                        if ($jobStartDate <= $month_date && $jobEndDate >= $month_date) {
+                                            $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
+                                        }
+                                        $month_date = $gun = $date;
+
+                                        ?>
+                                        <?php
+
+                                        if ($jobStartDate <= $month_date && $jobEndDate >= $month_date) {
                                             $puantaj_id = $puantajObj->getPuantajTuruId($person->id, $gun);
 
 
                                             if ($puantaj_id >= 0) {
+                                               
                                                 $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);
                                                 $puantajHelper->puantajClass($puantaj_id, $project_id, $puantaj_project);
                                             } else {
+                                                echo '<script>console.log(' . $puantaj_id . ')</script>';
                                                 if (Date::isWeekend($date)) {
                                                     $puantajHelper->puantajClass(53);
                                                 } else {

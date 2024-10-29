@@ -11,7 +11,12 @@ use App\Helper\Helper;
 use App\Helper\Date;
 use App\Helper\Security;
 
-$case_id = Security::decrypt($_POST['case_id']) ?? 0;
+if(isset($_POST['case_id'])){
+    $case_id = Security::decrypt($_POST['case_id'] ) ?? 0;
+}else{
+    $case_id = 0;
+}
+
 
 //Kullanıcının firmasını kontro eder
 $Auths->checkFirmReturn();

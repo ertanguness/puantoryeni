@@ -140,10 +140,10 @@ class UserModel extends Model
     }
 
     //Activate Token sorgulama
-    public function checkToken($token, $email)
+    public function checkToken( $email)
     {
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE activate_token = ? AND email = ?");
-        $sql->execute([$token, $email]);
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ?");
+        $sql->execute([$email]);
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 

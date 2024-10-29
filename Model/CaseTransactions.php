@@ -57,4 +57,26 @@ class CaseTransactions extends Model
         $sql = $this->db->prepare("DELETE FROM $this->table WHERE case_id = ?");
         $sql->execute([$case_id]);
     }
+
+    //Kasanın tüm hareketlerini getir
+    public function allTransactionByCaseId($case_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id = ?");
+        $sql->execute([$case_id]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    //Kasanın gelir-gider bilgilerini getir
+
+    public function sumAllIncomeExpense($case_id)
+    {
+        $sql = $this->db->prepare("SELECT 
+                                                SUM(CASE WHEN type_id = 1 THEN amount ELSE 0 END) AS income,
+                                                SUM(CASE WHEN type_id = 2 THEN amount ELSE 0 END) AS expense
+                                            FROM $this->table WHERE case_id = ?");
+        $sql->execute([$case_id]);
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
+    
 }

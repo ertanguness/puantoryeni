@@ -29,41 +29,48 @@ if ($_POST["action"] == "persons-load-from-xls") {
     $file_ext = strtolower(end($file_ext));
     $allowed = ["xls", "xlsx"];
 
+    $lastInsertedId = 0;
     if (in_array($file_ext, $allowed)) {
         try {
             //excel dosyasını okuma
             $spreadsheet = IOFactory::load($file_tmp);
             $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
             $data = [];
+            //hata mesajlarını bir değişkene ata ve sonuç olarak döndür
+            $error_message = [];
             foreach ($sheetData as $key => $row) {
                 if ($key == 1) {
                     continue;
                 }
-                $row = array_map("Security::escape", $row);
+                //$row = array_map(['Security', 'escape'], $row);
 
                 //Kuralları geçen kayıtların eklenmesi sağlanır
                 //full_name en az 3 karakter olmalı
                 if (strlen($row["A"]) < 3 || strlen($row["A"]) > 50) {
-                    continue;
+                    $error_message[] = "Satır $key: Ad Soyad 3-50 karakter arasında olmalıdır.";
                 }
                 //kimlik_no 11 karakter olmalı
                 if (strlen($row["B"]) != 11) {
-                    continue;
+                    $error_message[] = "Satır $key: Kimlik No 11 karakter olmalıdır.";
                 }
                 //job_start_date tarih formatında olmalı
                 if (!Date::isDate($row["C"])) {
-                    continue;
+                    $error_message[] = "Satır $key: İşe Başlama Tarihi tarih formatında olmalıdır.";
                 }
                 //iban_number 26 karakter olmalı
                 if (strlen($row["D"]) != 26) {
-                    continue;
+                    $error_message[] = "Satır $key: Iban Numarası 26 karakter olmalıdır.";
+
                 }
                 //daily_wages sayısal olmalı
                 if (!is_numeric($row["E"])) {
+                    $error_message[] = "Satır $key: Günlük/Aylık Ücret sayısal olmalıdır.";
+                }
+
+                // Eğer hata mesajı varsa, bu satırı atla
+                if (!empty($error_message)) {
                     continue;
                 }
-                
-
 
 
                 $data = [
@@ -83,9 +90,14 @@ if ($_POST["action"] == "persons-load-from-xls") {
                 ];
                 $lastInsertedId = $Persons->saveWithAttr($data) ?? 0;
             }
-
-            $status = "success";
-            $message = "Personeller başarıyla yüklendi";
+            //en az bir satır eklendiyse başarılı mesajı ver
+            if ($lastInsertedId > 0) {
+                $status = "success";
+                $message = "Personeller başarıyla yüklendi";
+            } else {
+                $status = "error";
+                $message = "Personeller yüklenemedi";
+            }
         } catch (PDOException $ex) {
             $status = "error";
             $message = $ex->getMessage();
@@ -95,11 +107,18 @@ if ($_POST["action"] == "persons-load-from-xls") {
         $status = "error";
         $message = "Dosya uzantısı uygun değil";
     }
+    if (!empty($error_message)) {
+        $message = "Hatalı kayıtlar var!";
+        foreach ($error_message as $error) {
+            $message .= "<br>" . $error;
+        }
+    }
 
     $res = [
         "status" => $status,
         "message" => $message,
-        //"data" => $data,
+        "data" => $data,
+        "error_message" => $error_message
     ];
 
     echo json_encode($res);

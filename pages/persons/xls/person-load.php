@@ -31,6 +31,9 @@ $Auths->checkAuthorize('upload_payment_permission');
                 <a href="pages/persons/xls/person-load-from.xls" class="btn me-2" data-tooltip="Yüklenecek Şablonu indirin">
                     <i class="ti ti-file-excel icon"></i> Örnek Dosya İndir
                 </a>
+                <a href="#" class="btn btn-ghost-danger me-2 clear" data-tooltip="Formu Temizleyin">
+                    <i class="ti ti-trash icon"></i> Temizle
+                </a>
             </div>
         </div>
         <div class="card mt-3">
@@ -49,9 +52,9 @@ $Auths->checkAuthorize('upload_payment_permission');
                                     <th>Tc Kimlik</th>
                                     <th>İşe Başlama Tarihi</th>
                                     <th>İban Numarası</th>
+                                    <th>Günlük/Aylık Ücret</th>
                                     <th>Telefon</th>
                                     <th>Email Adresi</th>
-                                    <th>Günlük/Aylık Ücret</th>
                                     <th>Beyaz/Mavi Yaka</th>
                                     <th>Adresi</th>
                                     <th>Açıklama</th>

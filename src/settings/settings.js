@@ -95,3 +95,26 @@ $(document).on("change", "#send_email_on_login", function () {
       console.error("Error:", error);
     });
 });
+
+$(document).on("click", "#home_save", function () {
+  var form = $("#settingsHomeForm");
+  let formData = new FormData(form[0]);
+  formData.append("action", "homeSettings");
+
+  fetch("api/settings/settings.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+     //console.log(data);
+      
+      title = data.status == "success" ? "Başarılı!" : "Hata!";
+      Swal.fire({
+        title: title,
+        text: data.message,
+        icon: data.status,
+        confirmButtonText: "Ok"
+      });
+    });
+});

@@ -1,6 +1,14 @@
 <?php
 $user_id = $_SESSION['user']->id;
 require_once "Model/MyFirmModel.php";
+require_once "App/Helper/security.php";
+
+use App\Helper\Security;
+
+
+$perm->checkAuthorize("my_companies_page");
+$Auths->checkFirmReturn();
+
 
 $MyFirmModel = new MyFirmModel();
 $myfirms = $MyFirmModel->getMyFirmByUserId();
@@ -27,23 +35,27 @@ $myfirms = $MyFirmModel->getMyFirmByUserId();
                     <table class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th style="width:7%">id</th>
+                                <th style="width:7%">Sıra</th>
                                 <th>Firma Adı</th>
-                                <th style="width:10%" >Telefon</th>
+                                <th style="width:10%">Telefon</th>
                                 <th>Mail Adresi</th>
                                 <th>Açıklama</th>
-                                <th style="width:10%" >Oluşturulma Tarihi</th>
+                                <th style="width:10%">Oluşturulma Tarihi</th>
                                 <th style="width:7%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
 
 
-                            <?php foreach ($myfirms as $myfirm) :
-                            ?>
+                            <?php 
+                            $i = 1;
+                            foreach ($myfirms as $myfirm):
+                            $id = Security::encrypt($myfirm->id);
+                                ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $myfirm->id; ?></td>
-                                    <td><a class="btn route-link" data-page="mycompany/manage&id=<?php echo $myfirm->id ?>" href="#">
+                                    <td class="text-center"><?php echo $i; ?></td>
+                                    <td><a class="btn route-link" data-page="mycompany/manage&id=<?php echo $id ?>"
+                                            href="#">
                                             <?php echo $myfirm->firm_name; ?>
                                         </a></td>
                                     <td class="text-start"><?php echo $myfirm->phone; ?></td>
@@ -52,12 +64,15 @@ $myfirms = $MyFirmModel->getMyFirmByUserId();
                                     <td><?php echo $myfirm->created_at; ?></td>
                                     <td class="text-end">
                                         <div class="dropdown">
-                                            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
+                                            <button class="btn dropdown-toggle align-text-top"
+                                                data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link" data-page="mycompany/manage&id=<?php echo $myfirm->id ?>" href="#">
+                                                <a class="dropdown-item route-link"
+                                                    data-page="mycompany/manage&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
-                                                <a class="dropdown-item delete-mycompany" data-id="<?php echo $myfirm->id ?>" href="#">
+                                                <a class="dropdown-item delete-mycompany"
+                                                    data-id="<?php echo $id ?>" href="#">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
                                             </div>
@@ -65,7 +80,9 @@ $myfirms = $MyFirmModel->getMyFirmByUserId();
 
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php 
+                            $i++;
+                        endforeach; ?>
                         </tbody>
                     </table>
                 </div>

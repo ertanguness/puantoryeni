@@ -102,7 +102,7 @@ $company = new CompanyHelper();
                                         <td class="text-center"><?php echo $i; ?></td>
                                         <td> <a href="#" data-tooltip="Detay/Güncelle"
                                                 data-page="persons/manage&id=<?php echo $id ?>"
-                                                class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                                class="nav-item route-link"><?php echo $person->full_name; ?></a></td>
                                         <td><?php echo $company->getcompanyName($person->company_id); ?></td>
                                         <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
                                         <td><?php echo $person->sigorta_no; ?></td>

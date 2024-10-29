@@ -224,15 +224,17 @@ function alertdanger($message)
                             $User->saveWithAttr($data);
 
                             //Kayıttan sonra kullanıcıya mail gönderilir
-                            //1 saat geçerli olan token oluşturma
-                            $token = urlencode(Security::encrypt(time() + 3600));
+
+                            //Şuan ki zamanı token olarak oluştur
+                            $token = (Security::encrypt(time() + 3600));
+
                             // $token = urlencode(bin2hex(random_bytes(32)));
-                            $activate_link = "http://puantor.com.tr/register-activate.php?email=".urlencode($email)."&token=" . $token;
+                            $activate_link = "http://puantor.com.tr/register-activate.php?email=".($email)."&token=" . $token;
 
                             // Token ve e-posta adresini veritabanına kaydetme
                             $data = [
                                 'id' => Security::decrypt($lastInsertUserId),
-                                'activate_token' => $token,
+                                'activate_token' => ($token),
                             ];
                             $User->setActivateToken($data);
 

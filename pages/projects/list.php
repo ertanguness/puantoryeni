@@ -89,7 +89,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                                 <td><?php echo $project->type == 0 ? 'Alınan' : 'Verilen' ?></td>
                                 <td><?php echo $project->firm_id ?></td>
                                 <td > 
-                                    <a class="route-link btn" data-tooltip="Detay" 
+                                    <a class="route-link nav-item" data-tooltip="Detay" 
                                         data-page="projects/manage&id=<?php echo $id ?>" 
                                         data-tooltip-location="top">
                                      <?php echo $project->project_name ?>

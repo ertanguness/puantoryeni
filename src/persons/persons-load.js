@@ -43,11 +43,12 @@ $(document).ready(function () {
         })
         .get()
         .join("");
-        //tableBody boş değilse
+      //tableBody boş değilse
       if (tableBody === "") {
         tableBody = "<tr><td colspan='100%'>Dosyada veri bulunamadı.</td></tr>";
-      }else{}
-      
+      } else {
+      }
+
       $("#result tbody").html(tableBody);
       $("#result table").addClass("table table-hover table-bordered");
     };
@@ -84,8 +85,6 @@ $(document).on("click", "#personsLoadButton", function () {
     return;
   }
 
-
-
   // tablonun body'sinde veri var mı kontrol et
   if ($("#result tbody td").length === 0) {
     swalAlert("Uyarı!", "Seçtiğiniz dosyada veri yok!", "warning");
@@ -113,19 +112,42 @@ $(document).on("click", "#personsLoadButton", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       if (data.status === "success") {
-        swalAlert("Başarılı!", "Personeller başarıyla yüklendi.", "success");
+        swal.fire({
+          title: "Başarılı!",
+          html: data.message,
+          icon: "success",
+          confirmButtonText: "Tamam"
+        });
         $("#persons-load-file").val("");
         $("#result tbody").html("");
         $("#personsLoadButton").prop("disabled", false);
         $("#personsLoadButton .spinner-border").remove();
       } else {
-        swalAlert("Hata!", data.message, "error");
+        swal.fire({
+          title: "Hata!",
+          html: data.message,
+          icon: "error",
+          confirmButtonText: "Tamam"
+        });
+        $("#personsLoadButton").prop("disabled", false);
+        $("#personsLoadButton .spinner-border").remove();
       }
     })
     .catch((error) => {
       console.error("Error:", error);
-      swalAlert("Hata!", "Bir hata oluştu. Lütfen tekrar deneyin.", "error");
+      swalAlert("Hata!", error.message, "error");
+      $("#personsLoadButton").prop("disabled", false);
+      $("#personsLoadButton .spinner-border").remove();
     });
+});
+
+$(document).on('click', '.clear', function() {
+  $("#persons-load-file").val("");
+  $("#result tbody").html("");
+  $("#personsLoadButton").prop("disabled", false);
+  $("#personsLoadButton .spinner-border").remove();
+
+
 });

@@ -13,7 +13,7 @@ class SettingsModel extends Model
 
     public function getSettings($set_name)
     {
-        $firm_id = $_SESSION['user']->firm_id;
+        $firm_id = $_SESSION['firm_id'];
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? AND set_name = ?");
         $sql->execute([$firm_id, $set_name]);
         return $sql->fetch(PDO::FETCH_OBJ);

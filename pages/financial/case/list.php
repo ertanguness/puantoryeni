@@ -87,7 +87,7 @@ $cases = $caseObj->allCaseWithFirmId();
                                     <tr>
                                         <td class="text-center"><?php echo $i; ?></td>
                                         <td><?php echo $company->getFirmName($case->company_id ?? ''); ?></td>
-                                        <td> <a class="btn route-link" data-tooltip="Detay/Güncelle"
+                                        <td> <a class="nav-item route-link" data-tooltip="Detay/Güncelle"
                                                 data-page="financial/case/manage&id=<?php echo $id ?>" href="#">
                                                 <?php echo $case->case_name; ?>
                                             </a>

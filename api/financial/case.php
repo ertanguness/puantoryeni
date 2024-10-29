@@ -22,17 +22,19 @@ if ($_POST["action"] == "saveCase") {
 
     $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
 
-    //eğer id 0 ve firmanın hiç kasası yoksa varsayılan kasa yap
-    if ($id == 0 && $caseObj->countCaseByFirm() == 0) {
-        $_POST["default_case"] = 1;
-    }
+
 
     //eğer varsayılan kasa yapılacaksa diğer kasaların varsayılanlığını kaldır
     if (isset($_POST["default_case"]) && $_POST["default_case"] == 'on') {
         $caseObj->removeDefaultCase();
         $_POST["default_case"] = 1;
     } else {
-        $_POST["default_case"] = 0;
+        //eğer id 0 ve firmanın hiç kasası yoksa varsayılan kasa yap
+        if ($id == 0 && $caseObj->countCaseByFirm() == 0) {
+            $_POST["default_case"] = 1;
+        } else {
+            $_POST["default_case"] = 0;
+        }
     }
     $data = [
         "id" => $id,
@@ -46,9 +48,11 @@ if ($_POST["action"] == "saveCase") {
         "isDefault" => Security::escape($_POST["default_case"]),
 
     ];
-    if(isset($_POST["start_budget"]) && $_POST["start_budget"] != ""){
+    if (isset($_POST["start_budget"]) && $_POST["start_budget"] != "") {
         $data["start_budget"] = Security::escape($_POST["start_budget"]);
-    }   
+    }else{
+        $data["start_budget"] = 0;
+    }
 
 
     try {

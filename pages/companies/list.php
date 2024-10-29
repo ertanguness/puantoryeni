@@ -63,7 +63,7 @@ $companies = $companyObj->allWithUserId();
                                 <tr>
                                     <td><span class="text-secondary"><?php echo $company->id; ?></span></td>
                                     <td>
-                                        <a href="#" class="btn route-link"
+                                        <a href="#" class="nav-item route-link"
                                             data-page="companies/manage&id=<?php echo $company->id ?>">
                                             <?php echo Helper::short($company->company_name, 32) ?>
                                         </a>

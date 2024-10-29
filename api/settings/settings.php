@@ -70,9 +70,39 @@ if ($_POST["action"] == "send_email_on_login") {
     $input_val = isset($_POST["send_email_on_login"]) ? 1 : 0;
     $data = [
         "id" => $id,
+        "firm_id" => $_SESSION["firm_id"],
         "user_id" => $_SESSION["user"]->id,
         "set_name" => "loginde_mail_gonder",
         "set_value" => $input_val
+    ];
+    try {
+        $lastInsertId = $Settings->saveWithAttr($data) ?? $id;
+        $status = "success";
+        $message = "Ayarlar başarıyla tamamlandı.";
+    } catch (PDOException $e) {
+        $status = "error";
+        $message = $e->getMessage();
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message
+    ];
+    echo json_encode($res);
+}
+
+//Genel ayarlar
+if ($_POST["action"] == "homeSettings") {
+
+    $work_hour = $_POST["work_hour"];
+    //$id = $Settings->getSettingIdByUserAndAction($_SESSION["user"]->id, "work_hour")->id ?? 0;
+    $id = $Settings->getSettings("work_hour")->id ?? 0;
+
+    $data = [
+        "id" => $id,
+        "firm_id" => $_SESSION["firm_id"],
+        "user_id" => $_SESSION["user"]->id,
+        "set_name" => "work_hour",
+        "set_value" => $work_hour
     ];
     try {
         $lastInsertId = $Settings->saveWithAttr($data) ?? $id;

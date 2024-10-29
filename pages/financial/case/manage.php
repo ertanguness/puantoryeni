@@ -87,7 +87,7 @@ $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
                                     <?php include_once 'content/0-home.php' ?>
                                 </div>
                                 <div class="tab-pane" id="tabs-payment-3" role="tabpanel">
-                                    <?php include_once 'content/1-payment-info.php' ?>
+                                    <?php include_once 'content/1-transactions.php' ?>
                                 </div>
                             </div>
                         </div>

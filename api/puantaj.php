@@ -6,9 +6,11 @@ require_once ROOT . '/Model/Persons.php';
 require_once ROOT . '/Model/Wages.php';
 require_once ROOT .'/Database/db.php';
 require_once ROOT .'/App/Helper/date.php';
+require_once ROOT .'/Model/SettingsModel.php';
+
 
 use App\Helper\Date;
-
+$Settings = new SettingsModel();
 $puantajObj = new Puantaj();
 $person = new Persons();
 $wages = new Wages();
@@ -17,6 +19,9 @@ if ($_POST['action'] == 'savePuantaj') {
     $status = '';
     $message = '';
 
+//Günlük calisma saatini getir
+$work_hour = $Settings->getSettings("work_hour")->set_value ?? 8;
+
     //Gelen data json formatında olduğu için decode edilir
     $json_data = json_decode($_POST['data'], true);
     $error_wages = [];
@@ -24,7 +29,7 @@ if ($_POST['action'] == 'savePuantaj') {
         // puantajId'nin boş olmadığını kontrol et
         //personelin tanımlı ücreti var ise o ücretten hesaplama yapılacak
         
-        $ucret = $person->getDailyWages($person_key)->daily_wages / 8;
+        $ucret = $person->getDailyWages($person_key)->daily_wages / $work_hour;
         if ($ucret == 0 || $ucret == '') {
             $error_wages[] = $person->getPersonById($person_key, 'full_name')->full_name;
         }
@@ -40,7 +45,7 @@ if ($_POST['action'] == 'savePuantaj') {
                 // Eğer personelin günlük ücreti tanımlı ise o ücretten hesaplama yapılır
                 $defined_wage = $wages->getWageByPersonIdAndDate($person_key,$puantaj_key)->amount ?? 0;
                 //tanımlı ücret yoksa günlük ücretten hesaplama yapılır
-                $daily_wages = ($defined_wage > 0) ?  ($defined_wage / 8) : $ucret;
+                $daily_wages = ($defined_wage > 0) ?  ($defined_wage / $work_hour) : $ucret;
                 
                 //puantajın saati, puantaj id'sine göre getirilir
                 $saat = $puantajObj->getPuantajSaati($puantaj_item['puantajId']);

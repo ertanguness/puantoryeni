@@ -120,7 +120,7 @@ $lastDay = Date::lastDay($month, $year);
                     <table class="table card-table table-responsive table-hover text-nowrap datatable" id="bordroTable">
                         <thead>
                             <tr>
-                                <th style="width:1%">id</th>
+                                <th style="width:1%">Sıra</th>
                                 <th>Personel Adı</th>
                                 <th>Ücret Türü</th>
                                 <th>Görevi</th>
@@ -139,10 +139,12 @@ $lastDay = Date::lastDay($month, $year);
 
 
                             <?php
+                            $i = 1;
                             foreach ($persons as $item):
                                 // Personel id'sine göre personel bilgilerini getirir
                                 $person = $personObj->find($item->id);
                                 $person_id = Security::encrypt($person->id);
+                                $id= Security::encrypt($person->id);
 
                                 // Personel Beyaz Yaka ise
                                 if ($person->wage_type == 1) {
@@ -187,10 +189,10 @@ $lastDay = Date::lastDay($month, $year);
 
                                 ?>
                                 <tr>
-                                    <td><?php echo $person->id; ?></td>
+                                    <td class="text-center"><?php echo $i; ?></td>
                                     <td> <a href="#" data-tooltip="Detay/Güncelle"
-                                            data-page="persons/manage&id=<?php echo $person_id ?>"
-                                            class="btn route-link"><?php echo $person->full_name; ?></a></td>
+                                            data-page="persons/manage&id=<?php echo $id ?>"
+                                            class="nav-item route-link"><?php echo $person->full_name; ?></a></td>
                                     <td><?php echo $person->wage_type == 1 ? 'Beyaz Yaka' : 'Mavi Yaka'; ?></td>
                                     <td><?php echo $person->job; ?></td>
                                     <td><?php echo $person->job_start_date; ?></td>
@@ -236,37 +238,38 @@ $lastDay = Date::lastDay($month, $year);
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <?php if ($Auths->hasPermission('make_staff_payment')) { ?>
-                                                    <a class="dropdown-item add-payment" data-id="<?php echo $person->id ?>"
+                                                    <a class="dropdown-item add-payment" data-id="<?php echo $id ?>"
                                                         href="#" data-bs-toggle="modal" data-bs-target="#payment-modal">
                                                         <i class="ti ti-cash-register icon me-3"></i> Ödeme Yap
                                                     </a>
                                                 <?php } ?>
 
-                                                <a class="dropdown-item add-wage-cut" data-id="<?php echo $person->id ?>"
+                                                <a class="dropdown-item add-wage-cut" data-id="<?php echo $id ?>"
                                                     data-tooltip="Avans,Ceza veya Bes gibi" data-tooltip-location="left"
                                                     href="#" data-bs-toggle="modal" data-bs-target="#wage_cut_modal">
                                                     <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
                                                 </a>
-                                                <a class="dropdown-item add-income" data-id="<?php echo $person->id ?>"
+                                                <a class="dropdown-item add-income" data-id="<?php echo $id ?>"
                                                     data-tooltip="Prim,İkramiye veya Ödül gibi" data-tooltip-location="left"
                                                     href="#" data-bs-toggle="modal" data-bs-target="#income_modal">
                                                     <i class="ti ti-download icon me-3"></i> Gelir Ekle
                                                 </a>
 
-                                                <?php $id = Security::encrypt($person->id); ?>
                                                 <a class="dropdown-item route-link" target="_blank"
                                                     data-page="payroll/pay-slip&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-file-dollar icon me-3"></i> Bordro Göster
                                                 </a>
-                                                <a class="dropdown-item" href="#">
+                                                <!-- <a class="dropdown-item" href="#">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
-                                                </a>
+                                                </a> -->
                                             </div>
                                         </div>
 
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php 
+                            $i++;
+                        endforeach; ?>
                         </tbody>
                     </table>
                 </div>
