@@ -38,7 +38,7 @@ if ($_POST['action'] == 'savePayment') {
     try {
         $lastInsertId = $payment->saveWithAttr($data);
 
-        $last_payment = $payment->getPersonIncomeExpensePayment($lastInsertId);
+        $last_payment = $payment->getPersonIncomeExpensePayment(Security::decrypt($lastInsertId));
 
         // // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
         $income_expense = $payment->sumAllIncomeExpense($person_id);

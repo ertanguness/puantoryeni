@@ -9,12 +9,12 @@ use App\Helper\Security;
 
 $caseObj = new Cases();
 $company = new CompanyHelper();
+
+$Auths->checkFirmReturn();
 $perm->checkAuthorize("cash_register_list");
 
 
 $cases = $caseObj->allCaseWithFirmId();
-
-echo $_SESSION['user']->firm_id;
 
 ?>
 <div class="container-xl">
@@ -57,7 +57,7 @@ echo $_SESSION['user']->firm_id;
 
 
                 <div class="table-responsive">
-                    <table class="table card-table text-nowrap datatable">
+                    <table class="table card-table text-nowrap datatable row-selected">
                         <thead>
                             <tr>
                                 <th style="width:7%">id</th>
@@ -79,11 +79,11 @@ echo $_SESSION['user']->firm_id;
                             //Kullanıcı firma id ve session firm_id eşleşiyorsa;
                             if ($Auths->checkFirm()): ?>
 
-                                <?php 
+                                <?php
                                 $i = 1;
                                 foreach ($cases as $case):
-                                $id = Security::encrypt($case->id)
-                                    ?>
+                                    $id = Security::encrypt($case->id)
+                                        ?>
                                     <tr>
                                         <td class="text-center"><?php echo $i; ?></td>
                                         <td><?php echo $company->getFirmName($case->company_id ?? ''); ?></td>
@@ -111,8 +111,7 @@ echo $_SESSION['user']->firm_id;
                                                     data-bs-toggle="dropdown">İşlem</button>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item route-link"
-                                                        data-page="financial/transaction/list&id=<?php echo $id ?>"
-                                                        href="#">
+                                                        data-page="financial/transaction/list&id=<?php echo $id ?>" href="#">
                                                         <i class="ti ti-transfer icon me-3"></i> Kasa Hareketleri
                                                     </a>
 
@@ -125,15 +124,13 @@ echo $_SESSION['user']->firm_id;
                                                         </a>
                                                     <?php } ?>
 
-                                                    <a class="dropdown-item default-case" data-id="<?php echo $id ?>"
-                                                        href="#">
+                                                    <a class="dropdown-item default-case" data-id="<?php echo $id ?>" href="#">
                                                         <i class="ti ti-checks icon me-3"></i> Varsayılan Yap
                                                     </a>
                                                     <?php
                                                     //Ekleme ve güncelleme yetkisi varsa
                                                     if ($Auths->hasPermission("cash_delete")) { ?>
-                                                        <a class="dropdown-item delete-case" data-id="<?php echo $id ?>"
-                                                            href="#">
+                                                        <a class="dropdown-item delete-case" data-id="<?php echo $id ?>" href="#">
                                                             <i class="ti ti-trash icon me-3"></i> Sil
                                                         <?php } ?>
                                                     </a>
@@ -143,9 +140,9 @@ echo $_SESSION['user']->firm_id;
 
                                         </td>
                                     </tr>
-                                <?php 
-                                $i++;
-                            endforeach; ?>
+                                    <?php
+                                    $i++;
+                                endforeach; ?>
                             <?php endif; ?>
                         </tbody>
                     </table>

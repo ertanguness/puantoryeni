@@ -125,11 +125,34 @@ class UserModel extends Model
     }
 
     //Token sorgulama
-   
+
 
     public function updateUserPassword($email, $password)
     {
         $sql = $this->db->prepare("UPDATE $this->table SET password = ? WHERE email = ?");
         $sql->execute([$password, $email]);
+    }
+
+    //Activate Token kaydetme
+    public function setActivateToken($data)
+    {
+        $this->saveWithAttr($data);
+    }
+
+    //Activate Token sorgulama
+    public function checkToken($token, $email)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE activate_token = ? AND email = ?");
+        $sql->execute([$token, $email]);
+        return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
+    //Kullanıcıyı aktif etme
+    public function ActivateUser( $email)
+    {
+        $sql = $this->db->prepare("UPDATE $this->table SET status = 1 WHERE email = ?");
+        $sql->execute([$email]);
+        //eğer başarılı ise geriye değer döndür
+        return $sql->rowCount();
     }
 }

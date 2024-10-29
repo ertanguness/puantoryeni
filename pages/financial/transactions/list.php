@@ -4,13 +4,20 @@ require_once "Model/CaseTransactions.php";
 require_once "App/Helper/helper.php";
 require_once "App/Helper/date.php";
 require_once "App/Helper/financial.php";
-
+require_once "App/Helper/security.php";
 
 
 use App\Helper\Helper;
 use App\Helper\Date;
+use App\Helper\Security;
 
-$case_id = $_POST['case_id'] ?? 0;
+$case_id = Security::decrypt($_POST['case_id']) ?? 0;
+
+//Kullanıcının firmasını kontro eder
+$Auths->checkFirmReturn();
+
+//Sayfa başlarında eklenecek alanlar
+$perm->checkAuthorize("income_expense_operations");
 
 
 $cases = new Cases();
@@ -93,7 +100,7 @@ $financialHelper = new Financial();
                     <table id="transactionTable" class="table card-table text-nowrap table-hover datatable">
                         <thead>
                             <tr>
-                                <th style="width:7%">İd</th>
+                                <th style="width:7%" class="text-center">Sıra</th>
                                 <th style="width:5%">Tarih</th>
                                 <th style="width:5%">İşlem Türü</th>
                                 <th style="width:5%">Alt Tür</th>
@@ -106,12 +113,16 @@ $financialHelper = new Financial();
                         <tbody>
 
 
-                            <?php foreach ($transactions as $transaction):
+                            <?php
+                            $i = 1;
+                            foreach ($transactions as $transaction):
+                                $id = Security::encrypt($transaction->id);
                                 ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $transaction->id ?></td>
+                                    <td class="text-center"><?php echo $i ?></td>
                                     <td><?php echo Date::dmY($transaction->date) ?></td>
-                                    <td class="text-center"><?php echo Helper::getTransactionType($transaction->type_id) ?></td>
+                                    <td class="text-center"><?php echo Helper::getTransactionType($transaction->type_id) ?>
+                                    </td>
                                     <td class="text-center"><?php echo $transaction->sub_type ?></td>
                                     <td><?php echo $cases->find($transaction->case_id)->case_name ?></td>
                                     <td><?php echo Helper::formattedMoney($transaction->amount, $transaction->amount_money ?? 1) ?>
@@ -122,24 +133,29 @@ $financialHelper = new Financial();
                                             <button class="btn dropdown-toggle align-text-top"
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- Gelir Gider Güncelleme yetkisi kontrol edilir -->
-                                            <?php if ($Auths->hasPermission('income_expense_add_update')) { ?>
+                                                <!-- Gelir Gider Güncelleme yetkisi kontrol edilir -->
+                                                <?php if ($Auths->hasPermission('income_expense_add_update')) : ?>
                                                     <a class="dropdown-item route-link"
-                                                        data-page="financial/transaction/manage&id=<?php echo $transaction->id ?>"
+                                                        data-page="financial/transaction/manage&id=<?php echo $id ?>"
                                                         href="#">
                                                         <i class="ti ti-edit icon me-3"></i> Güncelle
                                                     </a>
-                                                <?php } ?>
+                                                <?php endif ?>
+
+                                                <?php if($Auths->hasPermission("delete_income_expense")): ?>
                                                 <a class="dropdown-item delete-transaction"
-                                                    data-id="<?php echo $transaction->id ?>" href="#">
+                                                    data-id="<?php echo $id ?>" href="#">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                                <?php
+                                $i++;
+                            endforeach; ?>
                         </tbody>
                     </table>
                 </div>

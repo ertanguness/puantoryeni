@@ -6,28 +6,39 @@ require_once "../../App/Helper/date.php";
 require_once "../../App/Helper/helper.php";
 require_once "../../App/Helper/financial.php";
 require_once "../../Model/DefinesModel.php";
+require_once "../../App/Helper/security.php";
+require_once "../../Model/Auths.php";
+
 
 
 use App\Helper\Helper;
 use App\Helper\Date;
+use App\Helper\Security;
 
+$Auths = new Auths();
 $cases = new Cases();
 $ct = new CaseTransactions();
 $financial = new Financial();
 $define = new DefinesModel();
 
+
+$Auths->checkFirmReturn();
+
 if ($_POST["action"] == "saveTransaction") {
     $id = $_POST["transaction_id"];
 
+    //Kasa hareketi ekleme yetkisi var mı?
+    $Auths->hasPermission("income_expense_add_update");
+
     $data = [
-        "id" => $id,
+        "id" => 0,
         "date" => date("Y-m-d H:i:s"),
         "type_id" => $_POST["transaction_type"],
         "sub_type" => $_POST["inc_exp_type"],
-        "case_id" => $_POST["case_id"],
+        "case_id" => Security::decrypt($_POST["case_id"]),
         "amount" => $_POST["amount"],
         "amount_money" => $_POST["amount_money"],
-        "description" => $_POST["description"],
+        "description" => Security::escape($_POST["description"]),
     ];
 
     try {
@@ -41,10 +52,12 @@ if ($_POST["action"] == "saveTransaction") {
         }
 
         //Eklenen kaydın bilgilerini getir
-        $transaction = $ct->find($lastInsertId);
+        $transaction = $ct->find(Security::decrypt($lastInsertId));
         //Kayıt alanlarında düzenleme
         foreach ($transaction as $key => $value) {
-            if ($key == "date") {
+            if($key == "id"){
+                $transaction->id = Security::encrypt($value);
+            }else if ($key == "date") {
                 $transaction->$key = Date::dmY($value);
             } elseif ($key == "type_id") {
                 $transaction->$key = $value == 1 ? "Gelir" : "Gider";
@@ -68,6 +81,11 @@ if ($_POST["action"] == "saveTransaction") {
 }
 
 if ($_POST["action"] == "deleteTransaction") {
+
+    //Kasa hareketi silme yetkisi var mı?
+    $Auths->hasPermissionReturn("delete_income_expense");
+      
+
     $id = $_POST["id"];
     try {
         $ct->delete($id);

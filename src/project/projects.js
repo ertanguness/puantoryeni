@@ -5,7 +5,6 @@ $(document).on("click", "#saveProject", function () {
   //   console.log(pair[0] + ", " + pair[1]);
   // }
 
- 
   form.validate({
     rules: {
       project_name: {
@@ -70,7 +69,6 @@ $(document).on("click", "#savePersontoProject", function () {
     .then((data) => {
       console.log(data);
       if (data.status == "success") {
-        
         title = "Başarılı!";
       } else {
         title = "Hata!";
@@ -101,7 +99,6 @@ $(document).on("change", "#project_city", function () {
   getTowns($(this).val(), "#project_town");
 });
 
-
 $(document).on("click", ".delete-project", function () {
   //Tablo adı butonun içinde bulunduğu tablo
   let action = "deleteProject";
@@ -109,4 +106,37 @@ $(document).on("click", ".delete-project", function () {
   let url = "/api/projects/projects.php";
 
   deleteRecord(this, action, confirmMessage, url);
+});
+
+$(document).ready(function () {
+  // DataTable'ı başlat
+  var table = $("#projectTable").DataTable();
+
+  // Radyo butonuna tıklama olayını dinle
+  $(".form-selectgroup-input").on("change", function () {
+    var type = $(this).attr("data-type");
+    //Eğer tümü ise tüm filtreleri kaldır
+    if (type == "Tümü") {
+      table.column(1).search("").draw();
+      return;
+    }
+    if (this.checked) {
+      // DataTable'da filtreleme yap
+      table.column(1).search(type).draw();
+    }
+  });
+function filterTableByCheckedRadio() {
+  var checkedRadio = $(".form-selectgroup-input:checked");
+  if (checkedRadio.length > 0) {
+    var type = checkedRadio.attr("data-type");
+    if (type == "Tümü") {
+      table.column(1).search("").draw();
+    } else {
+      table.column(1).search(type).draw();
+    }
+  }
+}
+
+// Sayfa yüklendiğinde tabloyu filtrele
+filterTableByCheckedRadio();
 });

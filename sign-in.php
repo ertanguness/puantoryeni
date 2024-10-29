@@ -88,7 +88,7 @@ use App\Helper\Security;
                   echo alertdanger('Kullanıcı bulunamadı');
                   // Kullanıcı aktif değilse
                 } else if (isset($user) && $user->status == 0) {
-                  echo alertdanger('Kullanıcı henüz aktif değil');
+                  echo alertdanger('Hesabınız henüz aktif değil');
                 } else {
                   $verified = password_verify($password, $user->password);
 

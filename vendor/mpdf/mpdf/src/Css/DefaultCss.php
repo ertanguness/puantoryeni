@@ -7,13 +7,16 @@ class DefaultCss
 
 	public static $definition = [
 		'BODY' => [
-			'FONT-FAMILY' => 'serif',
+			'FONT-FAMILY' => 'sans-serif',
 			'FONT-SIZE' => '11pt',
 			'TEXT-INDENT' => '0pt',
 			'LINE-HEIGHT' => 'normal',
-			'MARGIN-COLLAPSE' => 'collapse', // Custom property to collapse top/bottom margins at top/bottom of page - ignored in tables/lists
 			'HYPHENS' => 'manual',
 			'FONT-KERNING' => 'auto',
+		],
+		'DIV' => [
+			'MARGIN' => '0',
+			'PADDING' => '0',
 		],
 		'P' => [
 			'MARGIN' => '1.12em 0',
@@ -213,5 +216,7 @@ class DefaultCss
 		'MARK' => [
 			'BACKGROUND-COLOR' => 'yellow',
 		],
+	
+	
 	];
 }

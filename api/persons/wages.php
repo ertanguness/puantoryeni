@@ -7,6 +7,8 @@ require_once '../../Model/Bordro.php';
 
 use App\Helper\Helper;
 use App\Helper\Date;
+use App\Helper\Security;
+
 $wages = new Wages();
 $bordro = new Bordro();
 
@@ -28,7 +30,7 @@ if ($_POST["action"] == "saveWage") {
 
 
     try {
-        $lastInsertId = $wages->saveWithAttr($data);
+        $lastInsertId = Security::decrypt($wages->saveWithAttr($data));
         $status = "success";
         if ($id == 0) {
             $message = "Ücret başarıyla kaydedildi.";
@@ -38,7 +40,7 @@ if ($_POST["action"] == "saveWage") {
 
         }
 
-        $last_wage = $wages->getWageById($lastInsertId ?? $id) ;
+        $last_wage = $wages->find($lastInsertId ?? $id) ;
         $last_wage->amount = Helper::formattedMoney($last_wage->amount);
         $last_wage->start_date = Date::Ymd($last_wage->start_date,"d.m.Y");
         $last_wage->end_date = Date::Ymd($last_wage->end_date,"d.m.Y");

@@ -43,8 +43,12 @@ $(document).ready(function () {
         })
         .get()
         .join("");
-      $("#result tbody").html(tableBody);
-      $("#result table").addClass("table table-hover table-bordered");
+      if (tableBody === "") {
+        tableBody = "<tr><td colspan='100%'>Dosyada veri bulunamadı.</td></tr>";
+      } else {
+        $("#result tbody").html(tableBody);
+        $("#result table").addClass("table table-hover table-bordered");
+      }
     };
 
     reader.onerror = function (error) {
@@ -71,6 +75,14 @@ $(document).on("click", "#paymentLoadButton", function () {
     swalAlert("Uyarı!", "Lütfen bir dosya seçin.", "warning");
     return;
   }
+
+  // tabloda 'Dosyada veri bulunamadı' uyarısı var mı kontrol et
+  //tabloda 'Dosyada veri bulunamadı.' uyarısından başka veri var mı kontrol et
+  if ($("#result tbody tr td").text() === "Dosyada veri bulunamadı.") {
+    swalAlert("Uyarı!", "Seçtiğiniz dosyada veri yok!", "warning");
+    $("#persons-load-file").val(""); // Inputu temizle
+    return;
+  }  
 
   // tablonun body'sinde veri var mı kontrol et
   if ($("#result tbody td").length === 0) {

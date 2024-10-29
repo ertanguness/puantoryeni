@@ -4,12 +4,14 @@ require_once "App/Helper/helper.php";
 
 use App\Helper\Helper;
 $selected_firm = $case->firm_id ?? $_SESSION['firm_id'];
+$default_case = ($case->isDefault ?? 0) == 1 ? "checked" : "";
+$is_disabled = ($case->isDefault ?? 0)== 1 ? "disabled" : "";
 
 ?>
 
 
 <form action="" id="caseForm">
-    <div class="row">
+    <div class="row d-none">
         <div class="col-md-4">
             <input type="text" name="id" id="id" class="form-control" value="<?php echo $new_id ?>">
         </div>
@@ -19,10 +21,23 @@ $selected_firm = $case->firm_id ?? $_SESSION['firm_id'];
     </div>
     <div class="row mb-3">
         <div class="col-md-2">
+            <label for="case_name" class="form-label">Varsayılan Kasa</label>
+        </div>
+        <div class="col-md-10">
+
+            <label class="form-check form-switch form-switch-lg">
+                <input class="form-check-input" name="default_case" id="default_case" type="checkbox" <?php echo $default_case . " " .$is_disabled; ?>>
+                <span class="form-check-label form-check-label-on">Varsayılan</span>
+                <span class="form-check-label form-check-label-off">Varsayılan Değil</span>
+            </label>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-2">
             <label for="case_name" class="form-label">Firması</label>
         </div>
         <div class="col-md-4">
-            <?php echo $company->myCompanySelect("firm_company", $selected_firm ,"disabled" ); ?>
+            <?php echo $company->myCompanySelect("firm_company", $selected_firm, "disabled"); ?>
         </div>
         <div class="col-md-2">
             <label for="case_name" class="form-label">Kasa Adı</label>
@@ -49,12 +64,14 @@ $selected_firm = $case->firm_id ?? $_SESSION['firm_id'];
         </div>
     </div>
     <div class="row mb-3">
+        <?php if($id == 0 ): ?>
         <div class="col-md-2">
             <label for="case_name" class="form-label">Başlangıç Bütçesi</label>
         </div>
         <div class="col-md-4">
             <input type="text" name="start_budget" class="form-control" value="<?php echo $case->start_budget ?? '' ?>">
         </div>
+        <?php endif ?>
         <div class="col-md-2">
             <label for="case_name" class="form-label">Açıklama</label>
         </div>

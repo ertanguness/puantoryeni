@@ -202,7 +202,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
 
                             <?php
                             foreach ($income_expenses as $item):
-                                $id = Security::encrypt($item->id);
+                                $item_id = Security::encrypt($item->id);
                                 ?>
                                 <tr>
                                     <td><?php echo $item->id; ?></td>
@@ -243,7 +243,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                                                         <i class="ti ti-edit icon me-3"></i> Güncelle
                                                     </a>
                                                     <a class="dropdown-item delete-payment" href="#"
-                                                        data-id="<?php echo $id ?>">
+                                                        data-id="<?php echo $item_id ?>">
                                                         <i class="ti ti-trash icon me-3"></i> Sil
                                                     </a>
                                                 </div>

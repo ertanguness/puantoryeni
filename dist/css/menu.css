@@ -20,6 +20,8 @@
   transition: all 0.3s ease-in-out;
 }
 
+
+
 .collapse-button span:nth-child(1) {
   top: 0;
 }
@@ -102,5 +104,11 @@
 #navbar.collapsed .navbar-brand img {
     max-width: 150px !important; /* Collapsed olduğunda direkt 150px genişliğe düşecek */
     margin-left: 12px; /* Gerekirse margin ayarla */
+}
+/* 576'dan küçükse #navbar width 100% olsun */
+@media (max-width: 576px) {
+  #navbar {
+    width: 100%;
+  }
 }
 

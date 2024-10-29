@@ -1,14 +1,22 @@
 <?php
-
+!defined('ROOT') ? define('ROOT', $_SERVER['DOCUMENT_ROOT']) : null;
 require_once "BaseModel.php";
+require_once "Persons.php";
+require_once ROOT . "/App/Helper/date.php";
+
+use App\Helper\Date;
+
 
 class Puantaj extends Model
 {
     protected $table = "puantaj";
+    //private $persons;
 
     public function __construct()
     {
         parent::__construct($this->table);
+        //Person sınıfını buraya dahil et
+        //$this->persons = new Persons();
     }
 
 
@@ -22,7 +30,8 @@ class Puantaj extends Model
     //Personelin puantaj tablosundaki çalışmaları getirilir
     public function getPuantajInfoByPerson($person_id)
     {
-        $sql = $this->db->prepare("SELECT * FROM puantaj WHERE person = ?");
+      
+        $sql = $this->db->prepare("SELECT * FROM puantaj WHERE person = ? ");
         $sql->execute([$person_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -66,5 +75,15 @@ class Puantaj extends Model
         $sql->execute([$person_id]);
         return $sql->fetch(PDO::FETCH_OBJ) ?? 0;
     }
-    
+
+    //Personelin göreve başlama tarihinden önceki ve işten ayrılma tarihinden sonraki tüm puantajları sil
+    public function deletePastAttendanceRecords($person_id, $job_start_date, $job_end_date)
+    {
+
+        $job_start_date = Date::Ymd($job_start_date);
+        $job_end_date = Date::Ymd($job_end_date);
+        $sql = $this->db->prepare("DELETE FROM $this->table WHERE person = ? and (gun < ? or gun > ?)");
+        $sql->execute([$person_id, $job_start_date, $job_end_date]);
+    }
+
 }

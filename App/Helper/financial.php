@@ -1,8 +1,11 @@
 <?php
 require_once ROOT . "/Database/db.php";
 require_once ROOT . "/Model/Cases.php";
+require_once ROOT . "/App/Helper/security.php";
 
 use Database\Db;
+use App\Helper\Security;
+
 class Financial extends Db
 {
 
@@ -49,7 +52,7 @@ class Financial extends Db
         
         foreach ($cases as $case) {
             $selectedAttr = $case_id == $case->id ? 'selected' : '';
-            $select .= "<option value=\"{$case->id}\" {$selectedAttr}>{$case->case_name}-{$case->bank_name}/{$case->branch_name}</option>";
+            $select .= "<option value=\"" . Security::encrypt($case->id) . "\" {$selectedAttr}>{$case->case_name}-{$case->bank_name}/{$case->branch_name}</option>";
         }
         $select .= '</select>';
         return $select;

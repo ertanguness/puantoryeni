@@ -170,9 +170,10 @@ function alertdanger($message)
 
 
                         $data = [
+                            'id' => 0,
                             'full_name' => Security::escape($_POST['full_name']),
                             'email' => Security::escape($_POST['email']),
-                            'status' => 1,
+                            'status' => 0,
                             'user_roles' => 1,
                             'is_main_user' => 1,
                             'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
@@ -181,19 +182,19 @@ function alertdanger($message)
                             $db->beginTransaction();
 
                             //Kullanıcı kaydı yapılır
-                            $lastInsertUserId = $user->saveWithAttr($data);
+                            $lastInsertUserId = $User->saveWithAttr($data);
 
                             //Girdiği firma adı ile yeni bir firma kaydedilir
                             $data = [
                                 'firm_name' => Security::escape($_POST['company_name']),
-                                'user_id' => $lastInsertUserId,
+                                'user_id' => Security::decrypt($lastInsertUserId),
                             ];
                             $lastInsertFirmId = $company->saveMyFirms($data);
 
                             //Firmaya Admin isimli bir Kullanıcı grubu atanır
                             $data = [
                                 "id" => 0,
-                                "firm_id" => $lastInsertFirmId,
+                                "firm_id" => Security::decrypt($lastInsertFirmId),
                                 "roleName" => 'Admin',
                                 "main_role" => 1
                             ];
@@ -207,7 +208,7 @@ function alertdanger($message)
                             $auths = implode(',', array_column($auths, 'id'));
                             //oluşturulan yetki grubuna yetkiler atanır
                             $data = [
-                                "role_id" => $lastInsertRoleId,
+                                "role_id" => Security::decrypt($lastInsertRoleId),
                                 "auth_ids" => $auths
                             ];
                             $RoleAuths->saveWithAttr($data);
@@ -215,12 +216,60 @@ function alertdanger($message)
 
                             //kaydedilen firma ve role kullanıcıya atanır
                             $data = [
-                                "id" => $lastInsertUserId,
-                                'firm_id' => $lastInsertFirmId,
-                                'user_roles' => $lastInsertRoleId
+                                "id" => Security::decrypt($lastInsertUserId),
+                                'firm_id' => Security::decrypt($lastInsertFirmId),
+                                'user_roles' => Security::decrypt($lastInsertRoleId)
                             ];
-                            $user->saveWithAttr($data);
+                            //Kullanıcı GÜncellenir
+                            $User->saveWithAttr($data);
 
+                            //Kayıttan sonra kullanıcıya mail gönderilir
+                            //1 saat geçerli olan token oluşturma
+                            $token = urlencode(Security::encrypt(time() + 3600));
+                            // $token = urlencode(bin2hex(random_bytes(32)));
+                            $activate_link = "http://puantor.com.tr/register-activate.php?email=".urlencode($email)."&token=" . $token;
+
+                            // Token ve e-posta adresini veritabanına kaydetme
+                            $data = [
+                                'id' => Security::decrypt($lastInsertUserId),
+                                'activate_token' => $token,
+                            ];
+                            $User->setActivateToken($data);
+
+                            //**********EPOSTA GÖNDERME ALANI */
+                            // mail şablonunu dahil etme
+
+                            ob_start();
+                            include 'register-success-email.php';
+                            $content = ob_get_clean();
+
+
+                            try {
+                                //mail sınıfı ve ayarlarını dahil etme
+                                require_once "mail-settings.php";
+
+                                // Alıcılar
+                                $mail->setFrom('bilgi@puantor.com.tr', 'Puantor');
+                                $mail->addAddress($email);
+                                $mail->isHTML(true);
+
+                                // E-posta konusu ve içeriği
+                                $mail->Subject = 'Aktivasyon Bağlantısı';
+                                $mail->Body = $content;
+                                $mail->AltBody = strip_tags($content);
+                                //Karakter seti
+                                $mail->CharSet = 'UTF-8';
+
+                                // PNG dosyasını e-postaya ekleyin
+                                $mail->AddEmbeddedImage('static/png/activation.png', 'activation');
+
+                                $mail->send();
+                                echo alertdanger('Aktivasyon bağlantısı e-posta adresinize gönderildi.', "info", "Başarılı!");
+                            } catch (Exception $e) {
+                                echo "E-posta gönderilemedi. Hata: {$mail->ErrorInfo}";
+                            }
+                            //**********EPOSTA GÖNDERME ALANI */
+                
                             $db->commit();
                             header('Location: register-success.php');
                         } catch (PDOException $exh) {

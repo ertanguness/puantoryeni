@@ -1,10 +1,11 @@
 <?php
-require_once '../Database/require.php';
-require_once '../Model/Puantaj.php';
-require_once '../Model/Persons.php';
-require_once '../Model/Wages.php';
-require_once '../Database/db.php';
-require_once '../App/Helper/date.php';
+!defined('ROOT') ? define('ROOT', $_SERVER["DOCUMENT_ROOT"]) : '';
+require_once ROOT .'/Database/require.php';
+require_once ROOT . '/Model/Puantaj.php';
+require_once ROOT . '/Model/Persons.php';
+require_once ROOT . '/Model/Wages.php';
+require_once ROOT .'/Database/db.php';
+require_once ROOT .'/App/Helper/date.php';
 
 use App\Helper\Date;
 

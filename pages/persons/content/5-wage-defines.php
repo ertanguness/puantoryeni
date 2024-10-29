@@ -6,8 +6,9 @@ require_once "Model/Wages.php";
 use App\Helper\Date;
 
 use App\Helper\Helper;
+use App\Helper\Security;
 
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
+// $id = isset($_GET['id']) ? $_GET['id'] : 0;
 $wagesObj = new Wages();
 $wages = $wagesObj->getWageByPersonId($id);
 
@@ -47,7 +48,6 @@ if(!$Auths->Authorize("person_page_wage_defines_info")) {
                                 <tr>
 
                                     <th style="width:2%">Sıra</th>
-                                    <th style="width:2%">id</th>
                                     <th class="text-start">Adı</th>
                                     <th class="text-start">Başlama Tarihi</th>
                                     <th class="text-start">Bitiş Tarihi</th>
@@ -64,11 +64,11 @@ if(!$Auths->Authorize("person_page_wage_defines_info")) {
                                 <?php
                                 $i = 1;
                                 foreach ($wages as $wage):
+                                    $id = Security::encrypt($wage->id);
                                 ?>
                                 <tr>
 
                                     <td class="text-center"><?php echo $i; ?></td>
-                                    <td class="text-center"><?php echo $wage->id; ?></td>
                                     <td class="text-start"><?php echo $wage->wage_name; ?></td>
                                     <td class="text-start"><?php echo Date::dmY($wage->start_date); ?></td>
                                     <td class="text-start"><?php echo Date::dmY($wage->end_date); ?></td>
@@ -81,12 +81,12 @@ if(!$Auths->Authorize("person_page_wage_defines_info")) {
                                             <button class="btn dropdown-toggle align-text-top"
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item update-wage" data-id="<?php echo $wage->id ?>"
+                                                <a class="dropdown-item update-wage" data-id="<?php echo $id ?>"
                                                     href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
                                                 <a class="dropdown-item delete-wage" href="#"
-                                                    data-id="<?php echo $wage->id ?>">
+                                                    data-id="<?php echo $id ?>">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
                                             </div>

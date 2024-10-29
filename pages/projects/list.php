@@ -24,27 +24,27 @@ $projects = $projectObj->allWithFirm($firm_id);
                 <div class="card-header">
                     <h3 class="card-title">Proje Listesi</h3>
                     <div class="col-auto ms-auto">
-                    <a href="#" class="btn btn-icon me-2" data-tooltip="Excele Aktar">
+                    <a href="#" class="btn btn-icon me-2" id="export_excel" data-tooltip="Excele Aktar">
                     <i class="ti ti-file-excel icon"></i>
                 </a>
                         <div class="form-selectgroup">
 
                             <label class="form-selectgroup-item">
-                                <input type="radio" name="icons" value="user" class="form-selectgroup-input" checked>
+                                <input type="radio" name="icons" value="user" data-type="Tümü" class="form-selectgroup-input" >
                                 <span class="form-selectgroup-label">
                                     <i class="ti ti-list-check icon me-2"></i>
                                     Tümü
                                 </span>
                             </label>
                             <label class="form-selectgroup-item">
-                                <input type="radio" name="icons" value="circle" class="form-selectgroup-input">
+                                <input type="radio" name="icons" value="circle" data-type="Alınan" class="form-selectgroup-input" checked>
                                 <span class="form-selectgroup-label">
                                     <i class="ti ti-download icon me-2"></i>
                                     Alınan Projeler
                                 </span>
                             </label>
                             <label class="form-selectgroup-item">
-                                <input type="radio" name="icons" value="square" class="form-selectgroup-input">
+                                <input type="radio" name="icons" value="square" data-type="Verilen" class="form-selectgroup-input">
                                 <span class="form-selectgroup-label">
                                     <i class="ti ti-upload icon me-2"></i>
                                     Verilen Projeler
@@ -71,7 +71,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                                 <th>İlçe</th>
                                 <th style="width:10%">Başlama Tarihi</th>
                                 <th>Güncel Bakiye</th>
-                                <th style="width:7%">İşlem</th>
+                                <th class="no-export" style="width:7%">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,7 +86,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                             ?>
                             <tr>
                                 <td class="text-center"><?php echo $i ?></td>
-                                <td><?php echo $project->type == 1 ? 'Alınan' : 'Verilen' ?></td>
+                                <td><?php echo $project->type == 0 ? 'Alınan' : 'Verilen' ?></td>
                                 <td><?php echo $project->firm_id ?></td>
                                 <td > 
                                     <a class="route-link btn" data-tooltip="Detay" 

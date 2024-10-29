@@ -4,9 +4,11 @@ require_once "../../Database/require.php";
 require_once "../../Model/Persons.php";
 require_once ROOT . "/Model/Bordro.php";
 require_once ROOT . "/App/Helper/security.php";
+require_once ROOT . "/Model/Puantaj.php";
 
 use App\Helper\Security;
 
+$Puantaj = new Puantaj();
 $Bordro = new Bordro();
 $Persons = new Persons();
 
@@ -16,6 +18,9 @@ if ($_POST["action"] == "savePerson") {
     if ($id > 0) {
         //personelin göreve başlama tarihinden önceki tüm maaşları sil
         $Bordro->deleteAllSalaries($id, $_POST["job_start_date"]);
+
+        //personelin göreve başlama tarihinden önceki ve işten ayrılma tarihinden sonraki tüm puantajları sil
+        $Puantaj->deletePastAttendanceRecords($id, $_POST["job_start_date"], $_POST["job_end_date"]);
     }
     $lastInsertId = 0;
     $data = [

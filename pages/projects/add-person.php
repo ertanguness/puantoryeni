@@ -5,19 +5,18 @@ require_once "App/Helper/helper.php";
 require_once "App/Helper/company.php";
 
 use App\Helper\Helper;
+use App\Helper\Security;
 
 $projects = new Projects();
 $person = new Persons();
 
 $id = $_GET['id'] ?? 0;
 
-$project = $projects->find($id);
+$project = $projects->find(Security::decrypt($id));
 $persons = $projects->getPersontoProject($firm_id,$id);
 $company = new CompanyHelper();
 
 
-//firma id'sini almak için $firm_id
-echo "firma id".$firm_id . "project id".$id;
 ?>
 <div class="container-xl mt-3">
     <div class="row row-deck row-cards">

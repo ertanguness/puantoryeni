@@ -1,9 +1,7 @@
 <?php
-
-// Require composer autoload
-ob_end_clean();
 require_once ROOT . '/vendor/autoload.php';
-// Create an instance of the class:
+
+ob_end_clean();
 $mpdf = new \Mpdf\Mpdf([
     'margin_left' => 0,
     'margin_right' => 0,
@@ -11,12 +9,15 @@ $mpdf = new \Mpdf\Mpdf([
  
 ]);
 
-$file = file_get_contents (__DIR__ . '/bordro.php');
-//echo $file;
-// Set a simple Footer including the page number
-$mpdf->setFooter('{DATE j-m-Y}' . ' - ' . 'Sayfa {PAGENO}');
-// Write some HTML code:
-$mpdf->WriteHTML($file);
 
-// Output a PDF file directly to the browser
+// Sayfa genişliğini al
+$pageWidth = $mpdf->w;
+
+$html = file_get_contents(ROOT . '/pages/payroll/bordro.php');
+
+$mpdf->WriteHTML($html);
+
+// Set a simple Footer including the page number
+$mpdf->setFooter('{DATE j-m-Y H:i:s}' . ' - ' . 'Sayfa {PAGENO}');
 $mpdf->Output();
+?>

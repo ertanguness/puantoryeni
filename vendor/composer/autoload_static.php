@@ -16,6 +16,12 @@ class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
         array (
             'setasign\\Fpdi\\' => 14,
         ),
+        'm' => 
+        array (
+            'mikehaertl\\wkhtmlto\\' => 20,
+            'mikehaertl\\tmp\\' => 15,
+            'mikehaertl\\shellcommand\\' => 24,
+        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -61,6 +67,18 @@ class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
         'setasign\\Fpdi\\' => 
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
+        'mikehaertl\\wkhtmlto\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikehaertl/phpwkhtmltopdf/src',
+        ),
+        'mikehaertl\\tmp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikehaertl/php-tmpfile/src',
+        ),
+        'mikehaertl\\shellcommand\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikehaertl/php-shellcommand/src',
         ),
         'ZipStream\\' => 
         array (

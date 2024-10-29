@@ -50,7 +50,7 @@ $(document).on("click", "#saveTransaction", function () {
       var table = $("#transactionTable").DataTable();
       table.row
         .add([
-          transaction.id,
+          table.rows().count() + 1,
           transaction.date,
           transaction.type_id,
           transaction.sub_type,
@@ -60,16 +60,18 @@ $(document).on("click", "#saveTransaction", function () {
           `<div class="dropdown">
             <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
             <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item route-link" data-page="financial/transaction/manage&id=<?php echo $transaction->id ?>" href="#">
+                <a class="dropdown-item route-link" data-page="financial/transaction/manage&id=${transaction.id}" href="#">
                     <i class="ti ti-edit icon me-3"></i> Güncelle
                 </a>
-                <a class="dropdown-item delete-transaction" data-id="<?php echo $transaction->id ?>" href="#">
+                <a class="dropdown-item delete-transaction" data-id="${transaction.id}" href="#">
                     <i class="ti ti-trash icon me-3"></i> Sil
                 </a>
             </div>
         </div>`
         ])
         .draw(false);
+      //ilk ve 3. sutüna text-center classı ekle
+      [0, 2, 3].forEach(i => table.column(i).nodes().to$().addClass("text-center"));
 
       Swal.fire({
         title: title,

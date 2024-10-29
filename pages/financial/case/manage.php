@@ -5,14 +5,23 @@ use App\Helper\Security;
 require_once "Model/Cases.php";
 require_once "App/Helper/company.php";
 
-$Auths->checkAuthorize("cash_register_add_update");
 
 $company = new CompanyHelper();
 $caseObj = new Cases();
+
+
+//Sayfa başlarında eklenecek alanlar
+$perm->checkAuthorize("cash_register_add_update");
 $id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
 $new_id = isset($_GET["id"]) ? $_GET['id'] : 0;
-$case = $caseObj->find($id);
 
+//Eğer url'den id yazılmışsa veya id boş ise projeler sayfasına gider
+if($id == null && isset($_GET['id'])) {
+    header("Location: /index.php?p=financial/case/list");
+    exit;
+}
+
+$case = $caseObj->find($id);
 $pageTitle = $id > 0 ? "Kasa Güncelle" : "Yeni Kasa";
 
 ?>

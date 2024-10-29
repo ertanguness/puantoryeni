@@ -4,15 +4,17 @@ require_once "App/Helper/date.php";
 require_once "Model/Bordro.php";
 require_once "Model/Puantaj.php";
 require_once "Model/Projects.php";
+require_once "App/Helper/security.php";
 
 
-
+use App\Helper\Security;
 use App\Helper\Helper;
 use App\Helper\Date;
 
 $bordro = new Bordro();
 $puantajObj = new Puantaj();
 $projects = new Projects();
+
 $puantaj_info = $puantajObj->getPuantajInfoByPerson($id);
 
 

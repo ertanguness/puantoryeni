@@ -43,13 +43,13 @@ $(document).ready(function () {
         })
         .get()
         .join("");
+        //tableBody boş değilse
+      if (tableBody === "") {
+        tableBody = "<tr><td colspan='100%'>Dosyada veri bulunamadı.</td></tr>";
+      }else{}
+      
       $("#result tbody").html(tableBody);
       $("#result table").addClass("table table-hover table-bordered");
-      //alanları düzenleme
-      //   $("#result table td").each(function() {
-      //     var cellText = $(this).text();
-      //     $(this).html('<input type="text" class="form-control m-0" value="' + cellText + '" />');
-      // });
     };
 
     reader.onerror = function (error) {
@@ -77,6 +77,15 @@ $(document).on("click", "#personsLoadButton", function () {
     return;
   }
 
+  //tabloda 'Dosyada veri bulunamadı.' uyarısından başka veri var mı kontrol et
+  if ($("#result tbody tr td").text() === "Dosyada veri bulunamadı.") {
+    swalAlert("Uyarı!", "Seçtiğiniz dosyada veri yok!", "warning");
+    $("#persons-load-file").val(""); // Inputu temizle
+    return;
+  }
+
+
+
   // tablonun body'sinde veri var mı kontrol et
   if ($("#result tbody td").length === 0) {
     swalAlert("Uyarı!", "Seçtiğiniz dosyada veri yok!", "warning");
@@ -98,7 +107,6 @@ $(document).on("click", "#personsLoadButton", function () {
   for (var pair of formData.entries()) {
     console.log(pair[0] + ", " + pair[1]);
   }
-
   fetch("api/persons/persons-load.php", {
     method: "POST",
     body: formData

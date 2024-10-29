@@ -40,7 +40,7 @@ class Bordro extends Model
     {
         $query = $this->db->prepare('
     SELECT 
-        (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND (kategori = :gelir or kategori = :maas) AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS gelir,
+        (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND (kategori = :gelir or kategori = :maas or kategori = :puantaj) AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS gelir,
         (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND kategori = :kesinti  AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS kesinti,
         (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND kategori = :odeme  AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS odeme
 ');
@@ -50,6 +50,7 @@ class Bordro extends Model
             'kesinti' => 2,
             'odeme' => 3,
             'maas' => 4,
+            'puantaj' => 5,
             'wage_type' => $wage_tpe,
             ':person_id' => $person_id,
             ':start_date' => $start_date,

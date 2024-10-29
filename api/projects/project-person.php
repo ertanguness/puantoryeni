@@ -1,5 +1,7 @@
 <?php
 
+use App\Helper\Security;
+
 require_once "../../Database/require.php";
 require_once "../../Model/Projects.php";
 
@@ -11,7 +13,7 @@ if ($_POST['action'] == "addPersonToProject") {
 
     $data = [
         "id" => $record_id ,
-        'project_id' => $_POST['project_id'],
+        'project_id' => Security::decrypt($_POST['project_id']),
         'person_id' => $_POST['person_id'],
         "state" => 1
 

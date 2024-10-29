@@ -253,9 +253,9 @@ $lastDay = Date::lastDay($month, $year);
                                                     <i class="ti ti-download icon me-3"></i> Gelir Ekle
                                                 </a>
 
-                                                <?php $enc_id = Security::encrypt($person->id); ?>
-                                                <a class="dropdown-item route-link"
-                                                    data-page="bordro/pay-slip&id=<?php echo $enc_id ?>" href="#">
+                                                <?php $id = Security::encrypt($person->id); ?>
+                                                <a class="dropdown-item route-link" target="_blank"
+                                                    data-page="payroll/pay-slip&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-file-dollar icon me-3"></i> Bordro Göster
                                                 </a>
                                                 <a class="dropdown-item" href="#">

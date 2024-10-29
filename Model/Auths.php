@@ -144,7 +144,7 @@ class Auths extends Model
         if (!$this->Authorize($auth_name)) {
             $res = [
                 "status" => "error",
-                "message" => "Yetkiniz yok"
+                "message" => "Bu işlemi yapmma yetkiniz yok"
             ];
             echo json_encode($res);
             exit;

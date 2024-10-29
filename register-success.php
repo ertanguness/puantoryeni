@@ -12,16 +12,18 @@
     <link href="./dist/css/tabler-payments.min.css?1726507346" rel="stylesheet">
     <link href="./dist/css/tabler-vendors.min.css?1726507346" rel="stylesheet">
     <link href="./dist/css/demo.min.css?1726507346" rel="stylesheet">
+    <link rel="icon" href="./static/favicon.ico" type="image/x-icon" />
+
     <style>
-    @import url('https://rsms.me/inter/inter.css');
+        @import url('https://rsms.me/inter/inter.css');
 
-    :root {
-        --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-    }
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
 
-    body {
-        font-feature-settings: "cv03", "cv04", "cv11";
-    }
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
     </style>
 </head>
 
@@ -31,17 +33,17 @@
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
                 <a href="." class="navbar-brand navbar-brand-autodark">
-                <img src="./static/logo-ai.svg" height="120" alt=""></a>
+                    <img src="./static/logo-ai.svg" height="120" alt=""></a>
                 </a>
             </div>
             <div class="text-center">
                 <div class="my-5">
                     <h2 class="h1">Tebrikler!</h2>
-                    <p class="fs-h3 text-secondary">
-                        Kayıt işleminiz başarıyla tamamlandı. En kısa sürede sizinle iletişime geçeceğiz.
-                    </p>
+                    <p class="fs-h3 text-secondary"> Kayıt işleminiz başarıyla tamamlandı. </br>
+                   Eposta adresinize aktivasyon maili gönderildi. </br>
+                   Aktivasyon işlemini tamamladıktan sonra giriş yapabilirsiniz</p>
                 </div>
-                
+
                 <div class="align-center">
                     <a href="sign-in.php" class="btn btn-primary w-100">
                         Giriş Sayfasına Git

@@ -77,6 +77,10 @@ $(document).on('click', '.default-case', function() {
             text: data.message,
             icon: data.status,
             confirmButtonText: 'Tamam'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload();
+            }
         });
     });
 

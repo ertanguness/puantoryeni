@@ -80,6 +80,8 @@ if ($(".datatable").length > 0) {
    $("#export_excel_puantaj").on("click", function () {
     puantaj_table.button(".buttons-excel").trigger();
   });
+ 
+
   
 }
 
