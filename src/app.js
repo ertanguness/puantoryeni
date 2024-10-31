@@ -56,13 +56,26 @@ if ($(".datatable").length > 0) {
       });
     }
   });
+  //Tüm tablolar için excel dışa aktarım butonu
   $("#export_excel").on("click", function () {
     table.button(".buttons-excel").trigger();
   });
 
+  //Personelin çalışma bilgileri tablosu için
+  $("#export_excel_puantaj_info").on("click", function () {
+    var table_puantaj_info = $("#puantaj_info_table").DataTable();
+    table_puantaj_info.button(".buttons-excel").trigger();
+  });
 
+  //Puantaj tablosu için
   var puantaj_table = $("#puantajTable").DataTable({
     ordering: false,
+    layout: {
+      bottomStart: "pageLength",
+      bottom2Start: "info",
+      topStart: null,
+      topEnd: "search"
+    },
     language: {
       url: "src/tr.json"
     },
@@ -74,15 +87,47 @@ if ($(".datatable").length > 0) {
           columns: ":visible:not(.no-export)" // .no-export sınıfına sahip sütunları dışa aktarma
         }
       }
-    ]
+    ],
+    initComplete: function (settings, json) {
+      var api = this.api();
+      var tableId = settings.sTableId;
+      $("#" + tableId + " thead").append('<tr class="search-input-row"></tr>');
+
+      api.columns().every(function () {
+        let column = this;
+        let title = api.column(0).header().textContent;
+        //0. kolonun title bilgisini al
+        
+        //0. ve 1. kolonun index numarasına göre arama kutusu ekle
+        if (column.index() == 0 || column.index() == 1) {
+          // Create input element
+          let input = document.createElement("input");
+            // Set placeholder based on column index
+          input.placeholder = column.index() === 0 ? "Adı Soyadı" : "Unvanı";
+          input.classList.add("form-control");
+          input.classList.add("form-control-sm");
+          input.setAttribute("autocomplete", "off");
+
+          // Append input element to the existing row
+          $("#" + tableId + " thead tr:eq(1) th:eq(" + column.index() + ")").append(input);
+
+          // Event listener for user input
+          $(input).on("keyup change", function () {
+            if (column.search() !== this.value) {
+              column.search(this.value).draw();
+            }
+          });
+        }
+
+        
+        
+      });
+    }
   });
 
-   $("#export_excel_puantaj").on("click", function () {
+  $("#export_excel_puantaj").on("click", function () {
     puantaj_table.button(".buttons-excel").trigger();
   });
- 
-
-  
 }
 
 if ($(".select2").length > 0) {
@@ -292,7 +337,6 @@ function AlertConfirm(confirmMessage = "Emin misiniz?") {
 $(document).on("change", "#myFirm", function () {
   var page = new URLSearchParams(window.location.search).get("p");
   window.location = "set-session.php?p=" + page + "&firm_id=" + $(this).val();
-  
 });
 
 function fadeOut(element, duration) {
@@ -346,12 +390,12 @@ function checkPersonId(id) {
   return true;
 }
 //Personeli kaydedip kaydetmediğimize bakarız
-function checkId(id,item) {
+function checkId(id, item) {
   if (id == 0) {
     swal.fire({
       title: "Hata",
       icon: "warning",
-      text: "Öncelikle "+ item +" kaydetmeniz gerekir!"
+      text: "Öncelikle " + item + " kaydetmeniz gerekir!"
     });
     return false;
   }

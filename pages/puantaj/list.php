@@ -5,9 +5,11 @@ require_once 'App/Helper/projects.php';
 require_once 'App/Helper/puantaj.php';
 require_once 'Model/Persons.php';
 require_once 'Model/Puantaj.php';
+require_once 'App/Helper/security.php';
 
 use App\Helper\Date;
 use App\Helper\Helper;
+use App\Helper\Security;
 
 $puantajHelper = new puantajHelper();
 $projectHelper = new ProjectHelper();
@@ -327,14 +329,15 @@ $dates = Date::generateDates($year, $month, $days);
 
                     </div>
                 </div>
+               
 
 
                 <div class="table-responsive">
                     <table id="puantajTable" class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th class="no-sort"></th>
-                                <th></th>
+                            <th class="ld">Adı Soyadı</th>
+                            <th class="ld">Unvanı</th>
                                 <th style="display:none"></th>
 
                                 <?php foreach ($dates as $date): ?>
@@ -351,8 +354,8 @@ $dates = Date::generateDates($year, $month, $days);
                             </tr>
                             <tr>
 
-                                <th class="ld">Adı Soyadı</th>
-                                <th class="ld">Unvanı</th>
+                                <th class="ld"></th>
+                                <th class="ld"></th>
                                 <th class="ld" style="display:none">Seç</th>
                                 <?php
                                 foreach ($dates as $date):
@@ -371,15 +374,16 @@ $dates = Date::generateDates($year, $month, $days);
                             <?php
                             foreach ($persons as $item):
                                 $person = $personObj->find($item->id);
+                                $id = Security::encrypt($person->id);
                                 ?>
                                 <tr>
-                                    <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $person->id ?>"><a
+                                    <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $id ?>"><a
                                             class="btn-user-modal" type="button">
-                                            <a href="index.php?p=persons/manage&id=<?php echo $person->id ?>"
+                                            <a href="index.php?p=persons/manage&id=<?php echo $id ?>"
                                                 target="_blank"><?php echo $person->full_name ?></a></td>
 
                                     <td class="text-nowrap" style="min-width:10vw;">
-                                        <?php echo $person->id ?>
+                                        <?php echo $person->job ?>
                                     </td>
 
 
@@ -415,7 +419,7 @@ $dates = Date::generateDates($year, $month, $days);
 
 
                                             if ($puantaj_id >= 0) {
-                                               
+
                                                 $puantaj_project = $puantajObj->getPuantajProjectId($person->id, $gun);
                                                 $puantajHelper->puantajClass($puantaj_id, $project_id, $puantaj_project);
                                             } else {

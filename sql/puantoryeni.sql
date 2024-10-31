@@ -16,7 +16,6 @@
 
 
 -- mbeyazil_puantoryeni için veritabanı yapısı dökülüyor
-DROP DATABASE IF EXISTS `mbeyazil_puantoryeni`;
 CREATE DATABASE IF NOT EXISTS `mbeyazil_puantoryeni` /*!40100 DEFAULT CHARACTER SET latin5 COLLATE latin5_turkish_ci */;
 USE `mbeyazil_puantoryeni`;
 
@@ -30,9 +29,9 @@ CREATE TABLE IF NOT EXISTS `auths` (
   `parent_id` tinyint(4) DEFAULT NULL,
   `is_active` tinyint(4) DEFAULT 1,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.auths: ~56 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.auths: ~58 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `auths`;
 INSERT INTO `auths` (`id`, `title`, `auth_name`, `description`, `parent_id`, `is_active`) VALUES
 	(1, 'Ana Sayfa', 'home_page', 'Ana sayfaya erişim yetkisi, kullanıcının sistemin ana arayüzüne ulaşmasını sağlar.', 0, 1),
@@ -90,7 +89,9 @@ INSERT INTO `auths` (`id`, `title`, `auth_name`, `description`, `parent_id`, `is
 	(91, 'Gelir Gider Silme', 'delete_income_expense', 'Bu yetki, kullanıcıların gelir ve gider kalemlerini sistemden silmesine olanak tanır. Finansal kayıtların güncellenmesi ve gereksiz kalemlerin kaldırılması için gereklidir.', 25, 1),
 	(92, 'Personel Sayfası Gelir Gider Bilgileri ', 'person_page_income_expence_info', 'Personel detay sayfasında personelin gelir gider bilgilerini görüntüleme yetkisi verir', 4, 1),
 	(93, 'Personel Sayfası Puantaj Bilgileri', 'person_page_puantaj_info', 'Personel detay sayfasında personelin çalışma bilgilerini görüntüleme yetkisi verir', 4, 1),
-	(94, 'Personel Sayfası Ücret Tanımları Bilgileri', 'person_page_wage_defines_info', 'Personel detay sayfasında personelin ücret tanımlama bilgilerini görüntüleme yetkisi verir', 4, 1);
+	(94, 'Personel Sayfası Ücret Tanımları Bilgileri', 'person_page_wage_defines_info', 'Personel detay sayfasında personelin ücret tanımlama bilgilerini görüntüleme yetkisi verir', 4, 1),
+	(95, 'Günlük Çalışma Saatini Düzenleme', 'daily_working_hours_edit', 'Bu yetki, kullanıcıların çalışanların veya belirli çalışma programlarının günlük çalışma saatlerini düzenleme veya değiştirme yetkisine sahip olmalarını sağlar', 12, 1),
+	(96, 'Personel Ödemesi Sil', 'delete_staf_payment', 'Bu yetki personeller yapılan ödemeleri silme yetkisi verir.', 25, 1);
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.cases
 DROP TABLE IF EXISTS `cases`;
@@ -1349,13 +1350,20 @@ CREATE TABLE IF NOT EXISTS `login_logs` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `login_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
 -- mbeyazil_puantoryeni.login_logs: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `login_logs`;
 INSERT INTO `login_logs` (`id`, `user_id`, `login_time`, `logout_time`, `ip_address`, `user_agent`) VALUES
 	(25, 10, '2024-10-29 11:29:02', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
-	(26, 10, '2024-10-29 19:27:59', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36');
+	(26, 10, '2024-10-29 19:27:59', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(27, 10, '2024-10-30 06:03:07', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(28, 10, '2024-10-31 05:14:35', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(29, 10, '2024-10-31 05:19:02', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(30, 10, '2024-10-31 05:19:23', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(31, 10, '2024-10-31 05:20:32', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(32, 10, '2024-10-31 05:20:41', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(33, 10, '2024-10-31 05:31:46', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.maas_gelir_kesinti
 DROP TABLE IF EXISTS `maas_gelir_kesinti`;
@@ -1373,12 +1381,21 @@ CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   `aciklama` varchar(255) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=311 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=323 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.maas_gelir_kesinti: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.maas_gelir_kesinti: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `maas_gelir_kesinti`;
 INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `project_id`, `gun`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
-	(310, 0, 1, 0, '20241001', 10, 2024, 1500.00, 4, 'Ekim 2024 Maaş', 'Aylık Maaş', '2024-10-29 18:11:51');
+	(312, 0, 1, 0, '20241001', 10, 2024, 25161.29, 4, 'Ekim 2024 Maaş', '26 günlük Maaş', '2024-10-29 23:42:43'),
+	(313, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:20:46'),
+	(314, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:32:56'),
+	(315, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:33:21'),
+	(316, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:33:40'),
+	(317, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:33:52'),
+	(318, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:35:01'),
+	(319, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:35:45'),
+	(320, 10, 1, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:36:29'),
+	(322, 10, 2, 0, '20241015', 10, 2024, 18000.00, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:55:19');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.menu
 DROP TABLE IF EXISTS `menu`;
@@ -1490,7 +1507,7 @@ CREATE TABLE IF NOT EXISTS `mission_headers_items` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.mission_headers_items: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.mission_headers_items: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `mission_headers_items`;
 INSERT INTO `mission_headers_items` (`id`, `mission_id`, `header_id`, `created_at`) VALUES
 	(1, 13, 1, '2024-10-06 11:23:14');
@@ -1561,7 +1578,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.password_resets: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.password_resets: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `password_resets`;
 INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`) VALUES
 	(17, 'beyzade83@hotmail.com', '3aebd031671764500d06d48683a1a814c7d92b668e17390212ae1361c2c1e0b1', '2024-10-25 21:26:55');
@@ -1595,9 +1612,9 @@ CREATE TABLE IF NOT EXISTS `persons` (
 -- mbeyazil_puantoryeni.persons: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `persons`;
 INSERT INTO `persons` (`id`, `firm_id`, `full_name`, `kimlik_no`, `sigorta_no`, `phone`, `address`, `project_id`, `company_id`, `daily_wages`, `iban_number`, `wage_type`, `job_start_date`, `job_end_date`, `job`, `state`, `email`, `job_group`, `description`) VALUES
-	(1, '11', 'Ahmet Yılmaz', 12345678901, NULL, '0500 123 45 ', 'İstanbul, Ca', NULL, 0, 1500.00, 'TR123456789012345678901234', 1, '15.01.2023', NULL, NULL, NULL, 'ahmet.yilmaz@example.com', NULL, 'İş deneyimi var.'),
-	(2, '11', 'Elif Demir', 23456789012, NULL, '0501 234 56 ', 'Ankara, Soka', NULL, 0, 1800.00, 'TR234567890123456789012345', 2, '10.10.2024', '23.10.2024', '', NULL, 'elif.demir@example.com', '', 'Hızlı öğrenir.'),
-	(3, '11', 'Mehmet Korkmaz', 34567890123, NULL, '0502 345 67 ', 'İzmir, Mahal', NULL, 0, 1200.00, 'TR345678901234567890123456', 2, '03.10.2024', '', '', NULL, 'mehmet.korkmaz@example.com', '', 'Takım çalışmasına yatkın.'),
+	(1, '11', 'Ahmet Yılmaz', 12345678901, NULL, '0500 123 45 ', 'İstanbul, Ca', NULL, 0, 30000.00, 'TR123456789012345678901234', 1, '04.10.2024', '29.10.2024', '', NULL, 'ahmet.yilmaz@example.com', '', 'İş deneyimi var.'),
+	(2, '11', 'Elif Demir', 23456789012, NULL, '0501 234 56 ', 'Ankara, Soka', NULL, 0, 1800.00, 'TR234567890123456789012345', 2, '10.10.2024', '23.10.2024', 'Çaycı', NULL, 'elif.demir@example.com', '', 'Hızlı öğrenir.'),
+	(3, '11', 'Mehmet Korkmaz', 34567890123, NULL, '0502 345 67 ', 'İzmir, Mahal', NULL, 0, 1200.00, 'TR345678901234567890123456', 2, '03.10.2024', '', 'Demirci', NULL, 'mehmet.korkmaz@example.com', '', 'Takım çalışmasına yatkın.'),
 	(4, '11', 'Zeynep Arslan', 45678901234, NULL, '0503 456 78 ', 'Bursa, Cadde', NULL, 0, 1600.00, 'TR456789012345678901234567', 2, '10.04.2023', NULL, NULL, NULL, 'zeynep.arslan@example.com', NULL, 'İletişim becerisi yüksek.'),
 	(5, '11', 'Canan Çelik', 56789012345, NULL, '0504 567 89 ', 'Antalya, Sok', NULL, 0, 1400.00, 'TR567890123456789012345678', 2, '12.05.2023', '', '', NULL, 'canan.celik@example.com', '', 'Yaratıcı düşünür.');
 
@@ -1640,10 +1657,12 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `creator` varchar(255) DEFAULT NULL,
   `created_at` date NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- mbeyazil_puantoryeni.projects: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `projects`;
+INSERT INTO `projects` (`id`, `type`, `account_id`, `company_id`, `firm_id`, `project_name`, `budget`, `city`, `town`, `address`, `phone`, `email`, `account_number`, `notes`, `start_date`, `project_file`, `creator`, `created_at`) VALUES
+	(58, 0, 0, 11, NULL, 'Akka Ges', 0.00, 0, 0, '', '', '', '', NULL, '', NULL, NULL, '2024-10-31');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.project_gelir_gider
 DROP TABLE IF EXISTS `project_gelir_gider`;
@@ -1674,10 +1693,12 @@ CREATE TABLE IF NOT EXISTS `project_person` (
   `state` int(11) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- mbeyazil_puantoryeni.project_person: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `project_person`;
+INSERT INTO `project_person` (`id`, `project_id`, `person_id`, `state`, `create_date`) VALUES
+	(101, 58, '2,4', 1, '2024-10-31 05:12:30');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.puantaj
 DROP TABLE IF EXISTS `puantaj`;
@@ -1694,29 +1715,42 @@ CREATE TABLE IF NOT EXISTS `puantaj` (
   `created_at` varchar(30) NOT NULL DEFAULT current_timestamp(),
   `updated_at` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1476 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1602 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- mbeyazil_puantoryeni.puantaj: ~18 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.puantaj: ~31 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `puantaj`;
 INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`, `gun`, `saat`, `tutar`, `description`, `created_at`, `updated_at`) VALUES
-	(1458, 0, 0, '2', 22, '20241010', 8.00, 1440.00, '0', '2024-10-29 21:56:11', ''),
-	(1459, 0, 0, '2', 22, '20241011', 8.00, 1440.00, '0', '2024-10-29 21:56:11', ''),
-	(1460, 0, 0, '2', 22, '20241012', 8.00, 1440.00, '0', '2024-10-29 21:56:11', ''),
-	(1461, 0, 0, '2', 53, '20241013', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1462, 0, 0, '2', 53, '20241020', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1463, 0, 0, '3', 53, '20241006', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1464, 0, 0, '3', 53, '20241013', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1465, 0, 0, '3', 53, '20241020', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1466, 0, 0, '3', 53, '20241027', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1467, 0, 0, '4', 53, '20241006', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1468, 0, 0, '4', 53, '20241013', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1469, 0, 0, '4', 53, '20241020', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1470, 0, 0, '4', 53, '20241027', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1471, 0, 0, '5', 53, '20241006', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1472, 0, 0, '5', 53, '20241013', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1473, 0, 0, '5', 53, '20241020', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1474, 0, 0, '5', 53, '20241027', 0.00, 0.00, '0', '2024-10-29 21:56:11', ''),
-	(1475, 0, 0, '2', 22, '20241014', 8.00, 1440.00, '0', '2024-10-29 23:04:52', '');
+	(1571, 0, 0, '2', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1572, 0, 0, '2', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1573, 0, 0, '3', 53, '20241006', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1574, 0, 0, '3', 22, '20241007', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
+	(1575, 0, 0, '3', 22, '20241008', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
+	(1576, 0, 0, '3', 22, '20241009', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
+	(1577, 0, 0, '3', 22, '20241010', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
+	(1578, 0, 0, '3', 22, '20241011', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
+	(1579, 0, 0, '3', 22, '20241012', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
+	(1580, 0, 0, '3', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1581, 0, 0, '3', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1582, 0, 0, '3', 53, '20241027', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1583, 0, 0, '4', 53, '20241006', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1584, 0, 0, '4', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1585, 0, 0, '4', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1586, 0, 0, '4', 53, '20241027', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1587, 0, 0, '5', 53, '20241006', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1588, 0, 0, '5', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1589, 0, 0, '5', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1590, 0, 0, '5', 53, '20241027', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
+	(1591, 0, 0, '4', 22, '20241007', 10.00, 1600.00, '0', '2024-10-31 08:11:52', ''),
+	(1592, 0, 0, '4', 22, '20241008', 10.00, 1600.00, '0', '2024-10-31 08:11:52', ''),
+	(1593, 0, 0, '4', 22, '20241009', 10.00, 1600.00, '0', '2024-10-31 08:11:52', ''),
+	(1594, 0, 0, '4', 22, '20241010', 10.00, 1600.00, '0', '2024-10-31 08:11:52', ''),
+	(1595, 0, 0, '4', 22, '20241011', 10.00, 1600.00, '0', '2024-10-31 08:11:52', ''),
+	(1596, 0, 58, '2', 22, '20241014', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
+	(1597, 0, 58, '2', 22, '20241015', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
+	(1598, 0, 58, '2', 22, '20241016', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
+	(1599, 0, 58, '2', 22, '20241017', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
+	(1600, 0, 58, '2', 22, '20241018', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
+	(1601, 0, 58, '2', 22, '20241019', 10.00, 1800.00, '0', '2024-10-31 08:12:41', '');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.puantajturu
 DROP TABLE IF EXISTS `puantajturu`;
@@ -1725,7 +1759,8 @@ CREATE TABLE IF NOT EXISTS `puantajturu` (
   `PuantajAdi` varchar(55) DEFAULT NULL,
   `PuantajKod` varchar(6) DEFAULT NULL,
   `PuantajSaati` double DEFAULT NULL,
-  `EklenecekSaat` double DEFAULT NULL,
+  `operant` varchar(1) DEFAULT NULL,
+  `EklenecekSaat` double(4,2) DEFAULT NULL,
   `Turu` varchar(14) DEFAULT NULL,
   `FontRengi` varchar(7) DEFAULT NULL,
   `ArkaPlanRengi` varchar(7) DEFAULT NULL,
@@ -1736,66 +1771,66 @@ CREATE TABLE IF NOT EXISTS `puantajturu` (
 
 -- mbeyazil_puantoryeni.puantajturu: ~59 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `puantajturu`;
-INSERT INTO `puantajturu` (`id`, `PuantajAdi`, `PuantajKod`, `PuantajSaati`, `EklenecekSaat`, `Turu`, `FontRengi`, `ArkaPlanRengi`, `isActive`, `IzinRapor`) VALUES
-	(1, '0,5 Yarım Fazla Çalışma', 'X05', 8.5, 0, 'Fazla Çalışma', '#080808', '#f9f4fe', 1, 0),
-	(2, '1 Saat Fazla Çalışma', 'X1', 9, NULL, 'Fazla Çalışma', '#080808', '#ecdefd', 1, 0),
-	(3, '1,5 Saat Fazla Çalışma', 'X15', 9.5, NULL, 'Fazla Çalışma', '#080808', '#dfc8fc', 1, 0),
-	(4, '2 Saat Fazla Çalışma', 'X2', 10, NULL, 'Fazla Çalışma', '#080808', '#d3b2fb', 1, 0),
-	(5, '2,5 Saat Fazla Çalışma', 'X25', 10.5, NULL, 'Fazla Çalışma', '#080808', '#c69cf9', 1, 0),
-	(6, '3 Saat Fazla Çalışma', 'X3', 11, NULL, 'Fazla Çalışma', '#080808', '#ba86f8', 1, 0),
-	(7, '3,5 Saat Fazla Çalışma', 'X35', 11.5, NULL, 'Fazla Çalışma', '#FFFAF5', '#ad70f7', 1, 0),
-	(8, '4 Saat Fazla Çalışma', 'X4', 12, NULL, 'Fazla Çalışma', '#FFFAF6', '#a05af6', 1, 0),
-	(9, '4,5 Saat Fazla Çalışma', 'X45', 12.5, NULL, 'Fazla Çalışma', '#FFFAF6', '#9445f4', 1, 0),
-	(10, '5 Saat Fazla Çalışma', 'X5', 13, NULL, 'Fazla Çalışma', '#FFFAF7', '#872ff3', 1, 0),
-	(11, '5,5 Saat Fazla Çalışma', 'X55', 13.5, NULL, 'Fazla Çalışma', '#FFFAF7', '#7b19f2', 1, 0),
-	(12, '6 Saat Fazla Çalışma', 'X6', 14, NULL, 'Fazla Çalışma', '#FFFAF8', '#6f0de6', 1, 0),
-	(13, '6,5 Saat Fazla Çalışma', 'X65', 14.5, NULL, 'Fazla Çalışma', '#FFFAF8', '#640cd0', 1, 0),
-	(14, '7 Saat Fazla Çalışma', 'X7', 15, NULL, 'Fazla Çalışma', '#FFFAF9', '#5a0bba', 1, 0),
-	(15, '7,5 Saat Fazla Çalışma', 'X7', 15, NULL, 'Fazla Çalışma', '#FFFAF9', '#4f09a4', 1, 0),
-	(16, '8 Saat Fazla Çalışma', 'X8', 16, NULL, 'Fazla Çalışma', '#FFFAF1', '#45088f', 1, 0),
-	(17, '8,5 Saat Fazla Çalışma', 'X85', 16.5, NULL, 'Fazla Çalışma', '#FFFAF1', '#3a0779', 1, 0),
-	(18, '9 Saat Fazla Çalışma', 'X9', 17, NULL, 'Fazla Çalışma', '#FFFAF1', '#300663', 1, 0),
-	(19, '9,5 Saat Fazla Çalışma', 'X95', 17.5, NULL, 'Fazla Çalışma', '#FFFAF1', '#1a0337', 1, 0),
-	(20, '10 Saat Fazla Çalışma', 'X10', 18, NULL, 'Fazla Çalışma', '#FFFAF1', '#100221', 1, 0),
-	(21, 'Yarım Çalışma', 'X/2', 4, NULL, 'Normal Çalışma', '#FFFFFF', '#4a7ef5', 0, 0),
-	(22, 'Mevcut', 'X', 8, NULL, 'Normal Çalışma', '#FFFAF4', '#2261f2', 0, 0),
-	(23, '1,5 Kat Ücret', '15X', 12, NULL, 'Normal Çalışma', '#FFFAF4', '#0d4cdd', 0, 0),
-	(24, 'Çift Ücret', '2X', 16, NULL, 'Normal Çalışma', '#FFFAF4', '#0a3eb5', 1, 1),
-	(25, '2,5 Kat Ücret', '25X', 20, NULL, 'Normal Çalışma', '#FFFAF4', '#08308d', 1, 1),
-	(26, '3 Günlük Ücret', '3X', 24, NULL, 'Normal Çalışma', '#FFFAF4', '#062265', 1, 0),
-	(27, '1 Saat', 'S1', 1, NULL, 'Saatlik', '#080808', '#f4fefa', 1, 0),
-	(28, '1,5 Saat Çalışma', 'S15', 1.5, NULL, 'Saatlik', '#080808', '#defdef', 1, 0),
-	(29, '2 Saat Çalışma', 'S2', 2, NULL, 'Saatlik', '#080808', '#c8fce4', 1, 0),
-	(30, '2,5 Saat Çalışma', 'S25', 2.5, NULL, 'Saatlik', '#080808', '#b2fbd9', 1, 0),
-	(31, '3 Saat Çalışma', 'S3', 3, NULL, 'Saatlik', '#080808', '#9cf9ce', 1, 0),
-	(32, '3,5 Saat Çalışma', 'S35', 3.5, NULL, 'Saatlik', '#080808', '#86f8c3', 1, 0),
-	(33, '4 Saat Çalışma', 'S4', 4, NULL, 'Saatlik', '#080808', '#70f7b8', 1, 0),
-	(34, '4,5 Saat Çalışma', 'S45', 4.5, NULL, 'Saatlik', '#080808', '#5af6ad', 1, 0),
-	(35, '5 Saat Çalışma', 'S5', 5, NULL, 'Saatlik', '#080808', '#45f4a2', 1, 0),
-	(36, '6 Saat Çalışma', 'S6', 6, NULL, 'Saatlik', '#080808', '#2ff397', 1, 0),
-	(37, '6,5 Saat Çalışma', 'S65', 6.5, NULL, 'Saatlik', '#080808', '#19f28c', 1, 0),
-	(38, '7 Saat Çalışma', 'S7', 7, NULL, 'Saatlik', '#080808', '#0de681', 1, 0),
-	(39, '7,5 Saat Çalışma', 'S75', 7.5, NULL, 'Saatlik', '#FFFAF4', '#0cd075', 1, 0),
-	(40, '8 Saat Çalışma', 'S8', 8, NULL, 'Saatlik', '#FFFAF4', '#0bba68', 1, 0),
-	(41, '8,5 Saat Çalışma', 'S85', 8.5, NULL, 'Saatlik', '#FFFAF4', '#09a45c', 1, 0),
-	(42, '9 Saat Çalışma', 'S9', 9, NULL, 'Saatlik', '#FFFAF4', '#088f50', 1, 0),
-	(43, '9,5 Saat Çalışma', 'S95', 9.5, NULL, 'Saatlik', '#FFFAF4', '#077943', 1, 0),
-	(44, '10 Saat Çalışma', 'S10', 10, NULL, 'Saatlik', '#FFFAF4', '#066337', 1, 0),
-	(45, 'Yıllık İzin', 'Yİ', 8, NULL, 'Ücretli İzin', '#FFFAF4', '#f99cd7', 1, 1),
-	(46, 'Rapor(Ücretli)', 'R+', 8, NULL, 'Ücretli İzin', '#3C486B', '#f886ce', 1, 0),
-	(47, 'Evlilik İzni', 'Eİ', 8, NULL, 'Ücretli İzin', '#FFFAF4', '#f770c5', 1, 0),
-	(48, 'Babalık İzni', 'Bİ', 8, NULL, 'Ücretli İzin', '#FFFAF4', '#f770c5', 0, 0),
-	(49, 'Yıllık İzin Yarım', 'Yİ/2', 4, NULL, 'Ücretli İzin', '#FFFAF4', '#f445b4', 0, 0),
-	(50, 'Mesai İzni', 'M', 8, NULL, 'Ücretli İzin', '#FFFAF4', '#f32fab', 0, 0),
-	(51, 'Devamsız', 'DVZ', 0, NULL, 'Ücretsiz', '#FFFAF4', '#f44545', 1, 0),
-	(52, 'Ücretsiz İzin', 'Uİ', 0, NULL, 'Ücretsiz', '#222', '#fbb2b2', 0, 1),
-	(53, 'Hafta Tatili', 'HT', 0, NULL, 'Ücretsiz', '#FFFAF4', '#98A88e', 1, 0),
-	(54, 'Resmi Tatil', 'RT', 0, NULL, 'Ücretsiz', '#FFFAF4', '#19f2bb', 1, 0),
-	(55, 'İşten Çıkış', 'CKS', 0, NULL, 'Ücretsiz', '#FFFAF4', '#f2a219', 0, 0),
-	(56, 'Rapor(Ücretsiz)', 'R-', 0, NULL, 'Ücretsiz', '#FFFAF4', '#634006', 1, 0),
-	(57, 'Rapor', 'R', 0, NULL, 'Ücretsiz', '#FFFAF4', '#794f07', 0, 1),
-	(58, '5,5 Saat Çalışma', 'S55', 5.5, NULL, 'Saatlik', '#080808', '#45f4a2', 1, NULL),
-	(59, 'Yarım Saat Çalışma', 'S05', 0.5, NULL, 'Saatlik', '#080808', '#f4fefa', NULL, NULL);
+INSERT INTO `puantajturu` (`id`, `PuantajAdi`, `PuantajKod`, `PuantajSaati`, `operant`, `EklenecekSaat`, `Turu`, `FontRengi`, `ArkaPlanRengi`, `isActive`, `IzinRapor`) VALUES
+	(1, '0,5 Yarım Fazla Çalışma', 'X05', 8.5, '+', 0.50, 'Fazla Çalışma', '#080808', '#f9f4fe', 1, 0),
+	(2, '1 Saat Fazla Çalışma', 'X1', 9, '+', 1.00, 'Fazla Çalışma', '#080808', '#ecdefd', 1, 0),
+	(3, '1,5 Saat Fazla Çalışma', 'X15', 9.5, '+', 1.50, 'Fazla Çalışma', '#080808', '#dfc8fc', 1, 0),
+	(4, '2 Saat Fazla Çalışma', 'X2', 10, '+', 2.00, 'Fazla Çalışma', '#080808', '#d3b2fb', 1, 0),
+	(5, '2,5 Saat Fazla Çalışma', 'X25', 10.5, '+', 2.50, 'Fazla Çalışma', '#080808', '#c69cf9', 1, 0),
+	(6, '3 Saat Fazla Çalışma', 'X3', 11, '+', 3.00, 'Fazla Çalışma', '#080808', '#ba86f8', 1, 0),
+	(7, '3,5 Saat Fazla Çalışma', 'X35', 11.5, '+', 3.50, 'Fazla Çalışma', '#FFFAF5', '#ad70f7', 1, 0),
+	(8, '4 Saat Fazla Çalışma', 'X4', 12, '+', 4.00, 'Fazla Çalışma', '#FFFAF6', '#a05af6', 1, 0),
+	(9, '4,5 Saat Fazla Çalışma', 'X45', 12.5, '+', 4.50, 'Fazla Çalışma', '#FFFAF6', '#9445f4', 1, 0),
+	(10, '5 Saat Fazla Çalışma', 'X5', 13, '+', 5.00, 'Fazla Çalışma', '#FFFAF7', '#872ff3', 1, 0),
+	(11, '5,5 Saat Fazla Çalışma', 'X55', 13.5, '+', 5.50, 'Fazla Çalışma', '#FFFAF7', '#7b19f2', 1, 0),
+	(12, '6 Saat Fazla Çalışma', 'X6', 14, '+', 6.00, 'Fazla Çalışma', '#FFFAF8', '#6f0de6', 1, 0),
+	(13, '6,5 Saat Fazla Çalışma', 'X65', 14.5, '+', 6.50, 'Fazla Çalışma', '#FFFAF8', '#640cd0', 1, 0),
+	(14, '7 Saat Fazla Çalışma', 'X7', 15, '+', 7.00, 'Fazla Çalışma', '#FFFAF9', '#5a0bba', 1, 0),
+	(15, '7,5 Saat Fazla Çalışma', 'X7', 15, '+', 7.50, 'Fazla Çalışma', '#FFFAF9', '#4f09a4', 1, 0),
+	(16, '8 Saat Fazla Çalışma', 'X8', 16, '+', 8.00, 'Fazla Çalışma', '#FFFAF1', '#45088f', 1, 0),
+	(17, '8,5 Saat Fazla Çalışma', 'X85', 16.5, '+', 8.50, 'Fazla Çalışma', '#FFFAF1', '#3a0779', 1, 0),
+	(18, '9 Saat Fazla Çalışma', 'X9', 17, '+', 9.00, 'Fazla Çalışma', '#FFFAF1', '#300663', 1, 0),
+	(19, '9,5 Saat Fazla Çalışma', 'X95', 17.5, '+', 9.50, 'Fazla Çalışma', '#FFFAF1', '#1a0337', 1, 0),
+	(20, '10 Saat Fazla Çalışma', 'X10', 18, '+', 10.00, 'Fazla Çalışma', '#FFFAF1', '#100221', 1, 0),
+	(21, 'Yarım Çalışma', 'X/2', 4, '/', 2.00, 'Normal Çalışma', '#FFFFFF', '#4a7ef5', 0, 0),
+	(22, 'Mevcut', 'X', 8, '+', 0.00, 'Normal Çalışma', '#FFFAF4', '#2261f2', 0, 0),
+	(23, '1,5 Kat Ücret', '15X', 12, '*', 1.50, 'Normal Çalışma', '#FFFAF4', '#0d4cdd', 0, 0),
+	(24, 'Çift Ücret', '2X', 16, '*', 2.00, 'Normal Çalışma', '#FFFAF4', '#0a3eb5', 1, 1),
+	(25, '2,5 Kat Ücret', '25X', 20, '*', 2.50, 'Normal Çalışma', '#FFFAF4', '#08308d', 1, 1),
+	(26, '3 Günlük Ücret', '3X', 24, '*', 3.00, 'Normal Çalışma', '#FFFAF4', '#062265', 1, 0),
+	(27, '1 Saat', 'S1', 1, NULL, NULL, 'Saatlik', '#080808', '#f4fefa', 1, 0),
+	(28, '1,5 Saat Çalışma', 'S15', 1.5, NULL, NULL, 'Saatlik', '#080808', '#defdef', 1, 0),
+	(29, '2 Saat Çalışma', 'S2', 2, NULL, NULL, 'Saatlik', '#080808', '#c8fce4', 1, 0),
+	(30, '2,5 Saat Çalışma', 'S25', 2.5, NULL, NULL, 'Saatlik', '#080808', '#b2fbd9', 1, 0),
+	(31, '3 Saat Çalışma', 'S3', 3, NULL, NULL, 'Saatlik', '#080808', '#9cf9ce', 1, 0),
+	(32, '3,5 Saat Çalışma', 'S35', 3.5, NULL, NULL, 'Saatlik', '#080808', '#86f8c3', 1, 0),
+	(33, '4 Saat Çalışma', 'S4', 4, NULL, NULL, 'Saatlik', '#080808', '#70f7b8', 1, 0),
+	(34, '4,5 Saat Çalışma', 'S45', 4.5, NULL, NULL, 'Saatlik', '#080808', '#5af6ad', 1, 0),
+	(35, '5 Saat Çalışma', 'S5', 5, NULL, NULL, 'Saatlik', '#080808', '#45f4a2', 1, 0),
+	(36, '6 Saat Çalışma', 'S6', 6, NULL, NULL, 'Saatlik', '#080808', '#2ff397', 1, 0),
+	(37, '6,5 Saat Çalışma', 'S65', 6.5, NULL, NULL, 'Saatlik', '#080808', '#19f28c', 1, 0),
+	(38, '7 Saat Çalışma', 'S7', 7, NULL, NULL, 'Saatlik', '#080808', '#0de681', 1, 0),
+	(39, '7,5 Saat Çalışma', 'S75', 7.5, NULL, NULL, 'Saatlik', '#FFFAF4', '#0cd075', 1, 0),
+	(40, '8 Saat Çalışma', 'S8', 8, NULL, NULL, 'Saatlik', '#FFFAF4', '#0bba68', 1, 0),
+	(41, '8,5 Saat Çalışma', 'S85', 8.5, NULL, NULL, 'Saatlik', '#FFFAF4', '#09a45c', 1, 0),
+	(42, '9 Saat Çalışma', 'S9', 9, NULL, NULL, 'Saatlik', '#FFFAF4', '#088f50', 1, 0),
+	(43, '9,5 Saat Çalışma', 'S95', 9.5, NULL, NULL, 'Saatlik', '#FFFAF4', '#077943', 1, 0),
+	(44, '10 Saat Çalışma', 'S10', 10, NULL, NULL, 'Saatlik', '#FFFAF4', '#066337', 1, 0),
+	(45, 'Yıllık İzin', 'Yİ', 8, '*', 1.00, 'Ücretli İzin', '#FFFAF4', '#f99cd7', 1, 1),
+	(46, 'Rapor(Ücretli)', 'R+', 8, '*', 1.00, 'Ücretli İzin', '#3C486B', '#f886ce', 1, 0),
+	(47, 'Evlilik İzni', 'Eİ', 8, '*', 1.00, 'Ücretli İzin', '#FFFAF4', '#f770c5', 1, 0),
+	(48, 'Babalık İzni', 'Bİ', 8, '*', 1.00, 'Ücretli İzin', '#FFFAF4', '#f770c5', 0, 0),
+	(49, 'Yıllık İzin Yarım', 'Yİ/2', 4, '/', 2.00, 'Ücretli İzin', '#FFFAF4', '#f445b4', 0, 0),
+	(50, 'Mesai İzni', 'M', 8, '*', 1.00, 'Ücretli İzin', '#FFFAF4', '#f32fab', 0, 0),
+	(51, 'Devamsız', 'DVZ', 0, '*', 0.00, 'Ücretsiz', '#FFFAF4', '#f44545', 1, 0),
+	(52, 'Ücretsiz İzin', 'Uİ', 0, '*', 0.00, 'Ücretsiz', '#222', '#fbb2b2', 0, 1),
+	(53, 'Hafta Tatili', 'HT', 0, '*', 0.00, 'Ücretsiz', '#FFFAF4', '#98A88e', 1, 0),
+	(54, 'Resmi Tatil', 'RT', 0, '*', 0.00, 'Ücretsiz', '#FFFAF4', '#19f2bb', 1, 0),
+	(55, 'İşten Çıkış', 'CKS', 0, '*', 0.00, 'Ücretsiz', '#FFFAF4', '#f2a219', 0, 0),
+	(56, 'Rapor(Ücretsiz)', 'R-', 0, '*', 0.00, 'Ücretsiz', '#FFFAF4', '#634006', 1, 0),
+	(57, 'Rapor', 'R', 0, '*', 0.00, 'Ücretsiz', '#FFFAF4', '#794f07', 0, 1),
+	(58, '5,5 Saat Çalışma', 'S55', 5.5, NULL, NULL, 'Saatlik', '#080808', '#45f4a2', 1, NULL),
+	(59, 'Yarım Saat Çalışma', 'S05', 0.5, NULL, NULL, 'Saatlik', '#080808', '#f4fefa', NULL, NULL);
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.role_auths
 DROP TABLE IF EXISTS `role_auths`;
@@ -1812,7 +1847,7 @@ INSERT INTO `role_auths` (`id`, `role_id`, `auth_ids`) VALUES
 	(8, 8, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94'),
 	(9, 9, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94'),
 	(10, 10, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94'),
-	(11, 11, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94');
+	(11, 11, '1,38,2,39,3,79,80,81,4,28,92,93,94,5,31,6,29,7,23,8,30,9,26,27,83,84,10,32,33,34,35,36,37,11,18,19,20,21,22,82,12,95,25,86,87,88,89,90,91,96,85,24,78');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.settings
 DROP TABLE IF EXISTS `settings`;
@@ -1897,7 +1932,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- mbeyazil_puantoryeni.users: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `user_type`, `parent_id`, `firm_id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `is_main_user`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `activate_token`, `created_at`) VALUES
-	(10, 1, 0, 11, 'Mehmet Ali Gokmen', 'beyzade83@hotmail.com', '$2y$10$h.y5jjGUtJ1Os7xPboyW3exEcMpEFt/AgYZQtnw5uOqxvNn.6u6La', NULL, NULL, NULL, 11, 1, 1, NULL, NULL, '8be5a092cf335c6d3ea07b0edc06d0d093a5d4006802333b9a9f0a5bc815e8d2', NULL, 'i1y1%2F3yoeAQBIkq4gl6bA4EGln5Vr5DBT%2FKpmMq%2FBNer3yDa0hk%3D', '2024-10-29 11:28:48');
+	(10, 1, 0, 11, 'Mehmet Ali Gokmen', 'beyzade83@hotmail.com', '$2y$10$h.y5jjGUtJ1Os7xPboyW3exEcMpEFt/AgYZQtnw5uOqxvNn.6u6La', NULL, NULL, NULL, 11, 1, 1, NULL, NULL, 'd9eba3dcd0ea0518693432f95f56db6befbccb9c10ed78664654e42bb0a8abbf', NULL, 'i1y1%2F3yoeAQBIkq4gl6bA4EGln5Vr5DBT%2FKpmMq%2FBNer3yDa0hk%3D', '2024-10-23 11:28:48');
 
 -- Geçici tablolar temizlenerek final VIEW oluşturuluyor
 DROP TABLE IF EXISTS `sqlmaas_gelir_kesinti`;

@@ -55,7 +55,7 @@ class Date
     {
         return $date ? date('Y', strtotime($date)) : date('Y');
     }
-    
+
 
     public static function daysInMonth($month, $year)
     {
@@ -85,7 +85,7 @@ class Date
     {
         return strtotime($date);
     }
-    
+
     public static function isBetween($date, $startDate, $endDate)
     {
         $date = strtotime($date);
@@ -170,6 +170,25 @@ class Date
         }
         $select .= '</select>';
         return $select;
+    }
+
+    /**
+     * İki tarih arasındaki gün farkını hesaplar.
+     *
+     * @param string $date1 İlk tarih (Y-m-d H:i:s formatında)
+     * @param string $date2 İkinci tarih (Y-m-d H:i:s formatında - boş ise bugünün tarihi alınır)
+     * @return int İki tarih arasındaki gün farkı
+     */
+    public static function getDateDiff($date1, $date2 = '')
+    {
+        //date2 boş ise bugünün tarihi alınır
+        if ($date2 == '') {
+            $date2 = date('Y-m-d H:i:s');
+        }
+        $datetime1 = new \DateTime($date1);
+        $datetime2 = new \DateTime($date2);
+        $interval = $datetime1->diff($datetime2);
+        return (int) $interval->format('%a');
     }
 
 

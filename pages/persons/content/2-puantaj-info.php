@@ -18,7 +18,7 @@ $projects = new Projects();
 $puantaj_info = $puantajObj->getPuantajInfoByPerson($id);
 
 
-if(!$Auths->Authorize("person_page_puantaj_info")) {
+if (!$Auths->Authorize("person_page_puantaj_info")) {
     Helper::authorizePage();
     return;
 }
@@ -36,21 +36,23 @@ if(!$Auths->Authorize("person_page_puantaj_info")) {
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Çalışma Bilgileri</h3>
-                    <div class="col-auto ms-auto">
-                        
+                    <div class="d-flex col-auto ms-auto">
+                        <a href="#" class="btn btn-icon me-2 excel" id="export_excel_puantaj_info" data-tooltip="Excele Aktar">
+                            <i class="ti ti-file-excel icon"></i>
+                        </a>
                     </div>
                 </div>
 
 
                 <div class="table-responsive">
-                    <table class="table card-table table-hover text-nowrap datatable">
+                    <table class="table card-table table-hover text-nowrap datatable" id="puantaj_info_table">
                         <thead>
                             <tr>
                                 <th style="width:7%">id</th>
-                                <th >Proje</th>
-                                <th >Puantaj Türü</th>
-                                <th >Tarih</th>
-                                <th >Saat</th>
+                                <th>Proje</th>
+                                <th>Puantaj Türü</th>
+                                <th>Tarih</th>
+                                <th>Saat</th>
                                 <th class="text-start">Tutar</th>
 
                             </tr>
@@ -62,7 +64,7 @@ if(!$Auths->Authorize("person_page_puantaj_info")) {
                                 ?>
                                 <tr>
                                     <td><?php echo $item->id ?></td>
-                                    <td><?php echo $projects->find($item->project_id )->project_name ?? '' ?></td>
+                                    <td><?php echo $projects->find($item->project_id)->project_name ?? '' ?></td>
                                     <td>
                                         <?php
                                         $puantaj_turu = $puantajObj->getPuantajTuruById($item->puantaj_id);

@@ -50,12 +50,14 @@ $(document).on('click', '#payment_addButton', function () {
     }).then(response => response.json())
         .then(data => {
             if (data.status == "success") {
+                console.log(data);
+                
                 $('#payment-modal').modal('hide');
                 form.trigger("reset");
                 Swal.fire({
                     icon: 'success',
                     title: 'Başarılı!',
-                    text: 'Ödeme başarıyla eklendi.'
+                    text: data.message
                 }).then(() => {
                     location.reload();
                 });
@@ -63,7 +65,7 @@ $(document).on('click', '#payment_addButton', function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Hata!',
-                    text: 'Ödeme eklenirken bir hata oluştu.'
+                    text: data.message
                 });
             }
         })

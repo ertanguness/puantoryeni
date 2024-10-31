@@ -192,4 +192,4 @@ if ($page == 'home') {
 
 
 
-<script src="./src/app.min.js" defer??></script>
+<script src="./src/app.js" defer??></script>

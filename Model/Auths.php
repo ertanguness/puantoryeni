@@ -126,7 +126,7 @@ class Auths extends Model
     }
 
     //Kullanıcının firm_id'si ve sessiondaki firmayı karşılaştır, eğer farklı ise false döner
-    function checkFirmReturn()
+    public function checkFirmReturn()
     {
         if ($_SESSION['user']->firm_id != $_SESSION['firm_id']) {
             $res = [
@@ -144,7 +144,7 @@ class Auths extends Model
         if (!$this->Authorize($auth_name)) {
             $res = [
                 "status" => "error",
-                "message" => "Bu işlemi yapmma yetkiniz yok"
+                "message" => "Bu işlemi yapma yetkiniz yok"
             ];
             echo json_encode($res);
             exit;

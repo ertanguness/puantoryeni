@@ -53,7 +53,7 @@ $Auths->checkAuthorize('upload_payment_permission');
                 <input type="file" name="payment-load-file" id="payment-load-file" class="form-control">
             </div>
 
-            <div class="col-auto me-auto mt-auto d-flex">
+            <div class="col-md-3 me-auto mt-auto d-flex">
 
 
                 <label for="" class="form-label"></label>
@@ -63,6 +63,9 @@ $Auths->checkAuthorize('upload_payment_permission');
                 <label for="İndir"></label>
                 <a href="pages/payroll/xls/payment-load.php" class="btn me-2" data-tooltip="Yüklenecek Şablonu indirin">
                     <i class="ti ti-file-excel icon"></i> Örnek Dosya İndir
+                </a>
+                <a href="#" class="btn btn-ghost-danger me-2 clear" data-tooltip="Formu Temizleyin">
+                    <i class="ti ti-trash icon"></i> Temizle
                 </a>
             </div>
         </div>

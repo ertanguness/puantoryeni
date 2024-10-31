@@ -72,11 +72,22 @@
   overflow-x: inherit;
 
 } */
+/* .table.dataTable tr td {
+  padding: 0 1em  !important;
+
+} */
 .table.dataTable thead th{
   text-align: left !important;  
 }
 .form-control-sm::placeholder {
-padding: 0.5rem 0.5rem;
+padding: 0.1rem 0.1rem;
+}
+.dataTable tr th:first-child {
+   padding-left: 0.8em !important;
+}
+.table.dataTable .form-control-sm {
+  border-radius: 4px;
+  height: 34px !important;
 }
 
 .icon {

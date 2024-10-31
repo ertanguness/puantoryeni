@@ -4,10 +4,13 @@ require_once 'configs/require.php';
 require_once 'Model/UserModel.php';
 require_once 'App/Helper/security.php';
 require_once 'Model/SettingsModel.php';
+require_once 'App/Helper/date.php';
 
 $Settings = new SettingsModel();
 
 $User = new UserModel();
+
+use App\Helper\Date;
 use App\Helper\Security;
 // if ($_POST && isset($_POST['submitForm'])) {
 //   $email = $_POST['email'];
@@ -76,6 +79,7 @@ use App\Helper\Security;
               $email = $_POST['email'];
               $password = $_POST['password'];
 
+
               // Email adresi boş ise
               if (empty($email)) {
                 echo alertdanger('Email adresi boş bırakılamaz');
@@ -91,33 +95,41 @@ use App\Helper\Security;
                   echo alertdanger('Hesabınız henüz aktif değil');
                 } else {
                   $verified = password_verify($password, $user->password);
+                  $demo_date = $user->created_at;
 
                   if ($verified) {
 
-                    $_SESSION['user'] = $user;
-                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                    $_SESSION['full_name'] = $user->full_name;
-                    $_SESSION['user_role'] = $user->user_roles;
-                    $User->setToken($user->id, $_SESSION['csrf_token']);
 
-                    //Giriş işlemleri kayıt altına alınıyor
-                    $_SESSION["log_id"] = $User->loginLog($user->id);
+                    // Kullanıcının hesap açma tarininden itibaren 15 gün geçmişse giriş yapmasına izin verme
+                    $days = Date::getDateDiff($demo_date);
+                    if ($days > 15) {
+                      echo alertdanger('Deneme süreniz dolmuştur. Lütfen iletişime geçiniz.');
+                    } else {
+
+                      $_SESSION['user'] = $user;
+                      $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                      $_SESSION['full_name'] = $user->full_name;
+                      $_SESSION['user_role'] = $user->user_roles;
+                      $User->setToken($user->id, $_SESSION['csrf_token']);
+
+                      //Giriş işlemleri kayıt altına alınıyor
+                      $_SESSION["log_id"] = $User->loginLog($user->id);
 
 
 
-                    //Eğer ayarlarda mail gönderme seçeneği açıksa
-                    $send_email_on_login = $Settings->getSettingIdByUserAndAction($user->id, "loginde_mail_gonder")->set_value ?? 0;
-                    if ($send_email_on_login == 1) {
+                      //Eğer ayarlarda mail gönderme seçeneği açıksa
+                      $send_email_on_login = $Settings->getSettingIdByUserAndAction($user->id, "loginde_mail_gonder")->set_value ?? 0;
+                      if ($send_email_on_login == 1) {
 
-                      //mail gönderilecek kullanıcının mail adresini al
-                      $email = $user->parent_id == 0 ? $user->email : $User->find($user->id);
+                        //mail gönderilecek kullanıcının mail adresini al
+                        $email = $user->parent_id == 0 ? $user->email : $User->find($user->id);
 
-                      //Kullanıcıya email gönder
-                      try {
+                        //Kullanıcıya email gönder
+                        try {
 
-                        require_once "mail-settings.php";
+                          require_once "mail-settings.php";
 
-                        $body = 'Merhaba ' . $user->full_name . ',<br><br>
+                          $body = 'Merhaba ' . $user->full_name . ',<br><br>
 
                                 Bu e-mail, hesabınıza giriş yapıldığını bildirmek amacıyla gönderilmiştir. 
                                 Kayıtlı mail adresiniz ile www.puantor.com.tr müşteri hesabınıza giriş yapılmıştır. <br><br>
@@ -131,28 +143,29 @@ use App\Helper\Security;
                                 İyi Çalışmalar,<br><br>
                                 www.puantor.com.tr';
 
-                        // Alıcılar
-                        $mail->setFrom('bilgi@puantor.com.tr', 'Puantor');
-                        $mail->addAddress($email);
-                        $mail->isHTML(true);
+                          // Alıcılar
+                          $mail->setFrom('bilgi@puantor.com.tr', 'Puantor');
+                          $mail->addAddress($email);
+                          $mail->isHTML(true);
 
-                        $mail->Subject = 'Hesabınıza giriş yapıldı';
-                        $mail->Body = $body;
-                        $mail->AltBody = strip_tags($body);
-                        //Karakter seti
-                        $mail->CharSet = 'UTF-8';
+                          $mail->Subject = 'Hesabınıza giriş yapıldı';
+                          $mail->Body = $body;
+                          $mail->AltBody = strip_tags($body);
+                          //Karakter seti
+                          $mail->CharSet = 'UTF-8';
 
-                        $mail->send();
-                      } catch (Exception $e) {
-                        echo "E-posta gönderilemedi. Hata: {$mail->ErrorInfo}";
+                          $mail->send();
+                        } catch (Exception $e) {
+                          echo "E-posta gönderilemedi. Hata: {$mail->ErrorInfo}";
+                        }
                       }
+
+                      // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
+                      $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';
+                      header("Location: company-list.php?returnUrl={$returnUrl}");
+
+                      exit();
                     }
-
-                    // returnUrl parametresini kontrol edin ve varsayılan değeri ayarlayın
-                    $returnUrl = isset($_GET['returnUrl']) && !empty($_GET['returnUrl']) ? urlencode($_GET['returnUrl']) : '';
-                    header("Location: company-list.php?returnUrl={$returnUrl}");
-
-                    exit();
 
                   } else {
                     echo alertdanger('Hatalı şifre veya email adresi');

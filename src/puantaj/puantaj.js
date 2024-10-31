@@ -43,6 +43,16 @@ listgun.on("click", function (e) {
   }
 });
 
+//Tablonun 1. satırdaki gunadi classına sahip td elemanına basınca tüm kolona click classını ekler
+$(".head-date, .gunadi").on("click", function () {
+  var index = $(this).index();
+  $("table tbody tr").each(function () {
+    var td = $(this).find("td").eq(index);
+    td.toggleClass("clicked");
+  });
+});
+
+
 //********************************************** */
 //Delete tuşuna basıldığı zaman içeriği temizler
 $(document).keydown(function (event) {

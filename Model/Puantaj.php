@@ -3,18 +3,28 @@
 require_once "BaseModel.php";
 require_once "Persons.php";
 require_once ROOT . "/App/Helper/date.php";
+require_once ROOT . "/App/Helper/puantaj.php";
+require_once ROOT ."/Model/SettingsModel.php";
+
+$PuantajHelper = new puantajHelper();
+$Settings = new SettingsModel();
 
 use App\Helper\Date;
-
+use Mpdf\Tag\S;
 
 class Puantaj extends Model
 {
     protected $table = "puantaj";
+    protected $PuantajHelper;
+
+    protected $Settings;
     //private $persons;
 
     public function __construct()
     {
         parent::__construct($this->table);
+        $this->PuantajHelper = new puantajHelper();
+        $this->Settings = new SettingsModel();
         //Person sınıfını buraya dahil et
         //$this->persons = new Persons();
     }
@@ -25,6 +35,17 @@ class Puantaj extends Model
         $sql = $this->db->prepare("SELECT PuantajSaati FROM puantajturu WHERE id = ?");
         $sql->execute([$id]);
         return $sql->fetch(PDO::FETCH_OBJ)->PuantajSaati ?? 0;
+    }
+    public function getPuantajSaatiByfirm($id)
+    {
+        //Firmanın çalışma saatini getir
+        $work_hour = $this->Settings->getSettings("work_hour")->set_value ?? 8;
+        $sql = $this->db->prepare("SELECT EklenecekSaat,operant FROM puantajturu WHERE id = ?");
+        $sql->execute([$id]);
+        $result= $sql->fetch(PDO::FETCH_OBJ);
+        //Puantaj saatini hesapla
+        $saat =$this->PuantajHelper->calculatePuantajSaati($result->EklenecekSaat,$work_hour, $result->operant);
+        return $saat;
     }
 
     //Personelin puantaj tablosundaki çalışmaları getirilir

@@ -130,3 +130,11 @@ $(document).on("click", "#paymentLoadButton", function () {
       swalAlert("Hata!", "Bir hata oluştu. Lütfen tekrar deneyin.", "error");
     });
 });
+$(document).on('click', '.clear', function() {
+  $("#payment-load-file").val("");
+  $("#result tbody").html("");
+  $("#paymentLoadButton").prop("disabled", false);
+  $("#paymentLoadButton .spinner-border").remove();
+
+
+});

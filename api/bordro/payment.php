@@ -5,17 +5,25 @@ require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
 require_once '../../App/Helper/helper.php';
 require_once '../../App/Helper/security.php';
+require_once "../../Model/Auths.php";
 
 use App\Helper\Date;
 use App\Helper\Helper;
 use App\Helper\Security;
+$Auths = new Auths();
 
 $payment = new Bordro();
 $puantaj = new Puantaj();
 
+
+$Auths->checkFirmReturn();
+
 if ($_POST['action'] == 'savePayment') {
+    //Ödeme Ekleme yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn("make_staff_payment");
+
     $id = $_POST['id'];
-    $person_id = $_POST['person_id_payment'];
+    $person_id = Security::decrypt($_POST['person_id_payment']);
     $month = $_POST['payment_month'];
     $year = $_POST['payment_year'];
 
@@ -23,7 +31,7 @@ if ($_POST['action'] == 'savePayment') {
     $dateString = sprintf('%2d%02d15', $year, $month);
 
     $data = [
-        'id' => $id,
+        'id' => 0,
         'user_id' => $_SESSION['user']->id,
         'person_id' => $person_id,
         'gun' => (int) $dateString,
@@ -52,7 +60,7 @@ if ($_POST['action'] == 'savePayment') {
         $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
         $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
         $income_expense->balance = Helper::formattedMoney($payment->getBalance($person_id));  // Bakiye
-      
+
 
         $status = 'success';
         $message = 'Başarıyla eklendi';
@@ -72,6 +80,10 @@ if ($_POST['action'] == 'savePayment') {
 }
 
 if ($_POST['action'] == 'deletePayment') {
+
+    //Ödeme Silme Yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn("delete_staff_payment");
+
     $id = $_POST['id'];
 
     try {
@@ -79,15 +91,16 @@ if ($_POST['action'] == 'deletePayment') {
 
         // Ödeme bilgilerini getirir
         $paymentInfo = $payment->getPersonIncomeExpensePayment(Security::decrypt($id));
-       
+
         //Gelen id'nin encrypt edilmiş olup olmadığını kontrol edin
-        if($payment->delete($id)){
+        if ($payment->delete($id)) {
             $status = 'success';
             $message = 'Başarıyla silindi.';
         } else {
             $status = 'error';
             $message = 'Silinirken bir hata oluştu.';
-        };
+        }
+        ;
 
         // Ödeme bilgilerindeki person_id alınır,
         // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
@@ -95,18 +108,18 @@ if ($_POST['action'] == 'deletePayment') {
 
         //Bakiye hesaplanır
         $balance = Helper::formattedMoney($income_expense->total_income - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
-        
+
         //Toplam Gelir
-        $income_expense->total_income = Helper::formattedMoney($income_expense->total_income ?? 0); 
-        
+        $income_expense->total_income = Helper::formattedMoney($income_expense->total_income ?? 0);
+
         // Toplam ödeme 
-        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  
-        
+        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);
+
         // Toplam gider
-        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  
-        
+        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);
+
         // Bakiye, değişkenine atama yapılır
-        $income_expense->balance = $balance;  
+        $income_expense->balance = $balance;
 
         $db->commit();
     } catch (PDOException $e) {
