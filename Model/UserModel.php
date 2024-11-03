@@ -140,7 +140,7 @@ class UserModel extends Model
     }
 
     //Activate Token sorgulama
-    public function checkToken( $email)
+    public function checkToken($email)
     {
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE email = ?");
         $sql->execute([$email]);
@@ -148,11 +148,20 @@ class UserModel extends Model
     }
 
     //Kullanıcıyı aktif etme
-    public function ActivateUser( $email)
+    public function ActivateUser($email)
     {
         $sql = $this->db->prepare("UPDATE $this->table SET status = 1 WHERE email = ?");
         $sql->execute([$email]);
         //eğer başarılı ise geriye değer döndür
         return $sql->rowCount();
+    }
+
+    //Kullanıcının seçtiği paketi getirme
+    public function getSelectedPackage($user_id)
+    {
+        $sql = $this->db->prepare("SELECT p.package_id FROM users u
+                                            LEFT JOIN mbeyazil_panel.users_packages p ON p.user_id= u.id WHERE user_id = ?");
+        $sql->execute([$user_id]);
+        return $sql->fetch(PDO::FETCH_OBJ);
     }
 }

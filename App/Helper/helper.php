@@ -181,16 +181,18 @@ class Helper
 
     //gelen kelimelerin sadece ilk harflerini döndürür
     //örnek : Ahmet Yılmaz => AY
-    public static function getInitials($name)
+    public static function getInitials($name, $count = 2)
     {
         if (empty($name) || $name == null) {
             return '';
         }
         $name = explode(' ', $name);
         $initials = '';
+        $counter = 0;
         foreach ($name as $n) {
-            if (!empty($n)) { // Boş olup olmadığını kontrol et
+            if (!empty($n) && $counter < $count) { // Boş olup olmadığını ve counter'ı kontrol et
                 $initials .= $n[0];
+                $counter++;
             }
         }
         return strtoupper($initials);

@@ -6,12 +6,13 @@ require_once '../../App/Helper/helper.php';
 
 use App\Helper\Date;
 use App\Helper\Helper;
+use App\Helper\Security;
 
 $income = new Bordro();
 
 if ($_POST['action'] == 'saveIncome') {
     $id = $_POST['id'];
-    $person_id = $_POST['person_id_income'];
+    $person_id = Security::decrypt($_POST['person_id_income']);
     $month = $_POST['income_month'];
     $year = $_POST['income_year'];
 
@@ -34,7 +35,7 @@ if ($_POST['action'] == 'saveIncome') {
     $lastInsertId = $income->saveWithAttr($data);
 
     // Son eklenen kaydın bilgileri formatlanır
-    $incomeData = $income->getPersonIncomeExpensePayment($lastInsertId);
+    $incomeData = $income->getPersonIncomeExpensePayment(Security::decrypt($lastInsertId));
 
     // Kaydedilen verinin türü getirilir(Ödeme, Kesinti, Gelir) (Gelir)
     $incomeData->kategori = Helper::getIncomeExpenseType($incomeData->kategori);
@@ -42,7 +43,17 @@ if ($_POST['action'] == 'saveIncome') {
     // Tutar formatlanır
     $incomeData->tutar = Helper::formattedMoney($incomeData->tutar);
 
-    $income_expense = $income->getIncomeExpenseData($person_id);
+    //Personelin toplam gelir ve gideri getirilir
+    $income_expense = $income->sumAllIncomeExpense($person_id);
+
+    
+    //Bakiyeyi hesapla
+    $income_expense->balance = Helper::formattedMoney($income_expense->total_income - $income_expense->total_expense);
+    
+    //Toplam gelir ve gider,ödeme formatlanır
+    $income_expense->total_income = Helper::formattedMoney($income_expense->total_income);
+    $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense);
+    $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment);
 
 
 

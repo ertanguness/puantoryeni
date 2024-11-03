@@ -93,7 +93,7 @@ $pageTitle = $id == 0 ? "Görüş ve Öneri" : "Görüş ve Öneri";
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <label for="">Mesaj</label>
-                                        <textarea name="message" class="form-control summernote"
+                                        <textarea name="message" class="form-control"
                                             style="min-height: 200px;" required></textarea>
                                     </div>
                                 </div>

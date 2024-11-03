@@ -15,7 +15,7 @@ if ($_POST['action'] == "saveJobGroups") {
             'firm_id' => $_SESSION['firm_id'],
             'name' => $_POST['job_group_name'],
             'description' => $_POST['description'],
-            'type' => 3
+            'type_id' => 3
         ];
         $lastInsertId = $Defines->saveWithAttr($data) ?? $id;
         $message = $id == 0 ? "İş Grubu başarıyla eklendi" : "İş Grubu başarı ile güncellendi";

@@ -7,12 +7,13 @@ require_once '../../App/Helper/helper.php';
 
 use App\Helper\Helper;
 use App\Helper\Date;
+use App\Helper\Security;
 
 $wagecut = new Bordro();
 
 if ($_POST['action'] == 'saveWageCut') {
     $id = $_POST['wage_cut_id'];
-    $person_id = $_POST['person_id_wage_cut'];
+    $person_id = Security::decrypt($_POST['person_id_wage_cut']);
     $month = $_POST['wage_cut_month'];
     $year = $_POST['wage_cut_year'];
 
@@ -43,7 +44,7 @@ if ($_POST['action'] == 'saveWageCut') {
     // Tutar formatlanır
     $wagecutData->tutar = Helper::formattedMoney($wagecutData->tutar);
 
-    $income_expense = $wagecut->getIncomeExpenseData($person_id);
+    $income_expense = $wagecut->sumAllIncomeExpense($person_id);
 
 
 

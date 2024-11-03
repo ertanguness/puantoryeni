@@ -50,7 +50,7 @@ $pageTitle = 'Ayarlar';
                                             Profil Bilgileri</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#tabs-activity-7" class="nav-link" data-bs-toggle="tab"
+                                        <a href="#tabs-account-7" id="tabs-account" class="nav-link" data-bs-toggle="tab"
                                             aria-selected="false" tabindex="-1"
                                             role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/activity -->
                                             <i class="ti ti-settings-spark icon me-2"></i>
@@ -73,7 +73,7 @@ $pageTitle = 'Ayarlar';
                                     <div class="tab-pane" id="tabs-profile-7" role="tabpanel">
                                         <?php include_once "content/1-profile.php" ?>
                                     </div>
-                                    <div class="tab-pane" id="tabs-activity-7" role="tabpanel">
+                                    <div class="tab-pane" id="tabs-account-7" role="tabpanel">
                                         <?php include_once "content/2-account.php" ?>
                                     </div>
                                     <div class="tab-pane" id="tabs-notifications-7" role="tabpanel">
@@ -90,8 +90,3 @@ $pageTitle = 'Ayarlar';
     </div>
 </div>
 
-
-<!-- Get ile gelen parametre edit-profile ise ikinci sekmeyi aç -->
-<script>
-
-</script>

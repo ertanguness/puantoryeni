@@ -1,13 +1,20 @@
 let urlParams = new URLSearchParams(window.location.search);
 let myParam = urlParams.get("tab");
 
-if (myParam == "edit-profile") {
+function activateTab(tabName) {
   $("#tabs-home").removeClass("active");
   $("#tabs-home-7").removeClass("active show");
-  $("#tabs-profile").addClass("active");
-  $("#tabs-profile-7").addClass("active show");
+  $(`#tabs-${tabName}`).addClass("active");
+  $(`#tabs-${tabName}-7`).addClass("active show");
 }
 
+if (myParam == "edit-profile") {
+  activateTab("profile");
+}
+
+if (myParam == "edit-account") {
+  activateTab("account");
+}
 $(document).on("click", "#userSave", function () {
   var form = $("#userForm");
 
@@ -107,8 +114,8 @@ $(document).on("click", "#home_save", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-     //console.log(data);
-      
+      //console.log(data);
+
       title = data.status == "success" ? "Başarılı!" : "Hata!";
       Swal.fire({
         title: title,
@@ -118,3 +125,4 @@ $(document).on("click", "#home_save", function () {
       });
     });
 });
+

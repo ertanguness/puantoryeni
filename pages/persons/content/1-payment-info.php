@@ -36,6 +36,8 @@ $total_income = $incomes;
 // Bakiye hesaplanacak
 $balance = $total_income - $total_expense - $total_payment;
 
+
+$id = Security::encrypt($id);
 if (!$Auths->Authorize("person_page_income_expence_info")) {
     Helper::authorizePage();
     return;

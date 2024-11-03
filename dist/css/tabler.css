@@ -22187,7 +22187,7 @@ Legend
   border-bottom: var(--tblr-border-width) var(--tblr-border-style) var(--tblr-border-color);
 }
 .list-group-flush > .list-group-header:last-child {
-  border-bottom-width: 0;
+  /* border-bottom-width: 0; */
 }
 
 .list-group-item {

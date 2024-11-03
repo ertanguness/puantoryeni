@@ -42,7 +42,7 @@ if (
 
 
 //Summernote eklenecek sayfalar 
-if ($page == "missions/manage" || $page == "feedback/list") {
+if ($page == "missions/manage" || $page == "feedback/list" || $page== "supports/tickets") {
     echo '<script src="./dist/libs/summernote/summernote-lite.min.js?1692870487"></script>';
 }
 
@@ -154,11 +154,17 @@ if ($page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage') 
 
 if($page == 'settings/manage'){
     echo '<script src="./src/settings/settings.js"></script>';
+    echo '<script src="./src/settings/packages.js"></script>';
 }
 
 if($page == 'feedback/list'){
     echo '<script src="./src/feedback.js"></script>';
 }
+
+if($page == 'supports/tickets'){
+    echo '<script src="./src/supports/tickets.js"></script>';
+}
+
 
 ?>
 

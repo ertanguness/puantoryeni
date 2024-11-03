@@ -40,7 +40,7 @@ class Bordro extends Model
     {
         $query = $this->db->prepare('
     SELECT 
-        (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND (kategori = :gelir or kategori = :maas or kategori = :puantaj) AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS gelir,
+        (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND (kategori = :gelir or kategori = :maas or kategori = :puantaj or kategori= :maas) AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS gelir,
         (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND kategori = :kesinti  AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS kesinti,
         (SELECT SUM(tutar) FROM ' . $this->sql_table . ' mgk WHERE mgk.person_id = :person_id AND kategori = :odeme  AND CAST(gun AS UNSIGNED) >= :start_date AND CAST(gun AS UNSIGNED) <= :end_date) AS odeme
 ');
@@ -241,5 +241,52 @@ class Bordro extends Model
         $job_start_date = Date::Ymd($job_start_date);
         $sql = $this->db->prepare("DELETE FROM $this->table WHERE person_id = :person_id AND gun <= :job_start_date");
         $sql->execute([':person_id' => $person_id, ':job_start_date' => $job_start_date]);
+    }
+
+    //Personelin gelir bilgieri getirilir
+    public function getPersonIncome($person_id, $ay, $yil)
+    {
+        $sql = $this->db->prepare("SELECT 
+                                                yil,
+                                                ay,
+                                                sum(tutar) AS tutar,
+                                                turu, saat,
+                                                kategori,
+                                                puantaj_turu
+                                            FROM sqlmaas_gelir_kesinti 
+                                            WHERE person_id = :person_id 
+                                             AND tutar > 0 
+                                            and ay = :ay and yil = :yil
+                                            AND kategori IN(1,4,5)
+                                            GROUP BY puantaj_turu,turu");
+        $sql->execute([
+            ':person_id' => $person_id,
+            ':ay' => $ay,
+            ':yil' => $yil
+        ]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    //Personelin Kesinti bilgieri getirilir
+    public function getPersonExpense($person_id,$ay,$yil)
+    {
+        $sql = $this->db->prepare("SELECT 
+                                                yil,
+                                                ay,
+                                                sum(tutar) AS tutar,
+                                                turu, saat,
+                                                kategori,
+                                                puantaj_turu
+                                            FROM sqlmaas_gelir_kesinti 
+                                            WHERE person_id = :person_id
+                                            and ay = :ay and yil = :yil
+                                            AND kategori IN(2,3)
+                                            GROUP BY puantaj_turu,turu");
+        $sql->execute([
+            ':person_id' => $person_id,
+            ':ay' => $ay,
+            ':yil' => $yil
+        ]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 }

@@ -6,6 +6,7 @@ session_start();
 
 //bu dosyanın bulunduğu dizini belirtir
 define("ROOT", __DIR__);
+date_default_timezone_set('Europe/Istanbul'); // Change to your timezone
 
 
 
@@ -88,10 +89,41 @@ $menu_name = $menus->getMenusByLink($active_page);
 
 
 <?php include_once "inc/head.php" ?>
+<style>
+
+</style>
 
 <body class="layout-fluid">
 
     <div class="page">
+
+
+        <div class="fab-menu text-center">
+            <button class="main-fab" onclick="toggleFabMenu()">
+                <span id="main-icon" class="icon-hamburger">&#9776;</span>
+                <span id="close-icon" class="icon-close">&#10006;</span>
+            </button>
+            <div class="fab-options" id="fab-options">
+                <button class="fab-item route-link" data-page="supports/tickets"  style="bottom: 70px;">
+                    <span>Teknik Destek</span>
+                    <i class="ti ti-headset text-white"></i>
+                </button>
+                <button class="fab-item" onclick="goWhatsApp()"  style="bottom: 130px;">
+                    <span>WhatsApp</span>
+                    <i class="ti ti-brand-whatsapp text-white"></i>
+                </button>
+                <button class="fab-item route-link" data-page="feedback/send" style="bottom: 190px;">
+                    <span>Görüş & Öneri</span>
+                    <i class="ti ti-brand-feedly text-white"></i>
+                </button>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Diğer HTML içeriğiniz -->
 
         <!-- Preloader -->
         <div class="preloader">
@@ -118,7 +150,8 @@ $menu_name = $menus->getMenusByLink($active_page);
                             </div>
                             <div>
                                 Deneme sürenizin bitmesine kalan süre <?php echo $diff; ?> gün, süreniz bitmeden önce
-                                paketinizi güncelleyin.
+                                paketinizi <a href="index.php?p=settings/manage&tab=edit-account"
+                                    class="text-warning"><u>güncelleyin.</u></a>
                             </div>
                         </div>
                         <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
@@ -179,6 +212,9 @@ $menu_name = $menus->getMenusByLink($active_page);
                 $pageWrapper.toggleClass('page-collapse');
             });
         });
+
+      
+
     </script>
 
 </body>

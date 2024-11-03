@@ -4,10 +4,12 @@ require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
 require_once '../../App/Helper/security.php';
 require_once '../../App/Helper/auths.php';
+require_once '../../Model/Auths.php';
 
 $Auths = new Auths();
 
 
+$Auths->checkFirmReturn();
 
 use App\Helper\Date;
 use App\Helper\Security;
@@ -15,6 +17,10 @@ use App\Helper\Security;
 $wage_cut = new Bordro();
 
 if ($_POST['action'] == 'saveWageCut') {
+
+    //Kesinti ekleme yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn("income_expense_add_update");
+
     $id = $_POST['wage_cut_id'];
     $month = $_POST['wage_cut_month'];
     $year = $_POST['wage_cut_year'];

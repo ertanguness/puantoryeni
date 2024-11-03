@@ -10,7 +10,7 @@ use App\Helper\Security;
 
 // $id = isset($_GET['id']) ? $_GET['id'] : 0;
 $wagesObj = new Wages();
-$wages = $wagesObj->getWageByPersonId($id);
+$wages = $wagesObj->getWageByPersonId(Security::decrypt($id));
 
 if(!$Auths->Authorize("person_page_wage_defines_info")) {
     Helper::authorizePage();

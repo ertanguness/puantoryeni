@@ -52,7 +52,7 @@
   <?php
   $page = isset($_GET["p"]) ? $_GET["p"] : "";
 
-  if ($page == "missions/manage" || $page == "feedback/list") {
+  if ($page == "missions/manage" || $page == "feedback/list" || $page== "supports/tickets") {
 
     echo '<link href="./dist/libs/summernote/summernote-lite.min.css" rel="stylesheet">';
   }
@@ -73,6 +73,10 @@
     $page == "financial/case/manage"
   ) {
     echo '<link href="./dist/libs/datatable/datatables.min.css" rel="stylesheet" />';
+  }
+
+  if($page == "supports/ticket-view"){
+    echo '<link href="./dist/css/tickets.css" rel="stylesheet" />';
   }
 
   ?>

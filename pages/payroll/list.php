@@ -24,7 +24,6 @@ $year = isset($_POST['year']) ? $_POST['year'] : date('Y');
 $month = isset($_POST['months']) ? $_POST['months'] : date('m');
 $last_day = Date::Ymd(Date::lastDay($month, $year));
 $project_id = isset($_POST['projects']) ? $_POST['projects'] : 0;
-
 if ($project_id == 0 || $project_id == '') {
     // Proje id boş ise Firma id'sine göre tüm personelleri getirir
     $persons = $personObj->getPersonIdByFirmCurrentMonth($firm_id, $last_day);
@@ -34,6 +33,7 @@ if ($project_id == 0 || $project_id == '') {
 }
 // Ayın ilk gününü bulma (20240901) şeklinde döner
 $firstDay = Date::firstDay($month, $year);
+// Set the default timezone to your local timezone
 
 // Ayın son gününü bulma (20240930) şeklinde döner
 $lastDay = Date::lastDay($month, $year);
@@ -129,7 +129,7 @@ $lastDay = Date::lastDay($month, $year);
                                 <th style="width:10%" class="text-center">Kesinti</th>
                                 <th style="width:10%" class="text-center">Toplam Hakediş</th>
                                 <th style="width:10%" class="text-center">Ödenen</th>
-                                <th style="width:10%" class="text-center">Devreden</th>
+                                <!-- <th style="width:10%" class="text-center">Devreden</th> -->
                                 <th style="width:10%" class="text-center">Ödenecek</th>
 
                                 <th style="width:1%" class="text-center no-export">İşlem</th>
@@ -141,10 +141,19 @@ $lastDay = Date::lastDay($month, $year);
                             <?php
                             $i = 1;
                             foreach ($persons as $item):
+
+
                                 // Personel id'sine göre personel bilgilerini getirir
                                 $person = $personObj->find($item->id);
                                 $person_id = Security::encrypt($person->id);
-                                $id= Security::encrypt($person->id);
+                                $id = Security::encrypt($person->id);
+
+                                //personelin görevden ayrılma tarihi firstday' büyükse personeli getirme
+                                if ($person->job_end_date != null) {
+                                    if ($person->job_end_date >= $firstDay) {
+                                        continue;
+                                    }
+                                }
 
                                 // Personel Beyaz Yaka ise
                                 if ($person->wage_type == 1) {
@@ -163,7 +172,7 @@ $lastDay = Date::lastDay($month, $year);
 
 
                                             $montly_income = $bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)->id ?? 0;
-                                         
+
                                             // Personelin aylık maaşı ekle mi diye kontrol et
                                             if ($montly_income == 0) {
                                                 // Personelin aylık maaşını ekleyelim
@@ -183,9 +192,6 @@ $lastDay = Date::lastDay($month, $year);
                                 $hakedis = $gelir - $wage_cut;
                                 $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->odeme;
                                 $kalan = $hakedis - $odeme;
-
-                                $bakiye = $bordro->getCarryOverBalance($person->id, $firstDay) ?? 0;
-                                $alacak = $bakiye->toplam + $kalan;
 
                                 ?>
                                 <tr>
@@ -219,15 +225,12 @@ $lastDay = Date::lastDay($month, $year);
 
                                     </td>
 
-                                    <td class="text-end <?php echo Helper::balanceColor($bakiye->toplam) ?>">
-                                        <?php echo Helper::formattedMoney($bakiye->toplam); ?>
-                                        <i class="ti ti-repeat icon"></i>
-                                    </td>
+
 
                                     <!-- Bakiye rengini belirle ve göster -->
-                                    <td class="text-end <?php echo Helper::balanceColor($alacak) ?>">
+                                    <td class="text-end <?php echo Helper::balanceColor($kalan) ?>">
                                         <!-- //Bakiyesini yazdır -->
-                                        <?php echo Helper::formattedMoney($alacak ?? 0); ?>
+                                        <?php echo Helper::formattedMoney($kalan ?? 0); ?>
                                         <i class="ti ti-credit-card-pay icon"></i>
                                     </td>
 
@@ -238,38 +241,44 @@ $lastDay = Date::lastDay($month, $year);
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <?php if ($Auths->hasPermission('make_staff_payment')) { ?>
-                                                    <a class="dropdown-item add-payment" data-id="<?php echo $id ?>"
-                                                        href="#" data-bs-toggle="modal" data-bs-target="#payment-modal">
+                                                    <a class="dropdown-item add-payment" data-id="<?php echo $id ?>" href="#"
+                                                        data-bs-toggle="modal" data-bs-target="#payment-modal">
                                                         <i class="ti ti-cash-register icon me-3"></i> Ödeme Yap
                                                     </a>
                                                 <?php } ?>
 
-                                                <a class="dropdown-item add-wage-cut" data-id="<?php echo $id ?>"
-                                                    data-tooltip="Avans,Ceza veya Bes gibi" data-tooltip-location="left"
-                                                    href="#" data-bs-toggle="modal" data-bs-target="#wage_cut_modal">
-                                                    <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
-                                                </a>
-                                                <a class="dropdown-item add-income" data-id="<?php echo $id ?>"
-                                                    data-tooltip="Prim,İkramiye veya Ödül gibi" data-tooltip-location="left"
-                                                    href="#" data-bs-toggle="modal" data-bs-target="#income_modal">
-                                                    <i class="ti ti-download icon me-3"></i> Gelir Ekle
-                                                </a>
+                                                <?php if ($Auths->hasPermission("income_expense_add_update")) {
+                                                    ; ?>
+                                                    <a class="dropdown-item add-wage-cut" data-id="<?php echo $id ?>"
+                                                        data-tooltip="Avans,Ceza veya Bes gibi" data-tooltip-location="left"
+                                                        href="#" data-bs-toggle="modal" data-bs-target="#wage_cut_modal">
+                                                        <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
+                                                    </a>
 
-                                                <a class="dropdown-item route-link" target="_blank"
-                                                    data-page="payroll/pay-slip&id=<?php echo $id ?>" href="#">
+                                                    <a class="dropdown-item add-income" data-id="<?php echo $id ?>"
+                                                        data-tooltip="Prim,İkramiye veya Ödül gibi" data-tooltip-location="left"
+                                                        href="#" data-bs-toggle="modal" data-bs-target="#income_modal">
+                                                        <i class="ti ti-download icon me-3"></i> Gelir Ekle
+                                                    </a>
+                                                <?php } ?>
+
+                                                <?php
+                                                $link = "index.php?p=payroll/pay-slip&id=" . $id . "&month=" . Security::encrypt($month) . "&year=" . Security::encrypt($year);
+                                                ?>
+
+                                                <a class="dropdown-item" target="_blank"
+                                                    href="index.php?p=payroll/pay-slip&id=<?php echo $link ?>">
                                                     <i class="ti ti-file-dollar icon me-3"></i> Bordro Göster
                                                 </a>
-                                                <!-- <a class="dropdown-item" href="#">
-                                                    <i class="ti ti-trash icon me-3"></i> Sil
-                                                </a> -->
+
                                             </div>
                                         </div>
 
                                     </td>
                                 </tr>
-                            <?php 
-                            $i++;
-                        endforeach; ?>
+                                <?php
+                                $i++;
+                            endforeach; ?>
                         </tbody>
                     </table>
                 </div>

@@ -97,19 +97,21 @@ if ($(".datatable").length > 0) {
         let column = this;
         let title = api.column(0).header().textContent;
         //0. kolonun title bilgisini al
-        
+
         //0. ve 1. kolonun index numarasına göre arama kutusu ekle
         if (column.index() == 0 || column.index() == 1) {
           // Create input element
           let input = document.createElement("input");
-            // Set placeholder based on column index
+          // Set placeholder based on column index
           input.placeholder = column.index() === 0 ? "Adı Soyadı" : "Unvanı";
           input.classList.add("form-control");
           input.classList.add("form-control-sm");
           input.setAttribute("autocomplete", "off");
 
           // Append input element to the existing row
-          $("#" + tableId + " thead tr:eq(1) th:eq(" + column.index() + ")").append(input);
+          $(
+            "#" + tableId + " thead tr:eq(1) th:eq(" + column.index() + ")"
+          ).append(input);
 
           // Event listener for user input
           $(input).on("keyup change", function () {
@@ -118,9 +120,6 @@ if ($(".datatable").length > 0) {
             }
           });
         }
-
-        
-        
       });
     }
   });
@@ -153,12 +152,15 @@ if ($(".select2").length > 0) {
 }
 $(document).ready(function () {
   if ($(".summernote").length > 0) {
-    var summernoteHeight = $(window).height() * 0.37; // Set height to 30% of window height
+    var summernoteHeight = $(window).height() * 0.24; // Set height to 30% of window height
     $(".summernote").summernote({
       height: summernoteHeight,
+      fontNames: ['inter','Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
+      addDefaultFonts: 'inter',
       callbacks: {
         onInit: function () {
           $(".summernote").summernote("height", summernoteHeight);
+          $(".summernote").summernote('fontName', 'inter');
         }
       }
     });
@@ -400,4 +402,53 @@ function checkId(id, item) {
     return false;
   }
   return true;
+}
+
+
+// Sayfanın herhangi bir yerine tıklandığında fab menüyü kapat
+document.addEventListener("click", function (event) {
+  if (event.target.closest(".fab-menu") === null) {
+    const fabOptions = document.getElementById("fab-options");
+    const mainIcon = document.getElementById("main-icon");
+    const closeIcon = document.getElementById("close-icon");
+
+    if (fabOptions.style.display === "block") {
+      fabOptions.classList.remove("show");
+      setTimeout(() => {
+        fabOptions.style.display = "none";
+      }, 300);
+      mainIcon.style.opacity = 1;
+      closeIcon.style.opacity = 0;
+    }
+  }
+});
+
+
+function toggleFabMenu() {
+  const fabOptions = document.getElementById("fab-options");
+  const mainIcon = document.getElementById("main-icon");
+  const closeIcon = document.getElementById("close-icon");
+
+  if (fabOptions.style.display === "none" || fabOptions.style.display === "") {
+    fabOptions.style.display = "block";
+    setTimeout(() => {
+      fabOptions.classList.add("show");
+    }, 10);
+    mainIcon.style.opacity = 0;
+    closeIcon.style.opacity = 1;
+  } else {
+    fabOptions.classList.remove("show");
+    setTimeout(() => {
+      fabOptions.style.display = "none";
+    }, 300);
+    mainIcon.style.opacity = 1;
+    closeIcon.style.opacity = 0;
+  }
+}
+
+function goWhatsApp() {
+  const phoneNumber = "905079432723";
+  const message = encodeURIComponent("Merhaba, Teknik desteğe ihtiyacım var");
+  const url = `https://wa.me/send?phone=${phoneNumber}&text=${message}`;
+  window.open(url, "_blank");
 }

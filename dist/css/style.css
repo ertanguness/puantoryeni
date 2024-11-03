@@ -210,10 +210,7 @@ padding: 0.1rem 0.1rem;
     border-radius: 4px !important; */
   font-size: 14px !important;
   height: 40px !important;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+
 }
 
 .form-floating .select2-container .select2-selection--single {
@@ -782,3 +779,111 @@ div:where(.swal2-icon-content) {
   border-color: var(--tblr-form-invalid-border-color) !important;
 
 }
+
+
+
+
+/* Floating Action Button Menü */
+.fab-menu {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* Ana FAB Butonu */
+.main-fab {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+  position: relative;
+}
+
+.main-fab:hover {
+  background-color: #0056b3;
+}
+
+/* İkonlar */
+.icon-hamburger, .icon-close {
+  font-size: 24px;
+  transition: opacity 0.3s ease;
+}
+
+.icon-close {
+  position: absolute;
+  opacity: 0; /* Başlangıçta kapalı */
+}
+
+/* FAB Menü Seçenekleri */
+.fab-options {
+  position: relative;
+  display: none; /* Başlangıçta gizli */
+}
+
+/* FAB Menü Elemanları */
+.fab-item {
+  position: absolute;
+  right: 0;
+   color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 20px;
+  justify-content: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0; /* Başlangıçta kapalı */
+  transform: translateY(20px); /* Başlangıçta aşağıda */
+}
+
+.fab-options .fab-item:nth-child(1),
+.fab-options .fab-item:nth-child(1) span {
+  background-color: #3b5998; /* İlk fab-item'ın arka plan rengiyle aynı */
+}
+
+.fab-options .fab-item:nth-child(2),
+.fab-options .fab-item:nth-child(2) span {
+  background-color: #25D366; /* İkinci fab-item'ın arka plan rengiyle aynı */
+}
+.fab-options .fab-item:nth-child(3),
+.fab-options .fab-item:nth-child(3) span {
+  background-color: #1DA1F2; /* Üçüncü fab-item'ın arka plan rengiyle aynı */
+}
+
+
+/* Metin ve Simge için Stil */
+.fab-item span {
+  display: none; /* Başlangıçta gizli */
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  right: 50px;
+  white-space: nowrap;
+}
+
+.fab-item:hover span {
+  display: inline-block;
+}
+
+/* FAB Menü Elemanları Açıldığında */
+.fab-options.show .fab-item {
+  opacity: 1;
+  transform: translateY(0); /* Yavaşça yukarı çıkar */
+}
+

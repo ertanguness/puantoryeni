@@ -15,7 +15,7 @@ $bordro = new Bordro();
 $puantajObj = new Puantaj();
 $projects = new Projects();
 
-$puantaj_info = $puantajObj->getPuantajInfoByPerson($id);
+$puantaj_info = $puantajObj->getPuantajInfoByPerson(Security::decrypt($id));
 
 
 if (!$Auths->Authorize("person_page_puantaj_info")) {

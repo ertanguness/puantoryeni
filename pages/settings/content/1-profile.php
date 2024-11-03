@@ -1,7 +1,11 @@
 <?php
 require_once "App/Helper/users.php";
+require_once "Model/UserModel.php";
 
+$Users = new UserModel();
 $userHelper = new UserHelper();
+
+echo "Kullanıcınn paketi :" . $Users->getSelectedPackage($_SESSION["user"]->id)->package_id;
 ; ?>
 <form action="" id="userForm">
     <div class="row mb-3">
@@ -12,7 +16,7 @@ $userHelper = new UserHelper();
                 Kaydet
             </button>
         </div>
-        
+
     </div>
 
     <div class="row mb-3">

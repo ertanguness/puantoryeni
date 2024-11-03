@@ -29,9 +29,9 @@ function addWageCutorIncome(
   let formData = new FormData(form[0]);
   formData.append("action", action);
 
-  for (let pair of formData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
+  // for (let pair of formData.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   fetch("api/bordro/" + apiLink + ".php", {
     method: "POST",

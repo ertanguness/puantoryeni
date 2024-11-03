@@ -1,9 +1,11 @@
 $(document).on("click", ".add-payment", function () {
     let personel_id = $(this).data("id");
     let personel_name = $(this).closest("tr").find("td:eq(1)").text();
-    let balance = $(this).closest("tr").find("td:eq(10)").text();
+    let balance = $(this).closest("tr").find("td:eq(9)").text();
     $("#person_id_payment").val(personel_id);
     $("#person_name_payment").text(personel_name);
+    console.log(personel_name);
+    
   
     $("#person_payment_balance").text("Bakiye :" + balance);
 });

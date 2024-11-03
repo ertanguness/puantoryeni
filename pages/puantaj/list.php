@@ -373,8 +373,15 @@ $dates = Date::generateDates($year, $month, $days);
                         <tbody>
                             <?php
                             foreach ($persons as $item):
+                               
                                 $person = $personObj->find($item->id);
                                 $id = Security::encrypt($person->id);
+
+                                 //Personelin işten ayrılma tarihi firstDay'den küçükse personeli getirme
+                                 if ($person->job_end_date >= Date::firstDay($month, $year)) {
+                                    continue;
+                                }
+
                                 ?>
                                 <tr>
                                     <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $id ?>"><a
