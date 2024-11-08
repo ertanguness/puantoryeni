@@ -11,7 +11,8 @@
                 <label for="">Firma Adı (*)</label>
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="firm_name" value="<?php echo $myfirm->firm_name ?? '' ?>" required>
+                <input type="text" class="form-control" name="firm_name" value="<?php echo $myfirm->firm_name ?? '' ?>"
+                    required>
             </div>
             <div class="col-md-2">
                 <label for="">Telefon</label>
@@ -31,7 +32,8 @@
                 <label for="">Başlangıç Bütçesi</label>
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="start_budget" value="<?php echo $myfirm->start_budget ?? '' ?>">
+                <input type="text" class="form-control" name="start_budget"
+                    value="<?php echo $myfirm->start_budget ?? '' ?>">
             </div>
         </div>
         <div class="row mt-3">
@@ -39,16 +41,21 @@
                 <label for="">Firma Logosu</label>
             </div>
             <div class="col-md-4">
-                <input type="file" class="form-control" name="brand_logo" value="">
+                <input type="file" class="form-control" name="brand_logo" onchange="previewImage(event)">
+
             </div>
             <div class="col-md-2">
                 <label for="">Açıklama</label>
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="description" value="<?php echo $myfirm->description ?? '' ?>">
+                <input type="text" class="form-control" name="description"
+                    value="<?php echo $myfirm->description ?? '' ?>">
             </div>
 
         </div>
 
     </div>
 </div>
+<script>
+
+</script>

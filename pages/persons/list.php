@@ -103,7 +103,7 @@ $company = new CompanyHelper();
                                         <td> <a href="#" data-tooltip="Detay/Güncelle"
                                                 data-page="persons/manage&id=<?php echo $id ?>"
                                                 class="nav-item route-link"><?php echo $person->full_name; ?></a></td>
-                                        <td><?php echo $company->getcompanyName($person->company_id); ?></td>
+                                        <td><?php echo $company->getcompanyName($person->company_id ) ?? 0; ?></td>
                                         <td <?php echo $wage_type_color; ?>><?php echo $wage_type; ?></td>
                                         <td><?php echo $person->sigorta_no; ?></td>
                                         <td><?php echo $person->phone; ?></td>
@@ -123,7 +123,7 @@ $company = new CompanyHelper();
                                                         <i class="ti ti-edit icon me-3"></i> Detay/Güncelle
                                                     </a>
 
-                                                    <a class="dropdown-item delete-person" data-id="<?php echo $person->id ?>"
+                                                    <a class="dropdown-item delete-person" data-id="<?php echo $id ?>"
                                                         href="#">
                                                         <i class="ti ti-trash icon me-3"></i> Sil
                                                     </a>

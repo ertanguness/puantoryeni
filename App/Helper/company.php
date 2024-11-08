@@ -19,8 +19,9 @@ class CompanyHelper extends Db
     }
     public function companySelect($name = 'companies', $id = null)
     {
-        $query = $this->db->prepare('SELECT * FROM companies');  // Tüm sütunları seç
-        $query->execute();
+        $firm_id =$_SESSION['user']->id;
+        $query = $this->db->prepare('SELECT * FROM companies where user_id = ?');  // Tüm sütunları seç
+        $query->execute([$firm_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);  // Tüm sonuçları al
 
         $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="width:100%">';
@@ -35,11 +36,14 @@ class CompanyHelper extends Db
 
     public function getCompanyName($id)
     {
+        if ($id == null) {
+            return '';
+        }
         $query = $this->db->prepare('SELECT company_name FROM companies WHERE id = :id');
         $query->execute(array('id' => $id));
         $result = $query->fetch(PDO::FETCH_OBJ);
         if ($result) {
-            return $result->company;
+            return $result->company ?? '' ;
         } else {
             return '';
         }

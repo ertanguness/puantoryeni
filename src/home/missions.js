@@ -13,7 +13,7 @@ $("#sortable").sortable({
 
     fetch("/api/missions/headers.php", {
       method: "POST",
-      body: formData,
+      body: formData
     })
       .then((response) => response.json())
       .then((data) => {
@@ -23,7 +23,7 @@ $("#sortable").sortable({
           console.error("Error updating order:", data.message);
         }
       });
-  },
+  }
 });
 
 $("#sortable").disableSelection();
@@ -41,12 +41,11 @@ $(".header-item").sortable({
       console.log("Taşınan öğenin ID'si: " + movedItemId); // Taşınan öğenin ID'sini konsola yazdır
       var newHeaderId = $(this).attr("id");
       console.log("Yeni başlık ID'si: " + newHeaderId); // Yeni başlık ID'sini konsola yazdır
-      
+
       var formData = new FormData();
       formData.append("mission_id", movedItemId);
       formData.append("header_id", newHeaderId);
       formData.append("action", "updateMissionHeader");
-
 
       for (var pair of formData.entries()) {
         console.log(pair[0] + ", " + pair[1]);
@@ -54,24 +53,21 @@ $(".header-item").sortable({
 
       fetch("/api/missions/missions.php", {
         method: "POST",
-        body: formData,
+        body: formData
       })
         .then((response) => response.json())
         .then((data) => {
           if (data.status === "success") {
             console.log(data);
-            
+
             console.log("Başlık güncellendi");
           } else {
             console.error("Başlık güncellenirken hata oluştu:", data.message);
           }
         });
-  
-  
     }
-  },
+  }
 });
-
 
 $(".done-mission").on("change", function () {
   var missionId = $(this).data("mission-id");
@@ -85,12 +81,12 @@ $(".done-mission").on("change", function () {
 
   fetch("/api/missions/missions.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.status === "success") {
-         if (isDone) {
+        if (isDone) {
           header.addClass("done").removeClass("no-done");
         } else {
           header.addClass("no-done").removeClass("done");
@@ -101,24 +97,26 @@ $(".done-mission").on("change", function () {
     });
 });
 
-$(document).on('click', '#done-show', function() {
+$(document).on("click", "#done-show", function () {
   var main = $("#sortable");
-  var toggle = main.find('.done');
-  
+  var toggle = main.find(".done");
+
   // sortable div içindeki done classına sahip divlerin en yakın mission-items divini bulup toggle işlemi yapar
-  toggle.closest('.mission-items').toggle();
-  
+  toggle.closest(".mission-items").toggle();
+
   // header-item içindeki mission-items elemanlarının görünürlüğünü kontrol et ve toggle işlemi yap
-  $(".header-item").each(function() {
+  $(".header-item").each(function () {
     var hasVisibleMissionItems = false;
-    
-    $(this).find(".mission-items").each(function() {
-      if ($(this).is(":visible")) {
-        hasVisibleMissionItems = true;
-        return false; // Döngüyü kır
-      }
-    });
-    
+
+    $(this)
+      .find(".mission-items")
+      .each(function () {
+        if ($(this).is(":visible")) {
+          hasVisibleMissionItems = true;
+          return false; // Döngüyü kır
+        }
+      });
+
     if (!hasVisibleMissionItems) {
       $(this).toggle();
     } else {
@@ -129,13 +127,12 @@ $(document).on('click', '#done-show', function() {
   var button = $(this);
   if (button.text().trim() === "Göster") {
     button.html('<i class="ti ti-eye-off icon me-1"></i> Gizle');
-    var visible= 1;
+    var visible = 1;
   } else {
     button.html('<i class="ti ti-eye-check icon me-1"></i> Göster');
     var visible = 0;
-   
   }
-  updateIsDoneVisibility(visible)
+  updateIsDoneVisibility(visible);
 });
 
 function updateIsDoneVisibility(visible) {
@@ -149,7 +146,18 @@ function updateIsDoneVisibility(visible) {
 
   fetch("/api/missions/missions.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
-
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success") {
+        console.log(data.message);
+      } else {
+        swal.fire({
+          title: "Hata!",
+          text: data.message,
+          icon: "error"
+        });
+      }
+    });
 }

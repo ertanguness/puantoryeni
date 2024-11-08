@@ -4,10 +4,10 @@ namespace App\Helper;
 
 class Date
 {
-    public static function dmY($date, $format = 'd.m.Y')
+    public static function dmY($date =null, $format = 'd.m.Y')
     {
         if ($date == null) {
-            return '';
+            $date = date('Y-m-d');
         }
         return date($format, strtotime($date));
     }

@@ -15,7 +15,7 @@
 
 
   <link rel="icon" href="./static/favicon.ico" type="image/x-icon" />
- 
+
   <!-- Your code -->
   <!-- CSS files -->
   <!-- Meta Başlık -->
@@ -30,21 +30,21 @@
 
 
   <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet" />
-  <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet" />
-  <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet" />
-  <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet" />
-  <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" />
+  <!-- <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet" /> -->
+  <!-- <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet" /> -->
+  <!-- <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet" /> -->
+  <!-- <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" /> -->
   <link href="./dist/css/style.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/menu.css?1692870487" rel="stylesheet" />
   <link href="./dist/libs/select2/css/select2.min.css?1692870487" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <!-- <link href="./dist/libs/tabler-icon/tabler-icons.min.css?1692870487" rel="stylesheet" /> -->
-
+  
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+  
   <!-- jQuery UI CSS -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+  
   <!-- manifest.json -->
   <link rel="manifest" href="/manifest.json">
 
@@ -52,7 +52,10 @@
   <?php
   $page = isset($_GET["p"]) ? $_GET["p"] : "";
 
-  if ($page == "missions/manage" || $page == "feedback/list" || $page== "supports/tickets") {
+  if (
+    $page == "missions/manage" || $page == "feedback/list"
+    || $page == "supports/tickets" || $page == "supports/ticket-view"
+  ) {
 
     echo '<link href="./dist/libs/summernote/summernote-lite.min.css" rel="stylesheet">';
   }
@@ -69,19 +72,17 @@
     || $page == "puantaj/list" || $page == "payroll/list" || $page == "defines/incexp/list"
     || $page == "missions/list" || $page == "missions/process/list" ||
     $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
-    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage'  ||
+    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage' ||
     $page == "financial/case/manage"
   ) {
     echo '<link href="./dist/libs/datatable/datatables.min.css" rel="stylesheet" />';
   }
 
-  if($page == "supports/ticket-view"){
+  if ($page == "supports/ticket-view") {
     echo '<link href="./dist/css/tickets.css" rel="stylesheet" />';
   }
 
   ?>
-
-
 
 
   <style>

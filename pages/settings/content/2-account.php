@@ -24,6 +24,23 @@ $packages = $Packages->getPackages();
             <?php
             foreach ($packages as $package):
                 $package_id = Security::encrypt($package->id);
+                if($package->person >100){
+                    $package->person = "Sınırsız";
+                    $package->firm = "Sınırsız";
+                    $package->project = "Sınırsız";
+                    $package->case = "Sınırsız";
+                    
+                    $free_month = "";
+                }else{
+                   
+                    $free_month = "Yıllık ödeme yaparsanız 2 ay ücretsiz!";
+                }
+                if($package->mission_manage == 1 ){
+                    $mission_manage = "Görev Yönetimi";
+                }else{
+                    $mission_manage = "<del>Görev Yönetimi</del>";
+                }
+                
                 ?>
                 <div class="col-sm-6 col-lg-3">
                     <div class="card card-md pricing-card">
@@ -44,24 +61,16 @@ $packages = $Packages->getPackages();
 
 
                             <ul class="list-unstyled lh-lg">
-                                <li><strong>10</strong> Personel</li>
-                                <li>1 Firma</li>
-                                <li>3 Proje</li>
-                                <li>1 Kasa</li>
+
+                                <li><strong><?php echo $package->person; ?></strong> Personel</li>
+                                <li><?php echo $package->firm; ?> Firma</li>
+                                <li><?php echo $package->project; ?> Proje</li>
+                                <li><?php echo $package->case; ?> Kasa</li>
                                 <li>
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/x -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="icon me-1 text-danger">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M18 6l-12 12"></path>
-                                        <path d="M6 6l12 12"></path>
-                                    </svg>
-                                    Görev Yönetimi
+                                    <?php echo $mission_manage ; ?>
+                                  
                                 </li>
-                                <li>Yıllık Ödemede 2 ay ücretsiz</li>
-
-
+                                <li></li>
                             </ul>
 
 

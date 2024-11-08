@@ -16,7 +16,7 @@ class SettingsModel extends Model
         $firm_id = $_SESSION['firm_id'];
         $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? AND set_name = ?");
         $sql->execute([$firm_id, $set_name]);
-        return $sql->fetch(PDO::FETCH_OBJ);
+        return $sql->fetch(PDO::FETCH_OBJ) ?? null;
     }
 
     public function getSettingIdByUserAndAction($user_id, $action_name)

@@ -1,8 +1,8 @@
 <?php
 require_once "../../Database/require.php";
-require_once "../../Model/DefinesModel.php";
+require_once "../../Model/JobGroupsModel.php";
 
-$Defines = new DefinesModel();
+$JobGroups = new JobGroupsModel();
 
 if ($_POST['action'] == "saveJobGroups") {
     $id = $_POST['id'];
@@ -11,13 +11,12 @@ if ($_POST['action'] == "saveJobGroups") {
     try {
         $data = [
             'id' => $id,
-            'user_id' => $_SESSION['user']->id,
             'firm_id' => $_SESSION['firm_id'],
-            'name' => $_POST['job_group_name'],
-            'description' => $_POST['description'],
-            'type_id' => 3
+            'group_name' => $_POST['job_group_name'],
+            'description' => $_POST['description']
+           
         ];
-        $lastInsertId = $Defines->saveWithAttr($data) ?? $id;
+        $lastInsertId = $JobGroups->saveWithAttr($data) ?? $id;
         $message = $id == 0 ? "İş Grubu başarıyla eklendi" : "İş Grubu başarı ile güncellendi";
         $status = "success";
 
@@ -38,7 +37,7 @@ if ($_POST['action'] == "saveJobGroups") {
 if ($_POST['action'] == "deleteJobGroups") {
     $id = $_POST['id'];
     try {
-        $Defines->delete($id);
+        $JobGroups->delete($id);
         $status = "success";
         $message = "İş Grubu başarıyla silindi";
     } catch (PDOException $ex) {

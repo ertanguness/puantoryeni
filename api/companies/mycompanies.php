@@ -3,6 +3,7 @@ require_once "../../Database/db.php";
 require_once "../../Model/Company.php";
 require_once "../../Model/UserModel.php";
 
+use App\Helper\Security;
 use Database\Db;
 session_start();
 
@@ -13,7 +14,7 @@ $db = $dbInstance->connect();
 $company = new Company();
 
 if ($_POST["action"] == "saveMyCompany") {
-    $id = $_POST["id"];
+    $id = Security::decrypt($_POST["id"]);
 
 
     $parent_id = $_SESSION["user"]->parent_id == 0 ? $_SESSION["user"]->id : $_SESSION["user"]->parent_id;

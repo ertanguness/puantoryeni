@@ -55,7 +55,7 @@ use App\Helper\Helper;
                         <div class="col-md-8">
                             <div class="mb-3">
                                 <label class="form-label">Tutar</label>
-                                <input type="text" name="amount" class="form-control" value="" autocomplete="off">
+                                <input type="text" name="amount" class="form-control money" value="" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-md-4">

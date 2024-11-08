@@ -8,13 +8,15 @@ require_once '../../App/Helper/date.php';
 
 use App\Helper\Date;
 use App\Helper\Helper;
+use App\Helper\Security;
 
 $project = new Projects();
 $incexp = new ProjectIncomeExpense();
 
 if ($_POST['action'] == 'add_progress_payment') {
+    //$id = Security::decrypt($_POST['progress_payment_id']);
     $id = $_POST['progress_payment_id'];
-    $project_id = $_POST['progress_payment_project_id'];
+    $project_id = Security::decrypt($_POST['progress_payment_project_id']);
 
     $data = [
         'id' => $id,
@@ -28,10 +30,10 @@ if ($_POST['action'] == 'add_progress_payment') {
     ];
 
     try {
-        $lastInsertId = $project->saveProgressPayment($data);
+        $lastInsertId = Security::decrypt($incexp->saveWithAttr($data)) ;
 
-        $last_progress_payment = $project->find($lastInsertId);
-        $last_progress_payment->tarih = Date::dmy($last_progress_payment->tarih);
+        $last_progress_payment = $incexp->find($lastInsertId);
+         $last_progress_payment->tarih = Date::dmy($last_progress_payment->tarih);
         $last_progress_payment->tutar = Helper::formattedMoney($last_progress_payment->tutar);
         $last_progress_payment->kategori = Helper::getIncomeExpenseType($last_progress_payment->kategori);
 

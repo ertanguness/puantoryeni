@@ -42,7 +42,8 @@ if (
 
 
 //Summernote eklenecek sayfalar 
-if ($page == "missions/manage" || $page == "feedback/list" || $page== "supports/tickets") {
+if ($page == "missions/manage" || $page == "feedback/list" 
+|| $page== "supports/tickets" || $page == "supports/ticket-view") {
     echo '<script src="./dist/libs/summernote/summernote-lite.min.js?1692870487"></script>';
 }
 
@@ -161,7 +162,7 @@ if($page == 'feedback/list'){
     echo '<script src="./src/feedback.js"></script>';
 }
 
-if($page == 'supports/tickets'){
+if($page == 'supports/tickets' || $page == 'supports/ticket-view'){
     echo '<script src="./src/supports/tickets.js"></script>';
 }
 
@@ -191,6 +192,7 @@ if ($page == 'home') {
 <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script src="./dist/libs/select2/js/select2.min.js?1724846371"></script>
 <!-- Tabler Core -->
 <script src="./dist/js/tabler.min.js?1692870487"></script>

@@ -5,14 +5,26 @@ require_once "App/Helper/MissionsHelper.php";
 require_once "App/Helper/date.php";
 
 use App\Helper\Date;
+use App\Helper\Security;
 
 $userHelper = new UserHelper();
 $missionHelper = new MissionsHelper();
 $missionObj = new Missions();
-$id = $_GET['id'] ?? 0;
+$id = isset($_GET['id']) ? Security::decrypt($_GET['id']) : 0;
 $mission = $missionObj->find($id);
 
 $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
+$start_date =$mission->start_date ?? Date::dmY();
+
+// Geçerli tarihten 7 gün sonrasının Unix zaman damgasını al
+$timestamp = strtotime('+7 days');
+
+// Unix zaman damgasını insan tarafından okunabilir bir formata dönüştür
+$readableDate = date('Y-m-d', $timestamp);
+
+// Görevin bitiş tarihi yoksa 7 gün sonrasını al
+$end_date = $mission->end_date ?? Date::dmY($readableDate);
+
 ?>
 <div class="page-wrapper">
     <!-- Page header -->
@@ -143,14 +155,14 @@ $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" name="start_date" class="form-control flatpickr"
-                                        value="<?php echo $mission->start_date ?? '' ?>">
+                                        value="<?php echo $start_date ?? '' ?>">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label">Bitiş Tarihi</label>
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" name="end_date" class="form-control flatpickr"
-                                        value="<?php echo $mission->end_date ?? '' ?>">
+                                        value="<?php echo $end_date ?? '' ?>">
                                 </div>
                             </div>
                             <div class="row">

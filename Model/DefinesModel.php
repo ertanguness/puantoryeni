@@ -6,6 +6,7 @@ require_once "BaseModel.php";
 class DefinesModel extends Model
 {
     protected $table = "defines";
+    protected $job_table = "job_groups";
     protected $firm_id;
 
     const TYPES = [
@@ -53,6 +54,8 @@ class DefinesModel extends Model
         $sql->execute([$this->firm_id, $type]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
+
+    
 
 
 

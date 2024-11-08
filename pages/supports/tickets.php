@@ -6,12 +6,15 @@ require_once 'App/Helper/date.php';
 
 use App\Helper\Date;
 use App\Helper\Helper;
+use App\Helper\Security;
+
 $Supports = new SupportsModel();
 
 $supports = $Supports->getSupportsByUser();
 
+$Auths->checkFirmReturn();
+$perm->checkAuthorize('supports_tickets_view');
 
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
 ?>
 <style>
     .card {
@@ -22,7 +25,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
     .list-group-item {
         padding: 1rem;
     }
-  
+
     .list-group-item:hover {
         background-color: #f8f9fa;
     }
@@ -42,12 +45,14 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
                             <?php
                             foreach ($supports as $support) { ?>
 
-                                <div class="list-group-item route-link" data-page="supports/ticket-view&id=<?php echo $support->id?>">
+                                <div class="list-group-item route-link"
+                                    data-page="supports/ticket-view&id=<?php echo Security::encrypt($support->id) ?>">
                                     <div class="row align-items-center">
-                                        <?php 
+                                        <?php
                                         $badge_color = $support->status == 0 ? 'red' : 'green';
                                         ?>
-                                        <div class="col-auto"><span class="badge bg-<?php echo $badge_color; ?>"></span></div>
+                                        <div class="col-auto"><span class="badge bg-<?php echo $badge_color; ?>"></span>
+                                        </div>
                                         <div class="col-auto">
                                             <a href="#">
                                                 <span class="avatar">
@@ -57,7 +62,8 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
                                         </div>
                                         <div class="col text-truncate">
                                             <a href="#" class="text-reset d-block"><?php echo $support->subject; ?></a>
-                                            <div class="d-block text-secondary text-truncate mt-n1"><?php echo  preg_replace('/\?/', '',strip_tags($support->message)); ?></div>
+                                            <div class="d-block text-secondary text-truncate mt-n1">
+                                                <?php echo preg_replace('/\?/', '', strip_tags($support->message)); ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <span class="list-group-item-actions">
@@ -90,8 +96,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
                                 <!--********** HIDDEN ROW************** -->
                                 <div class="row d-none">
                                     <div class="col-md-4">
-                                        <input type="text" name="id" class="form-control"
-                                            value="<?php echo $id ?? '' ?>">
+                                        <input type="text" name="id" class="form-control" value="0">
                                     </div>
                                     <div class="col-md-4">
                                         <input type="text" name="action" value="saveSupportTicket" class="form-control">
@@ -120,10 +125,15 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
                                         </div>
                                     </div>
                                     <div class="row mt-3">
+
+
+
                                         <div class="col-md-12">
-                                            <label for="">Mesaj</label>
-                                            <textarea name="message" class="form-control summernote"
-                                                style="max-height: 120px;" required></textarea>
+                                            <div class="form-group">
+                                                <label for="summernote">Mesajınız</label>
+                                                <textarea id="summernote" name="message" class="summernote"></textarea>
+                                                <input type="hidden" id="summernoteContent" name="summernoteContent">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

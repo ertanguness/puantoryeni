@@ -5,7 +5,7 @@ require_once "Model/UserModel.php";
 $Users = new UserModel();
 $userHelper = new UserHelper();
 
-echo "Kullanıcınn paketi :" . $Users->getSelectedPackage($_SESSION["user"]->id)->package_id;
+
 ; ?>
 <form action="" id="userForm">
     <div class="row mb-3">

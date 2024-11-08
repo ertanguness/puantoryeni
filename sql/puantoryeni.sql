@@ -16,6 +16,7 @@
 
 
 -- mbeyazil_puantoryeni için veritabanı yapısı dökülüyor
+DROP DATABASE IF EXISTS `mbeyazil_puantoryeni`;
 CREATE DATABASE IF NOT EXISTS `mbeyazil_puantoryeni` /*!40100 DEFAULT CHARACTER SET latin5 COLLATE latin5_turkish_ci */;
 USE `mbeyazil_puantoryeni`;
 
@@ -29,9 +30,9 @@ CREATE TABLE IF NOT EXISTS `auths` (
   `parent_id` tinyint(4) DEFAULT NULL,
   `is_active` tinyint(4) DEFAULT 1,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.auths: ~58 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.auths: ~66 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `auths`;
 INSERT INTO `auths` (`id`, `title`, `auth_name`, `description`, `parent_id`, `is_active`) VALUES
 	(1, 'Ana Sayfa', 'home_page', 'Ana sayfaya erişim yetkisi, kullanıcının sistemin ana arayüzüne ulaşmasını sağlar.', 0, 1),
@@ -91,7 +92,15 @@ INSERT INTO `auths` (`id`, `title`, `auth_name`, `description`, `parent_id`, `is
 	(93, 'Personel Sayfası Puantaj Bilgileri', 'person_page_puantaj_info', 'Personel detay sayfasında personelin çalışma bilgilerini görüntüleme yetkisi verir', 4, 1),
 	(94, 'Personel Sayfası Ücret Tanımları Bilgileri', 'person_page_wage_defines_info', 'Personel detay sayfasında personelin ücret tanımlama bilgilerini görüntüleme yetkisi verir', 4, 1),
 	(95, 'Günlük Çalışma Saatini Düzenleme', 'daily_working_hours_edit', 'Bu yetki, kullanıcıların çalışanların veya belirli çalışma programlarının günlük çalışma saatlerini düzenleme veya değiştirme yetkisine sahip olmalarını sağlar', 12, 1),
-	(96, 'Personel Ödemesi Sil', 'delete_staf_payment', 'Bu yetki personeller yapılan ödemeleri silme yetkisi verir.', 25, 1);
+	(96, 'Personel Ödemesi Sil', 'delete_staf_payment', 'Bu yetki personeller yapılan ödemeleri silme yetkisi verir.', 25, 1),
+	(97, 'Personel Kesinti İşlemleri', 'wage_cut_add_update', 'Bu yetkisi personele kesinti ekleme ve güncelleme yetkisi verir', NULL, 1),
+	(98, 'Personel Kesinti Silme', 'wage_cut_delete', 'Bu yetkisi personele eklenen kesintiyi silme yetkisi verir', NULL, 1),
+	(99, 'Personel Gelir İşlemleri', 'in', NULL, NULL, 1),
+	(100, 'Destek Talepleri', 'supports_tickets', 'Bu yetki, kullanıcıya müşteri destek bildirimleriyle ilgili tüm işlemleri yapabilme yetkisi verir. supports_tickets yetkisine sahip kullanıcılar, destek bildirimlerini görüntüleyebilir, yeni bildirimler oluşturabilir, mevcut bildirimleri düzenleyebilir, y', 0, 1),
+	(101, 'Destek Talebi Oluşturma', 'supports_tickets_create', 'Bu yetki, kullanıcıya müşteri destek bildirimleri oluşturma yetkisi verir. supports_tickets_create yetkisine sahip kullanıcılar, müşteri taleplerini veya destek ihtiyaçlarını sisteme yeni bir bildirim olarak kaydedebilirler.', 100, 1),
+	(102, 'Destek Talebi Görüntüleme', 'supports_tickets_view', 'Bu yetki, kullanıcıya müşteri destek bildirimlerini görüntüleme yetkisi verir. supports_tickets_view yetkisine sahip kullanıcılar, destek sisteminde oluşturulmuş tüm destek bildirimlerini inceleyebilir, bildirim detaylarına erişebilir ancak herhangi bir d', 100, 1),
+	(104, 'Yeni Görev', 'new_task', 'Menüden yeni görev ekleme yetkisi verir', 10, 1),
+	(105, 'Bordro Hesapla', 'payroll_calculate', 'Bordro sayfasında hesaplama yetkisi verir.', 3, 1);
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.cases
 DROP TABLE IF EXISTS `cases`;
@@ -210,10 +219,13 @@ CREATE TABLE IF NOT EXISTS `defines` (
   `description` varchar(30) DEFAULT NULL,
   `created_at` varchar(20) DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
 -- mbeyazil_puantoryeni.defines: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `defines`;
+INSERT INTO `defines` (`id`, `user_id`, `type_id`, `firm_id`, `name`, `sub_type`, `description`, `created_at`) VALUES
+	(22, 10, 2, 11, 'Gelir', 0, '', '2024-11-01 08:29:22'),
+	(23, 10, 3, 11, 'Boyacı Sıvacı', 0, '', '2024-11-08 15:12:04');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.define_numbers
 DROP TABLE IF EXISTS `define_numbers`;
@@ -1328,15 +1340,19 @@ INSERT INTO `ilce` (`id`, `il_id`, `ilce_adi`) VALUES
 DROP TABLE IF EXISTS `job_groups`;
 CREATE TABLE IF NOT EXISTS `job_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `firm_id` int(11) NOT NULL DEFAULT 0,
   `group_name` varchar(100) NOT NULL DEFAULT '0',
+  `description` varchar(100) NOT NULL DEFAULT '0',
+  `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.job_groups: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.job_groups: ~3 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `job_groups`;
-INSERT INTO `job_groups` (`id`, `group_name`) VALUES
-	(1, 'Alçı'),
-	(2, 'Fayans');
+INSERT INTO `job_groups` (`id`, `firm_id`, `group_name`, `description`, `created_at`) VALUES
+	(1, 0, 'Alçı', '0', '2024-11-08 15:19:50'),
+	(2, 0, 'Fayans', '0', '2024-11-08 15:19:50'),
+	(3, 11, 'Fabrikator', '0', '2024-11-08 15:19:50');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.login_logs
 DROP TABLE IF EXISTS `login_logs`;
@@ -1350,9 +1366,9 @@ CREATE TABLE IF NOT EXISTS `login_logs` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `login_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.login_logs: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.login_logs: ~37 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `login_logs`;
 INSERT INTO `login_logs` (`id`, `user_id`, `login_time`, `logout_time`, `ip_address`, `user_agent`) VALUES
 	(25, 10, '2024-10-29 11:29:02', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
@@ -1363,7 +1379,35 @@ INSERT INTO `login_logs` (`id`, `user_id`, `login_time`, `logout_time`, `ip_addr
 	(30, 10, '2024-10-31 05:19:23', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
 	(31, 10, '2024-10-31 05:20:32', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
 	(32, 10, '2024-10-31 05:20:41', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
-	(33, 10, '2024-10-31 05:31:46', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36');
+	(33, 10, '2024-10-31 05:31:46', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(34, 10, '2024-11-01 16:20:31', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(35, 10, '2024-11-02 07:39:13', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(36, 10, '2024-11-04 10:17:35', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(37, 10, '2024-11-04 17:52:38', '2024-11-05 19:43:23', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(38, 11, '2024-11-05 16:43:45', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(39, 10, '2024-11-07 18:41:02', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(40, 10, '2024-11-08 07:41:13', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(41, 10, '2024-11-08 07:42:00', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(42, 10, '2024-11-08 07:42:04', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(43, 10, '2024-11-08 07:42:54', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(44, 10, '2024-11-08 07:43:00', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(45, 10, '2024-11-08 07:43:32', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(46, 10, '2024-11-08 07:43:58', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(47, 10, '2024-11-08 07:44:18', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(48, 10, '2024-11-08 07:44:20', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(49, 10, '2024-11-08 07:44:34', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(50, 10, '2024-11-08 07:45:36', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(51, 10, '2024-11-08 07:45:38', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(52, 10, '2024-11-08 07:46:24', '2024-11-08 10:49:07', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(53, 10, '2024-11-08 07:49:08', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(54, 10, '2024-11-08 07:49:18', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(55, 10, '2024-11-08 07:51:42', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(56, 10, '2024-11-08 07:51:58', '2024-11-08 10:54:49', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(57, 10, '2024-11-08 07:54:51', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(58, 10, '2024-11-08 07:55:03', '2024-11-08 10:57:53', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(59, 10, '2024-11-08 07:57:58', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(60, 10, '2024-11-08 07:58:26', '2024-11-08 15:32:50', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'),
+	(61, 10, '2024-11-08 12:33:00', '', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.maas_gelir_kesinti
 DROP TABLE IF EXISTS `maas_gelir_kesinti`;
@@ -1381,21 +1425,15 @@ CREATE TABLE IF NOT EXISTS `maas_gelir_kesinti` (
   `aciklama` varchar(255) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=323 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=349 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.maas_gelir_kesinti: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.maas_gelir_kesinti: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `maas_gelir_kesinti`;
 INSERT INTO `maas_gelir_kesinti` (`id`, `user_id`, `person_id`, `project_id`, `gun`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
-	(312, 0, 1, 0, '20241001', 10, 2024, 25161.29, 4, 'Ekim 2024 Maaş', '26 günlük Maaş', '2024-10-29 23:42:43'),
-	(313, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:20:46'),
-	(314, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:32:56'),
-	(315, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:33:21'),
-	(316, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:33:40'),
-	(317, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:33:52'),
-	(318, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:35:01'),
-	(319, 10, 0, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:35:45'),
-	(320, 10, 1, 0, '20241015', 10, 2024, 25161.29, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:36:29'),
-	(322, 10, 2, 0, '20241015', 10, 2024, 18000.00, 3, 'Bakiye Ödemesi', '', '2024-10-30 15:55:19');
+	(344, 0, 1, 0, '20241101', 11, 2024, 40000.00, 4, 'Kasım 2024 Maaş', 'Aylık Maaş', '2024-11-02 15:59:28'),
+	(345, 10, 1, 0, '20241115', 11, 2024, 5000.00, 2, 'Avans', '', '2024-11-02 16:10:13'),
+	(346, 10, 1, 0, '20241115', 11, 2024, 4500.00, 2, 'Avans', '', '2024-11-02 16:11:07'),
+	(347, 10, 1, 0, '20241115', 11, 2024, 5000.00, 3, 'Bakiye', '', '2024-11-02 16:24:11');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.menu
 DROP TABLE IF EXISTS `menu`;
@@ -1410,9 +1448,9 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `index_no` int(11) DEFAULT NULL,
   `is_authorize` int(11) DEFAULT 1,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci COMMENT='isMenu alanı, menüde görünüp görünmesi için, \r\nindex_no alanı ile menülerin sırası belirlenir\r\nis_authorize alanı, yetki kontolü yapılıp yapılmayacağını belirler';
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci COMMENT='isMenu alanı, menüde görünüp görünmesi için, \r\nindex_no alanı ile menülerin sırası belirlenir\r\nis_authorize alanı, yetki kontolü yapılıp yapılmayacağını belirler';
 
--- mbeyazil_puantoryeni.menu: ~43 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.menu: ~42 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `menu`;
 INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActive`, `isMenu`, `index_no`, `is_authorize`) VALUES
 	(1, 'Ana Sayfa', 'home', 'home', 0, 1, 1, 1, 1),
@@ -1443,7 +1481,7 @@ INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActi
 	(43, 'Ayarlar', 'settings/manage', 'settings', 0, 1, 1, 11, 1),
 	(44, 'Gelir-Gider Türü Tanımlama', 'defines/incexp/list', '0', 27, 1, 1, NULL, 1),
 	(45, 'Görev Yönetimi', '0', 'mist', 0, 1, 1, 8, 1),
-	(46, 'Gelir-Gider Türü Ekle/Güncelle', 'defines/incexp/manage', '0', 27, 1, 0, NULL, 1),
+	(46, 'Yeni Görev', 'missions/manage', '0', 45, 1, 1, 0, 1),
 	(47, 'Görev Listesi', 'missions/list', '0', 45, 1, 1, NULL, 1),
 	(48, 'Görevlerim', 'missions/my-missions', '0', 45, 1, 1, NULL, 1),
 	(49, 'Verdiğim Görevler', 'missions/to-missions', '0', 45, 1, 1, NULL, 1),
@@ -1456,8 +1494,9 @@ INSERT INTO `menu` (`id`, `page_name`, `page_link`, `icon`, `parent_id`, `isActi
 	(56, 'Yetki Grubu Yetkilerini düzenle', 'users/auths/auths', '0', 17, 1, 0, NULL, 1),
 	(57, 'İş Grubu Tanımlama', 'defines/job-groups/list', '0', 27, 1, 1, NULL, 1),
 	(58, 'İş Grubu Ekle/Güncelle', 'defines/job-groups/manage', '0', 27, 1, 0, NULL, 1),
-	(59, 'Görüş & Öneri', 'feedback/send', 'brand-feedly', 0, 1, 1, 11, 0),
-	(60, 'Personelleri Excelden Yükle', 'persons/xls/person-load', '0', 33, 1, 0, NULL, 1);
+	(59, 'Görüş & Öneri', 'feedback/send', 'brand-feedly', 0, 0, 1, 11, 0),
+	(60, 'Personelleri Excelden Yükle', 'persons/xls/person-load', '0', 33, 1, 0, NULL, 1),
+	(61, 'Gelir-Gider Türü Ekle/Güncelle', 'defines/incexp/manage', '0', 27, 1, 0, NULL, 1);
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.missions
 DROP TABLE IF EXISTS `missions`;
@@ -1475,10 +1514,12 @@ CREATE TABLE IF NOT EXISTS `missions` (
   `status` int(11) NOT NULL DEFAULT 0,
   `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
 -- mbeyazil_puantoryeni.missions: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `missions`;
+INSERT INTO `missions` (`id`, `user_id`, `firm_id`, `header_id`, `user_ids`, `name`, `priority`, `start_date`, `end_date`, `description`, `status`, `created_at`) VALUES
+	(49, 0, 11, 18, '10', 'Ana Sayfa görev Butonu', 1, '05.11.2024', '12.11.2024', '<font face="inter">tamamlanmış görevleri gösterme</font>', 3, '2024-11-05 18:34:59');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.mission_headers
 DROP TABLE IF EXISTS `mission_headers`;
@@ -1492,10 +1533,12 @@ CREATE TABLE IF NOT EXISTS `mission_headers` (
   `status` int(3) NOT NULL DEFAULT 1,
   `created_at` varchar(20) NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
 -- mbeyazil_puantoryeni.mission_headers: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `mission_headers`;
+INSERT INTO `mission_headers` (`id`, `user_id`, `firm_id`, `header_name`, `header_order`, `description`, `status`, `created_at`) VALUES
+	(18, 10, 11, 'Genel', 0, '', 1, '2024-11-05 18:34:19');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.mission_headers_items
 DROP TABLE IF EXISTS `mission_headers_items`;
@@ -1566,7 +1609,34 @@ INSERT INTO `myfirms` (`id`, `user_id`, `firm_name`, `phone`, `email`, `start_bu
 	(8, 7, 'Mbe Yazılım', '0', '0', 0, '0', '0', '2024-10-28 22:21:05', 0, '0'),
 	(9, 8, 'sdf', '0', '0', 0, '0', '0', '2024-10-28 22:23:35', 0, '0'),
 	(10, 9, 'fgdfg', '0', '0', 0, '0', '0', '2024-10-28 22:24:54', 0, '0'),
-	(11, 10, 'Gokmen Yazılım Hizmetleri', '0', '0', 0, '67211c302ebed03.png', '0', '2024-10-29 14:28:48', 10, '0');
+	(11, 10, 'Mbe Yazılım Hizmetleri', '0', 'mbeyazilim@gmail.com', 0, '672a548e57fed02.png', '0', '2024-10-29 14:28:48', 11, '0');
+
+-- tablo yapısı dökülüyor mbeyazil_puantoryeni.packages
+DROP TABLE IF EXISTS `packages`;
+CREATE TABLE IF NOT EXISTS `packages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `program_name` varchar(50) NOT NULL DEFAULT '0',
+  `name` varchar(50) NOT NULL DEFAULT '0',
+  `price` varchar(50) DEFAULT NULL,
+  `money_unit` varchar(4) DEFAULT 'TRY',
+  `days` int(4) DEFAULT 30,
+  `discount_rate` double DEFAULT NULL,
+  `person` int(11) DEFAULT NULL,
+  `firm` int(11) DEFAULT NULL,
+  `case` int(11) DEFAULT NULL,
+  `project` int(11) DEFAULT NULL,
+  `mission_manage` int(11) DEFAULT NULL,
+  `created_at` varchar(20) DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- mbeyazil_puantoryeni.packages: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
+DELETE FROM `packages`;
+INSERT INTO `packages` (`id`, `program_name`, `name`, `price`, `money_unit`, `days`, `discount_rate`, `person`, `firm`, `case`, `project`, `mission_manage`, `created_at`) VALUES
+	(1, 'puantor', 'Başlangıç', '1000', 'TRY', 30, NULL, 10, 1, 1, 3, 0, '2024-11-05 20:07:38'),
+	(2, 'puantor', 'Premium', '1500', 'TRY', 30, NULL, 20, NULL, NULL, NULL, NULL, '2024-11-05 20:07:38'),
+	(3, 'puantor', 'Kurumsal', '2000', 'TRY', 30, NULL, 50, NULL, NULL, NULL, NULL, '2024-11-05 20:07:38'),
+	(4, 'puantor', 'Sınırsız', 'Bize Ulaşın', 'TRY', 30, NULL, 9999, NULL, NULL, NULL, NULL, '2024-11-05 20:07:38');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.password_resets
 DROP TABLE IF EXISTS `password_resets`;
@@ -1591,12 +1661,12 @@ CREATE TABLE IF NOT EXISTS `persons` (
   `full_name` varchar(25) DEFAULT NULL,
   `kimlik_no` bigint(10) DEFAULT NULL,
   `sigorta_no` bigint(10) DEFAULT NULL,
-  `phone` varchar(12) DEFAULT NULL,
-  `address` varchar(12) DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
   `project_id` varchar(255) DEFAULT NULL,
   `company_id` bigint(255) NOT NULL,
   `daily_wages` decimal(20,2) DEFAULT NULL,
-  `iban_number` varchar(26) DEFAULT NULL,
+  `iban_number` varchar(32) DEFAULT NULL,
   `wage_type` tinyint(1) DEFAULT NULL,
   `job_start_date` varchar(10) NOT NULL,
   `job_end_date` varchar(10) DEFAULT NULL,
@@ -1609,14 +1679,12 @@ CREATE TABLE IF NOT EXISTS `persons` (
   UNIQUE KEY `kimlik_no` (`kimlik_no`,`phone`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- mbeyazil_puantoryeni.persons: ~5 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.persons: ~3 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `persons`;
 INSERT INTO `persons` (`id`, `firm_id`, `full_name`, `kimlik_no`, `sigorta_no`, `phone`, `address`, `project_id`, `company_id`, `daily_wages`, `iban_number`, `wage_type`, `job_start_date`, `job_end_date`, `job`, `state`, `email`, `job_group`, `description`) VALUES
-	(1, '11', 'Ahmet Yılmaz', 12345678901, NULL, '0500 123 45 ', 'İstanbul, Ca', NULL, 0, 30000.00, 'TR123456789012345678901234', 1, '04.10.2024', '29.10.2024', '', NULL, 'ahmet.yilmaz@example.com', '', 'İş deneyimi var.'),
+	(1, '11', 'Ahmet Yılmaz', 12345678901, NULL, '05079432723', 'İstanbul, Ca', NULL, 0, 40000.00, 'TR123456789012345678901234', 1, '04.10.2024', '', '', NULL, 'ahmet.yilmaz@example.com', '', 'İş deneyimi var.'),
 	(2, '11', 'Elif Demir', 23456789012, NULL, '0501 234 56 ', 'Ankara, Soka', NULL, 0, 1800.00, 'TR234567890123456789012345', 2, '10.10.2024', '23.10.2024', 'Çaycı', NULL, 'elif.demir@example.com', '', 'Hızlı öğrenir.'),
-	(3, '11', 'Mehmet Korkmaz', 34567890123, NULL, '0502 345 67 ', 'İzmir, Mahal', NULL, 0, 1200.00, 'TR345678901234567890123456', 2, '03.10.2024', '', 'Demirci', NULL, 'mehmet.korkmaz@example.com', '', 'Takım çalışmasına yatkın.'),
-	(4, '11', 'Zeynep Arslan', 45678901234, NULL, '0503 456 78 ', 'Bursa, Cadde', NULL, 0, 1600.00, 'TR456789012345678901234567', 2, '10.04.2023', NULL, NULL, NULL, 'zeynep.arslan@example.com', NULL, 'İletişim becerisi yüksek.'),
-	(5, '11', 'Canan Çelik', 56789012345, NULL, '0504 567 89 ', 'Antalya, Sok', NULL, 0, 1400.00, 'TR567890123456789012345678', 2, '12.05.2023', '', '', NULL, 'canan.celik@example.com', '', 'Yaratıcı düşünür.');
+	(3, '11', 'Mehmet Korkmaz', 34567890123, NULL, '0502 345 67 ', 'İzmir, Mahal', NULL, 107, 1200.00, 'TR345678901234567890123456', 2, '03.10.2024', '', 'Demirci', NULL, 'mehmet.korkmaz@example.com', '', 'Takım çalışmasına yatkın.');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.person_daily_wages
 DROP TABLE IF EXISTS `person_daily_wages`;
@@ -1630,10 +1698,12 @@ CREATE TABLE IF NOT EXISTS `person_daily_wages` (
   `description` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
 -- mbeyazil_puantoryeni.person_daily_wages: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `person_daily_wages`;
+INSERT INTO `person_daily_wages` (`id`, `person_id`, `wage_name`, `start_date`, `end_date`, `amount`, `description`, `created_at`) VALUES
+	(73, 4, 'Kasım Ücret', '20241101', '20241115', 2500.0000, '', '2024-11-01 20:36:31');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.projects
 DROP TABLE IF EXISTS `projects`;
@@ -1679,10 +1749,18 @@ CREATE TABLE IF NOT EXISTS `project_gelir_gider` (
   `aciklama` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.project_gelir_gider: ~0 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.project_gelir_gider: ~6 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `project_gelir_gider`;
+INSERT INTO `project_gelir_gider` (`id`, `firm_id`, `project_id`, `tarih`, `ay`, `yil`, `tutar`, `kategori`, `turu`, `aciklama`, `created_at`) VALUES
+	(13, 11, 0, '20241106', NULL, NULL, 90000, 6, 'Proje Hakediş', '', '2024-11-06 08:02:59'),
+	(14, 11, 0, '20241106', NULL, NULL, 90000, 6, 'Proje Hakediş', '', '2024-11-06 08:03:38'),
+	(15, 11, 58, '20241106', NULL, NULL, 50000, 6, 'Proje Hakediş', '', '2024-11-06 08:11:10'),
+	(16, 11, 58, '20241106', NULL, NULL, 50000, 6, 'Proje Hakediş', '', '2024-11-06 08:11:57'),
+	(17, 11, 58, '20241106', NULL, NULL, 50000, 6, 'Proje Hakediş', '', '2024-11-06 08:12:40'),
+	(18, 11, 58, '20241106', NULL, NULL, 50000, 6, 'Proje Hakediş', '', '2024-11-06 08:13:00'),
+	(19, 11, 58, '20241106', NULL, NULL, 50000, 6, 'Proje Hakediş', '', '2024-11-06 08:13:38');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.project_person
 DROP TABLE IF EXISTS `project_person`;
@@ -1715,23 +1793,13 @@ CREATE TABLE IF NOT EXISTS `puantaj` (
   `created_at` varchar(30) NOT NULL DEFAULT current_timestamp(),
   `updated_at` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1602 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1650 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- mbeyazil_puantoryeni.puantaj: ~31 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.puantaj: ~59 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `puantaj`;
 INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`, `gun`, `saat`, `tutar`, `description`, `created_at`, `updated_at`) VALUES
 	(1571, 0, 0, '2', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
 	(1572, 0, 0, '2', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
-	(1573, 0, 0, '3', 53, '20241006', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
-	(1574, 0, 0, '3', 22, '20241007', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
-	(1575, 0, 0, '3', 22, '20241008', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
-	(1576, 0, 0, '3', 22, '20241009', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
-	(1577, 0, 0, '3', 22, '20241010', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
-	(1578, 0, 0, '3', 22, '20241011', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
-	(1579, 0, 0, '3', 22, '20241012', 10.00, 1200.00, '0', '2024-10-31 08:10:36', ''),
-	(1580, 0, 0, '3', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
-	(1581, 0, 0, '3', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
-	(1582, 0, 0, '3', 53, '20241027', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
 	(1583, 0, 0, '4', 53, '20241006', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
 	(1584, 0, 0, '4', 53, '20241013', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
 	(1585, 0, 0, '4', 53, '20241020', 0.00, 0.00, '0', '2024-10-31 08:10:36', ''),
@@ -1750,7 +1818,45 @@ INSERT INTO `puantaj` (`id`, `company_id`, `project_id`, `person`, `puantaj_id`,
 	(1598, 0, 58, '2', 22, '20241016', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
 	(1599, 0, 58, '2', 22, '20241017', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
 	(1600, 0, 58, '2', 22, '20241018', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
-	(1601, 0, 58, '2', 22, '20241019', 10.00, 1800.00, '0', '2024-10-31 08:12:41', '');
+	(1601, 0, 58, '2', 22, '20241019', 10.00, 1800.00, '0', '2024-10-31 08:12:41', ''),
+	(1602, 0, 0, '5', 22, '20241007', 10.00, 1400.00, '0', '2024-10-31 23:54:44', ''),
+	(1603, 0, 0, '5', 22, '20241008', 10.00, 1400.00, '0', '2024-10-31 23:54:44', ''),
+	(1604, 0, 0, '5', 22, '20241009', 10.00, 1400.00, '0', '2024-10-31 23:54:44', ''),
+	(1605, 0, 0, '5', 22, '20241010', 10.00, 1400.00, '0', '2024-10-31 23:54:44', ''),
+	(1606, 0, 0, '5', 22, '20241011', 10.00, 1400.00, '0', '2024-10-31 23:54:44', ''),
+	(1607, 0, 0, '5', 22, '20241012', 10.00, 1400.00, '0', '2024-10-31 23:54:44', ''),
+	(1618, 0, 0, '4', 53, '20241103', 0.00, 0.00, '2500.0000', '2024-11-01 00:13:18', ''),
+	(1619, 0, 0, '4', 53, '20241110', 0.00, 0.00, '2500.0000', '2024-11-01 00:13:18', ''),
+	(1620, 0, 0, '4', 53, '20241117', 0.00, 0.00, '0', '2024-11-01 00:13:18', ''),
+	(1621, 0, 0, '4', 53, '20241124', 0.00, 0.00, '0', '2024-11-01 00:13:18', ''),
+	(1622, 0, 0, '5', 53, '20241103', 0.00, 0.00, '0', '2024-11-01 00:13:18', ''),
+	(1623, 0, 0, '5', 53, '20241110', 0.00, 0.00, '0', '2024-11-01 00:13:18', ''),
+	(1624, 0, 0, '5', 53, '20241117', 0.00, 0.00, '0', '2024-11-01 00:13:18', ''),
+	(1625, 0, 0, '5', 53, '20241124', 0.00, 0.00, '0', '2024-11-01 00:13:18', ''),
+	(1626, 0, 0, '5', 22, '20241104', 10.00, 1400.00, '0', '2024-11-01 09:59:43', ''),
+	(1627, 0, 0, '5', 22, '20241105', 10.00, 1400.00, '0', '2024-11-01 09:59:43', ''),
+	(1628, 0, 0, '5', 22, '20241106', 10.00, 1400.00, '0', '2024-11-01 09:59:43', ''),
+	(1629, 0, 0, '5', 22, '20241107', 10.00, 1400.00, '0', '2024-11-01 09:59:43', ''),
+	(1630, 0, 0, '5', 22, '20241108', 10.00, 1400.00, '0', '2024-11-01 09:59:43', ''),
+	(1631, 0, 0, '5', 22, '20241109', 10.00, 1400.00, '0', '2024-11-01 09:59:43', ''),
+	(1632, 0, 58, '4', 24, '20241104', 20.00, 5000.00, '2500.0000', '2024-11-01 20:34:56', ''),
+	(1633, 0, 58, '4', 24, '20241105', 20.00, 5000.00, '2500.0000', '2024-11-01 20:34:56', ''),
+	(1634, 0, 58, '4', 24, '20241106', 20.00, 5000.00, '2500.0000', '2024-11-01 20:34:56', ''),
+	(1635, 0, 58, '4', 24, '20241107', 20.00, 5000.00, '2500.0000', '2024-11-01 20:34:56', ''),
+	(1636, 0, 58, '4', 24, '20241108', 20.00, 5000.00, '2500.0000', '2024-11-01 20:34:56', ''),
+	(1637, 0, 58, '4', 24, '20241109', 20.00, 5000.00, '2500.0000', '2024-11-01 20:34:56', ''),
+	(1638, 0, 58, '4', 22, '20241111', 10.00, 2500.00, '2500.0000', '2024-11-01 20:35:05', ''),
+	(1639, 0, 58, '4', 22, '20241112', 10.00, 2500.00, '2500.0000', '2024-11-01 20:35:05', ''),
+	(1640, 0, 58, '4', 22, '20241113', 10.00, 2500.00, '2500.0000', '2024-11-01 20:35:05', ''),
+	(1641, 0, 58, '4', 22, '20241114', 10.00, 2500.00, '2500.0000', '2024-11-01 20:35:05', ''),
+	(1642, 0, 58, '4', 22, '20241115', 10.00, 2500.00, '2500.0000', '2024-11-01 20:35:05', ''),
+	(1643, 0, 58, '4', 22, '20241116', 10.00, 1600.00, '0', '2024-11-01 20:35:05', ''),
+	(1644, 0, 58, '4', 22, '20241118', 10.00, 1600.00, '0', '2024-11-01 20:35:05', ''),
+	(1645, 0, 0, '4', 22, '20241119', 10.00, 1600.00, '0', '2024-11-01 20:38:02', ''),
+	(1646, 0, 0, '4', 22, '20241120', 10.00, 1600.00, '0', '2024-11-01 20:38:02', ''),
+	(1647, 0, 0, '4', 22, '20241121', 10.00, 1600.00, '0', '2024-11-01 20:38:02', ''),
+	(1648, 0, 0, '4', 22, '20241122', 10.00, 1600.00, '0', '2024-11-01 20:38:02', ''),
+	(1649, 0, 0, '4', 22, '20241123', 10.00, 1600.00, '0', '2024-11-01 20:38:02', '');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.puantajturu
 DROP TABLE IF EXISTS `puantajturu`;
@@ -1847,7 +1953,7 @@ INSERT INTO `role_auths` (`id`, `role_id`, `auth_ids`) VALUES
 	(8, 8, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94'),
 	(9, 9, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94'),
 	(10, 10, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94'),
-	(11, 11, '1,38,2,39,3,79,80,81,4,28,92,93,94,5,31,6,29,7,23,8,30,9,26,27,83,84,10,32,33,34,35,36,37,11,18,19,20,21,22,82,12,95,25,86,87,88,89,90,91,96,85,24,78');
+	(11, 11, '1,38,2,39,3,79,80,81,105,4,28,92,93,94,5,31,6,29,7,23,8,30,9,26,27,83,84,10,32,33,34,35,36,37,104,11,18,19,20,21,22,82,12,95,25,86,87,88,89,90,91,96,85,24,78,100,101,102');
 
 -- tablo yapısı dökülüyor mbeyazil_puantoryeni.settings
 DROP TABLE IF EXISTS `settings`;
@@ -1858,13 +1964,16 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `set_name` varchar(100) DEFAULT NULL,
   `set_value` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin5 COLLATE=latin5_turkish_ci;
 
--- mbeyazil_puantoryeni.settings: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.settings: ~4 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `settings`;
 INSERT INTO `settings` (`id`, `firm_id`, `user_id`, `set_name`, `set_value`) VALUES
 	(20, 11, 10, 'loginde_mail_gonder', '1'),
-	(23, 11, 10, 'work_hour', '10');
+	(23, 11, 10, 'work_hour', '10'),
+	(24, 11, 0, NULL, '0'),
+	(25, 11, 0, NULL, '1'),
+	(26, 11, 0, 'completed_tasks_visible', '1');
 
 -- görünüm yapısı dökülüyor mbeyazil_puantoryeni.sqlmaas_gelir_kesinti
 DROP VIEW IF EXISTS `sqlmaas_gelir_kesinti`;
@@ -1877,7 +1986,9 @@ CREATE TABLE `sqlmaas_gelir_kesinti` (
 	`ay` INT(11) NULL,
 	`yil` INT(11) NULL,
 	`person` VARCHAR(1) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`puantaj_turu` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci',
 	`gun` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci',
+	`saat` VARCHAR(1) NULL COLLATE 'utf8mb4_general_ci',
 	`tutar` DECIMAL(20,2) NULL,
 	`aciklama` VARCHAR(1) NOT NULL COLLATE 'latin5_turkish_ci',
 	`created_at` VARCHAR(1) NOT NULL COLLATE 'utf8mb4_general_ci'
@@ -1927,16 +2038,51 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`,`firm_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- mbeyazil_puantoryeni.users: ~1 rows (yaklaşık) tablosu için veriler indiriliyor
+-- mbeyazil_puantoryeni.users: ~2 rows (yaklaşık) tablosu için veriler indiriliyor
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `user_type`, `parent_id`, `firm_id`, `full_name`, `email`, `password`, `phone`, `job`, `title`, `user_roles`, `status`, `is_main_user`, `sicil_no`, `yetkinlik_no`, `session_token`, `remember_token`, `activate_token`, `created_at`) VALUES
-	(10, 1, 0, 11, 'Mehmet Ali Gokmen', 'beyzade83@hotmail.com', '$2y$10$h.y5jjGUtJ1Os7xPboyW3exEcMpEFt/AgYZQtnw5uOqxvNn.6u6La', NULL, NULL, NULL, 11, 1, 1, NULL, NULL, 'd9eba3dcd0ea0518693432f95f56db6befbccb9c10ed78664654e42bb0a8abbf', NULL, 'i1y1%2F3yoeAQBIkq4gl6bA4EGln5Vr5DBT%2FKpmMq%2FBNer3yDa0hk%3D', '2024-10-23 11:28:48');
+	(10, 1, 0, 11, 'Mehmet Ali Gokmen', 'beyzade83@hotmail.com', '$2y$10$h.y5jjGUtJ1Os7xPboyW3exEcMpEFt/AgYZQtnw5uOqxvNn.6u6La', NULL, NULL, NULL, 11, 1, 1, NULL, NULL, '26a6a2a251bb2b2f913c375648a492f646ba5cb278fc2782329203b0d5861696', NULL, 'i1y1%2F3yoeAQBIkq4gl6bA4EGln5Vr5DBT%2FKpmMq%2FBNer3yDa0hk%3D', '2024-10-29 11:28:48'),
+	(11, 1, 10, 11, 'Bilge Kazaz', 'bilgekazaz@gmail.com', '$2y$10$TnbEodeHXj3m0lba4dVIFeH4aJtmgzvLOKip4a.5MjTpyoWDpwMKC', '05079432723', '', NULL, 11, 1, NULL, NULL, NULL, 'e3e6ddbe8d1fc426182b3b340db7d3e78abbb85eece0544f2dfc8264bc09a329', NULL, NULL, '2024-11-05 16:25:21');
 
 -- Geçici tablolar temizlenerek final VIEW oluşturuluyor
 DROP TABLE IF EXISTS `sqlmaas_gelir_kesinti`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sqlmaas_gelir_kesinti` AS select `puantaj`.`id` AS `id`,`puantaj`.`person` AS `person_id`,'Puantaj Çalışma' AS `turu`,5 AS `kategori`,month(`puantaj`.`gun`) AS `ay`,year(`puantaj`.`gun`) AS `yil`,`puantaj`.`person` AS `person`,`puantaj`.`gun` AS `gun`,`puantaj`.`tutar` AS `tutar`,'' AS `aciklama`,`puantaj`.`created_at` AS `created_at` from `puantaj` union all select `maas_gelir_kesinti`.`id` AS `id`,`maas_gelir_kesinti`.`person_id` AS `person_id`,`maas_gelir_kesinti`.`turu` AS `turu`,`maas_gelir_kesinti`.`kategori` AS `kategori`,`maas_gelir_kesinti`.`ay` AS `ay`,`maas_gelir_kesinti`.`yil` AS `yil`,`maas_gelir_kesinti`.`person_id` AS `person_id`,`maas_gelir_kesinti`.`gun` AS `gun`,`maas_gelir_kesinti`.`tutar` AS `tutar`,`maas_gelir_kesinti`.`aciklama` AS `aciklama`,`maas_gelir_kesinti`.`created_at` AS `created_at` from `maas_gelir_kesinti` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `sqlmaas_gelir_kesinti` AS SELECT 
+    `puantaj`.`id` AS `id`,
+    `puantaj`.`person` AS `person_id`,
+    'Puantaj Çalışma' AS `turu`,
+    5 AS `kategori`,
+    MONTH(`puantaj`.`gun`) AS `ay`,
+    YEAR(`puantaj`.`gun`) AS `yil`,
+    `puantaj`.`person` AS `person`,
+    `puantaj`.`puantaj_id` AS `puantaj_turu`,
+    `puantaj`.`gun` AS `gun`,
+    `puantaj`.`saat` AS `saat`,
+    `puantaj`.`tutar` AS `tutar`,
+    '' AS `aciklama`,
+    `puantaj`.`created_at` AS `created_at`
+FROM 
+    `puantaj`
+
+UNION ALL
+
+SELECT 
+    `maas_gelir_kesinti`.`id` AS `id`,
+    `maas_gelir_kesinti`.`person_id` AS `person_id`,
+    `maas_gelir_kesinti`.`turu` AS `turu`,
+    `maas_gelir_kesinti`.`kategori` AS `kategori`,
+    `maas_gelir_kesinti`.`ay` AS `ay`,
+    `maas_gelir_kesinti`.`yil` AS `yil`,
+    `maas_gelir_kesinti`.`person_id` AS `person_id`,
+     '' AS `puantaj_turu`,
+    `maas_gelir_kesinti`.`gun` AS `gun`,
+    '' AS `saat`,
+    `maas_gelir_kesinti`.`tutar` AS `tutar`,
+    `maas_gelir_kesinti`.`aciklama` AS `aciklama`,
+    `maas_gelir_kesinti`.`created_at` AS `created_at`
+FROM 
+    `maas_gelir_kesinti` ;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

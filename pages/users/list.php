@@ -40,7 +40,7 @@ $users = $userObj->getUsersByFirm($firm_id);
                 <div class="card-header">
                     <h3 class="card-title">Kullanıcı Listesi</h3>
                     <div class="col-auto ms-auto">
-                        <a href="#" class="btn btn-primary add-user">
+                        <a href="#" class="btn btn-primary add-user route-link" data-page="users/manage">
                             <i class="ti ti-plus icon me-2"></i> Yeni
                         </a>
 

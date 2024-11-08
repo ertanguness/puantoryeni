@@ -155,12 +155,18 @@ $(document).ready(function () {
     var summernoteHeight = $(window).height() * 0.24; // Set height to 30% of window height
     $(".summernote").summernote({
       height: summernoteHeight,
-      fontNames: ['inter','Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
-      addDefaultFonts: 'inter',
+      fontNames: [
+        "inter",
+        "Arial",
+        "Arial Black",
+        "Comic Sans MS",
+        "Courier New"
+      ],
+      addDefaultFonts: "inter",
       callbacks: {
         onInit: function () {
           $(".summernote").summernote("height", summernoteHeight);
-          $(".summernote").summernote('fontName', 'inter');
+          $(".summernote").summernote("fontName", "inter");
         }
       }
     });
@@ -341,23 +347,23 @@ $(document).on("change", "#myFirm", function () {
   window.location = "set-session.php?p=" + page + "&firm_id=" + $(this).val();
 });
 
-function fadeOut(element, duration) {
-  var op = 1; // Opaklık başlangıç değeri
-  var interval = 50; // Milisaniye cinsinden aralık
-  var delta = interval / duration; // Her adımda azaltılacak opaklık miktarı
+// function fadeOut(element, duration) {
+//   var op = 1; // Opaklık başlangıç değeri
+//   var interval = 50; // Milisaniye cinsinden aralık
+//   var delta = interval / duration; // Her adımda azaltılacak opaklık miktarı
 
-  function reduceOpacity() {
-    op -= delta;
-    if (op <= 0) {
-      op = 0;
-      element.style.display = "none"; // Elementi gizle
-      clearInterval(fading); // Animasyonu durdur
-    }
-    element.style.opacity = op;
-  }
+//   function reduceOpacity() {
+//     op -= delta;
+//     if (op <= 0) {
+//       op = 0;
+//       element.style.display = "none"; // Elementi gizle
+//       clearInterval(fading); // Animasyonu durdur
+//     }
+//     element.style.opacity = op;
+//   }
 
-  var fading = setInterval(reduceOpacity, interval);
-}
+//   var fading = setInterval(reduceOpacity, interval);
+// }
 
 //İl seçildiğinde ilçeleri getir
 function getTowns(cityId, targetElement) {
@@ -404,7 +410,6 @@ function checkId(id, item) {
   return true;
 }
 
-
 // Sayfanın herhangi bir yerine tıklandığında fab menüyü kapat
 document.addEventListener("click", function (event) {
   if (event.target.closest(".fab-menu") === null) {
@@ -422,7 +427,6 @@ document.addEventListener("click", function (event) {
     }
   }
 });
-
 
 function toggleFabMenu() {
   const fabOptions = document.getElementById("fab-options");
@@ -452,3 +456,18 @@ function goWhatsApp() {
   const url = `https://wa.me/send?phone=${phoneNumber}&text=${message}`;
   window.open(url, "_blank");
 }
+
+function previewImage(event) {
+  var reader = new FileReader();
+  reader.onload = function () {
+      var output = document.querySelector('.brand-img img');
+      output.src = reader.result;
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+//para birimi mask
+if($('.money').length > 0){
+  $('.money').mask('#.###', {reverse: true});
+}
+

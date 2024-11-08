@@ -5,12 +5,15 @@ require_once "../../Model/Persons.php";
 require_once ROOT . "/Model/Bordro.php";
 require_once ROOT . "/App/Helper/security.php";
 require_once ROOT . "/Model/Puantaj.php";
+require_once "../../Model/Auths.php";
 
 use App\Helper\Security;
+use Random\Engine\Secure;
 
 $Puantaj = new Puantaj();
 $Bordro = new Bordro();
 $Persons = new Persons();
+$Auths = new Auths();
 
 
 if ($_POST["action"] == "savePerson") {
@@ -27,20 +30,23 @@ if ($_POST["action"] == "savePerson") {
         "id" => $id,
         "full_name" => $_POST["full_name"],
         "kimlik_no" => $_POST["kimlik_no"],
-        "email" => $_POST["email"],
+        "email" => filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) ? $_POST["email"] : null,
         "phone" => $_POST["phone"],
-        "address" => $_POST["address"],
+        "address" => Security::escape($_POST["address"]),
         "job" => $_POST["job"],
         "job_group" => $_POST["job_groups"],
         "firm_id" => $_SESSION["firm_id"],
         "wage_type" => $_POST["wage_type"],
-        "iban_number" => $_POST["iban_number"],
+        "iban_number" => Security::escape($_POST["iban_number"]),
         // "salary" => $_POST["salary"],
         "daily_wages" => $_POST["daily_wages"],
         "job_start_date" => $_POST["job_start_date"],
         "job_end_date" => $_POST["job_end_date"],
+           
         // "status" => $_POST["status"],
     ];
+
+
 
     try {
         $lastInsertId = $Persons->saveWithAttr($data) ?? $_POST["id"];
@@ -76,18 +82,11 @@ if ($_POST["action"] == "savePerson") {
 }
 
 if ($_POST["action"] == "deletePerson") {
-    $id = $_POST["id"];
-    $person = $Persons->find($id);
+    $id = ($_POST["id"]);
+    $person = $Persons->find(Security::decrypt($id));
 
     //İşlem yapan kullanıcı ile personelin firm id'si aynı olmalı
-    if ($person->firm_id == $_SESSION["firm_id"]) {
-        $res = [
-            "status" => "error",
-            "message" => "Bu işlemi yapmaya yetkiniz yok."
-        ];
-        echo json_encode($res);
-        exit();
-    }
+    $Auths->checkFirmReturn();
     try {
         $Persons->delete($id);
         $status = "success";

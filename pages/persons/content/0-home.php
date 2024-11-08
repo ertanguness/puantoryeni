@@ -97,34 +97,29 @@ if (isset($person->wage_type) && $person->wage_type == 1) {
     </div>
     <div class="row mt-2">
         <div class="col-md-2">
-            <label for="">Telefon</label>
+            <label for="">Telefon/Email Adresi</label>
         </div>
-        <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="505 555 55 55" name="phone"
+        <div class="col-md-2"> 
+            <input type="text" class="form-control" placeholder="505 555 55 55" maxlength="15" name="phone"
                 value="<?php echo $person->phone ?? ''; ?>">
         </div>
-        <div class="col-md-2 mt-2">
-            <label for="">Email Adresi</label>
-        </div>
-        <div class="col-md-4">
+    
+        <div class="col-md-2">
             <input type="text" class="form-control" name="email" value="<?php echo $person->email ?? ''; ?>">
         </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-2">
-            <label for="">Çalıştığ Firma</label>
-        </div>
-        <div class="col-md-4">
-            <input type="text" class="form-control" name="company_id" value="<?php echo $person->company_id ?? ''; ?>">
-        </div>
+
         <div class="col-md-2 mt-2">
             <label for="">İban Numarası</label>
         </div>
         <div class="col-md-4">
 
-            <input type="text" class="form-control" name="iban_number"
+            <input type="text" class="form-control" name="iban_number" maxlength="32"
                 value="<?php echo $person->iban_number ?? ''; ?>">
         </div>
+    </div>
+    <div class="row mt-2">
+        
+       
     </div>
     <div class="row mt-2">
         <div class="col-md-2">

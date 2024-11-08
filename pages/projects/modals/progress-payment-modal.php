@@ -26,13 +26,14 @@ use App\Helper\Date;
                     <input type="hidden" class="form-control" name="progress_payment_project_id" id="progress_payment_project_id" value="0">
 
                     <div class="text-secondary mt-3">
+                    
                         <label for="">Hakediş Tarihi</label>
                         <input type="text" name="progress_payment_date" class="form-control flatpickr mt-1">
                     </div>
                     
                     <div class="text-secondary mt-3">
                         <label for="">Hakediş Tutarı</label>
-                        <input type="text" name="progress_payment_amount" class="form-control mt-1">
+                        <input type="text" name="progress_payment_amount" class="form-control mt-1 money">
                     </div>
                     <div class="text-secondary mt-3">
                         <label for="">Açıklama</label>

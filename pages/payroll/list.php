@@ -94,9 +94,15 @@ $lastDay = Date::lastDay($month, $year);
                                 <i class="ti ti-checklist icon me-3"></i> Banka Listesi İndir
                             </a>
                         <?php } ?>
-
                     </div>
                 </div>
+                <?php if ($Auths->hasPermission('payroll_calculate')) { ?>
+                    <a class="btn btn-primary ms-2" href="#" id="payroll_calculate">
+                        <i class="ti ti-calculator icon me-3"></i> Hesapla
+                    </a>
+                <?php } ?>
+
+
             </div>
         </div>
     </form>
@@ -156,31 +162,34 @@ $lastDay = Date::lastDay($month, $year);
                                 }
 
                                 // Personel Beyaz Yaka ise
-                                if ($person->wage_type == 1) {
-                                    // Eylül 2024 Maaş şeklinde açıklama oluştur
-                                    $description = Date::monthName($month) . ' ' . $year . ' Maaş';
-                                    // Personelin aylık maaşı eklenmemişse
-                                    // Personelin işe başlama tarihi o ay içindeyse
+                                if (isset($_POST["action"]) && $_POST["action"] == 'payroll_calculate') {
+
+                                    if ($person->wage_type == 1) {
+                                        // Eylül 2024 Maaş şeklinde açıklama oluştur
+                                        $description = Date::monthName($month) . ' ' . $year . ' Maaş';
+                                        // Personelin aylık maaşı eklenmemişse
+                                        // Personelin işe başlama tarihi o ay içindeyse
                             
-                                    //veya personelin işe başlama tarihi o aydan önceyse
-                                    //Eğer ayın ilk günü bugünden küçükse
-                                    if ($firstDay <= Date::Ymd(date('Y-m-d'))) {
-                                        if (
-                                            Date::isBetween($person->job_start_date, $firstDay, $lastDay) ||
-                                            Date::isBefore($person->job_start_date, $firstDay)
-                                        ) {
+                                        //veya personelin işe başlama tarihi o aydan önceyse
+                                        //Eğer ayın ilk günü bugünden küçükse
+                                        if ($firstDay <= Date::Ymd(date('Y-m-d'))) {
+                                            if (
+                                                Date::isBetween($person->job_start_date, $firstDay, $lastDay) ||
+                                                Date::isBefore($person->job_start_date, $firstDay)
+                                            ) {
 
 
-                                            $montly_income = $bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)->id ?? 0;
+                                                $montly_income = $bordro->isPersonMonthlyIncomeAdded($person->id, $month, $year)->id ?? 0;
 
-                                            // Personelin aylık maaşı ekle mi diye kontrol et
-                                            if ($montly_income == 0) {
-                                                // Personelin aylık maaşını ekleyelim
-                                                $bordro->addPersonMonthlyIncome($person->id, $month, $year, $person->daily_wages, $description);
-                                            } else {
-                                                //echo $montly_income;
-                                                // Personelin aylık maaşını güncelleyelim,işe başlaama tarihinde değişiklik olduğu zaman maaş güncellenir
-                                                $bordro->updatePersonMonthlyIncome($person->id, $montly_income, $month, $year);
+                                                // Personelin aylık maaşı ekle mi diye kontrol et
+                                                if ($montly_income == 0) {
+                                                    // Personelin aylık maaşını ekleyelim
+                                                    $bordro->addPersonMonthlyIncome($person->id, $month, $year, $person->daily_wages, $description);
+                                                } else {
+                                                    //echo $montly_income;
+                                                    // Personelin aylık maaşını güncelleyelim,işe başlaama tarihinde değişiklik olduğu zaman maaş güncellenir
+                                                    $bordro->updatePersonMonthlyIncome($person->id, $montly_income, $month, $year);
+                                                }
                                             }
                                         }
                                     }

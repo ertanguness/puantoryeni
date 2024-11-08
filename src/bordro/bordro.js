@@ -77,3 +77,12 @@ function Route() {
   var form = $("#bordroInfoForm");
   form.submit();
 }
+
+
+// Bordro hesapla butonuna tıklandığında
+$(document).on("click", "#payroll_calculate", function () {
+  //POST işlemi için form oluşturuluyor
+  let form = $("#bordroInfoForm");
+  form.append('<input type="hidden" name="action" value="payroll_calculate">');
+  form.submit();
+});

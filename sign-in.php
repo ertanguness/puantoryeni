@@ -5,6 +5,7 @@ require_once 'Model/UserModel.php';
 require_once 'App/Helper/security.php';
 require_once 'Model/SettingsModel.php';
 require_once 'App/Helper/date.php';
+require_once 'Model/LoginLogsModel.php';
 
 $Settings = new SettingsModel();
 
@@ -60,7 +61,7 @@ use App\Helper\Security;
         $(this).remove();
       });
     });
-  }, 3000);
+  }, 10000);
 </script>
 
 <body class=" d-flex flex-column">
@@ -102,7 +103,7 @@ use App\Helper\Security;
 
                     // Kullanıcının hesap açma tarininden itibaren 15 gün geçmişse giriş yapmasına izin verme
                     $days = Date::getDateDiff($demo_date);
-                    if ($days > 15) {
+                    if ($days >= 15 && $user->user_type == 1) {
                       echo alertdanger('Deneme süreniz dolmuştur. Lütfen iletişime geçiniz.');
                     } else {
 
@@ -114,6 +115,10 @@ use App\Helper\Security;
 
                       //Giriş işlemleri kayıt altına alınıyor
                       $_SESSION["log_id"] = $User->loginLog($user->id);
+
+                      // giriş bilgileri panel kayıt ediiliyor
+                      $LoginLogs = new LoginLogsModel();
+                      $logs = $LoginLogs->panelLoginLog($user);
 
 
 

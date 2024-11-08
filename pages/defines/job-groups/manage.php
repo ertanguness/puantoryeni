@@ -1,8 +1,26 @@
 <?php
-require_once "Model/DefinesModel.php";
-$Defines = new DefinesModel();
-$id = $_GET['id'] ?? 0;
-$define = $Defines->find($id);
+
+
+require_once "Model/JobGroupsModel.php";
+$JobGroups = new JobGroupsModel();
+
+use App\Helper\Security;
+
+
+
+
+//Sayfa başlarında eklenecek alanlar
+$perm->checkAuthorize("job_groups_add_update");
+$id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
+$new_id = isset($_GET["id"]) ? $_GET['id'] : 0;
+
+//Eğer url'den id yazılmışsa veya id boş ise projeler sayfasına gider
+if($id == null && isset($_GET['id'])) {
+    header("Location: /index.php?p=defines/job-groups/list");
+    exit;
+}
+
+$jobGroups = $JobGroups->find($id);
 
 $pageTitle = $id > 0 ? "İş Grubu Güncelleme" : "Yeni İş Grubu";
 
@@ -60,7 +78,7 @@ $pageTitle = $id > 0 ? "İş Grubu Güncelleme" : "Yeni İş Grubu";
                                 </div>
                                 <div class="col-md-10">
                                     <input type="text" name="job_group_name" class="form-control"
-                                        value="<?php echo $define->name ?? '' ?>"
+                                        value="<?php echo $jobGroups->group_name ?? '' ?>"
                                         placeholder="Örn: Alçıpancı, Sıvacı, Boyacı">
                                 </div>
                             </div>
@@ -70,7 +88,7 @@ $pageTitle = $id > 0 ? "İş Grubu Güncelleme" : "Yeni İş Grubu";
                                 </div>
                                 <div class="col-md-10">
                                     <input type="text" name="description" class="form-control"
-                                        value="<?php echo $define->description ?? '' ?>">
+                                        value="<?php echo $jobGroups->description ?? '' ?>">
                                 </div>
                             </div>
                         </form>

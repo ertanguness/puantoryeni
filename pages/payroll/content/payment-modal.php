@@ -40,7 +40,7 @@ $case_id = $_POST['case_id'] ?? 0;
                     </div>
                     <div class="text-secondary mt-3">
                         <label for="">Ödeme Tutarı</label>
-                        <input type="text" name="payment_amount" id="payment_amount" class="form-control mt-1">
+                        <input type="text" name="payment_amount" id="payment_amount" class="form-control mt-1 money">
                     </div>
                     <div class="text-secondary mt-3">
                         <label for="">Ödeme Yapılacak Kasa</label>

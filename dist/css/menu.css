@@ -54,7 +54,7 @@
 }
 
 #navbar {
-  width: 236px;
+  /* width: 236px; */
   transition: width 0.3s ease-in-out;
   overflow: hidden;
 }

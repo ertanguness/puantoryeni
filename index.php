@@ -42,6 +42,9 @@ $User = new UserModel();
 $user = $User->find($_SESSION['user']->id) ?? null;
 
 if (!$user) {
+
+    $log_id = $_SESSION["log_id"];
+    $Users->logoutLog($log_id);
     header("Location: sign-in.php");
     exit();
 }
@@ -75,11 +78,6 @@ if ($user->user_type == 1) {
 }
 
 
-
-
-
-
-
 $active_page = isset($_GET["p"]) ? $_GET["p"] : "";
 $menu_name = $menus->getMenusByLink($active_page);
 
@@ -104,11 +102,11 @@ $menu_name = $menus->getMenusByLink($active_page);
                 <span id="close-icon" class="icon-close">&#10006;</span>
             </button>
             <div class="fab-options" id="fab-options">
-                <button class="fab-item route-link" data-page="supports/tickets"  style="bottom: 70px;">
+                <button class="fab-item route-link" data-page="supports/tickets" style="bottom: 70px;">
                     <span>Teknik Destek</span>
                     <i class="ti ti-headset text-white"></i>
                 </button>
-                <button class="fab-item" onclick="goWhatsApp()"  style="bottom: 130px;">
+                <button class="fab-item" onclick="goWhatsApp()" style="bottom: 130px;">
                     <span>WhatsApp</span>
                     <i class="ti ti-brand-whatsapp text-white"></i>
                 </button>
@@ -183,9 +181,13 @@ $menu_name = $menus->getMenusByLink($active_page);
 
     <?php include "inc/vendor-scripts.php" ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var preloader = document.querySelector('.preloader');
-            fadeOut(preloader, 300);
+        // document.addEventListener("DOMContentLoaded", function () {
+        //  var preloader = document.querySelector('.preloader');
+        //  fadeOut(preloader, 300);
+        // });
+        $(document).ready(function () {
+            var preloader = $('.preloader');
+            preloader.fadeOut();
         });
     </script>
 
@@ -213,7 +215,7 @@ $menu_name = $menus->getMenusByLink($active_page);
             });
         });
 
-      
+
 
     </script>
 

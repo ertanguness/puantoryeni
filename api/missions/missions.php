@@ -37,16 +37,16 @@ if ($_POST["action"] == "saveMission") {
             "firm_id" => $_SESSION["firm_id"],
             "user_ids" => $user_ids,
             "header_id" => $_POST["header_id"],
-            "start_date" => ($_POST["start_date"]) ,
+            "start_date" => ($_POST["start_date"]),
             "end_date" => $_POST["end_date"],
-             "priority" => $_POST["priority"],
+            "priority" => $_POST["priority"],
             "description" => $_POST["description"]
         ];
 
         $lastInsertId = $mission->saveWithAttr($data) ?? $id;
 
         $status = "success";
-        $message = $id > 0 ? "Güncelleme Başarılı" : "Kayıt Başarılı!!" ;
+        $message = $id > 0 ? "Güncelleme Başarılı" : "Kayıt Başarılı!!";
 
     } catch (PDOException $ex) {
         $status = "error";
@@ -66,7 +66,7 @@ if ($_POST["action"] == "deleteMission") {
     try {
         $mission->delete($id);
         $status = "success";
-        $message = "Görev başarıyla silindi." ;
+        $message = "Görev başarıyla silindi.";
     } catch (PDOException $e) {
         $status = "error";
         $message = $e->getMessage();
@@ -85,7 +85,7 @@ if ($_POST["action"] == "updateIsDone") {
     try {
         $mission->updateMissionStatus($id, $is_done);
         $status = "success";
-        $message = "Görev başarıyla tamamlandı." ;
+        $message = "Görev başarıyla tamamlandı.";
     } catch (PDOException $e) {
         $status = "error";
         $message = $e->getMessage();
@@ -121,18 +121,20 @@ if ($_POST["action"] == "updateMissionHeader") {
 }
 
 //Tamamlanmış görevlerin açılışta görünüp görünmeyeceğini güncellemek için
-if($_POST["action"] == "updateIsDoneVisibility"){
+if ($_POST["action"] == "updateIsDoneVisibility") {
     $firm_id = $_SESSION["firm_id"];
     $visible = $_POST["visible"];
     try {
+        $setting_id = $settings->getSettings("completed_tasks_visible")->id ?? 0;
         $data = [
-
+            "id" => $setting_id,
             "firm_id" => $firm_id,
-            "completed_tasks_visible" => $visible
+            "set_name" => "completed_tasks_visible",
+            "set_value" => $visible
         ];
-        $result = $settings->updateShowCompletedMissions($firm_id, $visible);
-        $status = "success";
-        $message = "Tamamlanmış görevler başarıyla güncellendi." . $result;
+        $result = $settings->saveWithAttr($data);
+         $status = "success";
+        $message = "Tamamlanmış görevler başarıyla güncellendi." ;
     } catch (PDOException $e) {
         $status = "error";
         $message = $e->getMessage();

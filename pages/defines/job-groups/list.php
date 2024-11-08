@@ -1,16 +1,18 @@
 <?php
 require_once "App/Helper/helper.php";
-require_once "Model/DefinesModel.php";
+require_once "Model/JobGroupsModel.php";
 
 
 use App\Helper\Helper;
-$Defines = new DefinesModel();
-$jobGroups = $Defines->getDefinesByType(3);
+use App\Helper\Security;
+
+$JobGroups = new JobGroupsModel();
+$jobGroups = $JobGroups->all();
 
 
 ?>
 <div class="container-xl mt-3">
-    <div class="alert alert-info bg-white alert-dismissible d-flex" >
+    <div class="alert alert-info bg-white alert-dismissible d-flex">
         <div class="d-flex">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -28,8 +30,8 @@ $jobGroups = $Defines->getDefinesByType(3);
                     göre alabilirsiniz!</div>
             </div>
         </div>
-   
-            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+
+        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
     </div>
     <div class="row row-deck row-cards">
         <div class="col-12">
@@ -48,7 +50,7 @@ $jobGroups = $Defines->getDefinesByType(3);
                     <table class="table card-table text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th style="width:7%">ID</th>
+                                <th style="width:7%">Sıra</th>
                                 <th>Grup Adı</th>
                                 <th>Açıklama</th>
                                 <th>Eklenme Tarihi</th>
@@ -59,11 +61,19 @@ $jobGroups = $Defines->getDefinesByType(3);
                         <tbody>
 
 
-                            <?php foreach ($jobGroups as $jobs):
+                            <?php
+                            $i = 1;
+                            foreach ($jobGroups as $jobs):
+                                $id = Security::encrypt($jobs->id);
                                 ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $jobs->id; ?></td>
-                                    <td><?php echo $jobs->name; ?></td>
+                                    <td class="text-center"><?php echo $i++; ?></td>
+                                    <td>
+                                        <a class="btn" data-page="defines/job-groups/manage&id=<?php echo $id ?>" href="#">
+                                            
+                                            <?php echo $jobs->group_name; ?>
+                                        </a>
+                                    </td>
                                     <td><?php echo $jobs->description; ?></td>
                                     <td class="text-start"><?php echo $jobs->created_at; ?></td>
 
@@ -73,12 +83,11 @@ $jobGroups = $Defines->getDefinesByType(3);
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a class="dropdown-item route-link"
-                                                    data-page="defines/job-groups/manage&id=<?php echo $jobs->id ?>"
-                                                    href="#">
+                                                    data-page="defines/job-groups/manage&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
                                                 <a class="dropdown-item delete-job-groups" href="#"
-                                                    data-id="<?php echo $jobs->id ?>">
+                                                    data-id="<?php echo $id ?>">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
                                             </div>

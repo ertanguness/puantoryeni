@@ -8,8 +8,10 @@ class Jobs extends Db
     public function jobGroupsSelect($name = "job_groups", $id = null)
     {
         try {
-            $query = $this->db->prepare("SELECT * FROM job_groups"); // Tüm sütunları seç
-            $query->execute();
+
+            $firm_id = $_SESSION['firm_id'];
+            $query = $this->db->prepare("SELECT * FROM job_groups where firm_id = ?"); // Tüm sütunları seç
+            $query->execute([$firm_id]);
             $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
 
             $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="width:100%">';

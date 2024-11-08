@@ -9,6 +9,7 @@ $headers = new MissionHeaders();
 $userHelper = new UserHelper();
 
 use App\Helper\Helper;
+use App\Helper\Security;
 
 $missions = $missionObj->getMissionsFirm($firm_id);
 
@@ -46,10 +47,13 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                         <tbody>
 
 
-                            <?php foreach ($missions as $item) :
+                            <?php 
+                            $i = 1;
+                            foreach ($missions as $item) :
+                            $id = Security::encrypt($item->id);
                             ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $item->id; ?></td>
+                                    <td class="text-center"><?php echo $i; ?></td>
                                     <td>
                                         <?php
                                         $header = $headers->getMissionHeader($item->header_id);
@@ -72,10 +76,10 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                                         <div class="dropdown">
                                             <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item route-link" data-page="missions/manage&id=<?php echo $item->id ?>" href="#">
+                                                <a class="dropdown-item route-link" data-page="missions/manage&id=<?php echo $id ?>" href="#">
                                                     <i class="ti ti-edit icon me-3"></i> Güncelle
                                                 </a>
-                                                <a class="dropdown-item delete-mission" href="#" data-id="<?php echo $item->id ?>">
+                                                <a class="dropdown-item delete-mission" href="#" data-id="<?php echo $id ?>">
                                                     <i class="ti ti-trash icon me-3"></i> Sil
                                                 </a>
                                             </div>
@@ -83,7 +87,9 @@ $missions = $missionObj->getMissionsFirm($firm_id);
 
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php 
+                            $i++;
+                        endforeach; ?>
                         </tbody>
                     </table>
                 </div>
