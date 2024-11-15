@@ -37,13 +37,13 @@ class CompanyHelper extends Db
     public function getCompanyName($id)
     {
         if ($id == null) {
-            return '';
+            return 'bilinmiyor';
         }
         $query = $this->db->prepare('SELECT company_name FROM companies WHERE id = :id');
         $query->execute(array('id' => $id));
         $result = $query->fetch(PDO::FETCH_OBJ);
         if ($result) {
-            return $result->company ?? '' ;
+            return $result->company_name ?? '' ;
         } else {
             return '';
         }

@@ -2,6 +2,7 @@
 require_once "App/Helper/jobs.php";
 
 $jobGroups = new Jobs();
+use App\Helper\Helper;
 
 if (isset($person->wage_type) && $person->wage_type == 1) {
     $wage_type_label = 'Aylık Maaş';
@@ -51,7 +52,7 @@ if (isset($person->wage_type) && $person->wage_type == 1) {
                 required>
         </div>
         <div class="col-md-2 mt-2">
-            <label for="">Tc Kimlik No (*)</label>
+            <label for="">Tc Kimlik No (*) </label>
         </div>
         <div class="col-md-4">
             <input type="text" class="form-control" name="kimlik_no" value="<?php echo $person->kimlik_no ?? ''; ?>"
@@ -74,8 +75,8 @@ if (isset($person->wage_type) && $person->wage_type == 1) {
             <label id="wage_type_label" for=""><?php echo $wage_type_label; ?></label>
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control fw-bold" name="daily_wages"
-                value="<?php echo $person->daily_wages ?? ''; ?>">
+            <input type="text" class="form-control fw-bold money" name="daily_wages"
+                value="<?php echo Helper::moneyToNumber($person->daily_wages) ?? '';?>">
         </div>
         <div class="col-md-2 mt-2">
 

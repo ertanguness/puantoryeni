@@ -37,4 +37,22 @@ class ProjectHelper extends Db
             }
         
     }
+
+        
+    //Projenin durumu ile ilgili select 
+    public function projectStatusSelect($name = 'status', $selected = null)
+    {
+        $query = $this->db->prepare('SELECT * FROM defines WHERE type_id = 5');
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+        $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
+        $select .= '<option value="0">Durum Seçiniz</option>';
+        foreach ($results as $row) {
+            $selectedAttr = $selected == $row->id ? 'selected' : '';
+            $select .= "<option value='$row->id' $selectedAttr>$row->name</option>";
+        }
+        $select .= '</select>';
+        return $select;
+    }
+
 }

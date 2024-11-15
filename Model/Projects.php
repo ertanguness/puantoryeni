@@ -12,7 +12,7 @@ class Projects extends Model
 
     public function allWithFirm($firm_id)
     {
-        $sql = $this->db->prepare('SELECT * FROM projects WHERE company_id = ?');
+        $sql = $this->db->prepare('SELECT * FROM projects WHERE firm_id = ?');
         $sql->execute([$firm_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }

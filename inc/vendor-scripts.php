@@ -33,7 +33,8 @@ if (
     $page == 'defines/incexp/list' ||
     $page == 'missions/list' || $page == 'missions/process/list' ||
     $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
-    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage'
+    $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage' ||
+    $page == 'defines/project-status/list'
 ) {
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
@@ -74,7 +75,7 @@ if ($page == 'defines/service-head/list' || $page == 'defines/service-head/manag
 }
 // Personel Liste, ekleme ve düzenleme sayfası
 if ($page == 'persons/list' || $page == 'persons/manage') {
-    echo '<script src="./src/persons/persons.min.js"></script>';
+    echo '<script src="./src/persons/persons.js"></script>';
 }
 // Personel diğer bilgileri ekleme ve düzenleme sayfası
 if ($page == 'persons/manage') {
@@ -166,6 +167,11 @@ if($page == 'supports/tickets' || $page == 'supports/ticket-view'){
     echo '<script src="./src/supports/tickets.js"></script>';
 }
 
+//Proje durumları
+if($page == 'defines/project-status/list' || $page == 'defines/project-status/manage'){
+    echo '<script src="./src/defines/project-status.js"></script>';
+}
+
 
 ?>
 
@@ -197,6 +203,7 @@ if ($page == 'home') {
 <!-- Tabler Core -->
 <script src="./dist/js/tabler.min.js?1692870487"></script>
 <script src="./dist/js/demo.min.js?1692870487"></script>
+<script src="./src/jquery.inputmask.js"></script>
 
 
 

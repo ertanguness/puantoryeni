@@ -118,7 +118,7 @@ use App\Helper\Security;
 
                       // giriş bilgileri panel kayıt ediiliyor
                       $LoginLogs = new LoginLogsModel();
-                      $logs = $LoginLogs->panelLoginLog($user);
+                      //$logs = $LoginLogs->panelLoginLog($user);
 
 
 

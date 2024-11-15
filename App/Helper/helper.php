@@ -47,6 +47,7 @@ class Helper
         '3' => 'Yüksek',
     ];
 
+
   
 
     public static function getPriority($priority)
@@ -77,6 +78,18 @@ class Helper
     public static function formattedMoney($value, $currency = 1)
     {
         return number_format($value, 2, ',', '.') . ' ' . self::MONEY_UNIT[$currency];
+    }
+
+    //109.852,25 şeklinde gelen değeri 109852.25 olarak döndürür
+    public static function formattedMoneyToNumber($value)
+    {
+        return str_replace(['.', ','], ['', '.'], $value);
+    }
+
+    // Veritabanından gelen sayıdaki "." yı virgüle çevirir
+    public static function moneyToNumber($value)
+    {
+        return str_replace('.', ',', $value);
     }
 
     //Para birim formatında TRY olmadan
@@ -214,6 +227,7 @@ class Helper
             
             </div>';
     }
+
 
 
 

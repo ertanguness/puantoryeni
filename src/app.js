@@ -196,7 +196,7 @@ if ($(".select2").length > 0) {
   });
 }
 
-function dtSearchInput(tableId, column, value) {}
+function dtSearchInput(tableId, column, value) { }
 
 //Geri dönüş yapmadan kayıt silme işlemi
 function deleteRecord(
@@ -246,7 +246,7 @@ function deleteRecord(
         }
         Swal.fire({
           title: title,
-          text: data.message,
+          html: data.message,
           icon: icon
         }).then((result) => {
           if (result.isConfirmed) {
@@ -326,7 +326,7 @@ function AlertConfirm(confirmMessage = "Emin misiniz?") {
   return new Promise((resolve, reject) => {
     Swal.fire({
       title: "Emin misiniz?",
-      text: confirmMessage,
+      html: confirmMessage,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -367,9 +367,10 @@ $(document).on("change", "#myFirm", function () {
 
 //İl seçildiğinde ilçeleri getir
 function getTowns(cityId, targetElement) {
-  let formData = new FormData();
+  var formData = new FormData();
   formData.append("city_id", cityId);
   formData.append("action", "getTowns");
+
 
   fetch("/api/il-ilce.php", {
     method: "POST",
@@ -460,14 +461,32 @@ function goWhatsApp() {
 function previewImage(event) {
   var reader = new FileReader();
   reader.onload = function () {
-      var output = document.querySelector('.brand-img img');
-      output.src = reader.result;
+    var output = document.querySelector('.brand-img img');
+    output.src = reader.result;
   };
   reader.readAsDataURL(event.target.files[0]);
 }
 
 //para birimi mask
-if($('.money').length > 0){
-  $('.money').mask('#.###', {reverse: true});
+if ($('.money').length > 0) {
+  //1.234,52 şeklinden regex yaz
+  //$(".money").inputmask("9-a{1,3}9{1,3}"); //mask with dynamic syntax
+
+
+
+  $(".money").inputmask("decimal", {
+    radixPoint: ",",
+    groupSeparator: ".",
+    digits: 2,
+    autoGroup: true,
+    rightAlign: false,
+    removeMaskOnSubmit: true
+  });
+  //Para birimi olan alanlarda virgülü noktaya çevir
+  // $('.money').on('keyup', function () {
+  //   var value = $(this).val();
+  //   var value = value.replace(/,/g, '.');
+  //   $(this).val(value);
+  // });
 }
 

@@ -13,6 +13,8 @@ $missionObj = new Missions();
 $id = isset($_GET['id']) ? Security::decrypt($_GET['id']) : 0;
 $mission = $missionObj->find($id);
 
+$enc_id = isset($_GET['id']) ? $_GET['id'] : 0;
+
 $pageTitle = $id > 0 ? "Görev Güncelleme" : "Yeni Görev";
 $start_date =$mission->start_date ?? Date::dmY();
 
@@ -64,7 +66,7 @@ $end_date = $mission->end_date ?? Date::dmY($readableDate);
                             <!--********** HIDDEN ROW************** -->
                             <div class="row d-none">
                                 <div class="col-md-4">
-                                    <input type="text" name="id" id="mission_id" class="form-control" value="<?php echo $id ?>">
+                                    <input type="text" name="id" id="mission_id" class="form-control" value="<?php echo $enc_id ?>">
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" name="action" value="saveMission" class="form-control">

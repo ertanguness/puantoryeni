@@ -13,11 +13,13 @@ if ($_POST['action'] == "saveProject") {
 
     $data = [
         "id" => $id,
-        "company_id" => $_SESSION['firm_id'],
+        "firm_id" => $_SESSION['firm_id'],
+        "company_id" => Security::decrypt($_POST['project_company']),
         'project_name' => Security::escape($_POST['project_name']),
         'start_date' => Security::escape($_POST['start_date']),
         'city' => Security::escape($_POST['project_city']),
         'town' => Security::escape($_POST['project_town']),
+        'status' => Security::escape($_POST['project_status']),
         'email' => Security::escape($_POST['email']),
         'phone' => Security::escape($_POST['phone']),
         'account_number' => Security::escape($_POST['account_number']),

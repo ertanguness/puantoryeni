@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('ROOT')) {
+    define('ROOT', $_SERVER['DOCUMENT_ROOT']);
+}
 require_once ROOT . '/Database/db.php';
 
 use Database\Db;

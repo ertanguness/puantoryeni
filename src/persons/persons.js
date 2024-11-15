@@ -1,6 +1,13 @@
 $(document).on("click", "#savePerson", function () {
   var form = $("#personForm");
-
+  jQuery.validator.addMethod(
+    "money",
+    function (value, element) {
+      var isValidMoney = /^\d{1,3}(?:\.\d{3})*(?:,\d{2})?$/.test(value);
+      return this.optional(element) || isValidMoney;
+    },
+    "Lütfen geçerli bir para birimi giriniz"
+  );
   form.validate({
     rules: {
       full_name: {
@@ -17,14 +24,11 @@ $(document).on("click", "#savePerson", function () {
       },
       job_start_date: {
         required: true,
-
       },
-      daily_wages : {
-        required :true,
-        number :true,
-        min:1
-
-      }
+      daily_wages: {
+        required: true,
+        money: true,
+      },
     },
     messages: {
       full_name: {
@@ -43,14 +47,10 @@ $(document).on("click", "#savePerson", function () {
         required: "Lütfen işe başlama tarihini giriniz",
         date: "Lütfen geçerli bir tarih giriniz",
       },
-      daily_wages : {
-        required : "Ücret alanı zorunludur",
-        number : "Ücret alanı sayısal değer olmalıdır",
-        min : "Ücret alanı 0 den büyük olmalıdır"
-
-      }
+      daily_wages: {
+        required: "Ücret alanı zorunludur",
+      },
     },
- 
   });
   if (!form.valid()) return false;
 
@@ -66,7 +66,7 @@ $(document).on("click", "#savePerson", function () {
       //console.log(data);
       if (data.status == "success") {
         title = "Başarılı!";
-      $("#person_id").val(data.lastid);
+        $("#person_id").val(data.lastid);
       } else {
         title = "Hata!";
       }

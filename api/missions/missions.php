@@ -9,6 +9,7 @@ require_once "../../Model/SettingsModel.php";
 require_once "../../Model/MissionProcessMapping.php";
 
 use App\Helper\Date;
+use App\Helper\Security;
 
 $firm_id = $_SESSION["firm_id"];
 $mission = new Missions();
@@ -19,7 +20,9 @@ $first_map = $process->getMissionProcessFirst($firm_id);
 
 //Göörevi kaydetme veya güncellemek için
 if ($_POST["action"] == "saveMission") {
-    $id = $_POST["id"];
+
+    //Yeni kayıt için id 0 olduğunda decrypt hata veriyor
+    $id =$_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
 
 
     //Görev Atananan kullanıcılar
@@ -43,7 +46,8 @@ if ($_POST["action"] == "saveMission") {
             "description" => $_POST["description"]
         ];
 
-        $lastInsertId = $mission->saveWithAttr($data) ?? $id;
+        //eğer yeni kayıt eklendi ise geri dönen değer encrypt 
+        $lastInsertId = $mission->saveWithAttr($data) ?? $_POST["id"];
 
         $status = "success";
         $message = $id > 0 ? "Güncelleme Başarılı" : "Kayıt Başarılı!!";

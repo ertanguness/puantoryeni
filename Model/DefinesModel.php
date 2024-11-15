@@ -55,7 +55,15 @@ class DefinesModel extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
-    
+    //Proje Durumu getirme : 5
+    public function getProjectStatus()
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? and type_id = ?");
+        $sql->execute([$this->firm_id, 5]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
+   
 
 
 

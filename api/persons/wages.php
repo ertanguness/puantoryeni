@@ -13,7 +13,7 @@ $wages = new Wages();
 $bordro = new Bordro();
 
 if ($_POST["action"] == "saveWage") {
-    $id = $_POST["wage_id"] ?? 0;
+    $id =Security::decrypt($_POST["wage_id"]);
     $person_id = $_POST["wage_person_id"];
    
 
@@ -30,17 +30,18 @@ if ($_POST["action"] == "saveWage") {
 
 
     try {
-        $lastInsertId = Security::decrypt($wages->saveWithAttr($data));
+        $lastInsertId = $wages->saveWithAttr($data)  ?? $_POST["wage_id"];
         $status = "success";
         if ($id == 0) {
             $message = "Ücret başarıyla kaydedildi.";
-            $id = $lastInsertId;
+         
         } else {
             $message = "Ücret başarıyla güncellendi.";
 
         }
 
-        $last_wage = $wages->find($lastInsertId ?? $id) ;
+        $last_wage = $wages->find( Security::decrypt($lastInsertId) ) ;
+        $last_wage->id =$lastInsertId;
         $last_wage->amount = Helper::formattedMoney($last_wage->amount);
         $last_wage->start_date = Date::Ymd($last_wage->start_date,"d.m.Y");
         $last_wage->end_date = Date::Ymd($last_wage->end_date,"d.m.Y");
@@ -75,6 +76,19 @@ if ($_POST["action"] == "deleteWage") {
     $res = [
         "status" => $status,
         "message" => $message
+    ];
+    echo json_encode($res);
+}
+
+if($_POST["action"] == "getWage"){
+    $id = Security::decrypt($_POST["id"]);
+    $wage = $wages->find($id);
+    $wage->amount = trim(str_replace("TRY","",Helper::formattedMoney($wage->amount)));
+    $wage->start_date = Date::dmY($wage->start_date,"d.m.Y");
+    $wage->end_date = Date::dmY($wage->end_date,"d.m.Y");
+    $res = [
+        "status" => "success",
+        "data" => $wage
     ];
     echo json_encode($res);
 }

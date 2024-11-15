@@ -96,6 +96,7 @@ $(document).ready(function () {
 
 $(document).on("change", "#project_city", function () {
   //İl id'si alınır ilce selectine ilceler yüklenir
+
   getTowns($(this).val(), "#project_town");
 });
 

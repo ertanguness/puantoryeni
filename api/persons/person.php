@@ -6,9 +6,11 @@ require_once ROOT . "/Model/Bordro.php";
 require_once ROOT . "/App/Helper/security.php";
 require_once ROOT . "/Model/Puantaj.php";
 require_once "../../Model/Auths.php";
+require_once "../../App/Helper/helper.php";
 
 use App\Helper\Security;
 use Random\Engine\Secure;
+use App\Helper\Helper;
 
 $Puantaj = new Puantaj();
 $Bordro = new Bordro();
@@ -39,7 +41,7 @@ if ($_POST["action"] == "savePerson") {
         "wage_type" => $_POST["wage_type"],
         "iban_number" => Security::escape($_POST["iban_number"]),
         // "salary" => $_POST["salary"],
-        "daily_wages" => $_POST["daily_wages"],
+        "daily_wages" => Helper::formattedMoneyToNumber($_POST["daily_wages"]),
         "job_start_date" => $_POST["job_start_date"],
         "job_end_date" => $_POST["job_end_date"],
            

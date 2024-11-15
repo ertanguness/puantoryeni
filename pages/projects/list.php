@@ -3,6 +3,7 @@ require_once 'Model/Projects.php';
 require_once 'Model/ProjectIncomeExpense.php';
 require_once 'App/Helper/helper.php';
 require_once 'App/Helper/cities.php';
+require_once 'App/Helper/company.php';
 
 use App\Helper\Helper;
 use App\Helper\Security;
@@ -14,6 +15,7 @@ $projectObj = new Projects();
 $incexpObj = new ProjectIncomeExpense();
 $cities = new Cities();
 $projects = $projectObj->allWithFirm($firm_id);
+$companyHelper = new CompanyHelper();
 
 ?>
 
@@ -87,7 +89,7 @@ $projects = $projectObj->allWithFirm($firm_id);
                             <tr>
                                 <td class="text-center"><?php echo $i ?></td>
                                 <td><?php echo $project->type == 0 ? 'Alınan' : 'Verilen' ?></td>
-                                <td><?php echo $project->firm_id ?></td>
+                                <td><?php echo $companyHelper->getCompanyName($project->company_id) ?></td>
                                 <td > 
                                     <a class="route-link nav-item" data-tooltip="Detay" 
                                         data-page="projects/manage&id=<?php echo $id ?>" 
