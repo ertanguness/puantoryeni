@@ -80,4 +80,13 @@ class Projects extends Model
         return $this->saveWithAttr($data);
     }
 
+
+    //projede kayıtlı çalışma var mı kontrol et
+    public function isExistPuantaj($id)
+    {
+        $sql = $this->db->prepare("SELECT COUNT(*) as total FROM puantaj WHERE project_id = ?");
+        $sql->execute([$id]);
+        return $sql->fetch(PDO::FETCH_OBJ)->total;
+    }
+
 }

@@ -47,11 +47,15 @@ listgun.on("click", function (e) {
 $(".head-date, .gunadi").on("click", function () {
   var index = $(this).index();
   $("table tbody tr").each(function () {
+    //eğer td --- farklı ise
     var td = $(this).find("td").eq(index);
-    td.toggleClass("clicked");
+
+    //td'nin değeri --- ise seçme
+    if (td.text() != "---") {
+      td.toggleClass("clicked");
+    }
   });
 });
-
 
 //********************************************** */
 //Delete tuşuna basıldığı zaman içeriği temizler
@@ -84,7 +88,6 @@ $(".gun:not(.selected)")
       // Only execute the code if left mouse button is clicked
       isMouseDown = true;
       $(this).toggleClass("clicked");
-      
     }
   })
   .mouseup(function () {
@@ -104,8 +107,6 @@ $(document).keydown(function (event) {
     $("td.clicked").removeClass("clicked");
   }
 });
-
-
 
 //********************************************** */
 function puantaj_olustur() {
@@ -128,12 +129,13 @@ function puantaj_olustur() {
     //gt = greater then
     row.find("td:gt(2)").each(function (index, td) {
       var date =
-        year + month + $("table thead tr:eq(1) th")
+        year +
+        month +
+        $("table thead tr:eq(1) th")
           .eq(index + 3)
-          .text()// İndeks + 2, 2. indeksten başlamasını sağlar
+          .text(); // İndeks + 2, 2. indeksten başlamasını sağlar
       var puantajId = $(this).attr("data-id") ? $(this).attr("data-id") : ""; // Durum bilgisini al
       // console.log(person_id + "--" + date + "--" + status); //
-
 
       // var key = person_id + " : " + position;
       var key = person_id;
@@ -157,14 +159,13 @@ function puantaj_olustur() {
             $(this).attr("data-tooltip", projeAdi);
             jsonData[key][date] = {
               puantajId: puantajId,
-              project_id: project_id,
+              project_id: project_id
             };
-          }
-           else {
+          } else {
             // değişiklik yapılmamışsa sadece kendi kayıtlarını al
             jsonData[key][date] = {
               puantajId: puantajId,
-              project_id: $(this).attr("data-project"),
+              project_id: $(this).attr("data-project")
             };
             console.log(person_id + "--" + date + "--" + puantajId); //
           }
@@ -183,7 +184,7 @@ function puantaj_olustur() {
   var data = {
     action: "puantaj",
     project_id: project_id,
-    data: JSON.stringify(jsonData),
+    data: JSON.stringify(jsonData)
   };
 
   let formData = new FormData();
@@ -193,23 +194,22 @@ function puantaj_olustur() {
 
   fetch("api/puantaj.php", {
     method: "POST",
-    body: formData,
+    body: formData
   })
     .then((response) => response.json())
     .then((data) => {
       // console.log(data);
       if (data.status == "success") {
         console.log(data.error_wages);
-      
-        title = "Başarılı";
 
+        title = "Başarılı";
       } else {
         title = "Hata";
       }
       Swal.fire({
         title: "Başarılı",
         html: data.message,
-        icon: "success",
+        icon: "success"
       });
     });
 }

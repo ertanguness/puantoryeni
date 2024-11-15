@@ -107,4 +107,10 @@ class Puantaj extends Model
         $sql->execute([$person_id, $job_start_date, $job_end_date]);
     }
 
+    public function deletePuantajGun($id)
+    {
+        $sql = $this->db->prepare("DELETE FROM $this->table WHERE id = ?");
+        $sql->execute([$id]);
+    }
+
 }

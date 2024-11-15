@@ -49,7 +49,19 @@ if ($_POST['action'] == "saveProject") {
 }
 
 if ($_POST['action'] == "deleteProject") {
-    $id = Security::decrypt($_POST['id']) ;
+    $id = $_POST['id'] ;
+    //projede kayıtlı çalışma var mı kontrol et
+    $isExistPuantaj = $project->isExistPuantaj($id);
+    if ($isExistPuantaj) {
+        $status = "error";
+        $message = "Projede kayıtlı çalışma var. Projeyi silemezsiniz.";
+        $res = [
+            'status' => $status,
+            'message' => $message,
+        ];
+        echo json_encode($res);
+        exit;
+    }
     try {
         $db->beginTransaction();
         $project->delete($id);

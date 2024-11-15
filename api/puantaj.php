@@ -40,7 +40,7 @@ $work_hour = $Settings->getSettings("work_hour")->set_value ?? 8;
             if ($puantaj_item['puantajId'] == 0) {
                 // Eğer puantajId 0 ise personelin o gün için puantajı olmadığı için
                 // hesaplama yapılmaması için o kayıt silinir
-                $puantajObj->delete($id);
+                $puantajObj->deletePuantajGun($id);
             } else if (!empty($puantaj_item['puantajId'])) {
 
 

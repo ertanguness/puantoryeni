@@ -128,6 +128,7 @@ $menu_name = $menus->getMenusByLink($active_page);
             <div class="preloader-icon"></div>
         </div>
 
+
         <!-- Navbar -->
         <?php include "inc/menu.php" ?>
         <!-- Sidebar -->
