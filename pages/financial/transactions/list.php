@@ -132,10 +132,10 @@ $financialHelper = new Financial();
                                 <tr>
                                     <td class="text-center"><?php echo $i ?></td>
                                     <td><?php echo Date::dmY($transaction->date) ?></td>
-                                    <td class="text-center"><?php echo Helper::getTransactionType($transaction->type_id) ?>
+                                    <td class="text-center"><?php echo Helper::getTransactionType($transaction->type_id ?? 0) ?>
                                     </td>
                                     <td class="text-center">
-                                        <?php echo $financialHelper->getTransactionType($transaction->sub_type) ?>
+                                        <?php echo $financialHelper->getTransactionType($transaction->sub_type ?? 0) ?>
                                     </td>
                                     <td><?php echo $cases->find($transaction->case_id)->case_name ?></td>
                                     <td><?php echo Helper::formattedMoney($transaction->amount, $transaction->amount_money ?? 1) ?>

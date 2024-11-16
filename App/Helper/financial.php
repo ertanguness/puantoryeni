@@ -86,6 +86,9 @@ const TYPE = [
     //Hareketin type bilgisini döndürür
     public function getTransactionType($type_id)
     {
+        if (!isset(self::TYPE[$type_id])) {
+            return "";
+        }
         return self::TYPE[$type_id];
     }
 }

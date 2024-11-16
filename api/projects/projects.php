@@ -15,7 +15,6 @@ if ($_POST['action'] == "saveProject") {
         "id" => $id,
         "firm_id" => $_SESSION['firm_id'],
         "type" => $_POST['project_type'],
-        "company_id" => Security::decrypt($_POST['project_company']),
         'project_name' => Security::escape($_POST['project_name']),
         'start_date' => Security::escape($_POST['start_date']),
         'end_date' => Security::escape($_POST['end_date']),
@@ -31,6 +30,11 @@ if ($_POST['action'] == "saveProject") {
     if(isset($_POST["budget"])){
         $data["budget"] = $_POST["budget"];
     };
+
+    //firma adı boş değilse
+    if (!empty($_POST['project_company'])) {
+        $data['company_id'] = Security::decrypt($_POST['project_company']);
+    }
     try {
         $lastInsertId = $project->saveWithAttr($data) ?? $_POST['id'];
         $status = "success";
