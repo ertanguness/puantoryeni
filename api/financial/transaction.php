@@ -34,9 +34,9 @@ if ($_POST["action"] == "saveTransaction") {
         "id" => 0,
         "date" => date("Y-m-d H:i:s"),
         "type_id" => $_POST["transaction_type"],
-        "sub_type" => $_POST["inc_exp_type"],
+        "sub_type" => $_POST["transaction_type"],
         "case_id" => Security::decrypt($_POST["case_id"]),
-        "amount" => $_POST["amount"],
+        "amount" => Helper::formattedMoneyToNumber($_POST["amount"]),
         "amount_money" => $_POST["amount_money"],
         "description" => Security::escape($_POST["description"]),
     ];
@@ -108,6 +108,63 @@ if ($_POST["action"] == "getSubTypes") {
     $res = [
 
         "subTypes" => $subTypes
+    ];
+    echo json_encode($res);
+}
+
+
+//Projeden Ödeme Al
+if($_POST["action"] == "getPaymentFromProject"){
+    $project_id = $_POST["fp_project_name"];
+
+    $amount = Helper::formattedMoneyToNumber($_POST["fp_amount"]);
+    $date = Date::ymd($_POST["fp_action_date"]);
+    $description = Security::escape($_POST["fp_description"]);
+
+    //Kasa hareketi ekleme yetkisi var mı?
+    //$Auths->hasPermission("income_expense_add_update");
+
+    $data = [
+        "id" => 0,
+        "date" => $date,
+        "type_id" => 2,
+        "sub_type" => 2,
+        "case_id" => ($_POST["fp_cases"]),
+        "amount" => $amount,
+        "amount_money" => 1,
+        "description" => $description,
+    ];
+
+    try {
+        $lastInsertId = $ct->saveWithAttr($data);
+        $status = "success";
+        $message = "Ödeme başarıyla alındı";
+
+        //Eklenen kaydın bilgilerini getir
+        // $transaction = $ct->find(Security::decrypt($lastInsertId));
+        // //Kayıt alanlarında düzenleme
+        // foreach ($transaction as $key => $value) {
+        //     if($key == "id"){
+        //         $transaction->id = Security::encrypt($value);
+        //     }else if ($key == "date") {
+        //         $transaction->$key = Date::dmY($value);
+        //     } elseif ($key == "type_id") {
+        //         $transaction->$key = $value == 1 ? "Gelir" : "Gider";
+        //     } elseif ($key == "case_id") {
+        //         $transaction->$key = $cases->find($value)->case_name;
+        //     } elseif ($key == "amount") {
+        //         $transaction->$key = Helper::formattedMoney($value, $transaction->amount_money ?? 1);
+        //     }
+        // }
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message,
+       
     ];
     echo json_encode($res);
 }

@@ -58,6 +58,16 @@ class Cases extends Model
         return $result->count;
     }
 
+    //gelen id haricinde firmaya ait kasaları getirir
+    public function getCasesExceptId($id)
+    {
+        $query = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? and id != ?");
+        $query->execute([$_SESSION['firm_id'], $id]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    //Kasanın mevcut bakiyesini getir
+ 
 
 
     //Eğer kasa varsayılan ise silinemez ve hata mesaajı döner

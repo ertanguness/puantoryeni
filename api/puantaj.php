@@ -33,7 +33,7 @@ $work_hour = $Settings->getSettings("work_hour")->set_value ?? 8;
         $person_id = Security::decrypt($person_key);
         $ucret = $person->getDailyWages($person_id)->daily_wages / $work_hour;
         if ($ucret == 0 || $ucret == '') {
-            $error_wages[] = $person->getPersonById($person_id, 'full_name')->full_name;
+            $error_wages[] = $person->getPersonByField($person_id, 'full_name');
         }
         foreach ($person_item as $puantaj_key => $puantaj_item) {
             $id = $puantajObj->getPuantajId($person_id, $puantaj_key);

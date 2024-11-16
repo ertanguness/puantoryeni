@@ -14,6 +14,7 @@ if ($_POST['action'] == "saveProject") {
     $data = [
         "id" => $id,
         "firm_id" => $_SESSION['firm_id'],
+        "type" => $_POST['project_type'],
         "company_id" => Security::decrypt($_POST['project_company']),
         'project_name' => Security::escape($_POST['project_name']),
         'start_date' => Security::escape($_POST['start_date']),

@@ -165,4 +165,3 @@ $perm->checkAuthorize("permission_groups");
         </div>
     </div>
 </div>
-</div>

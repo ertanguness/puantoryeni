@@ -50,7 +50,7 @@ if ($_POST["action"] == "saveCase") {
     ];
     if (isset($_POST["start_budget"]) && $_POST["start_budget"] != "") {
         $data["start_budget"] = Security::escape($_POST["start_budget"]);
-    }else{
+    } else {
         $data["start_budget"] = 0;
     }
 
@@ -114,4 +114,57 @@ if ($_POST["action"] == "defaultCase") {
     ];
     echo json_encode($res);
 
+}
+
+if ($_POST["action"] == "getCases") {
+
+
+    //Kasalararası virman yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn("intercash_transfer");
+    try {
+        $id = Security::decrypt($_POST["case_id"]);
+        $cases = $caseObj->getCasesExceptId($id);
+        $status = "success";
+
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message ?? "",
+        "cases" => $cases
+    ];
+
+    echo json_encode($res);
+}
+
+if ($_POST["action"] == "intercashTransfer") {
+
+    //Kasalararası virman yetkisi var mı kontrol et
+    $Auths->hasPermission("intercash_transfer");
+
+    $from_case_id = Security::decrypt($_POST["from_case"]);
+    $to_case_id = $_POST["to_case"];
+    $amount = Security::escape($_POST["amount"]);
+    $description = Security::escape($_POST["description"]);
+
+    try {
+        $db->beginTransaction();
+        $res = $CaseTransactions->transfer($from_case_id, $to_case_id, $amount, $description);
+        $status = $res["status"];
+        $message = $res["message"];
+        $db->commit();
+    } catch (PDOException $ex) {
+        $db->rollBack();
+        $status = "error";
+        $message = "Kasalar arası transfer sırasında bir hata oluştu." . $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message
+    ];
+    echo json_encode($res);
 }

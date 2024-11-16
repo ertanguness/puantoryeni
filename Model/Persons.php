@@ -46,11 +46,11 @@ class Persons extends Model
 
 
 
-    public function getPersonById($person_id,$field)
+    public function getPersonByField($person_id,$field)
     {
-        $query = $this->db->prepare("SELECT {$field} FROM persons WHERE id = ?");
+        $query = $this->db->prepare("SELECT * FROM persons WHERE id = ?");
         $query->execute([$person_id]);
-        return $query->fetch(PDO::FETCH_OBJ);
+        return $query->fetch(PDO::FETCH_OBJ)->$field;
     }
     public function getDailyWages($person_id)
     {

@@ -57,6 +57,14 @@ class Puantaj extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
+    //Projenin puantaj tablosundaki çalışmaları getirilir
+    public function getPuantajInfoByProject($project_id)
+    {
+        $sql = $this->db->prepare("SELECT * FROM puantaj WHERE project_id = ? ");
+        $sql->execute([$project_id]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
 
     //Puantaj id'sine göre puantaj bilgilerini getiri
     public function getPuantajTuruById($id)

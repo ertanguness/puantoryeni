@@ -9,7 +9,12 @@ use App\Helper\Security;
 class Financial extends Db
 {
 
-
+const TYPE = [
+        1 => "Gelir",
+        2 => "Gider",
+        3 => "Virman",
+        4 => "Diğer",
+    ];
     protected $caseObj;
    
 
@@ -42,13 +47,13 @@ class Financial extends Db
     {
        
         //case_id boş ise firmanın varsayılan kasa id'sini al
-        if (empty($case_id)) {
+        if (empty($case_id) && $case_id != 0) {
             $case_id = $this->caseObj->getDefaultCaseIdByFirm();
         }
     
         $cases = $this->caseObj->allCaseWithFirmId();
         $select = "<select name='".$name."' class=\"form-control select2\" id='".$name."' style='width:100%'>";
-        $select .= "<option value=''>Kasa Seçiniz</option>";
+        $select .= "<option value='0'>Kasa Seçiniz</option>";
         
         foreach ($cases as $case) {
             $selectedAttr = $case_id == $case->id ? 'selected' : '';
@@ -56,5 +61,11 @@ class Financial extends Db
         }
         $select .= '</select>';
         return $select;
+    }
+
+    //Hareketin type bilgisini döndürür
+    public function getTransactionType($type_id)
+    {
+        return self::TYPE[$type_id];
     }
 }
