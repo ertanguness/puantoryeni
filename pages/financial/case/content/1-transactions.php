@@ -13,6 +13,7 @@ use App\Helper\Helper;
 
 $Cases = new Cases();
 $Actions = new CaseTransactions();
+$financialHelper = new Financial();
 
 // Gelir gider bilgierini getir
 $actions = $Actions->allTransactionByCaseId($id);
@@ -177,7 +178,7 @@ $balance = $incomes - $expense;
                                     }
                                     ;
                                     ;
-                                    echo Helper::getIncomeExpenseType($item->type_id); ?>
+                                    echo $financialHelper->getTransactionType($item->sub_type); ?>
 
                                     </td>
                                     <td><?php echo Helper::formattedMoney($item->amount); ?></td>

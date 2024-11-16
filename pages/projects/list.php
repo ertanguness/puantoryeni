@@ -17,6 +17,7 @@ $cities = new Cities();
 $projects = $projectObj->allWithFirm($firm_id);
 $companyHelper = new CompanyHelper();
 
+
 ?>
 
 <div class="container-xl mt-3">

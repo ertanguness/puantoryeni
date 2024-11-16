@@ -7,13 +7,17 @@ require_once "App/Helper/financial.php";
 require_once "App/Helper/security.php";
 
 
+
 use App\Helper\Helper;
 use App\Helper\Date;
 use App\Helper\Security;
 
-if(isset($_POST['case_id'])){
-    $case_id = Security::decrypt($_POST['case_id'] ) ?? 0;
-}else{
+
+
+
+if (isset($_POST['case_id'])) {
+    $case_id = $_POST["case_id"] != 0 ? Security::decrypt($_POST['case_id']) : 0;
+} else {
     $case_id = 0;
 }
 
@@ -27,7 +31,7 @@ $perm->checkAuthorize("income_expense_operations");
 
 $cases = new Cases();
 $ct = new CaseTransactions();
-$transactions = $ct->allTransactionByCase(case_id: $case_id);
+$transactions = $case_id != 0 ? $ct->allTransactionByCase(case_id: $case_id) : $ct->allTransactionByFirm($_SESSION["firm_id"]);
 
 $financial = new Financial();
 $financialHelper = new Financial();
@@ -55,8 +59,9 @@ $financialHelper = new Financial();
 
                                 <!-- Projeden Ödeme Alma yetkisi varsa -->
                                 <?php if ($Auths->hasPermission('receive_payment_from_project')) { ?>
-                                    <a class="dropdown-item add-wage-cut" data-tooltip="Projeden ödeme al"
-                                        href="api/bordro/toexcel.php">
+                                    <a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#get_payment_from_project-modal" data-tooltip="Projeden ödeme al"
+                                        href="#">
                                         <i class="ti ti-buildings icon me-3"></i> Projeden Ödeme Al
                                     </a>
                                 <?php } ?>
@@ -128,7 +133,9 @@ $financialHelper = new Financial();
                                     <td><?php echo Date::dmY($transaction->date) ?></td>
                                     <td class="text-center"><?php echo Helper::getTransactionType($transaction->type_id) ?>
                                     </td>
-                                    <td class="text-center"><?php echo $transaction->sub_type ?></td>
+                                    <td class="text-center">
+                                        <?php echo $financialHelper->getTransactionType($transaction->sub_type) ?>
+                                    </td>
                                     <td><?php echo $cases->find($transaction->case_id)->case_name ?></td>
                                     <td><?php echo Helper::formattedMoney($transaction->amount, $transaction->amount_money ?? 1) ?>
                                     </td>
@@ -139,19 +146,18 @@ $financialHelper = new Financial();
                                                 data-bs-toggle="dropdown">İşlem</button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <!-- Gelir Gider Güncelleme yetkisi kontrol edilir -->
-                                                <?php if ($Auths->hasPermission('income_expense_add_update')) : ?>
+                                                <?php if ($Auths->hasPermission('income_expense_add_update')): ?>
                                                     <a class="dropdown-item route-link"
-                                                        data-page="financial/transaction/manage&id=<?php echo $id ?>"
-                                                        href="#">
+                                                        data-page="financial/transaction/manage&id=<?php echo $id ?>" href="#">
                                                         <i class="ti ti-edit icon me-3"></i> Güncelle
                                                     </a>
                                                 <?php endif ?>
 
-                                                <?php if($Auths->hasPermission("delete_income_expense")): ?>
-                                                <a class="dropdown-item delete-transaction"
-                                                    data-id="<?php echo $id ?>" href="#">
-                                                    <i class="ti ti-trash icon me-3"></i> Sil
-                                                </a>
+                                                <?php if ($Auths->hasPermission("delete_income_expense")): ?>
+                                                    <a class="dropdown-item delete-transaction" data-id="<?php echo $id ?>"
+                                                        href="#">
+                                                        <i class="ti ti-trash icon me-3"></i> Sil
+                                                    </a>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -171,3 +177,4 @@ $financialHelper = new Financial();
 </div>
 
 <?php include_once "modals/general-modal.php"; ?>
+<?php include_once "modals/get_payment_from_project-modal.php"; ?>

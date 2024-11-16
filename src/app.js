@@ -482,6 +482,18 @@ if ($('.money').length > 0) {
     rightAlign: false,
     removeMaskOnSubmit: true
   });
+
+
+  $(document).on('focus', '.money', function () {
+    $(this).inputmask("decimal", {
+        radixPoint: ",",
+        groupSeparator: ".",
+        digits: 2,
+        autoGroup: true,
+        rightAlign: false,
+        removeMaskOnSubmit: true
+    });
+});
   //Para birimi olan alanlarda virgülü noktaya çevir
   // $('.money').on('keyup', function () {
   //   var value = $(this).val();

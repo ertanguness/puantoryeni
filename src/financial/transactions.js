@@ -71,7 +71,9 @@ $(document).on("click", "#saveTransaction", function () {
         ])
         .draw(false);
       //ilk ve 3. sutüna text-center classı ekle
-      [0, 2, 3].forEach(i => table.column(i).nodes().to$().addClass("text-center"));
+      [0, 2, 3].forEach((i) =>
+        table.column(i).nodes().to$().addClass("text-center")
+      );
 
       Swal.fire({
         title: title,
@@ -132,4 +134,37 @@ $(document).on("change", "#firm_cases", function () {
   //case_id'yi form'a ekle
   form.append(`<input type="hidden" name="case_id" value="${case_id}">`);
   form.submit();
+});
+
+//projeden ödeme al
+$(document).on("click", "#savePaymentFromProject", function () {
+  var form = $("#paymentFromProjectForm");
+  let formData = new FormData(form[0]);
+
+  formData.append("action", "getPaymentFromProject");
+
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ", " + pair[1]);
+  }
+
+  fetch("api/financial/transaction.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+
+      if (data.status == "success") {
+        title = "Başarılı!";
+      } else {
+        title = "Hata!";
+      }
+      Swal.fire({
+        title: title,
+        text: data.message,
+        icon: data.status,
+        confirmButtonText: "Tamam"
+      });
+    });
 });

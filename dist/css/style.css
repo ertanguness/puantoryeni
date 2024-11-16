@@ -71,14 +71,12 @@
   /* İlk başlık satırının yüksekliğine bağlı olarak ayarlayın */
 }
 
-/* .table-responsive {
-  overflow-x: inherit;
+.table-responsive .dropdown-menu {
+  position: fixed !important; /* Menülerin overflow sorunu çözülür */
+  transform: translate(0, 100%); /* Menü, düğmenin altına hizalanır */
+}
 
-} */
-/* .table.dataTable tr td {
-  padding: 0 1em  !important;
 
-} */
 .table.dataTable thead th{
   text-align: left !important;  
 }

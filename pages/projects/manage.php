@@ -27,6 +27,7 @@ if($id == null && isset($_GET['id'])) {
 
 //id'ye göre kayıt getirilir
 $project = $projectObj->find($id);
+$type = $project->type ?? 1;
 
 $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
 

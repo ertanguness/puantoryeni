@@ -2,12 +2,15 @@
 require_once "Model/Cases.php";
 require_once "App/Helper/company.php";
 require_once "App/Helper/helper.php";
+require_once "App/Helper/financial.php";
+require_once "Model/CaseTransactions.php";
 
 
 use App\Helper\Helper;
 use App\Helper\Security;
 
 $caseObj = new Cases();
+$CaseTransactions = new CaseTransactions();
 $company = new CompanyHelper();
 
 $Auths->checkFirmReturn();
@@ -15,6 +18,7 @@ $perm->checkAuthorize("cash_register_list");
 
 
 $cases = $caseObj->allCaseWithFirmId();
+$financialHelper = new Financial();
 
 ?>
 <div class="container-xl">
@@ -55,7 +59,6 @@ $cases = $caseObj->allCaseWithFirmId();
                     </div>
                 </div>
 
-
                 <div class="table-responsive">
                     <table class="table card-table text-nowrap datatable row-selected">
                         <thead>
@@ -67,7 +70,6 @@ $cases = $caseObj->allCaseWithFirmId();
                                 <th>Şubesi</th>
                                 <th>Para Birimi</th>
                                 <th>Varsayılan mı?</th>
-                                <th>Başlangıç Bütçesi</th>
                                 <th>Güncel Bakiye</th>
                                 <th>Açıklama</th>
                                 <th style="width:7%">İşlem</th>
@@ -82,7 +84,8 @@ $cases = $caseObj->allCaseWithFirmId();
                                 <?php
                                 $i = 1;
                                 foreach ($cases as $case):
-                                    $id = Security::encrypt($case->id)
+                                    $id = Security::encrypt($case->id);
+                                    $balance = $CaseTransactions->getCaseBalance($case->id)->balance;
                                         ?>
                                     <tr>
                                         <td class="text-center"><?php echo $i; ?></td>
@@ -101,8 +104,9 @@ $cases = $caseObj->allCaseWithFirmId();
                                             echo '<i class="ti ti-check icon color-green"></i>';
                                         }
                                         ?></td>
-                                        <td><?php echo Helper::formattedMoney($case->start_budget); ?></td>
-                                        <td>1</td>
+                                        <td class="text-center">
+                                            <?php echo Helper::formattedMoney($balance); ?>
+                                        </td>
                                         <td><?php echo $case->description; ?></td>
 
                                         <td class="text-end">
@@ -124,6 +128,14 @@ $cases = $caseObj->allCaseWithFirmId();
                                                         </a>
                                                     <?php } ?>
 
+                                                    <!-- Kasalararası virman yetkisi varsa -->
+                                                    <?php if ($Auths->hasPermission("intercash_transfer")) {
+                                                        ; ?>
+                                                        <a class="dropdown-item intercash-transfer" data-id="<?php echo $id ?>"
+                                                            href="#">
+                                                            <i class="ti ti-transform icon me-3"></i> Kasalararası Virman
+                                                        </a>
+                                                    <?php } ?>
                                                     <a class="dropdown-item default-case" data-id="<?php echo $id ?>" href="#">
                                                         <i class="ti ti-checks icon me-3"></i> Varsayılan Yap
                                                     </a>
@@ -152,3 +164,6 @@ $cases = $caseObj->allCaseWithFirmId();
         </div>
     </div>
 </div>
+
+<!-- //modali dahil et -->
+<?php require_once "content/intercash_transfer-modal.php"; ?>

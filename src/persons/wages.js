@@ -1,6 +1,6 @@
 var wage_id = $("#wage_id");
 // Değişkenleri daha geniş bir kapsamda tanımlayın
-var wage_name, start_date, end_date, amount, description;
+var wage_name, start_date, end_date, amount, description, created_at;
 
 $(document).on("click", "#add_wage_row", function () {
   var table = $("#personWageTable").DataTable();
@@ -19,7 +19,7 @@ $(document).on("click", "#add_wage_row", function () {
       `<input type='text' class='form-control' name='wage_name' required placeholder='Ücret tanımı girin'>`,
       `<input type='text' class='form-control flatpickr' name='wage_start_date' id="wage_start_date" required placeholder='Başlama Tarihi girin'>`,
       `<input type='text' class='form-control flatpickr' name='wage_end_date' id="wage_end_date" required placeholder='Bitiş Tarihi girin'>`,
-      `<input type='text' class='form-control' name='wage_amount' required placeholder='Tutar giriniz'>`,
+      `<input type='text' class='form-control money' name='wage_amount' required placeholder='Tutar giriniz'>`,
       `<input type='text' class='form-control' name='wage_description'>`,
       ``,
       `<button type='button' class='btn me-1 remove_wage_row'><i class='ti ti-trash icon m-0'></i></button>
@@ -62,10 +62,8 @@ $(document).ready(function () {
   );
 });
 
-
 // yeni bir satır ekledikten veya güncellemeye bastıktan sonraki kaydet butonu
 $(document).on("click", ".save_wage_row", function () {
-
   var form = $("#personWageForm");
   let rowCount = table.rows().count();
   let row = $(this).closest("tr");
@@ -117,7 +115,7 @@ $(document).on("click", ".save_wage_row", function () {
   formData.append("action", "saveWage");
 
   for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
+    console.log(pair[0] + ", " + pair[1]);
   }
 
   showSpinner();
@@ -137,7 +135,9 @@ $(document).on("click", ".save_wage_row", function () {
       }
       swal.fire({
         title: title,
-        html:  data.message + "<span style='color: red;'><br><br> Ücreti değiştirdiğiniz takdirde ilgili ayları yeniden hesaplamalısınız.</span>",
+        html:
+          data.message +
+          "<span style='color: red;'><br><br> Ücreti değiştirdiğiniz takdirde ilgili ayları yeniden hesaplamalısınız.</span>",
         icon: data.status,
         confirmButtonText: "Tamam"
       });
@@ -155,18 +155,18 @@ $(document).on("click", ".save_wage_row", function () {
           data.description,
           data.created_at,
           `<div class="dropdown">
-                                        <button class="btn dropdown-toggle align-text-top"
-                                            data-bs-toggle="dropdown">İşlem</button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item update-wage"
-                                                data-id="${data.id}" href="#">
-                                                <i class="ti ti-edit icon me-3"></i> Güncelle
-                                            </a>
-                                            <a class="dropdown-item delete-wage" href="#" data-id="${data.id}">
-                                                <i class="ti ti-trash icon me-3"></i> Sil
-                                            </a>
-                                        </div>
-                                    </div>`
+              <button class="btn dropdown-toggle align-text-top"
+                  data-bs-toggle="dropdown">İşlem</button>
+              <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item update-wage"
+                      data-id="${data.id}" href="#">
+                      <i class="ti ti-edit icon me-3"></i> Güncelle
+                  </a>
+                  <a class="dropdown-item delete-wage" href="#" data-id="${data.id}">
+                      <i class="ti ti-trash icon me-3"></i> Sil
+                  </a>
+              </div>
+          </div>`
         ])
         .draw(false);
       var columns = [3, 4];
@@ -182,7 +182,7 @@ $(document).on("click", ".save_wage_row", function () {
 });
 
 $(document).on("keypress", 'input[name="wage_amount"]', function (e) {
-  if ((e.which < 48 || e.which > 57) && e.which != 46) {
+  if ((e.which < 48 || e.which > 57) && e.which != 46 && e.which != 44) {
     return false;
   }
 });
@@ -219,6 +219,10 @@ $(document).ready(function () {
   //Ücret tanımı güncelleme
   $(document).on("click", ".update-wage", function () {
     let id = $(this).data("id");
+
+
+    //preloader göster
+    $(".preloader").fadeIn();
     let row = $(this).closest("tr");
     $("#wage_id").val(id);
     $("#add_wage_row").attr("disabled", true);
@@ -226,57 +230,60 @@ $(document).ready(function () {
     formData.append("action", "getWage");
     formData.append("id", id);
 
-    for(var pair of formData.entries()) {
-      console.log(pair[0]+ ', '+ pair[1]);
-    }
-
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
 
     fetch("api/persons/wages.php", {
       method: "POST",
-     body: formData
+      body: formData
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.status == "success") {
-          
           let wage = data.data;
           wage_name = wage.wage_name;
           start_date = wage.start_date;
           end_date = wage.end_date;
           amount = wage.amount;
           description = wage.description;
-    
-    row
-      .find("td:eq(1)")
-      .html(
-        `<input type='text' class='form-control' name='wage_name' value='${wage_name}' required placeholder='Ücret tanımı girin'>`
-      );
-    row
-      .find("td:eq(2)")
-      .html(
-        `<input type='text' class='form-control flatpickr' name='wage_start_date' id="wage_start_date" value='${start_date}' required placeholder='Başlama Tarihi girin'>`
-      );
-    row
-      .find("td:eq(3)")
-      .html(
-        `<input type='text' class='form-control flatpickr' name='wage_end_date'  value='${end_date}' required placeholder='Bitiş Tarihi girin'>`
-      );
-    row
-      .find("td:eq(4)")
-      .html(
-        `<input type='text' class='form-control' name='wage_amount' value='${amount}' required placeholder='Tutar giriniz'>`
-      );
-    row
-      .find("td:eq(5)")
-      .html(
-        `<input type='text' class='form-control' name='wage_description' value='${description}'>`
-      );
-    row.find(
-      "td:eq(6)"
-    ).html(`<button type='button' class='btn me-1 cancel_wage_row'><i class='ti ti-x icon m-0'></i></button>
+          created_at = wage.created_at;
+
+          row
+            .find("td:eq(1)")
+            .html(
+              `<input type='text' class='form-control' name='wage_name' value='${wage_name}' required placeholder='Ücret tanımı girin'>`
+            );
+          row
+            .find("td:eq(2)")
+            .html(
+              `<input type='text' class='form-control flatpickr' name='wage_start_date' id="wage_start_date" value='${start_date}' required placeholder='Başlama Tarihi girin'>`
+            );
+          row
+            .find("td:eq(3)")
+            .html(
+              `<input type='text' class='form-control flatpickr' name='wage_end_date'  value='${end_date}' required placeholder='Bitiş Tarihi girin'>`
+            );
+          row
+            .find("td:eq(4)")
+            .html(
+              `<input type='text' class='form-control money' name='wage_amount' value='${amount}' required placeholder='Tutar giriniz'>`
+            );
+          row
+            .find("td:eq(5)")
+            .html(
+              `<input type='text' class='form-control' name='wage_description' value='${description}'>`
+            );
+
+          row.find("td:eq(7)").html("");
+          row.find("td:eq(7)")
+            .html(`<button type='button' class='btn me-1 cancel_wage_row'><i class='ti ti-x icon m-0'></i></button>
         <button type='button' class='btn save_wage_row'><i class='ti ti-device-floppy icon m-0'></i><div id="spinner" class="spinner" style="display: none;"></div></button>`);
+      //preloader gizle
+      $(".preloader").fadeOut();  
       }
-    }); 
+
+      });
 
     if ($(".flatpickr").length > 0) {
       $(".flatpickr").flatpickr({
@@ -291,15 +298,14 @@ $(document).ready(function () {
     let row = $(this).closest("tr");
     let id = $("#wage_id").val();
     let inputs = row.find("input");
-    console.log("Wage Name:", wage_name);
 
     $("#add_wage_row").removeAttr("disabled");
     wage_id.val(0);
 
-    let values = [wage_name, start_date, end_date, amount, description];
+    let values = [wage_name, start_date, end_date, amount, description,created_at];
 
     values.forEach((value, index) => {
-      row.find(`td:eq(${index + 2})`).text(value);
+      row.find(`td:eq(${index + 1})`).html(value);
     });
 
     row.find("td:eq(7)").html(`
@@ -321,7 +327,8 @@ $(document).ready(function () {
 $(document).on("click", ".delete-wage", function () {
   //Tablo adı butonun içinde bulunduğu tablo
   let action = "deleteWage";
-  let confirmMessage = "<span style='color: red;'>Ücreti sildiğiniz takdirde ilgili dönemleri yeniden hesaplamalısınız!</span>";
+  let confirmMessage =
+    "<span style='color: red;'>Ücreti sildiğiniz takdirde ilgili dönemleri yeniden hesaplamalısınız!</span>";
   let url = "/api/persons/wages.php";
 
   deleteRecord(this, action, confirmMessage, url);

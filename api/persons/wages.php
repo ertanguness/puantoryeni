@@ -22,7 +22,7 @@ if ($_POST["action"] == "saveWage") {
         "wage_name" => $_POST['wage_name'],
         "start_date" => Date::Ymd($_POST['wage_start_date'],"Ymd"),
         "end_date" => Date::Ymd($_POST['wage_end_date'],"Ymd"),
-        "amount" => str_replace(".","",$_POST['wage_amount']),
+        "amount" => Helper::formattedMoneyToNumber($_POST['wage_amount']),
         "description" => $_POST['wage_description'],
         "person_id" =>  $person_id,
     ];
