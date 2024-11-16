@@ -18,7 +18,7 @@ $projectHelper = new ProjectHelper();
         <label for="">Yüklenici Firması</label>
     </div>
     <div class="col-md-4">
-        <?php echo $companyHelper->companySelect("project_company", $project->company_id); ?>
+        <?php echo $companyHelper->companySelect("project_company", $project->company_id ?? '' ); ?>
     </div>
 
 
@@ -36,7 +36,7 @@ $projectHelper = new ProjectHelper();
         <label for="">Proje Durumu</label>
     </div>
     <div class="col-md-4">
-        <?php echo $projectHelper->projectStatusSelect("project_status", $project->status); ?>
+        <?php echo $projectHelper->projectStatusSelect("project_status", $project->status ?? '' ); ?>
     </div>
 
 
