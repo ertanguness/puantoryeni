@@ -63,6 +63,26 @@ const TYPE = [
         return $select;
     }
 
+    //Kullanıcıya göre kasaları getir
+    public function getCasesSelectByUser($name = "case_id", $case_id = "")
+    {
+        $is_main_user = $_SESSION['user']->parent_id;
+        if($is_main_user == 0){
+            $cases = $this->caseObj->allCaseWithFirmId();
+        }else{
+            $cases = $this->caseObj->getCasesByUserIds();
+        }
+        
+        $select = "<select name='".$name."' class=\"form-control select2\" id='".$name."' style='width:100%'>";
+        $select .= "<option value='0'>Kasa Seçiniz</option>";
+        foreach ($cases as $case) {
+            $selectedAttr = $case_id == $case->id ? 'selected' : '';
+            $select .= "<option value=\"" . Security::encrypt($case->id) . "\" {$selectedAttr}>{$case->case_name}-{$case->bank_name}/{$case->branch_name}</option>";
+        }
+        $select .= '</select>';
+        return $select;
+    }
+
     //Hareketin type bilgisini döndürür
     public function getTransactionType($type_id)
     {

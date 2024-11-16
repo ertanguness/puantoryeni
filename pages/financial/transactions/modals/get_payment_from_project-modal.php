@@ -50,7 +50,8 @@ $projectHelper = new ProjectHelper();
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Ödemenin Aktarılacağı Kasa</label>
-                                    <?php echo $financialHelper->getCasesSelectByFirm("fp_cases"); ?>
+                                    <?php echo $financialHelper->getCasesSelectByUser("fp_cases"); ?>
+                                    
                                 </div>
                             </div>
 

@@ -129,7 +129,7 @@ if($_POST["action"] == "getPaymentFromProject"){
         "date" => $date,
         "type_id" => 2,
         "sub_type" => 2,
-        "case_id" => ($_POST["fp_cases"]),
+        "case_id" => Security::decrypt($_POST["fp_cases"]),
         "amount" => $amount,
         "amount_money" => 1,
         "description" => $description,

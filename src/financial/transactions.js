@@ -143,9 +143,9 @@ $(document).on("click", "#savePaymentFromProject", function () {
 
   formData.append("action", "getPaymentFromProject");
 
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
+  // for (var pair of formData.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   fetch("api/financial/transaction.php", {
     method: "POST",
@@ -153,18 +153,28 @@ $(document).on("click", "#savePaymentFromProject", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.status == "success") {
-        title = "Başarılı!";
+        Swal.fire({
+          title: "Başarılı!",
+          text: data.message,
+          icon: data.status,
+          confirmButtonText: "Tamam"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        });
       } else {
-        title = "Hata!";
+
+        Swal.fire({
+          title: "Hata!",
+          text: data.message,
+          icon: data.status,
+          confirmButtonText: "Tamam"
+        });
       }
-      Swal.fire({
-        title: title,
-        text: data.message,
-        icon: data.status,
-        confirmButtonText: "Tamam"
-      });
+      
     });
 });

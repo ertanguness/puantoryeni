@@ -27,7 +27,7 @@ class UserHelper extends Db
     public function userSelectMultiple($name = "users[]", $selectedIds = [])
     {
         $firm_id = $_SESSION["firm_id"];
-        $query = $this->db->prepare("SELECT * FROM users where firm_id = ?"); // Tüm sütunları seç
+        $query = $this->db->prepare("SELECT * FROM users where firm_id = ? and parent_id != 0"); // Tüm sütunları seç
         $query->execute([$firm_id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
 

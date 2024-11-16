@@ -18,6 +18,7 @@ if ($_POST['action'] == "saveProject") {
         "company_id" => Security::decrypt($_POST['project_company']),
         'project_name' => Security::escape($_POST['project_name']),
         'start_date' => Security::escape($_POST['start_date']),
+        'end_date' => Security::escape($_POST['end_date']),
         'city' => Security::escape($_POST['project_city']),
         'town' => Security::escape($_POST['project_town']),
         'status' => Security::escape($_POST['project_status']),

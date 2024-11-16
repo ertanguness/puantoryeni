@@ -46,7 +46,7 @@ class ProjectHelper extends Db
         $query->execute();
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
-        $select .= '<option value="0">Durum Seçiniz</option>';
+        $select .= '<option value="">Durum Seçiniz</option>';
         foreach ($results as $row) {
             $selectedAttr = $selected == $row->id ? 'selected' : '';
             $select .= "<option value='$row->id' $selectedAttr>$row->name</option>";

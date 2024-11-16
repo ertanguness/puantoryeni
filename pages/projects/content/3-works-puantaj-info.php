@@ -51,7 +51,7 @@ if (!$Auths->Authorize("person_page_puantaj_info")) {
                         <thead>
                             <tr>
                                 <th style="width:7%">id</th>
-                                <th>Proje</th>
+                                <th>Personel</th>
                                 <th>Puantaj Türü</th>
                                 <th>Tarih</th>
                                 <th>Saat</th>

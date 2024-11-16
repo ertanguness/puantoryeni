@@ -9,11 +9,28 @@ $(document).on("click", "#saveProject", function () {
     rules: {
       project_name: {
         required: true
+      },
+      project_status : {
+        required: true
       }
     },
     messages: {
       project_name: {
         required: "Proje adı zorunludur."
+      },
+      project_status: {
+        required: "Proje Durumunu seçiniz."
+      }
+    },
+    errorPlacement: function (error, element) {
+      if (element.hasClass("select2")) {
+        // select2 konteynerini bul
+        var container = element.next(".select2-container");
+        // Hata mesajını, select2 konteynerinin sonuna ekler
+        error.insertAfter(container);
+      } else {
+        // Diğer tüm durumlar için varsayılan davranış
+        error.insertAfter(element);
       }
     }
   });
@@ -28,7 +45,7 @@ $(document).on("click", "#saveProject", function () {
   })
     .then((response) => response.json())
     .then((data) => {
-      // console.log(data);
+       console.log(data);
       if (data.status == "success") {
         $("#id").val(data.lastInsertId);
         title = "Başarılı!";

@@ -8,6 +8,7 @@ require_once "../../App/Helper/security.php";
 require_once "../../Model/Auths.php";
 
 use App\Helper\Security;
+
 $Auths = new Auths();
 
 $Auths->checkFirmReturn();
@@ -36,12 +37,25 @@ if ($_POST["action"] == "saveCase") {
             $_POST["default_case"] = 0;
         }
     }
+
+    //Kasanın yetkili olan kullanıcıları 
+    $users = isset($_POST["user_ids"]) ? $_POST["user_ids"] : [];
+    $user_ids = "";
+    if (count($users) > 0) {
+        foreach ($users as $user) {
+            $user_ids .= $user . ",";
+        }
+        $user_ids = rtrim($user_ids, ",");
+    }
+
+
     $data = [
         "id" => $id,
         "case_name" => Security::escape($_POST["case_name"]),
         "account_id" => Security::escape($_SESSION["user"]->id),
         "firm_id" => Security::escape($_SESSION["firm_id"]),
         "bank_name" => Security::escape($_POST["bank_name"]),
+        "user_ids" => $user_ids,
         "branch_name" => Security::escape($_POST["branch_name"]),
         "case_money_unit" => Security::escape($_POST["case_money_unit"]),
         "description" => Security::escape($_POST["description"]),
@@ -113,7 +127,6 @@ if ($_POST["action"] == "defaultCase") {
         "message" => "Varsayılan kasa başarıyla ayarlandı."
     ];
     echo json_encode($res);
-
 }
 
 if ($_POST["action"] == "getCases") {
@@ -125,7 +138,6 @@ if ($_POST["action"] == "getCases") {
         $id = Security::decrypt($_POST["case_id"]);
         $cases = $caseObj->getCasesExceptId($id);
         $status = "success";
-
     } catch (PDOException $ex) {
         $status = "error";
         $message = $ex->getMessage();

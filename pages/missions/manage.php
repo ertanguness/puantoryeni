@@ -141,6 +141,7 @@ $end_date = $mission->end_date ?? Date::dmY($readableDate);
                                 </div>
                                 <div class="col-md-4">
                                     <?php
+                                   
                                     // Veritabanından gelen user_ids değerini diziye dönüştür
                                     $user_ids = isset($mission->user_ids) ? explode(',', $mission->user_ids) : [];
                                     echo $userHelper->userSelectMultiple("user_ids[]", $user_ids);

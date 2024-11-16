@@ -9,7 +9,7 @@ require_once "Model/CaseTransactions.php";
 use App\Helper\Helper;
 use App\Helper\Security;
 
-$caseObj = new Cases();
+$Cases = new Cases();
 $CaseTransactions = new CaseTransactions();
 $company = new CompanyHelper();
 
@@ -17,8 +17,14 @@ $Auths->checkFirmReturn();
 $perm->checkAuthorize("cash_register_list");
 
 
-$cases = $caseObj->allCaseWithFirmId();
+$is_main_user = $_SESSION['user']->parent_id;
+if ($is_main_user == 0) {
+    $cases = $Cases->allCaseWithFirmId();
+} else {
+    $cases = $Cases->getCasesByUserIds();
+}
 $financialHelper = new Financial();
+
 
 ?>
 <div class="container-xl">
@@ -86,7 +92,7 @@ $financialHelper = new Financial();
                                 foreach ($cases as $case):
                                     $id = Security::encrypt($case->id);
                                     $balance = $CaseTransactions->getCaseBalance($case->id)->balance;
-                                        ?>
+                                ?>
                                     <tr>
                                         <td class="text-center"><?php echo $i; ?></td>
                                         <td><?php echo $company->getFirmName($case->company_id ?? ''); ?></td>
@@ -100,10 +106,10 @@ $financialHelper = new Financial();
                                         <td><?php echo Helper::money($case->case_money_unit); ?></td>
                                         <td class="text-center"><?php
 
-                                        if ($case->isDefault == 1) {
-                                            echo '<i class="ti ti-check icon color-green"></i>';
-                                        }
-                                        ?></td>
+                                                                if ($case->isDefault == 1) {
+                                                                    echo '<i class="ti ti-check icon color-green"></i>';
+                                                                }
+                                                                ?></td>
                                         <td class="text-center">
                                             <?php echo Helper::formattedMoney($balance); ?>
                                         </td>
@@ -129,8 +135,7 @@ $financialHelper = new Financial();
                                                     <?php } ?>
 
                                                     <!-- Kasalararası virman yetkisi varsa -->
-                                                    <?php if ($Auths->hasPermission("intercash_transfer")) {
-                                                        ; ?>
+                                                    <?php if ($Auths->hasPermission("intercash_transfer")) {; ?>
                                                         <a class="dropdown-item intercash-transfer" data-id="<?php echo $id ?>"
                                                             href="#">
                                                             <i class="ti ti-transform icon me-3"></i> Kasalararası Virman
@@ -145,14 +150,14 @@ $financialHelper = new Financial();
                                                         <a class="dropdown-item delete-case" data-id="<?php echo $id ?>" href="#">
                                                             <i class="ti ti-trash icon me-3"></i> Sil
                                                         <?php } ?>
-                                                    </a>
+                                                        </a>
                                                 </div>
                                             </div>
 
 
                                         </td>
                                     </tr>
-                                    <?php
+                                <?php
                                     $i++;
                                 endforeach; ?>
                             <?php endif; ?>

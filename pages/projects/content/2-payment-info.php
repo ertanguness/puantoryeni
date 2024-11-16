@@ -168,7 +168,7 @@ $balance = $total_income - $total_expense - $total_payment;
 
 
                 <div class="table-responsive">
-                    <table class="table card-table text-nowrap datatable" id="person_paymentTable">
+                    <table class="table card-table text-nowrap datatable" id="project_paymentTable">
                         <thead>
                             <tr>
                                 <th style="width:2%">id</th>

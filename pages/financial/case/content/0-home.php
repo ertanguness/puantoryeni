@@ -1,11 +1,15 @@
 <?php
 
 require_once "App/Helper/helper.php";
+require_once "App/Helper/users.php";
+
 
 use App\Helper\Helper;
+$userHelper = new UserHelper();
+
 $selected_firm = $case->firm_id ?? $_SESSION['firm_id'];
 $default_case = ($case->isDefault ?? 0) == 1 ? "checked" : "";
-$is_disabled = ($case->isDefault ?? 0)== 1 ? "disabled" : "";
+$is_disabled = ($case->isDefault ?? 0) == 1 ? "disabled" : "";
 
 ?>
 
@@ -26,7 +30,7 @@ $is_disabled = ($case->isDefault ?? 0)== 1 ? "disabled" : "";
         <div class="col-md-10">
 
             <label class="form-check form-switch form-switch-lg">
-                <input class="form-check-input" name="default_case" id="default_case" type="checkbox" <?php echo $default_case . " " .$is_disabled; ?>>
+                <input class="form-check-input" name="default_case" id="default_case" type="checkbox" <?php echo $default_case . " " . $is_disabled; ?>>
                 <span class="form-check-label form-check-label-on">Varsayılan</span>
                 <span class="form-check-label form-check-label-off">Varsayılan Değil</span>
             </label>
@@ -64,13 +68,13 @@ $is_disabled = ($case->isDefault ?? 0)== 1 ? "disabled" : "";
         </div>
     </div>
     <div class="row mb-3">
-        <?php if($id == 0 ): ?>
-        <div class="col-md-2">
-            <label for="case_name" class="form-label">Başlangıç Bütçesi</label>
-        </div>
-        <div class="col-md-4">
-            <input type="text" name="start_budget" class="form-control" value="<?php echo $case->start_budget ?? '' ?>">
-        </div>
+        <?php if ($id == 0): ?>
+            <div class="col-md-2">
+                <label for="case_name" class="form-label">Başlangıç Bütçesi</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="start_budget" class="form-control" value="<?php echo $case->start_budget ?? '' ?>">
+            </div>
         <?php endif ?>
         <div class="col-md-2">
             <label for="case_name" class="form-label">Açıklama</label>
@@ -86,5 +90,19 @@ $is_disabled = ($case->isDefault ?? 0)== 1 ? "disabled" : "";
         <div class="col-md-4">
             <?php echo Helper::moneySelect('case_money_unit', $case->start_budget_money ?? ''); ?>
         </div>
+
+        <div class="col-md-2">
+            <label for="case_name" class="form-label">Yetkili Kullanıcılar</label>
+        </div>
+        <div class="col-md-4">
+
+            <?php
+            // Veritabanından gelen user_ids değerini diziye dönüştür
+            $user_ids = isset($case->user_ids) ? explode(',', $case->user_ids) : [];
+            echo $userHelper->userSelectMultiple("user_ids[]", $user_ids);
+            ?>
+            <span class="form-text">Firma Sahibi; Kasayı Görmesini İstediği Kullanıcıları Ekleyebilir...</span>
+        </div>
+
     </div>
 </form>

@@ -60,11 +60,17 @@ $projectHelper = new ProjectHelper();
 </div>
 <div class="row mt-3">
     <div class="col-md-2">
-        <label for="">Başlangıç Tarihi</label>
+        <label for="">Başlangıç Tarihi
+            <p>Tahmini Bitiş Tarihi</p>
+        </label>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-2">
         <input type="text" class="form-control flatpickr" name="start_date"
             value="<?php echo $project->start_date ?? '' ?>">
+    </div>
+    <div class="col-md-2">
+        <input type="text" class="form-control flatpickr" name="end_date"
+            value="<?php echo $project->end_date ?? '' ?>">
     </div>
     <?php
     if ($id == 0) {

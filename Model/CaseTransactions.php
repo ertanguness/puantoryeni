@@ -28,7 +28,13 @@ class CaseTransactions extends Model
     //firmanın kasalarının işlemlerini getirir
     public function allTransactionByFirm($firm_id)
     {
-        $cases = $this->caseObj->allCaseWithFirmId();
+        $is_main_user= $_SESSION['user']->parent_id;
+        if($is_main_user==0){
+            $cases = $this->caseObj->allCaseWithFirmId();
+        }else{
+            $cases = $this->caseObj->getCasesByUserIds();
+        }
+
         $case_ids = array_map(function ($case) {
             return $case->id;
         }, $cases);
@@ -109,6 +115,7 @@ class CaseTransactions extends Model
        
         $amount = Helper::formattedMoneyToNumber($amount);
         $description = Security::escape($description);
+        $description = empty($description) ? "Virman" : $description;
 
         //aktarılacak kasa boş gelirse
         if (empty($from_case) || empty($to_case)) {

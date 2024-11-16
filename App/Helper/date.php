@@ -192,4 +192,17 @@ class Date
     }
 
 
+    //Kalan günü hesaplar
+    public static function getRemainingDays($date)
+    {
+        if($date == null){
+            return '';
+        }   
+
+        $today = date('Y-m-d');
+        $date = date('Y-m-d', strtotime($date));
+        $diff = strtotime($date) - strtotime($today);
+        return floor($diff / (60 * 60 * 24));
+    }
+
 }

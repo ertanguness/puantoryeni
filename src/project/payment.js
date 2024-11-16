@@ -1,7 +1,7 @@
 $(document).on("click", ".add-payment", function () {
   let project_id = $(this).data("id");
-  if(!checkId(project_id, "Projeyi")) {
-    return ;
+  if (!checkId(project_id, "Projeyi")) {
+    return;
   }
   $("#payment-modal").modal("show");
   let project_name = $(this).closest("tr").find("td:eq(2)").text();
@@ -52,7 +52,7 @@ $(document).on("click", "#payment_addButton", function () {
       if (data.status == "success") {
         console.log(data);
         let payment = data.last_payment;
-        var table = $("#person_paymentTable").DataTable();
+        var table = $("#project_paymentTable").DataTable();
         table.row
           .add([
             payment.id,
@@ -90,6 +90,8 @@ $(document).on("click", "#payment_addButton", function () {
 
         title = "Başarılı";
         $("#payment-modalForm").trigger("reset");
+        //url' p parametresinden sayfa adını al
+
       } else {
         title = "Hata";
       }
@@ -97,6 +99,6 @@ $(document).on("click", "#payment_addButton", function () {
         title: title,
         text: data.message,
         icon: data.status
-      });
+      })
     });
 });

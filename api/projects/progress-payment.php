@@ -23,7 +23,7 @@ if ($_POST['action'] == 'add_progress_payment') {
         'project_id' => $project_id,
         'firm_id' => $_SESSION['firm_id'],
         'tarih' => Date::Ymd($_POST['progress_payment_date']),
-        'tutar' => $_POST['progress_payment_amount'],
+        'tutar' => Helper::formattedMoneyToNumber($_POST['progress_payment_amount']),
         'kategori' => 6,
         'turu' => 'Proje Hakediş',
         'aciklama' => $_POST['progress_payment_description']

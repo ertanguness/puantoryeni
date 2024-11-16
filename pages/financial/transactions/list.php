@@ -47,7 +47,8 @@ $financialHelper = new Financial();
                         <div class="me-2" style="min-width:300px;">
                             <form action="#" method="post" id="caseForm">
 
-                                <?php echo $financialHelper->getCasesSelectByFirm("firm_cases", $case_id); ?>
+
+                                <?php echo $financialHelper->getCasesSelectByUser("firm_cases", $case_id); ?>
                             </form>
                         </div>
 
@@ -127,7 +128,7 @@ $financialHelper = new Financial();
                             $i = 1;
                             foreach ($transactions as $transaction):
                                 $id = Security::encrypt($transaction->id);
-                                ?>
+                            ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i ?></td>
                                     <td><?php echo Date::dmY($transaction->date) ?></td>
@@ -164,7 +165,7 @@ $financialHelper = new Financial();
 
                                     </td>
                                 </tr>
-                                <?php
+                            <?php
                                 $i++;
                             endforeach; ?>
                         </tbody>

@@ -66,7 +66,15 @@ class Cases extends Model
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    //Kasanın mevcut bakiyesini getir
+    //eğer giriş yapan kullanıcı,Kasanın user_ids alanında geçitorsa Kullanıcının yetkili olduğu kasaları getir
+    public function getCasesByUserIds()
+    {
+        $user_id = $_SESSION['user']->id;
+        $query = $this->db->prepare("SELECT * FROM $this->table WHERE FIND_IN_SET(?,user_ids)");
+        $query->execute([$user_id]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
  
 
 

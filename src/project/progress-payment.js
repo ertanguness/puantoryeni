@@ -11,7 +11,18 @@ $(document).on("click", ".add-progress-payment", function () {
   $("#progress_payment_project_id").val(project_id);
 });
 
+function addCustomValidationMethods() {
+  $.validator.addMethod("validNumber", function (value, element) {
+    return this.optional(element) || /^[0-9.,]+$/.test(value);
+  }, "Lütfen geçerli bir sayı girin");
+}
+
 $(document).on("click", "#progress_payment_addButton", function () {
+
+
+  addCustomValidationMethods();
+
+
   var form = $("#progress_payment_modalForm");
   var formData = new FormData(form[0]);
 
@@ -19,7 +30,7 @@ $(document).on("click", "#progress_payment_addButton", function () {
     rules: {
       progress_payment_amount: {
         required: true,
-        number: true
+        validNumber: true,
       },
       progress_payment_date: {
         required: true
@@ -28,7 +39,7 @@ $(document).on("click", "#progress_payment_addButton", function () {
     messages: {
       progress_payment_amount: {
         required: "Lütfen miktarı girin",
-        number: "Geçerli bir miktar girin"
+        validNumber: "Geçerli bir miktar girin",
       },
       progress_payment_date: {
         required: "Tarih seçin"
@@ -50,7 +61,7 @@ $(document).on("click", "#progress_payment_addButton", function () {
       console.log(data);
 
       let progress_payment = data.progress_payment;
-      var table = $("#person_paymentTable").DataTable();
+      var table = $("#project_paymentTable").DataTable();
       table.row
         .add([
           progress_payment.id,
@@ -95,6 +106,19 @@ $(document).on("click", "#progress_payment_addButton", function () {
         title: title,
         text: data.message,
         icon: data.status
-      });
+      }).then((result) => {
+        let page = getUrlParameter("p");
+        // console.log(page);
+        if (page == "projects/list") {
+          location.reload();
+        }
+
+      });;
     });
 });
+function getUrlParameter(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  var results = regex.exec(location.search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
