@@ -130,25 +130,32 @@ if ($(".datatable").length > 0) {
 }
 
 if ($(".select2").length > 0) {
+
   $(".select2").select2();
 
-  $("#products").select2({
-    dropdownParent: $(".modal")
-  });
-  $(".modal .select2").select2({
-    dropdownParent: $(".modal")
-  });
-  $("#amount_money").select2({
-    dropdownParent: $(".modal")
-  });
-  // $("#firm_cases").select2({
+  // $("#products").select2({
   //   dropdownParent: $(".modal")
   // });
-  $(
-    "#wage_cut_month, #wage_cut_year,#income_month, #income_year, #payment_month, #payment_year"
-  ).select2({
-    dropdownParent: $(".modal")
-  });
+  // $(".modal .select2").select2({
+  //   dropdownParent: $(".modal")
+  // });
+  // $("#amount_money").select2({
+  //   dropdownParent: $(".modal")
+  // });
+  // // $("#firm_cases").select2({
+  // //   dropdownParent: $(".modal")
+  // // });
+  // $(
+  //   "#wage_cut_month, #wage_cut_year,#income_month, #income_year, #payment_month, #payment_year"
+  // ).select2({
+  //   dropdownParent: $(".modal")
+  // });
+
+  //Modal'daki select2'lerin dropdown parent'ını modal yap
+  $('.modal .select2').each(function() { 
+    $(this).select2({ dropdownParent: $(this).parent()});
+})
+
 }
 $(document).ready(function () {
   if ($(".summernote").length > 0) {
@@ -386,6 +393,7 @@ function getTowns(cityId, targetElement) {
     });
 }
 
+
 //Personeli kaydedip kaydetmediğimize bakarız
 function checkPersonId(id) {
   if (id == 0) {
@@ -502,3 +510,25 @@ if ($('.money').length > 0) {
   // });
 }
 
+
+//Jquery validate ile yapılan doğrulamalarda para birimi formatı için
+function addCustomValidationMethods() {
+  $.validator.addMethod(
+    "validNumber",
+    function (value, element) {
+      return this.optional(element) || /^[0-9.,]+$/.test(value);
+    },
+    "Lütfen geçerli bir sayı girin"
+  );
+}
+
+//Jquery validate ile yapılan doğrulamalarda 0 olan değeri kabul etmemek için
+function addCustomValidationValidValue() {
+  $.validator.addMethod(
+    "validValue",
+    function (value, element) {
+      return this.optional(element) || parseFloat(value.replace(',', '.')) !== 0;
+    },
+    "Lütfen geçerli bir değer girin"
+  );
+}

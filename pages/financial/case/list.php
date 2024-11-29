@@ -28,29 +28,16 @@ $financialHelper = new Financial();
 
 ?>
 <div class="container-xl">
-    <div class="alert alert-info bg-white alert-dismissible mt-3" role="alert">
-        <div class="d-flex">
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon alert-icon">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
-                    <path d="M12 9h.01"></path>
-                    <path d="M11 12h1v4h1"></path>
-                </svg>
-            </div>
-            <div>
-                <h4 class="alert-title">Kasa Listesi!</h4>
-                <div class="text-secondary">Firmanız için tanımlı kasaları buradan yönetebilirsiniz.Gelir gider
-                    işlemleriniz içini varsayılan kasayı seçmeyi unutmayın!</div>
-            </div>
-        </div>
-        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-    </div>
+
+    <!-- Alert component'i dahil et -->
+    <?php
+        $title = "Kasa Listesi!";
+        $text = "Firmanız için tanımlı kasaları buradan yönetebilirsiniz.Gelir gider işlemleriniz içini varsayılan kasayı seçmeyi unutmayın!";
+        require_once 'pages/components/alert.php'
+    ?>
+    <!-- Alert  -->
+
     <div class="row row-deck row-cards">
-
-
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -92,7 +79,7 @@ $financialHelper = new Financial();
                                 foreach ($cases as $case):
                                     $id = Security::encrypt($case->id);
                                     $balance = $CaseTransactions->getCaseBalance($case->id)->balance;
-                                ?>
+                                    ?>
                                     <tr>
                                         <td class="text-center"><?php echo $i; ?></td>
                                         <td><?php echo $company->getFirmName($case->company_id ?? ''); ?></td>
@@ -106,10 +93,10 @@ $financialHelper = new Financial();
                                         <td><?php echo Helper::money($case->case_money_unit); ?></td>
                                         <td class="text-center"><?php
 
-                                                                if ($case->isDefault == 1) {
-                                                                    echo '<i class="ti ti-check icon color-green"></i>';
-                                                                }
-                                                                ?></td>
+                                        if ($case->isDefault == 1) {
+                                            echo '<i class="ti ti-check icon color-green"></i>';
+                                        }
+                                        ?></td>
                                         <td class="text-center">
                                             <?php echo Helper::formattedMoney($balance); ?>
                                         </td>
@@ -135,7 +122,8 @@ $financialHelper = new Financial();
                                                     <?php } ?>
 
                                                     <!-- Kasalararası virman yetkisi varsa -->
-                                                    <?php if ($Auths->hasPermission("intercash_transfer")) {; ?>
+                                                    <?php if ($Auths->hasPermission("intercash_transfer")) {
+                                                        ; ?>
                                                         <a class="dropdown-item intercash-transfer" data-id="<?php echo $id ?>"
                                                             href="#">
                                                             <i class="ti ti-transform icon me-3"></i> Kasalararası Virman
@@ -150,14 +138,14 @@ $financialHelper = new Financial();
                                                         <a class="dropdown-item delete-case" data-id="<?php echo $id ?>" href="#">
                                                             <i class="ti ti-trash icon me-3"></i> Sil
                                                         <?php } ?>
-                                                        </a>
+                                                    </a>
                                                 </div>
                                             </div>
 
 
                                         </td>
                                     </tr>
-                                <?php
+                                    <?php
                                     $i++;
                                 endforeach; ?>
                             <?php endif; ?>

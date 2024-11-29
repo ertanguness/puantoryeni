@@ -47,10 +47,10 @@ class Bordro extends Model
 
         $query->execute([
             'gelir' => 1,
-            'kesinti' => 2,
-            'odeme' => 3,
-            'maas' => 4,
-            'puantaj' => 5,
+            'kesinti' => 15,
+            'odeme' => 7,
+            'maas' => 16,
+            'puantaj' => 14,
             'wage_type' => $wage_tpe,
             ':person_id' => $person_id,
             ':start_date' => $start_date,
@@ -71,13 +71,13 @@ class Bordro extends Model
                         -COALESCE((
                             SELECT SUM(tutar) FROM maas_gelir_kesinti mgkk
                             WHERE mgkk.person_id = :person_id
-                            AND mgkk.kategori IN (2, 3)
+                            AND mgkk.kategori IN (2, 7)
                             AND mgkk.gun < :start_date  -- Kesinti Toplamı
                         ), 0) +
                         COALESCE((
                             SELECT SUM(tutar) FROM maas_gelir_kesinti mgkg
                             WHERE mgkg.person_id = :person_id
-                            AND mgkg.kategori IN (1, 4)
+                            AND mgkg.kategori IN (1, 16)
                             AND mgkg.gun < :start_date  -- Maaş veya diğer ödemeler toplamı
                         ), 0) +
                         COALESCE((
@@ -114,18 +114,36 @@ class Bordro extends Model
 
 
     // Personelin toplam gelir, gider ve ödeme bilgilerini döndürür
+    /* 
+    1: Gelir
+    14: Puantaj Çalışma
+    16: Maaş
+    15: Kesinti
+    7: Ödeme
+    */
     function sumAllIncomeExpense($person_id)
     {
         $sql = $this->db->prepare('SELECT 
-                                                COALESCE(SUM(CASE WHEN (kategori = 1 or kategori = 4 or kategori = 5) THEN tutar END), 0) AS total_income,
-                                                COALESCE(SUM(CASE WHEN kategori = 2 THEN tutar END), 0) AS total_expense,
-                                                COALESCE(SUM(CASE WHEN kategori = 3 THEN tutar END), 0) AS total_payment
+                                                COALESCE(SUM(CASE WHEN (kategori = 1 or kategori = 16 or kategori = 14) THEN tutar END), 0) AS total_income,
+                                                COALESCE(SUM(CASE WHEN kategori = 15 THEN tutar END), 0) AS total_expense,
+                                                COALESCE(SUM(CASE WHEN kategori = 7 THEN tutar END), 0) AS total_payment
 
                                             FROM sqlmaas_gelir_kesinti 
                                             WHERE person_id = :person_id
                                             ORDER BY created_at desc;');
         $sql->execute(['person_id' => $person_id]);
         return $sql->fetch(PDO::FETCH_OBJ);
+    }
+
+    //Formatlanmış Personel Gelir ve Gider bilgilerini döndürür
+    function sumAllIncomeExpenseFormatted($person_id)
+    {
+        $result = $this->sumAllIncomeExpense($person_id);
+        $result->balance = Helper::formattedMoney($result->total_income - $result->total_expense - $result->total_payment);
+        $result->total_income = Helper::formattedMoney($result->total_income);
+        $result->total_expense = Helper::formattedMoney($result->total_expense);
+        $result->total_payment = Helper::formattedMoney($result->total_payment);
+        return $result;
     }
 
     //Personelin Bakiyesini döndürür
@@ -138,11 +156,22 @@ class Bordro extends Model
     //Personelin maaşı eklenmiş mi kontrol eder
     public function isPersonMonthlyIncomeAdded($person_id, $month, $year)
     {
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE person_id = :person_id AND ay = :month AND yil = :year AND kategori = 4");
-        $sql->execute([':person_id' => $person_id, ':month' => $month, ':year' => $year]);
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE 
+                                            person_id = :person_id AND 
+                                            ay = :month AND 
+                                            yil = :year AND 
+                                            kategori = :kategori");
+                                        
+                                        $sql->execute([
+                                            ':person_id' => $person_id, 
+                                            ':month' => $month, 
+                                            ':year' => $year,
+                                            ':kategori' => 16 //Maaş
+                                        ]);
         return $sql->fetch(PDO::FETCH_OBJ);
     }
 
+    //Personelin Maaşını ekler
     public function addPersonMonthlyIncome($person_id, $month, $year, $tutar, $turu)
     {
         $Persons = new Persons();
@@ -173,7 +202,7 @@ class Bordro extends Model
             $description = 'Aylık Maaş';
         }
 
-        $sql = $this->db->prepare("INSERT INTO $this->table SET person_id = :person_id, gun = :gun, ay = :month, yil = :year, tutar = :tutar, kategori = 4 , turu = :turu , aciklama = :aciklama");
+        $sql = $this->db->prepare("INSERT INTO $this->table SET person_id = :person_id, gun = :gun, ay = :month, yil = :year, tutar = :tutar, kategori = 16 , turu = :turu , aciklama = :aciklama");
         $sql->execute([':person_id' => $person_id, ':gun' => $gun, ':month' => $month, ':year' => $year, ':tutar' => $tutar, ':turu' => $turu, ':aciklama' => $description]);
         return $this->db->lastInsertId();
     }
@@ -216,24 +245,6 @@ class Bordro extends Model
         $sql->execute([':tutar' => $tutar, ':id' => $montly_income_id, ':description' => $description]);
     }
 
-    public static function getIncomeExpenseData($person_id)
-    {
-        $payment = new Bordro();
-        $puantaj = new Puantaj();
-
-        $income_expense = $payment->sumAllIncomeExpense($person_id);
-        $income_puantaj = $puantaj->getPuantajIncomeByPerson($person_id);
-
-        $total_income_puantaj = $income_expense->total_income + $income_puantaj->total_income;
-
-        $balance = Helper::formattedMoney($total_income_puantaj - $income_expense->total_payment - $income_expense->total_expense);
-        $income_expense->total_income = Helper::formattedMoney($total_income_puantaj ?? 0);
-        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);
-        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);
-        $income_expense->balance = $balance;
-
-        return $income_expense;
-    }
 
     //Personelin işe başlama tarihinden önceki tüm maaşları sil
     public function deleteAllSalaries($person_id, $job_start_date)
@@ -257,7 +268,7 @@ class Bordro extends Model
                                             WHERE person_id = :person_id 
                                              AND tutar > 0 
                                             and ay = :ay and yil = :yil
-                                            AND kategori IN(1,4,5)
+                                            AND kategori IN(1,16,14)
                                             GROUP BY puantaj_turu,turu");
         $sql->execute([
             ':person_id' => $person_id,
@@ -280,7 +291,7 @@ class Bordro extends Model
                                             FROM sqlmaas_gelir_kesinti 
                                             WHERE person_id = :person_id
                                             and ay = :ay and yil = :yil
-                                            AND kategori IN(2,3)
+                                            AND kategori IN(7,15)
                                             GROUP BY puantaj_turu,turu");
         $sql->execute([
             ':person_id' => $person_id,

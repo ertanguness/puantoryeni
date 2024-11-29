@@ -135,7 +135,7 @@ function puantaj_olustur() {
           .eq(index + 3)
           .text(); // İndeks + 2, 2. indeksten başlamasını sağlar
       var puantajId = $(this).attr("data-id") ? $(this).attr("data-id") : ""; // Durum bilgisini al
-      // console.log(person_id + "--" + date + "--" + status); //
+       //console.log(person_id + "--" + date + "--" + puantajId); //
 
       // var key = person_id + " : " + position;
       var key = person_id;

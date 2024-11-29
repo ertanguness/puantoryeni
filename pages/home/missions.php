@@ -190,7 +190,7 @@ if (!$Auths->Authorize("home_page_mission_view")) {
                                                                 <div class="col">
                                                                     <div class="avatar-list avatar-list-stacked">
                                                                         <?php
-                                                                        $user_ids = $mission->user_ids;
+                                                                        $user_ids = $mission->user_ids ?? [];
                                                                         $user_ids = explode(",", $user_ids);
                                                                         $user_names = $userHelper->getUsersName($mission->user_ids);
 
@@ -201,8 +201,8 @@ if (!$Auths->Authorize("home_page_mission_view")) {
                                                                             <span class="avatar avatar-xs rounded"
                                                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                                                 data-bs-custom-class="custom-tooltip"
-                                                                                data-bs-title="<?php echo $user->full_name ?>">
-                                                                                <?php echo Helper::getInitials($user->full_name ?? ''); ?>
+                                                                                data-bs-title="<?php echo $user->full_name ?? '' ?>">
+                                                                                <?php echo Helper::getInitials($user->full_name ?? 0 ) ; ?>
                                                                             </span>
 
 

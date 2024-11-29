@@ -107,6 +107,8 @@ if ($page == 'projects/list' || $page == 'projects/manage' || $page == 'projects
     echo '<script src="./src/project/projects.js"></script>';
     echo '<script src="./src/project/progress-payment.js"></script>';
     echo '<script src="./src/project/payment.js"></script>';
+    echo '<script src="./src/project/expense.js"></script>';
+    echo '<script src="./src/project/deduction.js"></script>';
 }
 // Puantaj Ekleme,güncelleme ve listeleme sayfası
 if ($page == 'puantaj/list') {
@@ -116,6 +118,9 @@ if ($page == 'puantaj/list') {
 if ($page == 'payroll/list') {
     echo '<script src="./src/bordro/bordro.js"></script>';
     echo '<script src="./src/bordro/payment.js"></script>';
+    echo '<script src="./src/bordro/wage_cut.js"></script>';
+    echo '<script src="./src/bordro/income.js"></script>';
+    
 }
 // Gelir Gider Türü Tanımlama
 if ($page == 'defines/incexp/list' || $page == 'defines/incexp/manage') {
@@ -193,8 +198,11 @@ if ($page == 'home') {
     echo '<script src="./src/home/missions.js"></script>';
 }
 ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script src="./dist/js/flatpickr.min.js"></script>
+<script src="./dist/js/flatpickr.tr.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
 <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -23,12 +23,12 @@ $actions = $Actions->allTransactionByCaseId($id);
 // ********************************************************************************* */
 $summary = $Actions->sumAllIncomeExpense($id);
 
-$incomes = $summary->income;
-$expense = $summary->expense;
+$incomes = $summary->income; // Gelir
+$expense = $summary->expense; // Gider
+$balance = $incomes - $expense;// Bakiye 
 // ********************************************************************************* */
 
-// Bakiye hesaplanacak
-$balance = $incomes - $expense;
+
 
 ?>
 <div class="container-xl">
@@ -148,7 +148,7 @@ $balance = $incomes - $expense;
                         <thead>
                             <tr>
                                 <th style="width:2%">Sıra</th>
-                                <th>Tarih</th>
+                                <th style="width:7%">Tarih</th>
                                 <th>Adı</th>
                                 <th>İşlem Türü</th>
                                 <th>Tutar</th>
@@ -166,7 +166,7 @@ $balance = $incomes - $expense;
                                 ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><?php echo Date::dmY($item->date); ?></td>
+                                    <td class="text-center"><?php echo Date::dmY($item->date); ?></td>
                                     <td><?php echo $item->type_id; ?></td>
 
 

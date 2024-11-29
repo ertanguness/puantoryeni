@@ -13,13 +13,16 @@ $(document).on("click", ".add-wage-cut", function () {
   //Modaldaki kaydet butonuna tıklanınca
   $(document).on("click", "#wage_cut_addButton", function () {
     let form = $("#wage_cut_modalForm");
+    let urlParams = new URLSearchParams(window.location.search);
+    let page = urlParams.get("p");
   
     let formData = new FormData(form[0]);
     formData.append("action", "saveWageCut");
+    formData.append("page", page);
   
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
   
     fetch("api/persons/wage_cut.php", {
       method: "POST",

@@ -12,14 +12,16 @@ $(document).on("click", ".add-income", function () {
 
 //Modaldaki kaydet butonuna tıklanınca
 $(document).on("click", "#income_addButton", function () {
+  var urlParams = new URLSearchParams(window.location.search);
+  var page = urlParams.get("p");
+
+
   let form = $("#income_modalForm");
 
   let formData = new FormData(form[0]);
   formData.append("action", "saveIncome");
+  formData.append("page", page);
 
-  for (let pair of formData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
 
   fetch("api/persons/income.php", {
     method: "POST",
@@ -43,7 +45,8 @@ $(document).on("click", "#income_addButton", function () {
           income.turu,
           income.ay,
           income.yil,
-          income.kategori,
+          `<i class='ti ti-upload icon color-yellow me-1' ></i>
+          ${data.income.kategori}`,
           income.tutar,
           income.aciklama,
           income.created_at,
@@ -61,7 +64,7 @@ $(document).on("click", "#income_addButton", function () {
                       </div>
                   </div>`,
         ])
-        .order([0, "desc"])
+        .order([8, "desc"])
         .draw(false);
 
       if (data.status == "success") {

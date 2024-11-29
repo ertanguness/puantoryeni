@@ -10,6 +10,7 @@ use App\Helper\Security;
 class CaseTransactions extends Model
 {
     protected $table = "case_transactions";
+    protected $sql_table = "sql_case_transactions";
     protected $caseObj;
 
     public function __construct()
@@ -44,7 +45,7 @@ class CaseTransactions extends Model
         }
 
         $case_ids = implode(",", $case_ids);
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id IN ($case_ids)");
+        $sql = $this->db->prepare("SELECT * FROM $this->sql_table WHERE case_id IN ($case_ids) order BY id desc" );
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -57,7 +58,7 @@ class CaseTransactions extends Model
             $case_id = $this->caseObj->getDefaultCaseIdByFirm();
         }
 
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id = ?");
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id = ? ORDER BY id DESC");
         $sql->execute([$case_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -71,7 +72,7 @@ class CaseTransactions extends Model
     //Kasanın tüm hareketlerini getir
     public function allTransactionByCaseId($case_id)
     {
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id = ?");
+        $sql = $this->db->prepare("SELECT * FROM $this->sql_table WHERE case_id = ?");
         $sql->execute([$case_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -83,7 +84,7 @@ class CaseTransactions extends Model
         $sql = $this->db->prepare("SELECT 
                                                 SUM(CASE WHEN type_id = 1 THEN amount ELSE 0 END) AS income,
                                                 SUM(CASE WHEN type_id = 2 THEN amount ELSE 0 END) AS expense
-                                            FROM $this->table WHERE case_id = ?");
+                                            FROM $this->sql_table WHERE case_id = ?");
         $sql->execute([$case_id]);
         return $sql->fetch(PDO::FETCH_OBJ);
     }
@@ -97,7 +98,7 @@ class CaseTransactions extends Model
                 COALESCE(SUM(CASE WHEN type_id = 2 THEN amount ELSE 0 END),0) AS total_expense,
                 COALESCE(SUM(CASE WHEN type_id = 1 THEN amount ELSE 0 END) - SUM(CASE WHEN type_id = 2 THEN amount ELSE 0 END),0) AS balance
             FROM 
-                case_transactions
+                sql_case_transactions
             WHERE 
                 case_id = :case_id
         ";

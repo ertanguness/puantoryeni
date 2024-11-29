@@ -43,12 +43,13 @@ $financialHelper = new Financial();
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Gelir-Gider Hareketleri</h3>
+                    <input type="hidden" class="form-control" id="transaction_id" name="transaction_id" value="0">
                     <div class="col-auto ms-auto d-flex align-items-center">
                         <div class="me-2" style="min-width:300px;">
                             <form action="#" method="post" id="caseForm">
 
 
-                                <?php echo $financialHelper->getCasesSelectByUser("firm_cases", $case_id); ?>
+                                <?php echo $financialHelper->getCasesSelectByUser("firm_cases",$case_id); ?>
                             </form>
                         </div>
 
@@ -70,7 +71,7 @@ $financialHelper = new Financial();
                                 <!-- Personel ödeme yetkisi varsa -->
                                 <?php if ($Auths->hasPermission('make_staff_payment')) { ?>
                                     <a class="dropdown-item add-income" data-tooltip="Personele yapılan ödemeleri ekleyin"
-                                        href="#" data-bs-toggle="modal" data-bs-target="#income_modal">
+                                        href="#" data-bs-toggle="modal" data-bs-target="#pay_to_person-modal">
                                         <i class="ti ti-user-dollar icon me-3"></i> Personel Ödemesi Yap
                                     </a>
                                 <?php } ?>
@@ -79,7 +80,7 @@ $financialHelper = new Financial();
                                 <?php if ($Auths->hasPermission('make_company_payment')) { ?>
                                     <a class="dropdown-item add-income"
                                         data-tooltip="Yüklenici Firmaya yapılan ödemeleri ekleyin" href="#"
-                                        data-bs-toggle="modal" data-bs-target="#income_modal">
+                                        data-bs-toggle="modal" data-bs-target="#pay_to_company-modal">
                                         <i class="ti ti-home-stats icon me-3"></i> Firma Ödemesi Yap
                                     </a>
                                 <?php } ?>
@@ -88,7 +89,7 @@ $financialHelper = new Financial();
                                 <?php if ($Auths->hasPermission('add_project_expense')) { ?>
                                     <a class="dropdown-item add-income"
                                         data-tooltip="Alınan projeye yapılan masrafları ekleyin" href="#"
-                                        data-bs-toggle="modal" data-bs-target="#income_modal">
+                                        data-bs-toggle="modal" data-bs-target="#add_expense_received_project-modal">
                                         <i class="ti ti-building-estate icon me-3"></i> Alınan Proje Masraf Ekle
                                     </a>
                                 <?php } ?>
@@ -98,7 +99,7 @@ $financialHelper = new Financial();
                         </div>
 
                         <?php if ($Auths->hasPermission('income_expense_add_update')) { ?>
-                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-general">
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#general-modal">
                                 <i class="ti ti-plus icon me-2"></i> Yeni
                             </a>
                         <?php } ?>
@@ -116,7 +117,7 @@ $financialHelper = new Financial();
                                 <th style="width:5%">İşlem Türü</th>
                                 <th style="width:5%">Alt Tür</th>
                                 <th>Kasası</th>
-                                <th>Tutar</th>
+                                <th style="width:12%">Tutar</th>
                                 <th>Açıklama</th>
                                 <th style="width:7%" class="text-end">İşlem</th>
                             </tr>
@@ -138,7 +139,7 @@ $financialHelper = new Financial();
                                         <?php echo $financialHelper->getTransactionType($transaction->sub_type ?? 0) ?>
                                     </td>
                                     <td><?php echo $cases->find($transaction->case_id)->case_name ?></td>
-                                    <td><?php echo Helper::formattedMoney($transaction->amount, $transaction->amount_money ?? 1) ?>
+                                    <td class="text-end"><?php echo Helper::formattedMoney($transaction->amount, $transaction->amount_money ?? 1) ?>
                                     </td>
                                     <td><?php echo $transaction->description ?></td>
                                     <td class="text-end">
@@ -148,8 +149,7 @@ $financialHelper = new Financial();
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <!-- Gelir Gider Güncelleme yetkisi kontrol edilir -->
                                                 <?php if ($Auths->hasPermission('income_expense_add_update')): ?>
-                                                    <a class="dropdown-item route-link"
-                                                        data-page="financial/transaction/manage&id=<?php echo $id ?>" href="#">
+                                                    <a class="dropdown-item edit-transactions" href="#" data-id="<?php echo $id ?>">
                                                         <i class="ti ti-edit icon me-3"></i> Güncelle
                                                     </a>
                                                 <?php endif ?>
@@ -179,3 +179,6 @@ $financialHelper = new Financial();
 
 <?php include_once "modals/general-modal.php"; ?>
 <?php include_once "modals/get_payment_from_project-modal.php"; ?>
+<?php include_once "modals/pay_to_person-modal.php"; ?>
+<?php include_once "modals/pay_to_company-modal.php"; ?>
+<?php include_once "modals/add_expense_received_project-modal.php"; ?>

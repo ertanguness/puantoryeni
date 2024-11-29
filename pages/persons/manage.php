@@ -1,13 +1,22 @@
 <?php
 
-use App\Helper\Security;
 
 require_once 'Model/Persons.php';
+require_once 'Model/Cases.php';
+require_once 'Model/Projects.php';
+require_once 'App/Helper/projects.php';
+
+use App\Helper\Security;
+$Cases = new Cases();
+$Projects = new Projects();
+$projectHelper = new ProjectHelper();
+
 
 // Yetki kontrolü yapılır
 $perm->checkAuthorize("personnel_add_update");
 
 $id = isset($_GET["id"]) ? Security::decrypt($_GET['id']) : 0;
+$new_id = isset($_GET["id"]) ? $_GET['id'] : 0;
 
 
 //Eğer manuel id yazılmışsa personel sayfasına gönder
@@ -23,7 +32,47 @@ $person = $personObj->find($id);
 
 $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
 
+//Varsayılan kasayı getir
+$case_id = $Cases->getDefaultCaseIdByFirm();
+
+//personelin kayıtlı olduğu projeleri getir
+$personProjects = $Projects->getPersonProjects($id);
+
+
+//Personelin kayıtlı olduğu projeleri virgül ile birleştir
+$personProjectsIds = '';
+foreach ($personProjects as $key => $value) {
+    $personProjectsIds .= $value->project_id . ',';
+}
+//Sonundaki virgülü sil
+$personProjectsIds = rtrim($personProjectsIds, ',');
+
+// echo "<pre>";
+// print_r($personProjects);
+// echo "</pre>";
+
 ?>
+<style>
+    .person-image:hover {
+        cursor: pointer;
+    }
+
+    .person-image:hover+.person-image-hover {
+        display: block;
+    }
+
+    .person-image-hover {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        width: 200px;
+        height: 200px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    }
+</style>
 
 <div class="page-wrapper">
     <!-- Page header -->
@@ -44,7 +93,17 @@ $pageTitle = $id > 0 ? 'Personel Güncelle' : 'Yeni Personel';
                                 ;
                                 ?>
                                 <span class="avatar"
-                                    style="background-image: url('./static/hard-hat<?php echo $noback_shape; ?>.svg')"></span>
+                                    style="background-image: url('./static/hard-hat<?php echo $noback_shape; ?>.svg')">
+                                </span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="avatar person-image">
+                                    <!-- <img src="../../uploads/<?php echo $myfirm->brand_logo ?? '' ?>" alt=""> -->
+                                </div>
+                                <span class="person-image-hover mt-1">
+
+                                    <!-- <img src="../../uploads/<?php echo $myfirm->brand_logo ?? '' ?>" alt=""> -->
+                                </span>
                             </div>
                             <div class="col">
                                 <div class="font-weight-700">

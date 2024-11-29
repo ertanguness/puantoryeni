@@ -112,4 +112,29 @@ $(document).on('click', '.wage_type', function () {
 });
 
 
+$(document).on("click", ".delete-payment", async function () {
+  let type = $(this).closest("tr").find("td:eq(2)").text();
+  //Tablo adı butonun içinde bulunduğu tablo
+  let action = "deletePayment";
+  let confirmMessage = type + " silinecektir!";
+  let url = "/api/persons/person.php";
 
+  const result = await deleteRecordByReturn(this, action, confirmMessage, url);
+
+  let income_expense = result.income_expense;
+
+  let total_income = income_expense.total_income;
+  let total_expense = income_expense.total_expense;
+  let total_payment = income_expense.total_payment;
+  let balance = income_expense.balance;
+
+  console.log(total_income + " " + total_payment + " " + balance);
+  
+
+  $("#total_payment").text(total_payment);
+  $("#total_income").text(total_income);
+  $("#total_expense").text(total_expense);
+  $("#balance").text(balance);
+  
+
+});

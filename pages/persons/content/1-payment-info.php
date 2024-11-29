@@ -4,15 +4,18 @@ require_once 'Model/Bordro.php';
 require_once 'Model/Puantaj.php';
 require_once 'App/Helper/date.php';
 require_once 'App/Helper/security.php';
+require_once "App/Helper/financial.php";
+
 
 use App\Helper\Security;
+use App\Helper\Date;
+use App\Helper\Helper;
 
 $puantaj = new Puantaj();
 $bordro = new Bordro();
+$financialHelper = new Financial();
 
-use App\Helper\Date;
 // Eğer personel beyaz yaka ise ve içinde bulunduğu ayda gelir tablosuna maaş eklenmediyse git o tabloya personelin aylık ücretini ekle
-use App\Helper\Helper;
 
 // Gelir gider bilgierini getir
 $income_expenses = $bordro->getPersonWorkTransactions($id);
@@ -214,15 +217,9 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                                     <td><?php echo $item->yil; ?></td>
 
                                     <td><?php
-                                    if ($item->kategori == 1 || $item->kategori == 4) {
-                                        echo "<i class='ti ti-download icon color-green me-1' ></i>";
-                                    } elseif ($item->kategori == 2) {
-                                        echo "<i class='ti ti-trending-down icon color-red me-1' ></i> ";
-                                    } elseif ($item->kategori == 3) {
-                                        echo "<i class='ti ti-upload icon color-yellow me-1' ></i> ";
-                                    }
-                                    ;
-                                    echo Helper::getIncomeExpenseType($item->kategori); ?>
+                                    // İşlem türüne göre icon ve renk belirle
+                                    echo Helper::getIconWithColorByType($item->kategori) ?? '';
+                                    echo $financialHelper->getTransactionType($item->kategori); ?>
 
                                     </td>
                                     <td><?php echo Helper::formattedMoney($item->tutar); ?></td>
@@ -235,12 +232,12 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
 
                                     <td class="text-end">
                                         <div class="dropdown">
+                                            <button class="btn dropdown-toggle align-text-top"
+                                            data-bs-toggle="dropdown">İşlem</button>
+                                            <div class="dropdown-menu dropdown-menu-end">
                                             <?php
                                             //Eğer ödeme, gelir veya kesinti ise işlem yapılabilir
-                                            if (in_array($item->kategori, [1, 2, 3, 4])): ?>
-                                                <button class="btn dropdown-toggle align-text-top"
-                                                    data-bs-toggle="dropdown">İşlem</button>
-                                                <div class="dropdown-menu dropdown-menu-end">
+                                            if ($item->kategori != 14 ): ?>
                                                     <a class="dropdown-item edit-payment">
                                                         <i class="ti ti-edit icon me-3"></i> Güncelle
                                                     </a>

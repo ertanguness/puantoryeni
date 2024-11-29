@@ -10,11 +10,12 @@ use App\Helper\Security;
 $projects = new Projects();
 $person = new Persons();
 
-$id = $_GET['id'] ?? 0;
+$id = Security::decrypt($_GET['id']) ?? 0;
 
-$project = $projects->find(Security::decrypt($id));
+$project = $projects->find(($id));
 $persons = $projects->getPersontoProject($firm_id,$id);
 $company = new CompanyHelper();
+
 
 
 ?>
@@ -75,7 +76,7 @@ $company = new CompanyHelper();
                                     <td><?php echo $person->id; ?></td>
                                     <td><?php echo $person->full_name; ?></td>
                                     <td><?php echo $person->wage_type == 1 ? "Beyaz Yaka" : "Mavi Yaka"; ?></td>
-                                    <td><?php echo $person->job; ?></td>
+                                    <td><?php echo $person->is_added; ?></td>
                                     <td><?php echo $person->state ?></td>
 
                                 </tr>

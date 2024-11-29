@@ -5,9 +5,11 @@ use App\Helper\Security;
 require_once "Model/Projects.php";
 require_once "App/Helper/company.php";
 require_once "App/Helper/cities.php";
+require_once "Model/Cases.php";
 
 $companyHelper = new CompanyHelper();
 $cityHelper = new Cities();
+$Cases = new Cases();
 
 $perm->checkAuthorize("project_add_update");
 
@@ -31,17 +33,23 @@ $type = $project->type ?? 1;
 
 $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
 
+$case_id = $Cases->getDefaultCaseIdByFirm();
+
 ?>
 <div class="page-wrapper">
     <!-- Page header -->
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
-                <div class="col">
+            <div class="col">
+                        <!-- Page pre-title -->
+                        <div class="page-pretitle">
+                       <?php echo $pageTitle; ?>
+                    </div>
                     <h2 class="page-title">
-                        <?php echo $pageTitle; ?>
-                    </h2>
-                </div>
+                        <?php echo $project->project_name ?? 'Yeni Proje'?>
+                        </h2>
+                    </div>
 
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
@@ -144,3 +152,4 @@ $pageTitle = $id > 0 ? "Proje Detay/Güncelle" : "Yeni Proje";
 
 <?php include_once 'modals/payment-modal.php' ?>
 <?php include_once 'modals/progress-payment-modal.php' ?>
+<?php include_once 'modals/deduction-modal.php' ?>

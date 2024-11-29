@@ -41,6 +41,7 @@ if ($_POST["action"] == "saveTransaction") {
         "description" => Security::escape($_POST["description"]),
     ];
 
+
     try {
         $lastInsertId = $ct->saveWithAttr($data);
         $status = "success";
@@ -55,9 +56,9 @@ if ($_POST["action"] == "saveTransaction") {
         $transaction = $ct->find(Security::decrypt($lastInsertId));
         //Kayıt alanlarında düzenleme
         foreach ($transaction as $key => $value) {
-            if($key == "id"){
+            if ($key == "id") {
                 $transaction->id = Security::encrypt($value);
-            }else if ($key == "date") {
+            } else if ($key == "date") {
                 $transaction->$key = Date::dmY($value);
             } elseif ($key == "type_id") {
                 $transaction->$key = $value == 1 ? "Gelir" : "Gider";
@@ -84,7 +85,7 @@ if ($_POST["action"] == "deleteTransaction") {
 
     //Kasa hareketi silme yetkisi var mı?
     $Auths->hasPermissionReturn("delete_income_expense");
-      
+
 
     $id = $_POST["id"];
     try {
@@ -114,8 +115,9 @@ if ($_POST["action"] == "getSubTypes") {
 
 
 //Projeden Ödeme Al
-if($_POST["action"] == "getPaymentFromProject"){
-    $project_id = $_POST["fp_project_name"];
+if ($_POST["action"] == "getPaymentFromProject") {
+    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+    $project_id = Security::decrypt($_POST["fp_project_name"]);
 
     $amount = Helper::formattedMoneyToNumber($_POST["fp_amount"]);
     $date = Date::ymd($_POST["fp_action_date"]);
@@ -125,10 +127,11 @@ if($_POST["action"] == "getPaymentFromProject"){
     //$Auths->hasPermission("income_expense_add_update");
 
     $data = [
-        "id" => 0,
+        "id" => $id,
         "date" => $date,
-        "type_id" => 2,
-        "sub_type" => 2,
+        "type_id" => 1,
+        "sub_type" => 5,
+        "project_id" => $project_id,
         "case_id" => Security::decrypt($_POST["fp_cases"]),
         "amount" => $amount,
         "amount_money" => 1,
@@ -138,24 +141,8 @@ if($_POST["action"] == "getPaymentFromProject"){
     try {
         $lastInsertId = $ct->saveWithAttr($data);
         $status = "success";
-        $message = "Ödeme başarıyla alındı";
+        $message = $id == 0 ? "Ödeme başarıyla yapıldı" : "Ödeme başarıyla güncellendi";
 
-        //Eklenen kaydın bilgilerini getir
-        // $transaction = $ct->find(Security::decrypt($lastInsertId));
-        // //Kayıt alanlarında düzenleme
-        // foreach ($transaction as $key => $value) {
-        //     if($key == "id"){
-        //         $transaction->id = Security::encrypt($value);
-        //     }else if ($key == "date") {
-        //         $transaction->$key = Date::dmY($value);
-        //     } elseif ($key == "type_id") {
-        //         $transaction->$key = $value == 1 ? "Gelir" : "Gider";
-        //     } elseif ($key == "case_id") {
-        //         $transaction->$key = $cases->find($value)->case_name;
-        //     } elseif ($key == "amount") {
-        //         $transaction->$key = Helper::formattedMoney($value, $transaction->amount_money ?? 1);
-        //     }
-        // }
     } catch (PDOException $ex) {
         $status = "error";
         $message = $ex->getMessage();
@@ -164,7 +151,205 @@ if($_POST["action"] == "getPaymentFromProject"){
     $res = [
         "status" => $status,
         "message" => $message,
+
+    ];
+    echo json_encode($res);
+}
+
+//Personel Ödemesi Yap
+if ($_POST["action"] == "payToPerson") {
+    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+    $person_id = $_POST["tp_person_name"];
+    $amount = Helper::formattedMoneyToNumber($_POST["tp_amount"]);
+    $date = Date::ymd($_POST["tp_action_date"]);
+    $description = Security::escape($_POST["tp_description"]);
+
+    //Kasa hareketi ekleme yetkisi var mı?
+    //$Auths->hasPermission("income_expense_add_update");
+
+    $data = [
+        "id" => $id,
+        "date" => $date,
+        "type_id" => 2, //Gider
+        "sub_type" => 7, //Personel Ödemesi
+        "person_id" => Security::decrypt($_POST["tp_person_name"]),
+        "case_id" => Security::decrypt($_POST["tp_cases"]),
+        "amount" => $amount,
+        "amount_money" => 1,
+        "description" => $description,
+    ];
+
+    try {
+        $lastInsertId = $ct->saveWithAttr($data);
+        $status = "success";
+        $message = $id == 0 ? "Ödeme başarıyla yapıldı" : "Ödeme başarıyla güncellendi";
        
+
+
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message,
+
+    ];
+    echo json_encode($res);
+}
+
+
+//Firma Ödemesi Yap
+if ($_POST["action"] == "payToCompany") {
+    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+    $company_id = $_POST["tc_company_name"];
+    $amount = Helper::formattedMoneyToNumber($_POST["tc_amount"]);
+    $date = Date::ymd($_POST["tc_action_date"]);
+    $description = Security::escape($_POST["tc_description"]);
+
+    //Kasa hareketi ekleme yetkisi var mı?
+    //$Auths->hasPermission("income_expense_add_update");
+
+    $data = [
+        "id" => $id,
+        "date" => $date,
+        "type_id" => 2, //Gider
+        "sub_type" => 8, //Firma Ödemesi
+        "case_id" => Security::decrypt($_POST["tc_cases"]),
+        "company_id" => Security::decrypt($_POST["tc_company_name"]),
+        "amount" => $amount,
+        "amount_money" => 1,
+        "description" => $description,
+    ];
+
+    try {
+        $lastInsertId = $ct->saveWithAttr($data);
+        $status = "success";
+        $message = $id == 0 ? "Ödeme başarıyla yapıldı" : "Ödeme başarıyla güncellendi";
+
+
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message,
+
+    ];
+    echo json_encode($res);
+}
+
+//Alınan Proje Masrafı Ekle
+if ($_POST["action"] == "addExpenseReceivedProject") {
+    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+    $project_id = $_POST["rp_project_name"];
+    $amount = Helper::formattedMoneyToNumber($_POST["rp_amount"]);
+    $date = Date::ymd($_POST["rp_action_date"]);
+    $description = Security::escape($_POST["rp_description"]);
+
+    //Kasa hareketi ekleme yetkisi var mı?
+    //$Auths->hasPermission("income_expense_add_update");
+
+    $data = [
+        "id" => $id,
+        "date" => $date,
+        "type_id" => 2, //Gider
+        "sub_type" => 9, //Alınan Proje Masrafı
+        "case_id" => Security::decrypt($_POST["rp_cases"]),
+        "project_id" => Security::decrypt($_POST["rp_project_name"]),
+        "amount" => $amount,
+        "amount_money" => 1,
+        "description" => $description,
+    ];
+
+    try {
+        $lastInsertId = $ct->saveWithAttr($data);
+        $status = "success";
+        $message = $id == 0 ? "Masraf başarıyla eklendi" : "Masraf başarıyla güncellendi";
+
+
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message,
+
+    ];
+    echo json_encode($res);
+}
+
+
+//Güncelleme için verileri getir
+if ($_POST["action"] == "getTransaction") {
+    $id = $_POST["id"];
+    $projects = $_POST["projects"];
+    $persons = $_POST["persons"];
+    $companies = $_POST["companies"];
+    $cases = $_POST["cases"];
+
+
+    $transaction = $ct->find(Security::decrypt($id));
+    //tarihi formatla
+    $transaction->date = Date::dmY($transaction->date);
+
+    //kasa id geriye normal döner ancak select2'deki değerler şifreli olduğu için 
+    //select2 elemanın tüm değerleri karşılaştırarak eşleşen değer atanır
+    $cases = explode(",", ($cases));
+    //sondaki virgülü sil
+    array_pop($cases);
+    foreach ($cases as $case) {
+        //şifreyi çözerek bir değişkene ata
+        if ($transaction->case_id == Security::decrypt($case)) {
+            $transaction->case_id = $case;
+        }
+    }
+
+    //proje id geriye normal döner ancak select2'deki değerler şifreli olduğu için
+    //select2 elemanın tüm değerleri karşılaştırarak eşleşen değer atanır
+    $projects = explode(",", ($projects));
+    //sondaki virgülü sil
+    array_pop($projects);
+    foreach ($projects as $project) {
+        //şifreyi çözerek bir değişkene ata
+        if ($transaction->project_id == Security::decrypt($project)) {
+            $transaction->project_id = $project;
+        }
+    }
+
+    //personel id geriye normal döner ancak select2'deki değerler şifreli olduğu için
+    //select2 elemanın tüm değerleri karşılaştırarak eşleşen değer atanır
+    $persons = explode(",", ($persons));
+    //sondaki virgülü sil
+    array_pop($persons);
+    foreach ($persons as $person) {
+        //şifreyi çözerek bir değişkene ata
+        if ($transaction->person_id == Security::decrypt($person)) {
+            $transaction->person_id = $person;
+        }
+    }
+
+    //firma id geriye normal döner ancak select2'deki değerler şifreli olduğu için
+    //select2 elemanın tüm değerleri karşılaştırarak eşleşen değer atanır
+    $companies = explode(",", ($companies));
+    //sondaki virgülü sil
+    array_pop($companies);
+    foreach ($companies as $company) {
+        //şifreyi çözerek bir değişkene ata
+        if ($transaction->company_id == Security::decrypt($company)) {
+            $transaction->company_id = $company;
+        }
+    }
+
+    $res = [
+        "status" => "success",
+        "transaction" => $transaction,
+
     ];
     echo json_encode($res);
 }

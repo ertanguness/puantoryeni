@@ -52,7 +52,7 @@ class Puantaj extends Model
     public function getPuantajInfoByPerson($person_id)
     {
       
-        $sql = $this->db->prepare("SELECT * FROM puantaj WHERE person = ? ");
+        $sql = $this->db->prepare("SELECT * FROM puantaj WHERE person = ? and tutar > 0 ");
         $sql->execute([$person_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }

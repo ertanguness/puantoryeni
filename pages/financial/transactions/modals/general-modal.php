@@ -4,7 +4,7 @@ require_once 'App/Helper/helper.php';
 use App\Helper\Helper;
 
 ?>
-<div class="modal modal-blur fade" id="modal-general" tabindex="-1" style="display: none;" aria-hidden="true">
+<div class="modal modal-blur fade" id="general-modal" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +16,7 @@ use App\Helper\Helper;
                     <input type="hidden" class="form-control" id="transaction_id" name="transaction_id" value="0">
                     <div class="mb-3 w-100">
                         <label class="form-label">Kasa</label>
-                        <?php echo $financial->getCasesSelectByFirm('case_id',$case_id) ?>
+                        <?php echo $financial->getCasesSelectByUser("gm_case_id",$case_id) ?>
                     </div>
 
                     <label class="form-label">Türü</label>
@@ -61,7 +61,7 @@ use App\Helper\Helper;
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Tutar</label>
-                                <?php echo Helper::moneySelect('amount_money', ''); ?>
+                                <?php echo Helper::moneySelect("gm_amount_money", ''); ?>
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@ use App\Helper\Helper;
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Gelir/Gider Türü</label>
-                                <?php echo $financial->getIncExpTypeSelect(); ?>
+                                <?php echo $financial->getIncExpTypeSelect("gm_incexp_type"); ?>
                             </div>
                         </div>
                     </div>

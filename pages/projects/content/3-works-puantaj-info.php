@@ -17,6 +17,7 @@ $Persons = new Persons();
 $puantajObj = new Puantaj();
 $projectHelper = new Projects();
 
+//Projenin puantaj tablosundaki çalışma bilgilerini getirir
 $puantaj_info = $puantajObj->getPuantajInfoByProject($id);
 
 

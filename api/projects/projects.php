@@ -1,15 +1,18 @@
 <?php
-
-
 require_once "../../Database/require.php";
 require_once "../../Model/Projects.php";
+require_once "../../Model/ProjectIncomeExpense.php";
 require_once "../../App/Helper/security.php";
+require_once "../../App/Helper/helper.php";
 
+use App\Helper\Helper;
 use App\Helper\Security;
-$project = new Projects();
+
+$Projects = new Projects();
+$ProjectIncExp = new ProjectIncomeExpense();
 
 if ($_POST['action'] == "saveProject") {
-    $id =$_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
 
     $data = [
         "id" => $id,
@@ -27,16 +30,21 @@ if ($_POST['action'] == "saveProject") {
         'address' => Security::escape($_POST['address']),
     ];
     //Yeni kayıt esnasında başlangıç bütçesi alınır
-    if(isset($_POST["budget"])){
-        $data["budget"] = $_POST["budget"];
-    };
+    if (isset($_POST["budget"])) {
+        $data["budget"] = Helper::formattedMoneyToNumber($_POST["budget"]);
+    }
+    ;
 
     //firma adı boş değilse
     if (!empty($_POST['project_company'])) {
         $data['company_id'] = Security::decrypt($_POST['project_company']);
     }
+
+
+
+
     try {
-        $lastInsertId = $project->saveWithAttr($data) ?? $_POST['id'];
+        $lastInsertId = $Projects->saveWithAttr($data) ?? $_POST['id'];
         $status = "success";
         if ($id > 0) {
             $message = "Proje başarıyla güncellendi";
@@ -57,9 +65,9 @@ if ($_POST['action'] == "saveProject") {
 }
 
 if ($_POST['action'] == "deleteProject") {
-    $id = $_POST['id'] ;
+    $id = Security::decrypt($_POST['id']);
     //projede kayıtlı çalışma var mı kontrol et
-    $isExistPuantaj = $project->isExistPuantaj($id);
+    $isExistPuantaj = $Projects->isExistPuantaj($id);
     if ($isExistPuantaj) {
         $status = "error";
         $message = "Projede kayıtlı çalışma var. Projeyi silemezsiniz.";
@@ -72,7 +80,7 @@ if ($_POST['action'] == "deleteProject") {
     }
     try {
         $db->beginTransaction();
-        $project->delete($id);
+        $Projects->delete($_POST['id']);
         $status = "success";
         $message = "Proje başarıyla silindi";
         $db->commit();
@@ -85,6 +93,37 @@ if ($_POST['action'] == "deleteProject") {
     $res = [
         'status' => $status,
         'message' => $message,
+    ];
+    echo json_encode($res);
+}
+
+if ($_POST['action'] == "deleteProjectAction") {
+    //BaseModeldeki delete fonksiyonunda id decrypt edildiği için burada decrypt etmeye gerek yok
+    $id = Security::decrypt($_POST['id']);
+    $project_id = Security::decrypt($_GET['project_id']);
+
+    try {
+        $ProjectIncExp->delete($_POST['id']);
+        $status = "success";
+        $message = "Proje Hareketi silindi";
+        
+        //Formatlanmış gelir gider - bakiye bilgileri
+        $summary = $ProjectIncExp->sumAllIncomeExpenseFormatted($project_id);
+
+         //Projenin hakediş tamanlanma durumunu güncelle
+         $progress_range= $ProjectIncExp->getProgressPaymentRange($project_id);
+      
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        'status' => $status,
+        'message' => $message,
+        'summary' => $summary,
+        "progress" => $progress_range,
+
     ];
     echo json_encode($res);
 }

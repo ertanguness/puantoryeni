@@ -3,7 +3,9 @@ require_once '../../Model/Bordro.php';
 require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
 
+
 use App\Helper\Date;
+use App\Helper\Helper;
 
 $income = new Bordro();
 
@@ -22,9 +24,9 @@ if ($_POST['action'] == 'saveIncome') {
         'gun' => (int)$dateString,
         "ay" => $month,
         "yil" => $year,
-        "kategori" => 1,
+        "kategori" => 1,//Gelir
         'turu' => $_POST['income_type'],
-        'tutar' => $_POST['income_amount'],
+        'tutar' => Helper::formattedMoneyToNumber($_POST['income_amount']),
         'aciklama' => $_POST['income_description'],
     ];
 

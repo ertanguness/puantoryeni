@@ -35,7 +35,7 @@ $missions = $missionObj->getMissionsFirm($firm_id);
                                 <th style="width:7%">ID</th>
                                 <th>Görev Başlığı</th>
                                 <th>Görev Adı</th>
-                                <th>Yetkili Kişi</th>
+                                <th>Atanan Kullanıcı</th>
                                 <th>Önem Derecesi</th>
                                 <th>Başlama Tarihi</th>
                                 <th>Bitiş Tarihi</th>

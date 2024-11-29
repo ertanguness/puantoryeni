@@ -4,6 +4,7 @@ require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
 require_once '../../App/Helper/helper.php';
 
+
 use App\Helper\Date;
 use App\Helper\Helper;
 use App\Helper\Security;
@@ -15,6 +16,10 @@ if ($_POST['action'] == 'saveIncome') {
     $person_id = Security::decrypt($_POST['person_id_income']);
     $month = $_POST['income_month'];
     $year = $_POST['income_year'];
+
+    $page = $_POST['page'];
+    $incomeData = [];
+    $income_expense = [];
 
     // Sayıları birleştirerek string oluşturun
     $dateString = sprintf('%2d%02d15', $year, $month);
@@ -28,33 +33,26 @@ if ($_POST['action'] == 'saveIncome') {
         'yil' => $year,
         'kategori' => 1,
         'turu' => $_POST['income_type'],
-        'tutar' => $_POST['income_amount'],
+        'tutar' => Helper::formattedMoneyToNumber($_POST['income_amount']),
         'aciklama' => $_POST['income_description'],
     ];
 
     $lastInsertId = $income->saveWithAttr($data);
 
-    // Son eklenen kaydın bilgileri formatlanır
-    $incomeData = $income->getPersonIncomeExpensePayment(Security::decrypt($lastInsertId));
 
-    // Kaydedilen verinin türü getirilir(Ödeme, Kesinti, Gelir) (Gelir)
-    $incomeData->kategori = Helper::getIncomeExpenseType($incomeData->kategori);
+    if ($page == 'persons/manage') {
+        // Son eklenen kaydın bilgileri formatlanır
+        $incomeData = $income->getPersonIncomeExpensePayment(Security::decrypt($lastInsertId));
 
-    // Tutar formatlanır
-    $incomeData->tutar = Helper::formattedMoney($incomeData->tutar);
+        // Kaydedilen verinin türü getirilir(Ödeme, Kesinti, Gelir) (Gelir)
+        $incomeData->kategori = Helper::getIncomeExpenseType($incomeData->kategori);
 
-    //Personelin toplam gelir ve gideri getirilir
-    $income_expense = $income->sumAllIncomeExpense($person_id);
+        // Tutar formatlanır
+        $incomeData->tutar = Helper::formattedMoney($incomeData->tutar);
 
-    
-    //Bakiyeyi hesapla
-    $income_expense->balance = Helper::formattedMoney($income_expense->total_income - $income_expense->total_expense);
-    
-    //Toplam gelir ve gider,ödeme formatlanır
-    $income_expense->total_income = Helper::formattedMoney($income_expense->total_income);
-    $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense);
-    $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment);
-
+        //Personelin toplam gelir ve gider ve bakiyesi getirilir
+        $income_expense = $income->sumAllIncomeExpenseFormatted($person_id);
+    }
 
 
     $status = 'success';

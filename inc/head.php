@@ -30,17 +30,12 @@
 
 
   <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet" />
-  <!-- <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet" /> -->
-  <!-- <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet" /> -->
-  <!-- <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet" /> -->
-  <!-- <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet" /> -->
   <link href="./dist/css/style.css?1692870487" rel="stylesheet" />
   <link href="./dist/css/menu.css?1692870487" rel="stylesheet" />
   <link href="./dist/libs/select2/css/select2.min.css?1692870487" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-  <!-- <link href="./dist/libs/tabler-icon/tabler-icons.min.css?1692870487" rel="stylesheet" /> -->
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
+  <link href="./dist/css/flatpickr.min.css?1692870487" rel="stylesheet" />
 
   <!-- jQuery UI CSS -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -49,7 +44,6 @@
   <link rel="manifest" href="/manifest.json">
 
 
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 
 
 
@@ -90,6 +84,7 @@
   ?>
 
 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <style>
     @import url('https://rsms.me/inter/inter.css');
 

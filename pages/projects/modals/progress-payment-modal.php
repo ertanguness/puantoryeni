@@ -12,8 +12,7 @@
              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              <div class="modal-status bg-success"></div>
              <div class="modal-body text-center pb-0">
-                 <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
-                 <i class="ti ti-building-bridge icon-lg text-success"></i>
+                 <i class="ti ti-building-estate icon-lg text-success"></i>
                  <h3 id="progress_payment_project_name">
                  </h3>
                  <p>
@@ -34,11 +33,17 @@
                          <label for="">Hakediş Tarihi</label>
                          <input type="text" name="progress_payment_date" value="<?php echo date('d.m.Y') ?>" class="form-control flatpickr mt-1">
                      </div>
+                      <!-- Kasa seçiniz -->
+                    <div class="text-secondary mt-3">
+                    <label for="">Kasa</label>
+                        <?php  echo $financialHelper->getCasesSelectByUser("progress_payment_cases",$case_id); ?>
+                    </div>
+
 
                      <div class="text-secondary mt-3">
                          <label for="">Açıklama</label>
                          <textarea name="progress_payment_description" class="form-control mt-1"
-                             placeholder="Hakediş hakkında açıklama yazınız"></textarea>
+                             placeholder="Hakediş hakkında açıklama yazınız" style="min-height:100px"></textarea>
                      </div>
                  </form>
              </div>

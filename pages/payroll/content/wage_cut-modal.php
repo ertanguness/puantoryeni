@@ -1,7 +1,9 @@
-<?php require_once "App/Helper/date.php";
+<?php
+require_once "App/Helper/date.php";
+require_once "App/Helper/financial.php";
 use App\Helper\Date;
 
-
+$financialHelper = new Financial();
 ?>
 
 
@@ -31,12 +33,24 @@ use App\Helper\Date;
             <div class="container ps-4 pe-4 py-4">
                 <form action="" id="wage_cut_modalForm">
                     <input type="hidden" class="form-control" name="wage_cut_id" value="0">
-                    <input type="hidden" class="form-control" name="person_id_wage_cut" id="person_id_wage_cut" value="0">
+                    <input type="hidden" class="form-control" name="person_id_wage_cut" id="person_id_wage_cut"
+                        value="0">
 
                     <div class="text-secondary mt-3">
-                        <label for="">Kesinti Türü</label>
+                        <label for="">Kesinti Adı</label>
                         <input type="text" name="wage_cut_type" class="form-control mt-1">
                     </div>
+                    <div class="row">
+
+
+                        <div class="text-secondary mt-3">
+                            <label for="">Kesinti Miktarı</label>
+                            <input type="text" name="wage_cut_amount" class="form-control mt-1 money">
+                        </div>
+
+
+                    </div>
+
                     <div class="text-secondary mt-3">
                         <label for="">Kesinti Yapılacak Dönem</label>
                         <div class="row d-flex">
@@ -51,10 +65,7 @@ use App\Helper\Date;
                             </div>
                         </div>
                     </div>
-                    <div class="text-secondary mt-3">
-                        <label for="">Kesinti Miktarı</label>
-                        <input type="text" name="wage_cut_amount" class="form-control mt-1 money">
-                    </div>
+
                     <div class="text-secondary mt-3">
                         <label for="">Açıklama</label>
                         <textarea name="wage_cut_description" class="form-control mt-1"

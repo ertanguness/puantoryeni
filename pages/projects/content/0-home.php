@@ -35,7 +35,7 @@ $projectHelper = new ProjectHelper();
         <label for="">Yüklenici Firması</label>
     </div>
     <div class="col-md-4">
-        <?php echo $companyHelper->companySelect("project_company", $project->company_id ?? ''); ?>
+        <?php echo $companyHelper->getCompanySelect("project_company", $project->company_id ?? ''); ?>
     </div>
 
 
@@ -73,15 +73,15 @@ $projectHelper = new ProjectHelper();
             value="<?php echo $project->end_date ?? '' ?>">
     </div>
     <?php
-    if ($id == 0) {
+    //if ($id == 0) {
     ?>
         <div class="col-md-2">
-            <label for="">Açılış Bütçe</label>
+            <label for="">Proje Bedeli</label>
         </div>
         <div class="col-md-4">
-            <input type="text" class="form-control" name="budget" value="<?php echo $project->budget ?? '' ?>">
+            <input type="text" class="form-control money" name="budget" value="<?php echo $project->budget ?? 0 ?>">
         </div>
-    <?php } ?>
+    <?php //} ?>
 
 
 </div>

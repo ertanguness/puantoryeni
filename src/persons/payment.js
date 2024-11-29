@@ -4,6 +4,7 @@ $(document).on("click", ".add-payment", function () {
     return;
   } 
 
+  
 $("#payment-modal").modal("show")
 
   let personel_name = $(".full-name").text();
@@ -14,6 +15,8 @@ $("#payment-modal").modal("show")
 });
 
 $(document).on("click", "#payment_addButton", function () {
+  var urlParams = new URLSearchParams(window.location.search);
+  var page = urlParams.get("p");
   var form = $("#payment_modalForm");
 
   form.validate({
@@ -44,12 +47,13 @@ $(document).on("click", "#payment_addButton", function () {
   var formData = new FormData(form[0]);
 
   formData.append("action", "savePayment");
+  formData.append("page", page);
 
   for (var pair of formData.entries()) {
     console.log(pair[0] + ", " + pair[1]);
   }
 
-  fetch("api/bordro/payment.php", {
+  fetch("api/persons/payment.php", {
     method: "POST",
     body: formData,
   })
@@ -78,8 +82,8 @@ $(document).on("click", "#payment_addButton", function () {
                         <button class="btn dropdown-toggle align-text-top"
                             data-bs-toggle="dropdown">İşlem</button>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item route-link"
-                                data-page="reports/ysc&id=<?php echo $item->id ?>" href="#">
+                            <a class="dropdown-item"
+                                 href="#">
                                 <i class="ti ti-edit icon me-3"></i> Güncelle
                             </a>
                             <a class="dropdown-item delete-payment" href="#" data-id='${data.payment.id}'>
@@ -88,7 +92,7 @@ $(document).on("click", "#payment_addButton", function () {
                         </div>
                     </div>`,
           ])
-          .order([0, 'desc'])
+          .order([8, 'desc'])
           .draw(false);
 
         // $("#payment-modal").modal("hide");
@@ -124,30 +128,5 @@ $(document).on("click", "#person_payment_balance", function () {
   $("#payment_type").val("Bakiye Ödemesi").focus();
 });
 
-$(document).on("click", ".delete-payment", async function () {
-  let type = $(this).closest("tr").find("td:eq(2)").text();
-  //Tablo adı butonun içinde bulunduğu tablo
-  let action = "deletePayment";
-  let confirmMessage = type + " silinecektir!";
-  let url = "/api/bordro/payment.php";
 
-  const result = await deleteRecordByReturn(this, action, confirmMessage, url);
-
-  let income_expense = result.income_expense;
-
-  let total_income = income_expense.total_income;
-  let total_expense = income_expense.total_expense;
-  let total_payment = income_expense.total_payment;
-  let balance = income_expense.balance;
-
-  console.log(total_income + " " + total_payment + " " + balance);
-  
-
-  $("#total_payment").text(total_payment);
-  $("#total_income").text(total_income);
-  $("#total_expense").text(total_expense);
-  $("#balance").text(balance);
-  
-
-});
 

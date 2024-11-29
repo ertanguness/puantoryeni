@@ -43,8 +43,8 @@ $user = $User->find($_SESSION['user']->id) ?? null;
 
 if (!$user) {
 
-    $log_id = $_SESSION["log_id"];
-    $Users->logoutLog($log_id);
+    // $log_id = $_SESSION["log_id"];
+    // $Users->logoutLog($log_id);
     header("Location: sign-in.php");
     exit();
 }

@@ -1,13 +1,15 @@
 <?php
+require_once "App/Helper/financial.php";
 
+$financialHelper = new Financial();
 use App\Helper\Date;
 
-$case_id = $_POST['case_id'] ?? 0;
+// $case_id = $_POST['case_id'] ?? 0;
 ?>
 
 
 <div class="modal modal-blur fade" id="payment-modal" tabindex="-1" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-status bg-success"></div>
@@ -31,23 +33,38 @@ $case_id = $_POST['case_id'] ?? 0;
             </div>
             <div class="container ps-4 pe-4 py-4">
                 <form action="" id="payment_modalForm">
+
+
+
                     <input type="hidden" class="form-control" name="id" value="0">
                     <input type="hidden" class="form-control" name="person_id_payment" id="person_id_payment" value="0">
 
                     <div class="text-secondary mt-3">
-                        <label for="">Ödeme Adı</label>
+                        <label for="payment_type">Ödeme Adı</label>
                         <input type="text" name="payment_type" id="payment_type" class="form-control mt-1">
                     </div>
-                    <div class="text-secondary mt-3">
-                        <label for="">Ödeme Tutarı</label>
-                        <input type="text" name="payment_amount" id="payment_amount" class="form-control mt-1 money">
+                    <div class="row d-flex">
+                        <div class="col-6">
+
+                            <div class="text-secondary mt-3">
+                                <label for="payment_amount">Ödeme Tutarı</label>
+                                <input type="text" name="payment_amount" id="payment_amount"
+                                    class="form-control mt-1 money">
+                            </div>
+                        </div>
+                        <div class="col-6">
+
+                            <div class="text-secondary mt-3">
+                                <label class="mb-1">Ödemenin çıkacağı Kasa</label>
+                                <?php echo $financialHelper->getCasesSelectByUser("payment_cases", $case_id); ?>
+
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-secondary mt-3">
-                        <label for="">Ödeme Yapılacak Kasa</label>
-                    </div>
+
                     <div class="text-secondary mt-3">
 
-                        <label for="">Ödeme Dönemi</label>
+                        <label class="mb-1">Ödeme Dönemi</label>
                         <div class="row d-flex">
                             <div class="col-6">
 
@@ -60,6 +77,7 @@ $case_id = $_POST['case_id'] ?? 0;
                             </div>
                         </div>
                     </div>
+
 
                     <div class="text-secondary mt-3">
                         <label for="">Açıklama</label>
@@ -76,12 +94,13 @@ $case_id = $_POST['case_id'] ?? 0;
                             </a></div>
                         <div class="col">
                             <a href="#" class="btn btn-success w-100" id="payment_addButton">
-                                Ödeme Ekle
+                                Ödeme Yap
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            
+          </div>
     </div>
 </div>

@@ -7,6 +7,8 @@ require_once ROOT . "/App/Helper/security.php";
 require_once ROOT . "/Model/Puantaj.php";
 require_once "../../Model/Auths.php";
 require_once "../../App/Helper/helper.php";
+require_once "../../Model/Projects.php";
+
 
 use App\Helper\Security;
 use Random\Engine\Secure;
@@ -16,10 +18,16 @@ $Puantaj = new Puantaj();
 $Bordro = new Bordro();
 $Persons = new Persons();
 $Auths = new Auths();
+$Projects = new Projects();
 
 
 if ($_POST["action"] == "savePerson") {
-    $id = Security::decrypt($_POST["id"]);
+    //personel kaydetme yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn('personnel_add_update');
+
+    //gelen id 0 dan farklı ise şifreyi çöz, değilse 0 ata
+    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+
     if ($id > 0) {
         //personelin göreve başlama tarihinden önceki tüm maaşları sil
         $Bordro->deleteAllSalaries($id, $_POST["job_start_date"]);
@@ -51,6 +59,7 @@ if ($_POST["action"] == "savePerson") {
 
 
     try {
+        //Yeni kayıt ise geriye şifreli id döner, güncelleme ise Post ile gelen şifreli id döner
         $lastInsertId = $Persons->saveWithAttr($data) ?? $_POST["id"];
         $status = "success";
         if ($id == 0) {
@@ -58,6 +67,11 @@ if ($_POST["action"] == "savePerson") {
         } else {
             $message = "Personel başarıyla güncellendi.";
         }
+
+
+        //Personelin çalıştığı projeleri kaydet
+        $Projects->savePersonProjects(Security::decrypt($lastInsertId), $_POST["person_project"]);
+
     } catch (PDOException $e) {
         $status = "error";
         if ($e->errorInfo[1] == 1062) {
@@ -84,12 +98,18 @@ if ($_POST["action"] == "savePerson") {
 }
 
 if ($_POST["action"] == "deletePerson") {
+
+    //personel silme yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn('personnel_delete');
+
     $id = ($_POST["id"]);
     $person = $Persons->find(Security::decrypt($id));
 
     //İşlem yapan kullanıcı ile personelin firm id'si aynı olmalı
     $Auths->checkFirmReturn();
     try {
+
+        // burada personelin işlemlerinin de silinmesi için kontrol eklenecek
         $Persons->delete($id);
         $status = "success";
         $message = "Personel başarıyla silindi.";
@@ -100,6 +120,66 @@ if ($_POST["action"] == "deletePerson") {
     $res = [
         "status" => $status,
         "message" => $message
+    ];
+    echo json_encode($res);
+}
+
+
+
+
+//Gelir gider bilgilerindeki kayıtları silmek için
+if ($_POST['action'] == 'deletePayment') {
+
+    //Ödeme Silme Yetkisi var mı kontrol et
+    $Auths->hasPermissionReturn("delete_staff_payment");
+
+    $id = $_POST['id'];
+
+    try {
+        $db->beginTransaction();
+
+        // Ödeme bilgilerini getirir
+        $paymentInfo = $Bordro->getPersonIncomeExpensePayment(Security::decrypt($id));
+
+        //Gelen id'nin encrypt edilmiş olup olmadığını kontrol edin
+        if ($Bordro->delete($id)) {
+            $status = 'success';
+            $message = 'Başarıyla silindi.';
+        } else {
+            $status = 'error';
+            $message = 'Silinirken bir hata oluştu.';
+        }
+        ;
+
+        // Ödeme bilgilerindeki person_id alınır,
+        // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
+        $income_expense = $Bordro->sumAllIncomeExpense($paymentInfo->person_id);
+
+        //Bakiye hesaplanır
+        $balance = Helper::formattedMoney($income_expense->total_income - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
+
+        //Toplam Gelir
+        $income_expense->total_income = Helper::formattedMoney($income_expense->total_income ?? 0);
+
+        // Toplam ödeme 
+        $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);
+
+        // Toplam gider
+        $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);
+
+        // Bakiye, değişkenine atama yapılır
+        $income_expense->balance = $balance;
+
+        $db->commit();
+    } catch (PDOException $e) {
+        $db->rollBack();
+        $status = 'error';
+        $message = $e->getMessage();
+    }
+    $res = [
+        'status' => $status,
+        'message' => $message,
+        'income_expense' => $income_expense,
     ];
     echo json_encode($res);
 }

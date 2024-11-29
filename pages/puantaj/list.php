@@ -32,7 +32,6 @@ if ($project_id == 0 || $project_id == '') {
     $persons = $projects->getPersonIdByFromProjectCurrentMonth($project_id, $last_day);
 
 }
-
 // Ayın son gününü bulma
 $days = Date::daysInMonth($month, $year);
 // Tarihleri oluşturma

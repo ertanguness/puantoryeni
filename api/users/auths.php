@@ -3,28 +3,23 @@ require_once '../../Database/require.php';
 require_once '../../App/Helper/date.php';
 require_once '../../Model/RoleAuthsModel.php';
 require_once '../../App/Helper/security.php';
+require_once '../../Model/Auths.php';
 
-$roleAuths = new RoleAuthsModel();
 use App\Helper\Security;
 use App\Helper\Date;
+$Auths = new Auths();
 
 
-//CSRF token kontrolü yap
-if (!Security::checkCsrfToken()) {
-    $res = [
-        "status" => "error",
-        "message" => "Geçersiz token"
-    ];
-    echo json_encode($res);
-    exit();
-}
-
+$roleAuths = new RoleAuthsModel();
 
 if ($_POST["action"] == "saveAuths") {
 
 
     try {
-        // $id = Security::decrypt($_POST["auth_id"]);
+
+        //Yetki Kontrolü yapılır
+        $Auths->hasPermissionReturn("transaction_permissions");
+
         $id = Security::decrypt($_POST["auth_id"]);
         $auth_ids = $_POST["auths"] ?? [];
         $auths = [];

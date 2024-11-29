@@ -36,6 +36,10 @@ use App\Helper\Date;
                         <input type="text" name="income_type" class="form-control mt-1">
                     </div>
                     <div class="text-secondary mt-3">
+                        <label for="">Gelir Tutarı</label>
+                        <input type="text" name="income_amount" class="form-control mt-1 money">
+                    </div>
+                    <div class="text-secondary mt-3">
                         <label for="">Gelir Eklenecek Dönem</label>
                         <div class="row d-flex">
                             <div class="col-6">
@@ -49,10 +53,7 @@ use App\Helper\Date;
                             </div>
                         </div>
                     </div>
-                    <div class="text-secondary mt-3">
-                        <label for="">Gelir Miktarı</label>
-                        <input type="text" name="income_amount" class="form-control mt-1 money">
-                    </div>
+                    
                     <div class="text-secondary mt-3">
                         <label for="">Açıklama</label>
                         <textarea name="income_description" class="form-control mt-1"

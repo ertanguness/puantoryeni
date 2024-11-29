@@ -13,7 +13,7 @@ if ($_POST['action'] == "addPersonToProject") {
 
     $data = [
         "id" => $record_id ,
-        'project_id' => Security::decrypt($_POST['project_id']),
+        'project_id' =>($_POST['project_id']),
         'person_id' => $_POST['person_id'],
         "state" => 1
 

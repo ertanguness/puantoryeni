@@ -25,11 +25,13 @@ if (!isset($_GET['id']) || $id == 0) {
 $auths = $authObj->auths();
 $role = $roleObj->find($id);
 
+
 $roleAuths = $roleAuthsObj->getAuthsByRoleId($id);//Güncelleme yapılacak 
 $auth_id = Security::encrypt($roleAuths->id) ?? 0;
 
 
-// Yetki kontrolü yapılır
+
+//Yetki kontrolü yapılır
 $perm->checkAuthorize( "transaction_permissions");
 
 

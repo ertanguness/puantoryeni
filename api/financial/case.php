@@ -22,7 +22,7 @@ if ($_POST["action"] == "saveCase") {
     $Auths->hasPermission("cash_register_add_update");
 
     $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
-
+    $lastInsertedId = 0;
 
 
     //eğer varsayılan kasa yapılacaksa diğer kasaların varsayılanlığını kaldır
@@ -70,7 +70,7 @@ if ($_POST["action"] == "saveCase") {
 
 
     try {
-        $lastInsertId = ($caseObj->saveWithAttr($data)) ?? $_POST["id"];
+        $lastInsertId = ($caseObj->saveWithAttr($data)) ?? $id;
         $status = "success";
         if ($id == 0) {
             $message = "Kasa başarıyla kaydedildi.";

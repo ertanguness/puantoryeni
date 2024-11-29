@@ -26,7 +26,8 @@ if ($_POST["action"] == "saveMission") {
 
 
     //Görev Atananan kullanıcılar
-    $users = $_POST["user_ids"];
+
+    $users = $_POST["user_ids"] ?? [];
     $user_ids = "";
     foreach ($users as $user) {
         $user_ids .= $user . ",";

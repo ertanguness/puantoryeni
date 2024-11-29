@@ -34,7 +34,7 @@ class UserHelper extends Db
         $id = str_replace('[]', ' ', $name);
         $id = $id . uniqid();
         $select = '<select name="' . $name . '" class="form-select select2" id="' . $id . '" style="width:100%" multiple>';
-        $select .= '<option value="">Personel Seçiniz</option>';
+        //$select .= '<option value="">Personel Seçiniz</option>';
         foreach ($results as $row) { // $results üzerinde döngü
             $selected = in_array($row->id, $selectedIds) ? ' selected' : ''; // Eğer id varsa seçili yap
             $select .= '<option value="' . $row->id . '"' . $selected . '>' . $row->full_name . '</option>'; // $row->title yerine $row->name kullanıldı
@@ -61,7 +61,7 @@ class UserHelper extends Db
             if ($result) {
                 $users[] = $result->full_name;
             } else {
-                $users[] = "Binimiyor (ID: $id)";
+                $users[] = "";
             }
         }
         return implode(',', $users);

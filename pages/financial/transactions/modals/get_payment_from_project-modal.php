@@ -1,9 +1,13 @@
 <?php
 require_once 'App/Helper/date.php';
 require_once "App/Helper/projects.php";
+require_once "Model/Cases.php";
 
 use App\Helper\Date;
 $projectHelper = new ProjectHelper();
+
+$Cases = new Cases();
+$case_id = $Cases->getDefaultCaseIdByFirm();
 
 ?>
 
@@ -23,7 +27,7 @@ $projectHelper = new ProjectHelper();
 
                             <div class="text-center">
                                 <img src="static/png/folders.png" alt="Image" class="img-fluid mt-2"
-                                    style="max-width: 240px">
+                                    style="width: 100%">
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -32,7 +36,8 @@ $projectHelper = new ProjectHelper();
 
                                 <div class="col">
                                     <label class="form-label">Proje Adı</label>
-                                    <?php echo $projectHelper->getProjectSelect("fp_project_name") ?>
+                                    <!-- Alınan projeleri getir -->
+                                    <?php echo $projectHelper->getProjectSelectByType(name: "fp_project_name", type:1) ?>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -50,7 +55,7 @@ $projectHelper = new ProjectHelper();
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Ödemenin Aktarılacağı Kasa</label>
-                                    <?php echo $financialHelper->getCasesSelectByUser("fp_cases"); ?>
+                                    <?php echo $financialHelper->getCasesSelectByUser("fp_cases",$case_id); ?>
                                     
                                 </div>
                             </div>

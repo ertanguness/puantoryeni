@@ -14,7 +14,14 @@ $MyFirmModel = new MyFirmModel();
 $myfirms = $MyFirmModel->getMyFirmByUserId();
 
 ?>
-<div class="container-xl mt-3">
+<div class="container-xl">
+       <!-- Alert component'i dahil et -->
+       <?php
+        $title = "Firmalarım Listesi!";
+        $text = "Sahip olduğunuz firmaları buradan yönetebilirsiniz.";
+        require_once 'pages/components/alert.php'
+    ?>
+    <!-- Alert  -->
     <div class="row row-deck row-cards">
         <div class="col-12">
             <div class="card">

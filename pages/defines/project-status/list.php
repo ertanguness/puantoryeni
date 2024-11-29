@@ -20,7 +20,7 @@ $projectStatus = $Defines->getProjectStatus();
                 </svg>
             </div>
             <div>
-                <h4 class="alert-title">Proje Durumu Tanımalama!</h4>
+                <h4 class="alert-title">Proje Durumu Tanımlama!</h4>
                 <div class="text-secondary">Projeniz için Proje Durumlarını tanımlayabilir ve raporlarınızı bu durumlara
                     göre alabilirsiniz!</div>
             </div>

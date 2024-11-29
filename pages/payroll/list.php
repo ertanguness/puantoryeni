@@ -7,13 +7,14 @@ require_once 'App/Helper/date.php';
 require_once 'App/Helper/projects.php';
 require_once "App/Helper/financial.php";
 require_once "App/Helper/security.php";
+require_once "Model/Cases.php";
 
 use App\Helper\Security;
 use App\Helper\Date;
 use App\Helper\Helper;
 
 
-
+$Cases = new Cases();
 $projects = new Projects();
 $projectHelper = new ProjectHelper();
 $personObj = new Persons();
@@ -37,6 +38,8 @@ $firstDay = Date::firstDay($month, $year);
 
 // Ayın son gününü bulma (20240930) şeklinde döner
 $lastDay = Date::lastDay($month, $year);
+
+$case_id = $Cases->getDefaultCaseIdByFirm();
 
 ?>
 <div class="container-xl mt-3">
@@ -260,7 +263,7 @@ $lastDay = Date::lastDay($month, $year);
                                                     ; ?>
                                                     <a class="dropdown-item add-wage-cut" data-id="<?php echo $id ?>"
                                                         data-tooltip="Avans,Ceza veya Bes gibi" data-tooltip-location="left"
-                                                        href="#" data-bs-toggle="modal" data-bs-target="#wage_cut_modal">
+                                                        href="#">
                                                         <i class="ti ti-cut icon me-3"></i> Kesinti Ekle
                                                     </a>
 

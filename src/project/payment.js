@@ -4,23 +4,30 @@ $(document).on("click", ".add-payment", function () {
     return;
   }
   $("#payment-modal").modal("show");
-  let project_name = $(this).closest("tr").find("td:eq(2)").text();
+  let project_name = $(this).closest("tr").find("td:eq(3)").text();
   $("#payment_project_name").text(project_name);
   $("#payment_project_id").val(project_id);
 });
 
 $(document).on("click", "#payment_addButton", function () {
   var form = $("#payment_modalForm");
+  var urlParams = new URLSearchParams(window.location.search);
+  var page = urlParams.get("p");
   var formData = new FormData(form[0]);
+  addCustomValidationMethods(); //app.js içerisinde tanımlı(validNumber metodu)
+  addCustomValidationValidValue(); //app.js içerisinde tanımlı(validValue metodu)
 
   form.validate({
     rules: {
       payment_amount: {
         required: true,
-        number: true
+        validNumber: true
       },
       payment_date: {
         required: true
+      },
+      payment_cases: {
+        validValue: true
       }
     },
     messages: {
@@ -30,6 +37,9 @@ $(document).on("click", "#payment_addButton", function () {
       },
       payment_date: {
         required: "Tarih seçin"
+      },
+      payment_cases: {
+        validValue: "Lütfen bir seçim yapın"
       }
     }
   });
@@ -38,10 +48,11 @@ $(document).on("click", "#payment_addButton", function () {
   }
 
   formData.append("action", "add_payment");
+  formData.append("page", page);
 
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
+  // for (var pair of formData.entries()) {
+  //   console.log(pair[0] + ", " + pair[1]);
+  // }
 
   fetch("api/projects/payment.php", {
     method: "POST",
@@ -49,56 +60,41 @@ $(document).on("click", "#payment_addButton", function () {
   })
     .then((response) => response.json())
     .then((data) => {
+      /*
+        projects/manage sayfasında eklenen ödemenin verilerini tabloya eklemek ve 
+        özet bilgilerini sayfa yenilenmeden güncellemek için
+      */
       if (data.status == "success") {
-        console.log(data);
-        let payment = data.last_payment;
-        var table = $("#project_paymentTable").DataTable();
-        table.row
-          .add([
-            payment.id,
-            payment.tarih,
-            payment.turu,
-            payment.ay,
-            payment.yil,
-            `<i class='ti ti-upload icon color-yellow me-1' ></i>
-            ${payment.kategori}`,
-            payment.tutar,
-            payment.aciklama,
-            payment.created_at,
-            `<div class="dropdown">
-              <button class="btn dropdown-toggle align-text-top"
-                  data-bs-toggle="dropdown">İşlem</button>
-              <div class="dropdown-menu dropdown-menu-end">
-                  <a class="dropdown-item edit-payment"
-                      data-id='${payment.id}'>
-                      <i class="ti ti-edit icon me-3"></i> Güncelle
-                  </a>
-                  <a class="dropdown-item delete-payment" href="#" data-id='${payment.id}'>
-                      <i class="ti ti-trash icon me-3"></i> Sil
-                  </a>
-              </div>
-          </div>`
-          ])
-          .order([0, "desc"])
-          .draw(false);
-
-        let summary = data.summary;
-        $("#total_income").text(summary.hakedis);
-        $("#total_expense").text(summary.kesinti);
-        $("#total_payment").text(summary.odeme);
-        $("#balance").text(summary.balance);
-
         title = "Başarılı";
-        $("#payment-modalForm").trigger("reset");
-        //url' p parametresinden sayfa adını al
+       
+        if (page == "projects/manage") {
+          console.log(data);
 
+          let payment = data.last_payment;
+          //Projenin gelir-gider, bakiye bilgilerini almak için
+          payment.project_id = $("#payment_project_id").val();
+          //gelen veriler ile birlikte tabloya satır ekleme
+          addDataToTable(payment);
+
+          let summary = data.summary;
+          //Ödemelerin toplamını ve bakiyeyi güncelle
+          $("#total_payment").text(summary.gelir);
+          $("#balance").text(summary.balance);
+          $("#payment-modalForm").trigger("reset");
+        }
       } else {
         title = "Hata";
       }
-      swal.fire({
-        title: title,
-        text: data.message,
-        icon: data.status
-      })
+      swal
+        .fire({
+          title: title,
+          text: data.message,
+          icon: data.status
+        })
+        .then(() => {
+          if (page == "projects/list") {
+            location.reload();
+          }
+        });
     });
 });

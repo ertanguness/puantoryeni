@@ -48,7 +48,7 @@ class Helper
     ];
 
 
-  
+
 
     public static function getPriority($priority)
     {
@@ -137,8 +137,8 @@ class Helper
     }
 
 
-  
-  
+
+
     public static function kdvSelect($name = 'kdv', $selected = '20')
     {
         $select = '<select id="' . $name . '" name="' . $name . '" class="select2 form-control" style="width:100%">';
@@ -228,6 +228,60 @@ class Helper
             </div>';
     }
 
+
+
+    /**
+     * Get icon with color by type
+     * @param $type int app/helper/financial.php içindeki sabitler
+     * @return string
+     */
+    public static function getIconWithColorByType($type)
+    {
+        $icon = "";
+        $color = "";
+
+        switch ($type) {
+            case 1://Gelir
+            case 6: //Hakediş
+                $icon = "ti-fold-up";
+                $color = "color-green";
+                break;
+            case 2:
+                $icon = "ti-stairs-down";
+                $color = "color-red";
+                break;
+            case 3:
+                $icon = "ti-upload";
+                $color = "color-yellow";
+                break;
+            case 5: //Ödeme
+            case 7: //Maaş
+                $icon = "ti-cash-register";
+                $color = "color-yellow";
+                break;
+            case 10: //Hakediş
+                $icon = "ti-building-estate";
+                $color = "color-green";
+                break;
+            case 11: //Masraf
+            case 12:  //Kesinti
+            case 15: //Personel Kesinti
+                $icon = "ti-fold-down";
+                $color = "color-red";
+                break;
+            case 14: //Puantaj Çalışma
+                $icon = "ti-stretching";
+                $color = "color-red";
+                break;
+
+            default:
+                $icon = "ti-question-mark";
+                $color = "";
+                break;
+        }
+
+        return "<i class='ti $icon icon $color me-1'></i>";
+    }
 
 
 

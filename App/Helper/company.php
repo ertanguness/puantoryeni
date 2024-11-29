@@ -17,7 +17,7 @@ class CompanyHelper extends Db
         $this->MyFirmModel = new MyFirmModel();
 
     }
-    public function companySelect($name = 'companies', $id = null)
+    public function getCompanySelect($name = 'companies', $id = null)
     {
         $firm_id =$_SESSION['user']->id;
         $query = $this->db->prepare('SELECT * FROM companies where user_id = ?');  // Tüm sütunları seç
