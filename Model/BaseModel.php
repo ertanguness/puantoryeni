@@ -5,6 +5,8 @@
 require_once ROOT . '/Database/db.php';
 require_once ROOT . '/App/Helper/security.php';
 
+
+
 use App\Helper\Security;
 use Database\Db;
 
@@ -21,6 +23,10 @@ class Model extends Db
         $this->table = $table ?: $this->getTableName();
     }
 
+    public function getDb()
+    {
+        return $this->db;
+    }
     protected function getTableName()
     {
         $className = get_called_class();
@@ -85,7 +91,7 @@ class Model extends Db
         $setClause = '';
 
         if ($this->find($this->attributes[$this->primaryKey]) === false) {
-            throw new Exception('Kayıt bulunamadı.' . $this->attributes[$this->primaryKey]);
+            throw new \Exception('Kayıt bulunamadı.' . $this->attributes[$this->primaryKey]);
         }
 
         foreach ($this->attributes as $key => $value) {
@@ -125,7 +131,7 @@ class Model extends Db
         $sql->execute(array($id));
 
         if ($sql->rowCount() === 0) {
-            return new Exception('Kayıt bulunamadı veya silinemedi.');
+            return new \Exception('Kayıt bulunamadı veya silinemedi.');
         }
         return true;
     }
@@ -138,7 +144,7 @@ class Model extends Db
         $sql->execute(array($id));
 
         if ($sql->rowCount() === 0) {
-            return new Exception('Kayıt bulunamadı veya silinemedi.');
+            return new \Exception('Kayıt bulunamadı veya silinemedi.');
         }
         return true;
     }

@@ -102,6 +102,7 @@ class Auths extends Model
         return $this->Authorize($auth_name);
     }
 
+    // Yetki kontrolü yapar ve yetki yoksa authorize sayfasına yönlendirir
     function checkAuthorize($auth_name)
     {
         //user'in firm_id'si ve Session firm_id'si aynı mı kontrolü yapılır

@@ -34,7 +34,8 @@ if (
     $page == 'missions/list' || $page == 'missions/process/list' ||
     $page == 'missions/headers/manage' || $page == 'missions/headers/list' ||
     $page == 'defines/job-groups/list' || $page == 'defines/job-groups/manage' ||
-    $page == 'defines/project-status/list'
+    $page == 'defines/project-status/list' ||
+    $page == 'todos/list' 
 ) {
     echo '<script src="./dist/libs/datatable/datatables.min.js"></script>';
 }
