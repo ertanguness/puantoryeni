@@ -50,7 +50,7 @@ class DefinesModel extends Model
 
     public function getIncExpTypesByFirmandType($type)
     {
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? and sub_type = ?");
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE firm_id = ? and type_id = ?");
         $sql->execute([$this->firm_id, $type]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }

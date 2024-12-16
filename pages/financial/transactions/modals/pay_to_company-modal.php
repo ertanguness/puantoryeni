@@ -31,7 +31,6 @@ $CompanyHelper = new CompanyHelper();
 
                                 <div class="col">
                                     <label class="form-label">Firma Adı</label>
-                                    <!-- Tüm Firmaları getir -->
                                      <!-- tc: to company -->
                                     <?php echo $CompanyHelper->getCompanySelect(name: "tc_company_name") ?>
                                 </div>

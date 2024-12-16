@@ -20,14 +20,14 @@ class Financial extends Db
         7 => "Personel Ödemesi",
         8 => "Firma Ödemesi",
         9 => "Alınan Proje Masrafı",
-        10 => "Hakediş", 
+        10 => "Hakediş",
         11 => "Proje Masrafı",
         12 => "Proje Kesinti",
         13 => "Masraf",
         14 => "Puantaj Çalışma",
         15 => "Kesinti",
         16 => "Maaş",
-        ];
+    ];
     protected $caseObj;
 
 
@@ -105,4 +105,56 @@ class Financial extends Db
         }
         return self::TYPE[$type_id];
     }
+
+    //defines tablosundan id'ye gore sorgula
+    public function getUsersTransactionType($id)
+    {
+        $query = $this->db->prepare("SELECT * FROM defines WHERE id = ?");
+        $query->execute([$id]);
+        return $query->fetch(PDO::FETCH_OBJ)->name;
+    }
+
+    //gelen case_id değerini kontrol etmek için
+    public static function caseControl($case_id)
+    {
+       if (!isset($case_id) || $case_id == 0) {
+            $res = [
+                "status" => "error",
+                "message" => "Kasa seçimi yapınız"
+            ];
+            echo json_encode($res);
+            exit();
+
+        }
+    }
+
+    //Gelen tutarın kontrolü
+    public static function amountControl($amount)
+    {
+       if (!isset($amount) || $amount == 0 || $amount == '') {
+            $res = [
+                "status" => "error",
+                "message" => "Geçerli bir tutar giriniz!"
+            ];
+            echo json_encode($res);
+            exit();
+
+        }
+    }
+    //Gelen işlem türünün kontrolü
+    public static function typeControl($type)
+    {
+       if (!isset($type) || $type == 0 || $type == '') {
+            $res = [
+                "status" => "error",
+                "message" => "İşlem Türünü seçiniz!"
+            ];
+            echo json_encode($res);
+            exit();
+
+        }
+    }
+
+
+
 }

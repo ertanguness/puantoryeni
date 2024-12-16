@@ -249,7 +249,7 @@ $enc_id = isset($_GET['id']) ? ($_GET['id']) : 0;
                                     <td><?php echo $item->yil; ?></td>
                                     <td><?php echo Helper::formattedMoney($item->tutar); ?></td>
                                     <td data-tooltip="<?php echo $item->aciklama; ?>">
-                                        <?php echo Helper::short($item->aciklama); ?>
+                                        <?php echo Helper::short($item->aciklama,30); ?>
                                     </td>
                                     <td><?php echo $item->created_at; ?></td>
 

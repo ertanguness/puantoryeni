@@ -57,7 +57,9 @@ $dates = Date::generateDates($year, $month, $days);
 
     table.dataTable.table-sm>thead>tr>th:not(.sorting_disabled) {
         padding: 7px !important;
+       
     }
+
 
 
     .dataTables_wrapper .dataTables_filter {
@@ -109,7 +111,6 @@ $dates = Date::generateDates($year, $month, $days);
         vertical-align: bottom;
         padding: 0;
         line-height: 1.5;
-        position: relative;
     }
 
 
@@ -238,6 +239,14 @@ $dates = Date::generateDates($year, $month, $days);
         font-weight: 600;
 
     }
+    table .sticky {
+        position: sticky;
+        top: 10;
+        z-index: 1000;
+        background-color: #bbb !important;
+
+    }
+ 
 </style>
 
 
@@ -328,15 +337,15 @@ $dates = Date::generateDates($year, $month, $days);
 
                     </div>
                 </div>
-               
+
 
 
                 <div class="table-responsive">
                     <table id="puantajTable" class="table card-table text-nowrap datatable">
-                        <thead>
+                        <thead class="sticky">
                             <tr>
-                            <th class="ld">Adı Soyadı</th>
-                            <th class="ld">Unvanı</th>
+                                <th class="ld">Adı Soyadı</th>
+                                <th class="ld">Unvanı</th>
                                 <th style="display:none"></th>
 
                                 <?php foreach ($dates as $date): ?>
@@ -372,23 +381,23 @@ $dates = Date::generateDates($year, $month, $days);
                         <tbody>
                             <?php
                             foreach ($persons as $item):
-                               
+
                                 $person = $personObj->find($item->id);
                                 $id = Security::encrypt($person->id);
 
-                                 //Personelin işten ayrılma tarihi firstDay'den küçükse personeli getirme
-                                 if ($person->job_end_date >= Date::firstDay($month, $year)) {
+                                //Personelin işten ayrılma tarihi firstDay'den küçükse personeli getirme
+                                if ($person->job_end_date >= Date::firstDay($month, $year)) {
                                     continue;
                                 }
 
                                 ?>
                                 <tr>
-                                    <td class="text-nowrap" style="min-width:12vw;" data-id="<?php echo $id ?>"><a
-                                            class="btn-user-modal" type="button">
+                                    <td class="text-nowrap" style="" data-id="<?php echo $id ?>"><a class="btn-user-modal"
+                                            type="button">
                                             <a href="index.php?p=persons/manage&id=<?php echo $id ?>"
                                                 target="_blank"><?php echo $person->full_name ?></a></td>
 
-                                    <td class="text-nowrap" style="min-width:10vw;">
+                                    <td class="text-nowrap" style="">
                                         <?php echo $person->job ?>
                                     </td>
 

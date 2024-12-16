@@ -16,7 +16,7 @@ $personHelper = new PersonHelper();
             </div>
             <div class="modal-body">
                 <form action="" id="payToPersonForm">
-                   
+                    <input type="hidden" class="form-control" id="tp_id" name="tp_id" value="0">
 
                     <div class="row d-flex">
                         <div class="col-md-5 vertical-center justify-content-center">
@@ -39,7 +39,7 @@ $personHelper = new PersonHelper();
                             <div class="row mb-3">
                                 <div class="col">
                                     <label class="form-label">Ödeme Tutarı</label>
-                                    <input type="text" name="tp_amount" class="form-control money">
+                                    <input type="text" name="tp_amount" id="tp_amount" class="form-control money">
 
                                 </div>
                                 <div class="col">

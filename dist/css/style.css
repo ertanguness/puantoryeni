@@ -57,7 +57,7 @@
 }
 
 .tableFixHead thead th {
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   z-index: 1;
   /* Arka plan rengini belirleyin, sticky header'ın altındaki içeriğin görünmesini engellemek için */

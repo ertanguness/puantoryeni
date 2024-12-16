@@ -108,7 +108,7 @@ $financialHelper = new Financial();
                                                     data-bs-toggle="dropdown">İşlem</button>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item route-link"
-                                                        data-page="financial/transaction/list&id=<?php echo $id ?>" href="#">
+                                                        data-page="financial/case/manage&id=<?php echo $id ?>" href="#">
                                                         <i class="ti ti-transfer icon me-3"></i> Kasa Hareketleri
                                                     </a>
 

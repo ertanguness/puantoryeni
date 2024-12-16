@@ -121,4 +121,28 @@ class Puantaj extends Model
         $sql->execute([$id]);
     }
 
+    //Projenin toplam çalışan personel sayısını getir
+    public function getTotalWorksPersonByProject($project_id)
+    {
+        $sql = $this->db->prepare("SELECT COUNT(DISTINCT person) as total_person FROM puantaj WHERE project_id = ?");
+        $sql->execute([$project_id]);
+        return $sql->fetch(PDO::FETCH_OBJ)->total_person ?? 0;
+    }
+
+    //Projenin toplam çalışma saatini getir
+    public function getTotalWorksHourByProject($project_id)
+    {
+        $sql = $this->db->prepare("SELECT SUM(saat) as total_hour FROM puantaj WHERE project_id = ?");
+        $sql->execute([$project_id]);
+        return $sql->fetch(PDO::FETCH_OBJ)->total_hour ?? 0;
+    }
+
+    //Projenin toplam çalışma tutarını getir
+    public function getTotalWorksBalanceByProject($project_id)
+    {
+        $sql = $this->db->prepare("SELECT SUM(tutar) as total_balance FROM puantaj WHERE project_id = ?");
+        $sql->execute([$project_id]);
+        return $sql->fetch(PDO::FETCH_OBJ)->total_balance ?? 0;
+    }
+
 }

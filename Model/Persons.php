@@ -17,6 +17,22 @@ class Persons extends Model
         $query->execute([$firm_id]);
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
+//Personelin ad soyadını getir
+    public function getPersonName($person_id)
+    {
+        $query = $this->db->prepare("SELECT full_name FROM $this->table WHERE id = ?");
+        $query->execute([$person_id]);
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
+
+    //Aktif personelleri getir
+    public function getPersonsByActive()
+    {
+        $query = $this->db->prepare('SELECT * FROM persons WHERE firm_id = ? and job_end_date IS NOT NULL');
+        $query->execute([$_SESSION['firm_id']]);
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function getPersonIdByFirm($firm_id)
     {
         $query = $this->db->prepare('SELECT id FROM persons WHERE firm_id = ?');
@@ -50,7 +66,11 @@ class Persons extends Model
     {
         $query = $this->db->prepare("SELECT * FROM persons WHERE id = ?");
         $query->execute([$person_id]);
-        return $query->fetch(PDO::FETCH_OBJ)->$field;
+        $person = $query->fetch(PDO::FETCH_OBJ);
+        if (!$person) {
+            return "Personel Silinmiş";
+        }
+        return $person->$field;
     }
     public function getDailyWages($person_id)
     {

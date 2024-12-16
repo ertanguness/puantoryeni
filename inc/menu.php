@@ -125,6 +125,7 @@ $Auths = new Auths();
                                         //Eğer menü yetkiye tabi ise yetki kontrolü yapılır
                                         if ($sub_menu->is_authorize == 1) {
                                             //Sayfa Adından Auths tablosundaki title alanı ile sorgulanarak yetki id alınır
+                                            //Menü adı ile Auts tablosundaki title alanı aynı olmalı
                                             $auth_id = $Auths->getAuthIdByTitle($sub_menu->page_name)->id ?? 0;
 
                                             //Yetki id'si gelen sayfa için yetki kontrolü yapılır

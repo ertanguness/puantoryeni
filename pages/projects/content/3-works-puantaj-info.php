@@ -20,6 +20,15 @@ $projectHelper = new Projects();
 //Projenin puantaj tablosundaki çalışma bilgilerini getirir
 $puantaj_info = $puantajObj->getPuantajInfoByProject($id);
 
+//Projenin toplam çalışan personel sayısını getirir
+$total_person = $puantajObj->getTotalWorksPersonByProject($id);
+
+//Projenin toplam çalışma saatini getirir
+$total_hours = $puantajObj->getTotalWorksHourByProject($id);
+
+//Projenin toplam çalışma tutarını getirir
+$total_amount = $puantajObj->getTotalWorksBalanceByProject($id);
+
 
 if (!$Auths->Authorize("person_page_puantaj_info")) {
     Helper::authorizePage();
@@ -45,7 +54,82 @@ if (!$Auths->Authorize("person_page_puantaj_info")) {
                         </a>
                     </div>
                 </div>
+                <div class="card-header">
+                    <div class="row row-cards">
 
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-green text-white avatar">
+                                                <i class="ti ti-users icon"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">
+                                               Toplam Çalışan Personel
+                                            </div>
+                                            <div class="text-secondary">
+                                                <label for="" id="total_income">
+                                                    <?php echo ($total_person ?? 0) . " Kişi" ; ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-yellow text-white avatar">
+                                                <i class="ti ti-clock-24 icon"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">
+                                                Toplam Çalışma Saati
+                                            </div>
+                                            <div class="text-secondary">
+                                                <label for="" id="total_expense">
+                                                    <?php echo ($total_hours ?? 0) . " Saat"; ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-primary text-white avatar">
+                                                <i class="ti ti-basket-dollar icon"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">
+                                                Toplam Çalışma Tutarı
+                                            </div>
+                                            <div class="text-secondary">
+                                                <label for="" id="balance">
+                                                    <?php echo Helper::formattedMoney($total_amount ); ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="table-responsive">
                     <table class="table card-table table-hover text-nowrap datatable" id="puantaj_info_table">

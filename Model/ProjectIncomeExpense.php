@@ -2,6 +2,7 @@
 //define('ROOT', $_SERVER['DOCUMENT_ROOT'] );
 require_once 'BaseModel.php';
 require_once ROOT . '/App/Helper/helper.php';
+require_once ROOT . "/Model/Projects.php";
 
 use App\Helper\Helper;
 

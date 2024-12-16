@@ -30,7 +30,14 @@ if ($(".datatable").length > 0) {
         let column = this;
         let title = column.header().textContent;
 
-        if (title != "İşlem") {
+        //0. ve 1. kolonun index numarasına göre arama kutusu ekle
+        //kolon başlığında checkbox varsa arama kutusu ekleme
+
+        if (
+          title != "İşlem" &&
+          title != "Seç" &&
+          $(column.header()).find('input[type="checkbox"]').length === 0
+        ) {
           // Create input element
           let input = document.createElement("input");
           input.placeholder = title;
@@ -70,6 +77,7 @@ if ($(".datatable").length > 0) {
   //Puantaj tablosu için
   var puantaj_table = $("#puantajTable").DataTable({
     ordering: false,
+
     layout: {
       bottomStart: "pageLength",
       bottom2Start: "info",
@@ -88,6 +96,7 @@ if ($(".datatable").length > 0) {
         }
       }
     ],
+
     initComplete: function (settings, json) {
       var api = this.api();
       var tableId = settings.sTableId;
@@ -130,7 +139,6 @@ if ($(".datatable").length > 0) {
 }
 
 if ($(".select2").length > 0) {
-
   $(".select2").select2();
 
   // $("#products").select2({
@@ -152,10 +160,9 @@ if ($(".select2").length > 0) {
   // });
 
   //Modal'daki select2'lerin dropdown parent'ını modal yap
-  $('.modal .select2').each(function() { 
-    $(this).select2({ dropdownParent: $(this).parent()});
-})
-
+  $(".modal .select2").each(function () {
+    $(this).select2({ dropdownParent: $(this).parent() });
+  });
 }
 $(document).ready(function () {
   if ($(".summernote").length > 0) {
@@ -203,7 +210,7 @@ if ($(".select2").length > 0) {
   });
 }
 
-function dtSearchInput(tableId, column, value) { }
+function dtSearchInput(tableId, column, value) {}
 
 //Geri dönüş yapmadan kayıt silme işlemi
 function deleteRecord(
@@ -378,7 +385,6 @@ function getTowns(cityId, targetElement) {
   formData.append("city_id", cityId);
   formData.append("action", "getTowns");
 
-
   fetch("/api/il-ilce.php", {
     method: "POST",
     body: formData
@@ -392,7 +398,6 @@ function getTowns(cityId, targetElement) {
       console.error("Error:", error);
     });
 }
-
 
 //Personeli kaydedip kaydetmediğimize bakarız
 function checkPersonId(id) {
@@ -469,18 +474,16 @@ function goWhatsApp() {
 function previewImage(event) {
   var reader = new FileReader();
   reader.onload = function () {
-    var output = document.querySelector('.brand-img img');
+    var output = document.querySelector(".brand-img img");
     output.src = reader.result;
   };
   reader.readAsDataURL(event.target.files[0]);
 }
 
 //para birimi mask
-if ($('.money').length > 0) {
+if ($(".money").length > 0) {
   //1.234,52 şeklinden regex yaz
   //$(".money").inputmask("9-a{1,3}9{1,3}"); //mask with dynamic syntax
-
-
 
   $(".money").inputmask("decimal", {
     radixPoint: ",",
@@ -491,17 +494,16 @@ if ($('.money').length > 0) {
     removeMaskOnSubmit: true
   });
 
-
-  $(document).on('focus', '.money', function () {
+  $(document).on("focus", ".money", function () {
     $(this).inputmask("decimal", {
-        radixPoint: ",",
-        groupSeparator: ".",
-        digits: 2,
-        autoGroup: true,
-        rightAlign: false,
-        removeMaskOnSubmit: true
+      radixPoint: ",",
+      groupSeparator: ".",
+      digits: 2,
+      autoGroup: true,
+      rightAlign: false,
+      removeMaskOnSubmit: true
     });
-});
+  });
   //Para birimi olan alanlarda virgülü noktaya çevir
   // $('.money').on('keyup', function () {
   //   var value = $(this).val();
@@ -510,15 +512,14 @@ if ($('.money').length > 0) {
   // });
 }
 
-
 //Jquery validate ile yapılan doğrulamalarda para birimi formatı için
 function addCustomValidationMethods() {
   $.validator.addMethod(
     "validNumber",
     function (value, element) {
-      return this.optional(element) || /^[0-9.,]+$/.test(value);
+      return this.optional(element) || (/^[0-9.,]+$/.test(value) && parseFloat(value.replace(",", ".")) > 0);
     },
-    "Lütfen geçerli bir sayı girin"
+    "Lütfen geçerli bir sayı girin ve 0'dan büyük bir değer girin"
   );
 }
 
@@ -527,7 +528,9 @@ function addCustomValidationValidValue() {
   $.validator.addMethod(
     "validValue",
     function (value, element) {
-      return this.optional(element) || parseFloat(value.replace(',', '.')) !== 0;
+      return (
+        this.optional(element) || parseFloat(value.replace(",", ".")) !== 0
+      );
     },
     "Lütfen geçerli bir değer girin"
   );

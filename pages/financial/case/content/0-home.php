@@ -68,14 +68,7 @@ $is_disabled = ($case->isDefault ?? 0) == 1 ? "disabled" : "";
         </div>
     </div>
     <div class="row mb-3">
-        <?php if ($id == 0): ?>
-            <div class="col-md-2">
-                <label for="case_name" class="form-label">Başlangıç Bütçesi</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="start_budget" class="form-control" value="<?php echo $case->start_budget ?? '' ?>">
-            </div>
-        <?php endif ?>
+
         <div class="col-md-2">
             <label for="case_name" class="form-label">Açıklama</label>
         </div>

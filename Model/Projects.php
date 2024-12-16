@@ -41,14 +41,28 @@ class Projects extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
+    // Proje id'sine göre personelleri getirir
+    public function getPersonsByProject($project_id)
+    {
+        $sql = $this->db->prepare('SELECT 
+                                            p.*, 
+                                            (CASE 
+                                                WHEN FIND_IN_SET(p.id, (SELECT GROUP_CONCAT(person_id) FROM project_person WHERE project_id = ?)) > 0 THEN 1 
+                                                ELSE 0 
+                                            END) AS is_added
+                                        FROM 
+                                            persons p
+                                        WHERE 
+                                            p.wage_type = 2;');
+        $sql->execute([$project_id]);
+        return $sql->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function getPersonFromProject($project_id)
     {
         $sql = $this->db->prepare('SELECT *
-                                            FROM persons
-                                            WHERE wage_type = 2
-                                            AND (
-                                                FIND_IN_SET(id, (SELECT person_id FROM project_person WHERE project_id = ?))
-                                            );');
+                                            FROM project_person
+                                            WHERE project_id = ?');
         $sql->execute([$project_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -61,7 +75,7 @@ class Projects extends Model
         $sql = $this->db->prepare('SELECT COUNT(*) as total
                                             FROM project_person
                                             WHERE project_id = ?
-                                            AND FIND_IN_SET(?, person_id);');
+                                            AND person_id = ?');
         $sql->execute([$project_id, $person_id]);
         return $sql->fetch(PDO::FETCH_OBJ)->total;
     }
@@ -79,35 +93,23 @@ class Projects extends Model
     }
 
     //Personelin kayıtlı olduğu dizileri getir
-    public function getPersonInArray($person_id)
+    public function getProjectsByPerson($person_id)
     {
-        $sql = $this->db->prepare('SELECT person_id
+        $sql = $this->db->prepare('SELECT project_id
                                             FROM project_person
-                                            WHERE FIND_IN_SET(?, person_id);');
+                                            WHERE person_id = ?;');
         $sql->execute([$person_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function getPersonIdByFromProjectCurrentMonth($project_id, $last_day)
     {
-        // $sql = $this->db->prepare('SELECT id
-        //                                     FROM persons
-        //                                     WHERE wage_type = 2
-        //                                     AND (
-        //                                         FIND_IN_SET(id, (SELECT person_id FROM project_person WHERE project_id = ?))
-        //                                     )
-        //                                     AND STR_TO_DATE(job_start_date, "%d.%m.%Y") <= ?;');
-        // $sql->execute([$project_id, $last_day]);
-        // return $sql->fetchAll(PDO::FETCH_OBJ);
-
         $sql = $this->db->prepare('SELECT id
-                        FROM persons
+                        FROM persons p
                         WHERE wage_type = 2
-                        AND FIND_IN_SET(id, (
-                            SELECT GROUP_CONCAT(person_id) 
-                            FROM project_person 
-                            WHERE project_id = ?
-                        ))
+                        AND  (SELECT person_id
+                                FROM project_person 
+                                WHERE project_id = ? and person_id = p.id) 
                         AND STR_TO_DATE(job_start_date, "%d.%m.%Y") <= ?;');
         $sql->execute([$project_id, $last_day]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
@@ -137,55 +139,54 @@ class Projects extends Model
     }
 
     //Personeli projelere kaydet
+
     public function savePersonProjects($person_id, $projects)
     {
         $this->table = 'project_person';
 
-        //Personelin kayıtlı olduğu projeleri getir
-        $person_list = $this->getPersonInArray($person_id);
-        foreach ($person_list as $person) {
-            //Personelin kayıtlı olduğu projelerden personel id'sini sil
-            $this->removePersonIdFromList($person->person_id, $person_id);
+        // Personelin kayıtlı olduğu projeleri getir
+        $projects_by_person = $this->getProjectsByPerson($person_id);
+        $existing_project_ids = array_map(function ($project) {
+            return $project->project_id;
+        }, $projects_by_person);
 
+        // Silinecek projeleri belirle
+        $projects_to_delete = array_diff($existing_project_ids, $projects);
+
+        // Eklenecek projeleri belirle
+        $projects_to_add = array_diff($projects, $existing_project_ids);
+
+        // Silinecek projeleri sil
+        foreach ($projects_to_delete as $project_id) {
+            $sql = $this->db->prepare('DELETE FROM project_person WHERE project_id = ? AND person_id = ?');
+            $sql->execute([$project_id, $person_id]);
         }
 
-        //$this->delete(['person_id' => $person_id]);
-        foreach ($projects as $project_id) {
-            //Eğer personel projede kayıtlı ise ekleme
-            if ($this->isExistPersonInProject($project_id, $person_id) > 0)
-                continue;
-
-
-
-
-
-            //eğer proje kayıtlı ise person_id alanına ekleme yapar
-            if ($this->findById($project_id) > 0) {
-                $sql = $this->db->prepare('UPDATE project_person 
-                        SET person_id = IF(person_id = "", ?, CONCAT(person_id, ",", ?)) 
-                        WHERE project_id = ?');
-                $sql->execute([$person_id, $person_id, $project_id]);
+        // Eklenecek projeleri ekle
+        foreach ($projects_to_add as $project_id) {
+            //personel id boş ise ekleme yapma
+            if ($person_id == 0 || $person_id == "") {
                 continue;
             }
-            $this->saveWithAttr([
-                'person_id' => $person_id,
-                'project_id' => $project_id,
-                "description" => "aadd"
-            ]);
+            //personel projede kayıtlı değilse ekle
+            if ($this->isExistPersonInProject($project_id, $person_id) == 0) {
+                $data = [
+                    'project_id' => $project_id,
+                    'person_id' => $person_id,
+                    "state" => 1,
+                    "user_id" => $_SESSION['user']->id,
+                ];
+                $this->saveWithAttr($data);
+            }
+
         }
     }
-    public static function removePersonIdFromList($person_id_list, $person_id_to_remove)
+
+    //Personeli projelerden sil
+    public function deletePersonFromProjects($person_id, $project_id)
     {
-        // Listeyi diziye dönüştür
-        $person_ids = explode(',', $person_id_list);
-
-        // Diziden istenen person_id'yi çıkar
-        $person_ids = array_filter($person_ids, function ($id) use ($person_id_to_remove) {
-            return $id != $person_id_to_remove;
-        });
-
-        // Diziyi tekrar virgülle ayrılmış bir listeye dönüştür
-        return implode(',', $person_ids);
+        $sql = $this->db->prepare('DELETE FROM project_person WHERE person_id = ? and project_id = ?');
+        $sql->execute([$person_id, $project_id]);
     }
 
 }

@@ -20367,6 +20367,7 @@ Stacked card
   border-radius: var(--tblr-card-border-radius) var(--tblr-card-border-radius) 0 0;
 }
 
+
 .card-header-light {
   border-bottom-color: transparent;
   background: var(--tblr-bg-surface-tertiary);

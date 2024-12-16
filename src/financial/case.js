@@ -107,10 +107,10 @@ $(document).on("click", ".intercash-transfer", function () {
         });
 
         // Kasa seçenekleri HTML'e ekleniyor ve modal gösteriliyor
-        $("#from_case").val(case_id);
-        $("#to_case").html(select);
+        $("#it_from_cases").val(case_id);
+        $("#it_to_case").html(select);
 
-        modal.modal("show");
+        modal.modal("show"); 
       } else {
         title = "Hata!";
         Swal.fire({

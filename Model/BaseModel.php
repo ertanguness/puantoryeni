@@ -129,4 +129,17 @@ class Model extends Db
         }
         return true;
     }
+
+    //Soft delete
+    public function softDelete($id)
+    {
+        $id = Security::decrypt($id);
+        $sql = $this->db->prepare("UPDATE $this->table SET deleted_at = NOW() WHERE $this->primaryKey = ?");
+        $sql->execute(array($id));
+
+        if ($sql->rowCount() === 0) {
+            return new Exception('Kayıt bulunamadı veya silinemedi.');
+        }
+        return true;
+    }
 }

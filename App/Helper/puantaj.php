@@ -33,13 +33,13 @@ class puantajHelper extends Db
 
         // Veritabanından gelen verilerle liste öğeleri oluşturma
         while ($result = $sql->fetch(PDO::FETCH_ASSOC)) {
-            if ($result["Turu"] != "Saatlik") {
+            //if ($result["Turu"] != "Saatlik") {
                 $saat = $result["EklenecekSaat"];
                 $operant = $result["operant"];
                 $puantaj_saati = $this->calculatePuantajSaati($saat, $work_hour, $operant);
-            } else {
-                $puantaj_saati = $result["PuantajSaati"];
-            }
+            // } else {
+            //     $puantaj_saati = $result["PuantajSaati"];
+            // }
 
             $output .= '
             <li class="nav-item" style="min-width:200px">
@@ -91,8 +91,18 @@ class puantajHelper extends Db
     }
 
     // gelen operanta göre işlem yap
+ 
     function calculatePuantajSaati($saat, $work_hour, $operant)
     {
+        // Sayısal olmayan değerleri kontrol et
+        // if (!is_numeric($saat) || !is_numeric($work_hour)) {
+        //     return 'Non-numeric value encountered';
+        // }
+        $work_hour = str_replace(',', '.', $work_hour);
+        $saat = str_replace(',', '.', $saat);
+    
+        $puantaj_saati = 0;
+    
         switch ($operant) {
             case '+':
                 $puantaj_saati = $saat + $work_hour;
@@ -113,10 +123,9 @@ class puantajHelper extends Db
             default:
                 return 'Invalid operant';
         }
-
+    
         return $puantaj_saati;
     }
-
 
 
 

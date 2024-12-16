@@ -243,11 +243,11 @@ class Helper
         switch ($type) {
             case 1://Gelir
             case 6: //Hakediş
-                $icon = "ti-fold-up";
+                $icon = "ti-arrow-up-dashed";
                 $color = "color-green";
                 break;
             case 2:
-                $icon = "ti-stairs-down";
+                $icon = "ti-arrow-down-dashed";
                 $color = "color-red";
                 break;
             case 3:

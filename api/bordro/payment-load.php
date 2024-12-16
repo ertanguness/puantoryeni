@@ -59,7 +59,7 @@ if ($_POST["action"] == "payment-load-from-xls") {
                     "tutar" => $row["D"],
                     "ay" => $month,
                     "yil" => $year,
-                    "kategori" => 3,
+                    "kategori" => 7,
                     "turu" => $type,
                     "aciklama" => "Excel yükleme",
                 ];

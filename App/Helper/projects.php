@@ -20,10 +20,7 @@ class ProjectHelper extends Db
     }
     public function getProjectSelect($name = "projects", $project_id = null )
     {
-        // $query = $this->db->prepare("SELECT * FROM projects where firm_id = ? "); // Tüm sütunları seç
-        // $query->execute([$_SESSION["firm_id"]]); // Sorguyu çalıştır
-        // $results = $query->fetchAll(PDO::FETCH_OBJ); // Tüm sonuçları al
-
+       
         $results = $this->Projects->getProjectsByFirm($_SESSION["firm_id"]);
 
         $select = '<select name="' . $name . '" class="form-select select2" id="' . $name . '" style="width:100%">';

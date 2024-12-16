@@ -1,9 +1,10 @@
 <?php
-!defined("ROOT") ? define("ROOT", $_SERVER['DOCUMENT_ROOT']): null;
+!defined("ROOT") ? define("ROOT", $_SERVER['DOCUMENT_ROOT']) : null;
 require_once "BaseModel.php";
 require_once "Cases.php";
-require_once ROOT ."/App/Helper/helper.php";
-require_once ROOT."/App/Helper/security.php";
+require_once ROOT . "/App/Helper/helper.php";
+require_once ROOT . "/App/Helper/security.php";
+require_once "SettingsModel.php";
 
 use App\Helper\Helper;
 use App\Helper\Security;
@@ -13,10 +14,13 @@ class CaseTransactions extends Model
     protected $sql_table = "sql_case_transactions";
     protected $caseObj;
 
+    protected $Settings;
+
     public function __construct()
     {
         parent::__construct($this->table);
         $this->caseObj = new Cases();
+        $this->Settings = new SettingsModel();
     }
 
     public function allByCase($case_id)
@@ -29,10 +33,10 @@ class CaseTransactions extends Model
     //firmanın kasalarının işlemlerini getirir
     public function allTransactionByFirm($firm_id)
     {
-        $is_main_user= $_SESSION['user']->parent_id;
-        if($is_main_user==0){
+        $is_main_user = $_SESSION['user']->parent_id;
+        if ($is_main_user == 0) {
             $cases = $this->caseObj->allCaseWithFirmId();
-        }else{
+        } else {
             $cases = $this->caseObj->getCasesByUserIds();
         }
 
@@ -45,7 +49,7 @@ class CaseTransactions extends Model
         }
 
         $case_ids = implode(",", $case_ids);
-        $sql = $this->db->prepare("SELECT * FROM $this->sql_table WHERE case_id IN ($case_ids) order BY id desc" );
+        $sql = $this->db->prepare("SELECT * FROM $this->sql_table WHERE case_id IN ($case_ids) order BY id desc");
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -58,7 +62,7 @@ class CaseTransactions extends Model
             $case_id = $this->caseObj->getDefaultCaseIdByFirm();
         }
 
-        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE case_id = ? ORDER BY id DESC");
+        $sql = $this->db->prepare("SELECT * FROM $this->sql_table WHERE case_id = ? ORDER BY id DESC");
         $sql->execute([$case_id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
@@ -111,9 +115,9 @@ class CaseTransactions extends Model
 
 
     //Kasalar arası transfer işlemi
-    public function transfer($from_case, $to_case, $amount, $description)
+    public function transfer($from_case, $to_case, $amount, $description,$date)
     {
-       
+
         $amount = Helper::formattedMoneyToNumber($amount);
         $description = Security::escape($description);
         $description = empty($description) ? "Virman" : $description;
@@ -131,29 +135,32 @@ class CaseTransactions extends Model
             return ["status" => "error", "message" => "Geçersiz miktar."];
         }
 
-        $from_case_balance = $this->getCaseBalance($from_case)->balance;
+        //alt limit -2500, bakiye -2000 ise 500 transfer yapabilir
+        $sub_limit = $this->Settings->getSettings("cases_sub_limit")->set_value ?? 0;
+        $from_case_balance =  ($this->getCaseBalance($from_case)->balance) - $sub_limit  ;
 
-        if ($from_case_balance < $amount) {
+        if ($amount > $from_case_balance) {
             return ["status" => "error", "message" => "Yetersiz bakiye.<br> Yapabileceğiniz maksimum transfer miktarı: <br>" . Helper::formattedMoney($from_case_balance)];
         }
 
+
         $data = [
-            "date" => date("Y-m-d H:i:s"),
+            "date" => $date,
             "case_id" => $from_case,
             "type_id" => 2,
             "sub_type" => 3,
-            "amount" => Helper::formattedMoneyToNumber($amount),
+            "amount" => ($amount),
             "description" => $description ?? "Virman",
             "created_at" => date("Y-m-d H:i:s")
         ];
         $this->saveWithAttr($data);
 
         $data = [
-            "date" => date("Y-m-d H:i:s"),
+            "date" => $date,
             "case_id" => $to_case,
             "type_id" => 1,
             "sub_type" => 3,
-            "amount" => Helper::formattedMoneyToNumber($amount),
+            "amount" => ($amount),
             "description" => $description ?? "Virman",
             "created_at" => date("Y-m-d H:i:s")
         ];

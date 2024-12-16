@@ -126,3 +126,25 @@ $(document).on("click", "#home_save", function () {
     });
 });
 
+$(document).on("click", "#financial_save", function () {
+  var form = $("#settingsFinancialForm");
+  let formData = new FormData(form[0]);
+  formData.append("action", "financialSettings");
+
+  fetch("api/settings/settings.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      //console.log(data);
+
+      title = data.status == "success" ? "Başarılı!" : "Hata!";
+      Swal.fire({
+        title: title,
+        text: data.message,
+        icon: data.status,
+        confirmButtonText: "Ok"
+      });
+    });
+});

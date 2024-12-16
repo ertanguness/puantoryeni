@@ -15,6 +15,7 @@ $(document).on("click", "#payment_addButton", function () {
 
   var form = $("#payment_modalForm");
   addCustomValidationMethods(); // custom validation methodlarını çalıştır
+  
   form.validate({
     rules: {
       payment_amount: {

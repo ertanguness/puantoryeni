@@ -114,6 +114,8 @@ function puantaj_olustur() {
   var year = $("#year").val();
   var month = $("#months").val().padStart(2, "0");
 
+  //preloader göster
+  $(".preloader").fadeIn();
   // JSON verisini saklamak için bir nesne oluştur
   var jsonData = {};
   // Tablodaki her satırı döngü ile işle
@@ -135,7 +137,7 @@ function puantaj_olustur() {
           .eq(index + 3)
           .text(); // İndeks + 2, 2. indeksten başlamasını sağlar
       var puantajId = $(this).attr("data-id") ? $(this).attr("data-id") : ""; // Durum bilgisini al
-       //console.log(person_id + "--" + date + "--" + puantajId); //
+      //console.log(person_id + "--" + date + "--" + puantajId); //
 
       // var key = person_id + " : " + position;
       var key = person_id;
@@ -167,7 +169,7 @@ function puantaj_olustur() {
               puantajId: puantajId,
               project_id: $(this).attr("data-project")
             };
-            console.log(person_id + "--" + date + "--" + puantajId); //
+            //console.log(person_id + "--" + date + "--" + puantajId); //
           }
         } else {
           jsonData[key][date] = { puantajId: puantajId, project_id: "" };
@@ -198,20 +200,26 @@ function puantaj_olustur() {
   })
     .then((response) => response.json())
     .then((data) => {
+      $(".preloader").fadeOut();
       // console.log(data);
       if (data.status == "success") {
-        console.log(data.error_wages);
+        //console.log(data.error_wages);
 
         title = "Başarılı";
       } else {
         title = "Hata";
       }
+      //preloader gizle
+
       Swal.fire({
         title: "Başarılı",
         html: data.message,
         icon: "success"
       });
     });
+
+  //preloader gizle
+  $(".preloader").fadeOut();
 }
 
 $("#projects").on("change", function () {

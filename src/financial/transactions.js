@@ -1,97 +1,104 @@
-$(document).on("click", "#saveTransaction", function () {
-  var form = $("#transactionModalForm");
-  // Özel doğrulama yöntemi ekleme
-  $.validator.addMethod(
-    "inputPattern",
-    function (value, element) {
-      return this.optional(element) || /^[0-9]+[.,]?[0-9]*$/.test(value);
-    },
-    "Tutar sayısal değer olmalıdır"
-  );
-  form.validate({
+var hasProcess = false;
+
+//Genel Gelir-Gider Ekle
+$(document).ready(function () {
+  addCustomValidationMethods();
+  addCustomValidationValidValue();
+
+  //genel modal form kontrolleri
+  $("#transactionModalForm").validate({
     rules: {
       amount: {
         required: true,
-        inputPattern: true
+        validNumber: true
+      },
+      gm_case_id: {
+        required: true,
+        validValue: true
+      },
+      gm_incexp_type: {
+        required: true,
+        validValue: true
       }
     },
     messages: {
       amount: {
         required: "Lütfen tutar giriniz",
-        inputPattern: "Tutar sayısal değer olmalıdır"
+        validNumber: "Lütfen geçerli bir tutar giriniz!"
+      },
+      gm_case_id: {
+        required: "Lütfen bir kasa seçiniz!",
+        validValue: "Lütfen bir kasa seçiniz!"
+      },
+      gm_incexp_type: {
+        required: "İşlem Türünü seçiniz!",
+        validValue: "İşlem Türünü seçiniz!"
       }
+    },
+    errorPlacement: function (error, element) {
+      customErrorPlacement(error, element);
     }
   });
-  if (!form.valid()) {
-    return;
-  }
+});
 
-  let formData = new FormData(form[0]);
+//Genel modal kaydet butonuna basınca
+$(document).on("click", "#saveTransaction", function () {
+  var form = $("#transactionModalForm");
+  //Eğer tüm kontroller doğru ise
+  if (form.valid()) {
+    let formData = new FormData(form[0]);
 
-  formData.append("action", "saveTransaction");
+    formData.append("action", "saveTransaction");
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
 
-  // for (var pair of formData.entries()) {
-  //   console.log(pair[0] + ", " + pair[1]);
-  // }
-
-  fetch("/api/financial/transaction.php", {
-    method: "POST",
-    body: formData
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status == "success") {
-        title = "Başarılı!";
-      } else {
-        title = "Hata!";
-      }
-
-      var transaction = data.transaction;
-      var table = $("#transactionTable").DataTable();
-      table.row
-        .add([
-          table.rows().count() + 1,
-          transaction.date,
-          transaction.type_id,
-          transaction.sub_type,
-          transaction.case_id,
-          transaction.amount,
-          transaction.description,
-          `<div class="dropdown">
-            <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">İşlem</button>
-            <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item edit-transactions" data-id=${transaction.id}" href="#">
-                    <i class="ti ti-edit icon me-3"></i> Güncelle
-                </a>
-                <a class="dropdown-item delete-transaction" data-id="${transaction.id}" href="#">
-                    <i class="ti ti-trash icon me-3"></i> Sil
-                </a>
-            </div>
-        </div>`
-        ])
-        .draw(false);
-      //ilk ve 3. sutüna text-center classı ekle
-      [0, 2, 3].forEach((i) =>
-        table.column(i).nodes().to$().addClass("text-center")
-      );
-
-      Swal.fire({
-        title: title,
-        text: data.message,
-        icon: data.status,
-        confirmButtonText: "Tamam"
-      });
+    fetch("/api/financial/transaction.php", {
+      method: "POST",
+      body: formData
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+
+        if (data.status == "success") {
+          title = "Başarılı!";
+        } else {
+          title = "Hata!";
+        }
+        Swal.fire({
+          title: title,
+          text: data.message,
+          icon: data.status,
+          confirmButtonText: "Tamam"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            //$("#amount").val("");
+            hasProcess = true;
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+});
+
+//general-modal kaptıldığında sayfayı yenile
+$("#general-modal").on("hidden.bs.modal", function () {
+  //console.log(hasProcess);
+
+  if (hasProcess === true) {
+    window.location.reload();
+  }
 });
 
 $(document).on("click", ".delete-transaction", function () {
   //Tablo adı butonun içinde bulunduğu tablo
   let action = "deleteTransaction";
   let confirmMessage = "Kasa hareketi silinecektir!";
-  let url = "/api/financial/transaction.php";
+  let type = $(this).data("type");
+  let url = "/api/financial/transaction.php?type=" + type;
 
   deleteRecord(this, action, confirmMessage, url);
 });
@@ -114,13 +121,16 @@ $(document).on("click", ".transaction_type", function () {
   })
     .then((response) => response.json())
     .then((data) => {
+      //Elementin içini boşalt
+      $("#gm_incexp_type").html("");
       var options = "<option value=''>Tür Seçiniz</option>";
       data = data.subTypes;
+      console.log(data);
 
       data.forEach((element) => {
         options += `<option value="${element.id}">${element.name}</option>`;
       });
-      $("#inc_exp_type").html(options);
+      $("#gm_incexp_type").html(options);
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -134,6 +144,27 @@ $(document).on("change", "#firm_cases", function () {
   //case_id'yi form'a ekle
   form.append(`<input type="hidden" name="case_id" value="${case_id}">`);
   form.submit();
+});
+let isTriggeringChange = false;
+
+function clearAndTrigger(selectors) {
+  if (!isTriggeringChange) {
+    isTriggeringChange = true;
+    $(selectors).val(0).trigger("change");
+    isTriggeringChange = false;
+  }
+}
+
+$(document).on("change", "#gm_project_id", function () {
+  clearAndTrigger("#gm_person_name, #gm_company");
+});
+
+$(document).on("change", "#gm_person_name", function () {
+  clearAndTrigger("#gm_company, #gm_project_id");
+});
+
+$(document).on("change", "#gm_company", function () {
+  clearAndTrigger("#gm_project_id, #gm_person_name");
 });
 
 // select2 elemanlarında seçim yapıldığında validator'ı tekrar çalıştır
@@ -217,83 +248,185 @@ $(document).on("click", "#savePaymentFromProject", function () {
     });
 });
 
-//Personele ödeme yap
-$(document).on("click", "#savePayToPerson", function () {
-  var form = $("#payToPersonForm");
+//Personellere ödeme yap
+$(document).ready(function () {
+  addCustomValidationMethods();
+  addCustomValidationValidValue();
 
-  addCustomValidationMethods(); //app.js içerisinde tanımlı(validNumber metodu)
-  addCustomValidationValidValue(); //app.js içerisinde tanımlı(validValue metodu)
-  form.validate({
+  $("#payToPersonsForm").validate({
+    rules: {
+      tps_action_date: {
+        required: true
+      },
+      tps_cases: {
+        required: true
+      }
+    },
+    messages: {
+      tps_action_date: {
+        required: "Lütfen ödeme tarihini girin"
+      },
+      tps_cases: {
+        required: "Lütfen ödeme yapılacak kasayı seçin"
+      }
+    },
+    errorPlacement: function (error, element) {
+      if (element.hasClass("select2")) {
+        error.insertAfter(element.next("span"));
+      } else {
+        error.insertAfter(element);
+      }
+    }
+  });
+
+  $("#savePayToPersons").on("click", function () {
+    if ($("#payToPersonsForm").valid()) {
+      //tablodaki satırlardaki değerleri al
+      var person_ids = [];
+      var amounts = [];
+      var person_id = "";
+      var amount = "";
+
+      var form = $("#payToPersonsForm");
+      var formData = new FormData(form[0]);
+      //preloader göster
+      $(".preloader").fadeIn();
+      //tablodaki satırlardaki değerleri al
+      $("#payToPersons tbody tr").each(function () {
+        //ilk td elemanının data-id attribute'undaki değeri al
+        person_id = $(this).find("td:eq(0)").data("id");
+        amount = $(this).find("td:eq(1) input").val();
+        //eğer amount 0'dan büyükse veya boş değilse veya numeric ise işlem yap
+        if (amount > 0 && amount != "" && $.isNumeric(amount)) {
+          person_ids.push(person_id);
+          amounts.push(amount);
+        }
+      });
+
+      formData.append("person_ids", person_ids);
+      formData.append("amounts", amounts);
+
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
+
+      formData.append("action", "payToPersons");
+      fetch("api/financial/transaction.php", {
+        method: "POST",
+        body: formData
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status == "success") {
+            title = "Başarılı!";
+          } else {
+            title = "Hata";
+          }
+          swal
+            .fire({
+              title: title,
+              text: data.message,
+              icon: data.status
+            })
+            .then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+        });
+      //preloader gizle
+      $(".preloader").fadeOut();
+    }
+  });
+});
+
+///// GENEL MODALDA BİŞRLEŞTİRİLDİ//////////////////////
+
+//Personele ödeme yap
+$(document).ready(function () {
+  addCustomValidationMethods();
+  addCustomValidationValidValue();
+
+  $("#payToPersonForm").validate({
     rules: {
       tp_person_name: {
-        required: true,
-        validValue: true
+        required: true
       },
       tp_amount: {
         required: true,
-        validNumber: true
+        validNumber: true,
+        validValue: true
+      },
+      tp_action_date: {
+        required: true
       },
       tp_cases: {
-        required: true,
-        validValue: true
+        required: true
       }
     },
     messages: {
       tp_person_name: {
-        validValue: "Lütfen bir personel seçin"
+        required: "Lütfen personel seçin"
       },
       tp_amount: {
-        required: "Lütfen miktarı girin",
-        validNumber: "Geçerli bir miktar girin"
+        required: "Lütfen ödeme tutarını girin",
+        validNumber: "Lütfen geçerli bir sayı girin",
+        validValue: "Lütfen geçerli bir değer girin"
+      },
+      tp_action_date: {
+        required: "Lütfen ödeme tarihini girin"
       },
       tp_cases: {
-        required: "Lütfen bir kasa seçin",
-        validValue: "Lütfen bir kasa seçin"
+        required: "Lütfen ödeme yapılacak kasayı seçin"
       }
     },
     errorPlacement: function (error, element) {
-      customErrorPlacement(error, element);
+      if (element.hasClass("select2")) {
+        error.insertAfter(element.next("span"));
+      } else {
+        error.insertAfter(element);
+      }
     }
   });
-  if (!form.valid()) {
-    return;
-  }
 
+  $("#savePayToPerson").on("click", function () {
+    if ($("#payToPersonForm").valid()) {
+      // Form geçerliyse işlemleri yap
+      // Örneğin formu submit edebilirsiniz
+      var form = $("#payToPersonForm");
+      let formData = new FormData(form[0]);
+      formData.append("action", "payToPerson");
 
-  let id = $("#transaction_id").val();
-  let formData = new FormData(form[0]);
+      fetch("api/financial/transaction.php", {
+        method: "POST",
+        body: formData
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
 
-  formData.append("action", "payToPerson");
-  formData.append("id", id);
-
-  fetch("api/financial/transaction.php", {
-    method: "POST",
-    body: formData
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data);
-
-      if (data.status == "success") {
-        Swal.fire({
-          title: "Başarılı!",
-          text: data.message,
-          icon: data.status,
-          confirmButtonText: "Tamam"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
+          if (data.status == "success") {
+            Swal.fire({
+              title: "Başarılı!",
+              text: data.message,
+              icon: data.status,
+              confirmButtonText: "Tamam"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+          } else {
+            Swal.fire({
+              title: "Hata!",
+              text: data.message,
+              icon: data.status,
+              confirmButtonText: "Tamam"
+            });
           }
         });
-      } else {
-        Swal.fire({
-          title: "Hata!",
-          text: data.message,
-          icon: data.status,
-          confirmButtonText: "Tamam"
-        });
-      }
-    });
+    }
+  });
 });
 
 //Firma Ödemesi yap
@@ -339,8 +472,6 @@ $(document).on("click", "#savePayToCompany", function () {
   if (!form.valid()) {
     return;
   }
-
-
 
   let formData = new FormData(form[0]);
 
@@ -425,9 +556,6 @@ $(document).on("click", "#saveAddExpenseReceivedProject", function () {
     return;
   }
 
-
-
-
   let formData = new FormData(form[0]);
 
   formData.append("action", "addExpenseReceivedProject");
@@ -466,6 +594,8 @@ $(document).on("click", "#saveAddExpenseReceivedProject", function () {
       }
     });
 });
+
+///// GENEL MODALDA BİŞRLEŞTİRİLDİ//////////////////////
 
 //Güncelleme işlemi
 $(document).on("click", ".edit-transactions", function () {
@@ -628,3 +758,65 @@ function customErrorPlacement(error, element) {
     error.insertAfter(element);
   }
 }
+
+//Virman yaparken çıkış yapılacak kasa seçilince hedef kasaları getirmekiçin
+$(document).on("change", "#it_from_cases", function () {
+  let from_case_id = $(this).val();
+  var formData = new FormData();
+  formData.append("from_case_id", from_case_id);
+  formData.append("action", "getCaseTransfer");
+
+  fetch("api/financial/transaction.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.status == "success") {
+        // Başarılı yanıt alındığında kasa seçenekleri oluşturuluyor
+        select = "<option value=''>Kasa Seçiniz!!</option>";
+        $.each(data.cases, function (index, value) {
+          select +=
+            "<option value='" + value.id + "'>" + value.case_name + "</option>";
+        });
+
+        // Kasa seçenekleri HTML'e ekleniyor
+        $("#it_to_case").html(select);
+      }
+    });
+});
+
+//Virman modalindaki kaydet butonuna basınca
+$(document).on("click", "#add-case-transfer", function () {
+  var form = $("#caseTransferForm");
+  var formData = new FormData(form[0]);
+  formData.append("action", "intercashTransfer");
+
+  fetch("/api/financial/case.php", {
+    method: "POST",
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status == "success") {
+        Swal.fire({
+          title: "Başarılı!",
+          text: data.message,
+          icon: data.status,
+          confirmButtonText: "Tamam"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Hata!",
+          html: data.message,
+          icon: data.status,
+          confirmButtonText: "Tamam"
+        });
+      }
+    });
+});

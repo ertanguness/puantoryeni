@@ -7,10 +7,12 @@ require_once ROOT . '/Model/Wages.php';
 require_once ROOT . '/Database/db.php';
 require_once ROOT . '/App/Helper/date.php';
 require_once ROOT . '/Model/SettingsModel.php';
+require_once ROOT . '/App/Helper/helper.php';
 
 
 use App\Helper\Date;
 use App\Helper\Security;
+use App\Helper\Helper;
 
 $Settings = new SettingsModel();
 $puantajObj = new Puantaj();
@@ -23,6 +25,7 @@ if ($_POST['action'] == 'savePuantaj') {
 
     //Günlük calisma saatini getir
     $work_hour = $Settings->getSettings("work_hour")->set_value ?? 8;
+    $work_hour = str_replace(',', '.', $work_hour);
 
     //Gelen data json formatında olduğu için decode edilir
     $json_data = json_decode($_POST['data'], true);
@@ -48,7 +51,7 @@ if ($_POST['action'] == 'savePuantaj') {
                 // Eğer personelin günlük ücreti tanımlı ise o ücretten hesaplama yapılır
                 $defined_wage = $wages->getWageByPersonIdAndDate($person_id, $puantaj_key)->amount ?? 0;
                 //tanımlı ücret yoksa günlük ücretten hesaplama yapılır
-                $daily_wages = ($defined_wage > 0) ? ($defined_wage / $work_hour) : $ucret;
+                $daily_wages = Helper::formattedMoneyToNumber(($defined_wage > 0) ? ($defined_wage / $work_hour) : $ucret);
 
 
                 //eğer saatlik çalışma değilse
@@ -59,7 +62,7 @@ if ($_POST['action'] == 'savePuantaj') {
                     //puantajın saati, puantaj id'sine göre getirilir
                     $saat = $puantajObj->getPuantajSaatiByfirm($puantaj_item['puantajId']);
                     //Günlük hakediş tutarı hesaplanır
-                    $tutar = $saat * $daily_wages;
+                    $tutar = floatval($saat) *  $daily_wages;
                 } else {
                     $saat = $puantaj_turu->PuantajSaati;
                     $tutar = $saat * ($daily_wages );
@@ -76,7 +79,7 @@ if ($_POST['action'] == 'savePuantaj') {
                 ];
 
                 try {
-                    if ($tutar > 0) {
+                    //if ($tutar > 0) {
                         // Veriyi modele gönder
                         $lastInsertId = $puantajObj->saveWithAttr($data);
                         $status = 'success';
@@ -85,7 +88,7 @@ if ($_POST['action'] == 'savePuantaj') {
                         } else {
                             $message = 'Puantaj başarıyla güncellendi';
                         }
-                    }
+                    //}
                 } catch (Exception $e) {
                     // Hata yönetimi
                     $status = 'error';

@@ -52,7 +52,7 @@ if ($_POST["action"] == "savePerson") {
         "daily_wages" => Helper::formattedMoneyToNumber($_POST["daily_wages"]),
         "job_start_date" => $_POST["job_start_date"],
         "job_end_date" => $_POST["job_end_date"],
-           
+
         // "status" => $_POST["status"],
     ];
 
@@ -110,7 +110,7 @@ if ($_POST["action"] == "deletePerson") {
     try {
 
         // burada personelin işlemlerinin de silinmesi için kontrol eklenecek
-        $Persons->delete($id);
+        $Persons->softDelete($id);
         $status = "success";
         $message = "Personel başarıyla silindi.";
     } catch (PDOException $e) {
@@ -134,26 +134,25 @@ if ($_POST['action'] == 'deletePayment') {
     $Auths->hasPermissionReturn("delete_staff_payment");
 
     $id = $_POST['id'];
+    $person_id = Security::decrypt($_GET['person_id']);
+    $income_expense = '';
+    $status = 'success';
+    $message = $id;
+
+    $type = $_GET["type"];
 
     try {
-        $db->beginTransaction();
+         $db->beginTransaction();
 
-        // Ödeme bilgilerini getirir
-        $paymentInfo = $Bordro->getPersonIncomeExpensePayment(Security::decrypt($id));
-
-        //Gelen id'nin encrypt edilmiş olup olmadığını kontrol edin
-        if ($Bordro->delete($id)) {
-            $status = 'success';
-            $message = 'Başarıyla silindi.';
+         //Gelen type değerine göre silme işlemi yapılır
+         if ($type === 'Puantaj Çalışma') {
+            $Puantaj->delete($id);
         } else {
-            $status = 'error';
-            $message = 'Silinirken bir hata oluştu.';
+            $Bordro->delete($id);
         }
-        ;
 
-        // Ödeme bilgilerindeki person_id alınır,
         // Personelin, maas_gelir_kesinti tablosundaki ödeme, kesinti ve gelir toplamlarını getirir
-        $income_expense = $Bordro->sumAllIncomeExpense($paymentInfo->person_id);
+        $income_expense = $Bordro->sumAllIncomeExpense($person_id);
 
         //Bakiye hesaplanır
         $balance = Helper::formattedMoney($income_expense->total_income - $income_expense->total_payment - $income_expense->total_expense);  // Bakiye
@@ -169,8 +168,12 @@ if ($_POST['action'] == 'deletePayment') {
 
         // Bakiye, değişkenine atama yapılır
         $income_expense->balance = $balance;
+        
+    
+        $message = "İşlem başarılı bir şekilde gerçekleşti.";
 
-        $db->commit();
+
+         $db->commit();
     } catch (PDOException $e) {
         $db->rollBack();
         $status = 'error';
@@ -178,7 +181,7 @@ if ($_POST['action'] == 'deletePayment') {
     }
     $res = [
         'status' => $status,
-        'message' => $message,
+        'message' =>  $message,
         'income_expense' => $income_expense,
     ];
     echo json_encode($res);

@@ -113,11 +113,13 @@ $(document).on('click', '.wage_type', function () {
 
 
 $(document).on("click", ".delete-payment", async function () {
-  let type = $(this).closest("tr").find("td:eq(2)").text();
+  let type_name = $(this).closest("tr").find("td:eq(2)").text();
+  let type = $(this).closest("tr").find("td:eq(5)").text();
+  let person_id = $("#person_id").val();
   //Tablo adı butonun içinde bulunduğu tablo
   let action = "deletePayment";
-  let confirmMessage = type + " silinecektir!";
-  let url = "/api/persons/person.php";
+  let confirmMessage = type_name + " silinecektir!";
+  let url = "/api/persons/person.php?person_id=" + person_id  + "&type=" + type;
 
   const result = await deleteRecordByReturn(this, action, confirmMessage, url);
 
@@ -128,7 +130,7 @@ $(document).on("click", ".delete-payment", async function () {
   let total_payment = income_expense.total_payment;
   let balance = income_expense.balance;
 
-  console.log(total_income + " " + total_payment + " " + balance);
+  // console.log(total_income + " " + total_payment + " " + balance);
   
 
   $("#total_payment").text(total_payment);

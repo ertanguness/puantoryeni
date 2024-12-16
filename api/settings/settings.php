@@ -4,9 +4,11 @@ require_once ROOT . "/Database/require.php";
 require_once ROOT . "/Model/UserModel.php";
 require_once ROOT . "/App/Helper/date.php";
 require_once ROOT . "/Model/SettingsModel.php";
+require_once ROOT . "/App/Helper/helper.php";
 
 
 use App\Helper\Date;
+use App\Helper\Helper;
 
 
 $User = new UserModel();
@@ -103,6 +105,35 @@ if ($_POST["action"] == "homeSettings") {
         "user_id" => $_SESSION["user"]->id,
         "set_name" => "work_hour",
         "set_value" => $work_hour
+    ];
+    try {
+        $lastInsertId = $Settings->saveWithAttr($data) ?? $id;
+        $status = "success";
+        $message = "Ayarlar başarıyla tamamlandı.";
+    } catch (PDOException $e) {
+        $status = "error";
+        $message = $e->getMessage();
+    }
+    $res = [
+        "status" => $status,
+        "message" => $message
+    ];
+    echo json_encode($res);
+}
+
+//Genel ayarlar
+if ($_POST["action"] == "financialSettings") {
+
+    $sub_limit = $_POST["sub_limit"];
+    //$id = $Settings->getSettingIdByUserAndAction($_SESSION["user"]->id, "work_hour")->id ?? 0;
+    $id = $Settings->getSettings("cases_sub_limit")->id ?? 0;
+
+    $data = [
+        "id" => $id,
+        "firm_id" => $_SESSION["firm_id"],
+        "user_id" => $_SESSION["user"]->id,
+        "set_name" => "cases_sub_limit",
+        "set_value" =>Helper::formattedMoneyToNumber($sub_limit)
     ];
     try {
         $lastInsertId = $Settings->saveWithAttr($data) ?? $id;

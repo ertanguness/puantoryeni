@@ -8,6 +8,9 @@ require_once "../../App/Helper/financial.php";
 require_once "../../Model/DefinesModel.php";
 require_once "../../App/Helper/security.php";
 require_once "../../Model/Auths.php";
+require_once "../../Model/ProjectIncomeExpense.php";
+require_once "../../Model/Bordro.php";
+require_once "../../Model/Persons.php";
 
 
 
@@ -20,6 +23,9 @@ $cases = new Cases();
 $ct = new CaseTransactions();
 $financial = new Financial();
 $define = new DefinesModel();
+$ProjectIncExp = new ProjectIncomeExpense();
+$Bordro = new Bordro();
+$Person = new Persons();
 
 
 $Auths->checkFirmReturn();
@@ -27,22 +33,44 @@ $Auths->checkFirmReturn();
 if ($_POST["action"] == "saveTransaction") {
     $id = $_POST["transaction_id"];
 
-    //Kasa hareketi ekleme yetkisi var mı?
+    //Kasa boş gelmesini engelle
+    $financial::caseControl($_POST["gm_case_id"]);
+
+    //Tutar boş gelmesini engelle
+    $financial::amountControl($_POST["amount"]);
+
+    //İşlem Türü boş gelmesini engelle
+    $financial::typeControl($_POST["gm_incexp_type"]);
+
+
+   //Kasa hareketi ekleme yetkisi var mı?
     $Auths->hasPermission("income_expense_add_update");
 
-    $data = [
-        "id" => 0,
-        "date" => date("Y-m-d H:i:s"),
-        "type_id" => $_POST["transaction_type"],
-        "sub_type" => $_POST["transaction_type"],
-        "case_id" => Security::decrypt($_POST["case_id"]),
-        "amount" => Helper::formattedMoneyToNumber($_POST["amount"]),
-        "amount_money" => $_POST["amount_money"],
-        "description" => Security::escape($_POST["description"]),
-    ];
+    $case_id = Security::decrypt($_POST["gm_case_id"]);
+    $project_id = $_POST["gm_project_id"];
+    $person_id = $_POST["gm_person_name"] != 0 ? Security::decrypt($_POST["gm_person_name"]) : 0 ;
+    $company_id = $_POST["gm_company"] != 0 ? Security::decrypt($_POST["gm_company"]) : 0 ;
+    
+    $users_type_id = $_POST["gm_incexp_type"] ?? 0;
 
-
+ 
     try {
+        $data = [
+            "id" => 0,
+            "date" => ($_POST["transaction_date"]),
+            "type_id" => $_POST["transaction_type"],
+            "project_id" => $project_id,
+            "person_id" => $person_id ,
+            "company_id" => $company_id ,
+            "users_type_id" => $users_type_id ,
+            "case_id" =>  $case_id,
+            "amount" => Helper::formattedMoneyToNumber($_POST["amount"]),
+            "amount_money" => $_POST["gm_amount_money"],
+            "description" => Security::escape($_POST["description"]),
+        ];
+
+
+
         $lastInsertId = $ct->saveWithAttr($data);
         $status = "success";
         if ($id == 0) {
@@ -52,22 +80,23 @@ if ($_POST["action"] == "saveTransaction") {
             $message = "Kasa Hareketi başarıyla güncellendi";
         }
 
-        //Eklenen kaydın bilgilerini getir
-        $transaction = $ct->find(Security::decrypt($lastInsertId));
-        //Kayıt alanlarında düzenleme
-        foreach ($transaction as $key => $value) {
-            if ($key == "id") {
-                $transaction->id = Security::encrypt($value);
-            } else if ($key == "date") {
-                $transaction->$key = Date::dmY($value);
-            } elseif ($key == "type_id") {
-                $transaction->$key = $value == 1 ? "Gelir" : "Gider";
-            } elseif ($key == "case_id") {
-                $transaction->$key = $cases->find($value)->case_name;
-            } elseif ($key == "amount") {
-                $transaction->$key = Helper::formattedMoney($value, $transaction->amount_money ?? 1);
-            }
-        }
+        //     //Eklenen kaydın bilgilerini getir
+        //      $transaction = $ct->find(Security::decrypt($lastInsertId));
+
+        //    // Kayıt alanlarında düzenleme
+        //     foreach ($transaction as $key => $value) {
+        //         if ($key == "id") {
+        //             $transaction->id = Security::encrypt($value);
+        //         } else if ($key == "date") {
+        //             $transaction->$key = Date::dmY($value);
+        //         } elseif ($key == "type_id") {
+        //             $transaction->$key = $value == 1 ? "Gelir" : "Gider";
+        //         } elseif ($key == "case_id") {
+        //             $transaction->$key = $cases->find($value)->case_name;
+        //         } elseif ($key == "amount") {
+        //             $transaction->$key = Helper::formattedMoney($value, $transaction->amount_money ?? 1);
+        //         }
+        //     }
     } catch (PDOException $ex) {
         $status = "error";
         $message = $ex->getMessage();
@@ -75,8 +104,7 @@ if ($_POST["action"] == "saveTransaction") {
 
     $res = [
         "status" => $status,
-        "message" => $message,
-        "transaction" => $transaction
+        "message" => $message
     ];
     echo json_encode($res);
 }
@@ -88,8 +116,14 @@ if ($_POST["action"] == "deleteTransaction") {
 
 
     $id = $_POST["id"];
+    $type = $_GET["type"];
     try {
-        $ct->delete($id);
+
+        if (in_array($type, [5, 6, 10, 11, 12])) {
+            $ProjectIncExp->delete($id);
+        } else {
+            $ct->delete($id);
+        }
         $status = "success";
         $message = "Kasa hareketi başarıyla silindi.";
     } catch (PDOException $ex) {
@@ -158,7 +192,7 @@ if ($_POST["action"] == "getPaymentFromProject") {
 
 //Personel Ödemesi Yap
 if ($_POST["action"] == "payToPerson") {
-    $id = $_POST["id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
+    $id = $_POST["tp_id"] != 0 ? Security::decrypt($_POST["id"]) : 0;
     $person_id = $_POST["tp_person_name"];
     $amount = Helper::formattedMoneyToNumber($_POST["tp_amount"]);
     $date = Date::ymd($_POST["tp_action_date"]);
@@ -183,13 +217,64 @@ if ($_POST["action"] == "payToPerson") {
         $lastInsertId = $ct->saveWithAttr($data);
         $status = "success";
         $message = $id == 0 ? "Ödeme başarıyla yapıldı" : "Ödeme başarıyla güncellendi";
-       
+
 
 
     } catch (PDOException $ex) {
         $status = "error";
         $message = $ex->getMessage();
     }
+
+    $res = [
+        "status" => $status,
+        "message" => $message,
+
+    ];
+    echo json_encode($res);
+    exit();
+}
+
+//Personellere Ödeme Yap
+if ($_POST["action"] == "payToPersons") {
+
+    //gelen değeri virgülden ayırarak diziye çevir
+    $person_ids = explode(",", $_POST["person_ids"]);
+    $case = Security::decrypt($_POST["tps_cases"]);
+    $date = Date::ymd($_POST["tps_action_date"]);
+    $description = Security::escape($_POST["tps_amount_description"]);
+    $amounts = explode(",", $_POST["amounts"]);
+
+    //Kasa hareketi ekleme yetkisi var mı?
+    //$Auths->hasPermission("income_expense_add_update");
+
+    try {
+        $i = 0;
+        foreach ($person_ids as $person) {
+            $full_name = $Person->getPersonName($person)->full_name;
+            $data = [
+                "id" => 0,
+                "date" => $date,
+                "type_id" => 2, //Gider
+                "sub_type" => 7, //Personel Ödemesi
+                "person_id" => $person,
+                "case_id" => $case,
+                "amount" => Helper::formattedMoneyToNumber($amounts[$i]),
+                "amount_money" => 1,
+                "description" => $full_name . " " . $description,
+            ];
+            $i++;
+            $ct->saveWithAttr($data);
+        }
+
+        $status = "success";
+        $message = "Ödeme başarıyla yapıldı";
+
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+
 
     $res = [
         "status" => $status,
@@ -352,4 +437,27 @@ if ($_POST["action"] == "getTransaction") {
 
     ];
     echo json_encode($res);
+}
+
+//Kasalar arası virman yapmak için transfer yapılacak kasaları getir
+if ($_POST["action"] == "getCaseTransfer") {
+    //Kasalararası virman yetkisi var mı kontrol et
+    //$Auths->hasPermissionReturn("intercash_transfer");
+    try {
+        $id = Security::decrypt($_POST["from_case_id"]);
+        $cases = $cases->getCasesExceptId($id);
+        $status = "success";
+    } catch (PDOException $ex) {
+        $status = "error";
+        $message = $ex->getMessage();
+    }
+
+    $res = [
+        "status" => $status,
+        "message" => $message ?? "",
+        "cases" => $cases
+    ];
+
+    echo json_encode($res);
+
 }

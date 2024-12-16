@@ -70,7 +70,7 @@ $pageTitle = $id > 0 ? 'Geir-Gider Türü Güncelleme' : 'Yeni Gelir-Gider Tür�
                                     <label class='form-label'>Tipi</label>
                                 </div>
                                 <div class='col-md-4'>
-                                    <?php echo Helper::incExpTypeSelect("incexp_type", $incexp->type ?? 1) ?>
+                                    <?php echo Helper::incExpTypeSelect("incexp_type", $incexp->type_id ?? 1) ?>
                                 </div>
 
                             </div>

@@ -33,7 +33,7 @@ $projectHelper = new ProjectHelper();
                                     <label class="form-label">Proje Adı</label>
                                     <!-- Alınan Projeleri getir -->
                                      <!-- rp: received project -->
-                                    <?php echo $projectHelper->getProjectSelectByType(name: "rp_project_name", type:2) ?>
+                                    <?php echo $projectHelper->getProjectSelectByType(name: "rp_project_name",type:1) ?>
 
                                 </div>
                             </div>

@@ -1,3 +1,7 @@
+
+<?php 
+$case_id = 0;
+?>
 <div class="modal modal-blur fade" id="intercash_transfer-modal" tabindex="-1" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -8,7 +12,7 @@
             </div>
             <div class="modal-body ">
                 <form action="" id="caseTransferForm">
-                    <input type="hidden" name="it_from_cases" id="it_from_cases" value="0">
+                    <input type="hidden" name="from_case" id="from_case" value="0">
                     <div class="card mb-3">
                         <div class="ribbon ribbon-top bg-yellow">
                             <!-- Download SVG icon from http://tabler-icons.io/i/star -->
@@ -25,7 +29,14 @@
                             <h3 class="card-title">Lütfen kasalar arasında para transferi yaparken bilgilerinizi
                                 dikkatlice
                                 kontrol ediniz.</h3>
-                            
+                          
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-end">
+
+                        <div class="col">
+                            <label class="form-label">Çıkış Yapılacak Kasa <font class="text-danger">(*)</font></label>
+                            <?php echo $financialHelper->getCasesSelectByUser("it_from_cases", $case_id); ?>
                         </div>
                     </div>
                     <div class="row mb-3 align-items-end">
@@ -37,7 +48,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row">
 
                         <div class="col-md-6">
@@ -46,7 +56,7 @@
                                 placeholder="Tutar giriniz">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Tarih <font class="text-danger">(*)</font></label>
+                            <label class="form-label">Tarih<font class="text-danger">(*)</font></label>
                             <input type="text" class="form-control flatpickr" name="it_date" id="it_date" value="<?php echo date("d.m.Y")?>"
                                 placeholder="Tarih giriniz">
                         </div>
@@ -61,7 +71,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn me-auto" data-bs-dismiss="modal">Çık</button>
-                <button type="button" class="btn btn-primary" id="add-case-transfer" >Transfer
+                <button type="button" class="btn btn-primary" id="add-case-transfer">Transfer
                     Yap</button>
             </div>
         </div>

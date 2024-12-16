@@ -62,11 +62,6 @@ if ($_POST["action"] == "saveCase") {
         "isDefault" => Security::escape($_POST["default_case"]),
 
     ];
-    if (isset($_POST["start_budget"]) && $_POST["start_budget"] != "") {
-        $data["start_budget"] = Security::escape($_POST["start_budget"]);
-    } else {
-        $data["start_budget"] = 0;
-    }
 
 
     try {
@@ -152,19 +147,29 @@ if ($_POST["action"] == "getCases") {
     echo json_encode($res);
 }
 
-if ($_POST["action"] == "intercashTransfer") {
 
+//
+if ($_POST["action"] == "intercashTransfer") {
+    //it = intercashTransfer
     //Kasalararası virman yetkisi var mı kontrol et
     $Auths->hasPermission("intercash_transfer");
 
-    $from_case_id = Security::decrypt($_POST["from_case"]);
-    $to_case_id = $_POST["to_case"];
-    $amount = Security::escape($_POST["amount"]);
-    $description = Security::escape($_POST["description"]);
+
+    $from_case_id = Security::decrypt($_POST["it_from_cases"]);
+    $date = $_POST["it_date"];
+    $to_case_id = $_POST["it_to_case"];
+    $amount = Security::escape($_POST["it_amount"]);
+    $description = Security::escape($_POST["it_description"]);
 
     try {
         $db->beginTransaction();
-        $res = $CaseTransactions->transfer($from_case_id, $to_case_id, $amount, $description);
+        $res = $CaseTransactions->transfer(
+                                    $from_case_id,
+                                    $to_case_id,
+                                    $amount,
+                                    $description,
+                                    $date
+        );
         $status = $res["status"];
         $message = $res["message"];
         $db->commit();

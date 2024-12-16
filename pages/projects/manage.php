@@ -120,6 +120,14 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
                                             Çalışma/Puantaj Bilgileri
                                         </a>
                                     </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#tabs-summary-3" class="nav-link" data-bs-toggle="tab"
+                                            aria-selected="false" tabindex="-1"
+                                            role="tab">
+                                            <i class="ti ti-chart-dots icon me-1"></i>
+                                           Proje Özet Bilgileri
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -137,6 +145,10 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
                                     </div>
                                     <div class="tab-pane" id="tabs-puantaj-3" role="tabpanel">
                                         <?php include_once "content/3-works-puantaj-info.php" ?>
+
+                                    </div>
+                                    <div class="tab-pane" id="tabs-summary-3" role="tabpanel">
+                                        <?php include_once "content/4-project-summary.php" ?>
 
                                     </div>
                                 </div>

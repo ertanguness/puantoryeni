@@ -87,7 +87,7 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
                                 <th style="width:10%">Başlama Tarihi</th>
                                 <th style="width:10%">Tahmini Bitiş Tarihi</th>
                                 <th style="width:10%">Kalan Gün</th>
-                                <th>Güncel Bakiye</th>
+                               
                                 <th class="no-export" style="width:7%">İşlem</th>
                             </tr>
                         </thead>
@@ -151,11 +151,11 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
 
                                     </td>
 
-                                    <!-- Bakiye rengini belirle ve göster -->
-                                    <td class="<?php echo Helper::balanceColor($balance) ?>">
-                                        <!-- //Bakiyesini yazdır -->
-                                        <?php echo Helper::formattedMoney($balance) ?>
-                                    </td>
+                                    <!-- Bakiye rengini belirle ve göster 
+                                    <td class="<?php //echo Helper::balanceColor($balance) ?>">-->
+                                        <!-- //Bakiyesini yazdır 
+                                        <?php //echo Helper::formattedMoney($balance) ?>
+                                    </td>-->
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <button class="btn dropdown-toggle align-text-top"

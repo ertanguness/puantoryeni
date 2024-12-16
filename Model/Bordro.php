@@ -16,6 +16,8 @@ class Bordro extends Model
     protected $table = 'maas_gelir_kesinti';
     protected $sql_table = 'sqlmaas_gelir_kesinti';
 
+    protected $sql_table_puantaj_toplam ="sqlmaas_gelir_kesinti_puantaj_toplam";
+
     public function __construct()
     {
         parent::__construct($this->table);
@@ -31,7 +33,7 @@ class Bordro extends Model
     // get() metodu ile id'ye göre kayıt çeker
     public function getPersonWorkTransactions($id)
     {
-        $sql = $this->db->prepare("SELECT * FROM $this->sql_table WHERE person_id = :id AND tutar > 0 ORDER BY created_at DESC");
+        $sql = $this->db->prepare("SELECT * FROM $this->sql_table_puantaj_toplam WHERE person_id = :id AND tutar > 0 ORDER BY created_at DESC");
         $sql->execute([':id' => $id]);
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
