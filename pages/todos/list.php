@@ -2,13 +2,15 @@
 require_once "Model/TodoModel.php";
 require_once "App/Helper/helper.php";
 require_once "App/Helper/date.php";
-use App\Helper\Date;
+require_once "App/Helper/projects.php";
 
+use App\Helper\Date;
 use App\Helper\Helper;
 use App\Helper\Security;
 
 $Todo = new Todo();
-$todos = $Todo->all();
+$todos = $Todo->getTodosByFirm();
+$projectHelper = new ProjectHelper();
 
 ?>
 <div class="container-xl mt-3">
@@ -30,9 +32,12 @@ $todos = $Todo->all();
                         <thead>
                             <tr>
                                 <th style="width:5%">Sıra</th>
+                                <th>Proje Adı</th>
+                                <th>Konu</th>
                                 <th>Adı</th>
-                                <th>Türü</th>
+                                <th>Son Tarih</th>
                                 <th>Açıklama</th>
+                                <th>Durum</th>
                                 <th>Eklenme Tarihi</th>
                                 <th>İşlem</th>
 
@@ -46,11 +51,14 @@ $todos = $Todo->all();
                                 ?>
                                 <tr>
                                     <td class="text-center"><?php echo $todo->id ?></td>
+                                    <td><?php echo $projectHelper->getProjectName($todo->project_id) ?></td>
+                                    <td><?php echo $todo->subject ?></td>
                                     <td>
                                         <a class="route-link" data-page="todos/manage&id=<?php echo $id ?>" href="#">
                                             <?php echo $todo->title ?>
                                         </a>
                                     </td>
+                                    <td><?php echo Date::dmY($todo->due_date) ?></td>
                                     <td><?php echo $todo->description ?></td>
                                     <td><?php echo $todo->status ?></td>
                                     <td><?php echo Date::dmY($todo->created_at) ?></td>

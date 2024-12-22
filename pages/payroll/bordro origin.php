@@ -1,12 +1,5 @@
 <?php
-require_once ROOT . "/Model/DefinesModel.php";
 use App\Helper\Helper;
-use App\Helper\Date;
-$Defines = new DefinesModel();
-
-//$first_day = Date::firstDay($ay, $yil);
-
-
 
 ?>
 
@@ -17,7 +10,7 @@ $Defines = new DefinesModel();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $person->full_name ?> - Bordro </title>
+    <title><?php echo $person->full_name ?> - Bordro</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,11 +20,11 @@ $Defines = new DefinesModel();
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-size: 9px;
+            font-size: 13px;
         }
 
         .payslip-container {
-            width: 1194px;
+            width: 797px;
             padding: 20px;
             background-color: #fff;
 
@@ -93,7 +86,7 @@ $Defines = new DefinesModel();
 
         .table td {
             padding: 4px;
-            font-size: 10px;
+            font-size: 13px;
             border: 1px solid #ddd;
         }
 
@@ -168,7 +161,7 @@ $Defines = new DefinesModel();
                     </tr>
                     <tr>
                         <td class="col-4">Adı Soyadı:</td>
-                        <td class="col-8"><?php echo $person->full_name ?></td>
+                        <td class="col-8"><?php echo $person->full_name; ?></td>
                     </tr>
                     <tr>
                         <td>TC Kimlik No:</td>
@@ -189,26 +182,15 @@ $Defines = new DefinesModel();
                         <td class="col-8"><?php echo $firm_name; ?></td>
                     </tr>
                     <tr>
-                        <td class="text-right">Telefon:</td>
-                        <td><?php echo $firm->phone; ?></td>
-                    </tr>
-                    <!-- //Dönem Bilgileri -->
-                    <tr>
-                        <td class="text-right">Dönem:</td>
-                        <td><?php echo Date::monthName($ay) . ' ' . $yil; ?></td>
+                        <td class="text-right">Email:</td>
+                        <td><?php echo $firm_email; ?></td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-6 bg-gray">
-                <h3 class="text-center">GELİRLER</h3>
-            </div>
-            <div class="col-6 bg-gray">
-                <h3 class="text-center">GİDERLER</h3>
-            </div>
-            <!-- <h3 class="text-center pt-20">GELİRLER VE GİDERLER</h3> -->
+            <h3 class="text-center pt-20">GELİRLER VE GİDERLER</h3>
             <div class="col-6">
 
 
@@ -255,7 +237,7 @@ $Defines = new DefinesModel();
                         $total_expense += $expense->tutar;
                         ?>
                         <tr>
-                            <td><?php echo $Defines->getTypeNameById($expense->kategori ?? 0); ?></td>
+                            <td><?php echo $expense->turu; ?></td>
                             <td class="text-right">
                                 <?php echo Helper::formattedMoneyWithoutCurrency($expense->tutar); ?>
                             </td>
@@ -285,7 +267,7 @@ $Defines = new DefinesModel();
                     </td>
                     <td>
                         Firma İmza: _____________
-                    </td>
+                        </td>
                 </tr>
             </table>
         </div>

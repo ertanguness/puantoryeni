@@ -33,12 +33,12 @@ require_once 'App/Helper/security.php';
 
 use App\Helper\Security;
 
+
 $menus = new Menus();
 $User = new UserModel();
 
 $perm = new Auths();//Sayfalarda yetki kontrolü yapmak için kullanılır
 
-$User = new UserModel();
 $user = $User->find($_SESSION['user']->id) ?? null;
 
 if (!$user) {
@@ -188,7 +188,7 @@ $menu_name = $menus->getMenusByLink($active_page);
         // });
         $(document).ready(function () {
             var preloader = $('.preloader');
-            preloader.fadeOut();
+            preloader.fadeOut(500);
         });
     </script>
 

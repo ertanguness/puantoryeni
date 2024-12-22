@@ -135,9 +135,7 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
                                 <th>Görevi</th>
                                 <th>İşe Başlama Tarihi</th>
                                 <th style="width:10%" class="text-center">Brüt Ücret</th>
-                                <th style="width:10%" class="text-center">Kesinti</th>
-                                <th style="width:10%" class="text-center">Toplam Hakediş</th>
-                                <th style="width:10%" class="text-center">Ödenen</th>
+                                <th style="width:10%" class="text-center">Ödenen/Kesinti</th>
                                 <!-- <th style="width:10%" class="text-center">Devreden</th> -->
                                 <th style="width:10%" class="text-center">Ödenecek</th>
 
@@ -199,11 +197,9 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
                                 }
 
                                 // Personel id'sine göre personelin maaş ve kesinti bilgilerini getirir(Örnek: 20240901-20240930 arası)
-                                $gelir = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->gelir;
-                                $wage_cut = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->kesinti;
-                                $hakedis = $gelir - $wage_cut;
-                                $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay, $person->wage_type)->odeme;
-                                $kalan = $hakedis - $odeme;
+                                $gelir = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay)->gelir;
+                                $odeme = $bordro->getPersonSalaryAndWageCut($person->id, $firstDay, $lastDay)->odeme;
+                                $kalan = $gelir - $odeme;
 
                                 ?>
                                 <tr>
@@ -221,15 +217,7 @@ $case_id = $Cases->getDefaultCaseIdByFirm();
                                         <i class="ti ti-download icon text-green"></i>
 
                                     </td>
-                                    <td class="text-end">
-                                        <?php echo Helper::formattedMoney($wage_cut ?? 0); ?>
-                                        <i class="ti ti-upload icon color-red"></i>
-                                    </td>
 
-                                    <td class="text-end">
-                                        <?php echo Helper::formattedMoney(($hakedis) ?? 0); ?>
-                                        <i class="ti ti-switch-vertical icon color-blue"></i>
-                                    </td>
 
                                     <td class="text-end">
                                         <?php echo Helper::formattedMoney($odeme ?? 0); ?>

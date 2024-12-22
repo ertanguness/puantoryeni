@@ -5,6 +5,7 @@ require_once 'Model/Puantaj.php';
 require_once 'App/Helper/date.php';
 require_once 'App/Helper/security.php';
 require_once "App/Helper/financial.php";
+require_once 'Model/DefinesModel.php';
 
 
 use App\Helper\Security;
@@ -14,6 +15,7 @@ use App\Helper\Helper;
 $puantaj = new Puantaj();
 $bordro = new Bordro();
 $financialHelper = new Financial();
+$Defines = new DefinesModel();
 
 // Eğer personel beyaz yaka ise ve içinde bulunduğu ayda gelir tablosuna maaş eklenmediyse git o tabloya personelin aylık ücretini ekle
 
@@ -22,23 +24,23 @@ $income_expenses = $bordro->getPersonWorkTransactions($id);
 
 $month = Date::getMonth();
 
+//$gelir = $Defines->getExpenseTypes(1);
+//$kesinti = $Defines->getExpenseTypes(2);
 
 
 // maas_gelir_gider tablosunda personelin toplam gelir, gider ve ödeme bilgilerini getir
 // ********************************************************************************* */
 $summary = $bordro->sumAllIncomeExpense($id);
 
-$incomes = $summary->total_income;
-$total_expense = $summary->total_expense;
-$total_payment = $summary->total_payment;
-// ********************************************************************************* */
-
 // Toplam Gelir(Puantaj + Eklenen Gelirler+ veya maaş)
-$total_income = $incomes;
+$total_income = $summary->total_income;
+
+$total_expense = $summary->total_expense;
 
 // Bakiye hesaplanacak
-$balance = $total_income - $total_expense - $total_payment;
+$balance = $total_income - $total_expense;
 
+// ********************************************************************************* */
 
 $id = Security::encrypt($id);
 if (!$Auths->Authorize("person_page_income_expence_info")) {
@@ -52,7 +54,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Gelir Gider Listesi</h3>
+                    <h3 class="card-title">Gelir Gider Listesi  </h3>
                     <div class="d-flex col-auto ms-auto">
 
 
@@ -84,7 +86,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                 <div class="card-header">
                     <div class="row row-cards">
 
-                        <div class="col-md-6 col-xl-3">
+                        <div class="col-md-4 col-xl-4">
                             <div class="card card-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -108,7 +110,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-xl-3">
+                        <div class="col-md-4 col-xl-4">
                             <div class="card card-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -119,7 +121,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                                         </div>
                                         <div class="col">
                                             <div class="font-weight-medium">
-                                                Kesinti/Gider Toplamı
+                                                Kesinti/Gider/Ödeme Toplamı
                                             </div>
                                             <div class="text-secondary">
                                                 <label for="" id="total_expense">
@@ -132,34 +134,9 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-xl-3">
-                            <div class="card card-sm">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-yellow text-white avatar">
-                                                <i class="ti ti-upload icon"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="font-weight-medium">
-                                                Ödeme Toplamı
-                                            </div>
-                                            <div class="text-secondary">
-                                                <label for="" id="total_payment">
-                                                    <?php echo Helper::formattedMoney($total_payment ?? 0); ?>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
 
-
-
-                        <div class="col-md-6 col-xl-3">
+                        <div class="col-md-4 col-xl-4">
                             <div class="card card-sm">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -238,7 +215,7 @@ if (!$Auths->Authorize("person_page_income_expence_info")) {
                                                 <?php
                                                 //Eğer ödeme, gelir veya kesinti ise işlem yapılabilir
                                                 if ($item->kategori != 14): ?>
-                                                    <a class="dropdown-item edit-payment" >
+                                                    <a class="dropdown-item edit-payment">
                                                         <i class="ti ti-edit icon me-3"></i> Güncelle
                                                     </a>
                                                 <?php endif ?>

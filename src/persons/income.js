@@ -32,7 +32,7 @@ $(document).on("click", "#income_addButton", function () {
       var income = data.income_data;
       var income_expense = data.income_expense;
 
-      $("#total_payment").text(income_expense.total_payment);
+      //$("#total_payment").text(income_expense.total_payment);
       $("#total_income").text(income_expense.total_income);
       $("#total_expense").text(income_expense.total_expense);
       $("#balance").text(income_expense.balance);
@@ -46,7 +46,7 @@ $(document).on("click", "#income_addButton", function () {
           income.ay,
           income.yil,
           `<i class='ti ti-upload icon color-yellow me-1' ></i>
-          ${data.income.kategori}`,
+          ${income.kategori}`,
           income.tutar,
           income.aciklama,
           income.created_at,

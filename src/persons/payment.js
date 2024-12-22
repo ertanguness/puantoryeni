@@ -61,7 +61,7 @@ $(document).on("click", "#payment_addButton", function () {
     .then((data) => {
       if (data.status == "success") {
         // console.log(data);
-        $("#total_payment").text(data.income_expense.total_payment);
+        //$("#total_payment").text(data.income_expense.total_payment);
         $("#total_income").text(data.income_expense.total_income);
         $("#total_expense").text(data.income_expense.total_expense);
         $("#balance").text(data.income_expense.balance);

@@ -138,7 +138,7 @@ use App\Helper\Helper;
 
                                     <label class="form-label">İşlem Tarihi</label>
                                     <input type="text" name="transaction_date" class="form-control flatpickr"
-                                        value="<?php echo date('Y-m-d'); ?>">
+                                        value="<?php echo date('d.m.Y'); ?>">
 
                                 </div>
                                 <div class="col-md-6">

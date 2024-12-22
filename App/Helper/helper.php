@@ -271,7 +271,7 @@ class Helper
                 break;
             case 14: //Puantaj Çalışma
                 $icon = "ti-stretching";
-                $color = "color-red";
+                $color = "color-green";
                 break;
 
             default:

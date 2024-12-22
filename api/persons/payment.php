@@ -70,7 +70,7 @@ if ($_POST['action'] == 'savePayment') {
             $last_payment->tutar = Helper::formattedMoney($last_payment->tutar);
 
             $income_expense->total_income = Helper::formattedMoney($income_expense->total_income ?? 0);  // Toplam gelir
-            $income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
+            //$income_expense->total_payment = Helper::formattedMoney($income_expense->total_payment ?? 0);  // Toplam ödeme
             $income_expense->total_expense = Helper::formattedMoney($income_expense->total_expense ?? 0);  // Toplam gider
             $income_expense->balance = Helper::formattedMoney($payment->getBalance($person_id));  // Bakiye
         }

@@ -63,7 +63,39 @@ class DefinesModel extends Model
         return $sql->fetchAll(PDO::FETCH_OBJ);
     }
 
-   
+    /**
+     * Gelir veya Gider türlerini array getirir
+     */
+    public function getExpenseTypes($type)
+    {
+        $sql = $this->db->prepare("SELECT * FROM $this->table WHERE type_id = ?");
+        $sql->execute([$type]);
+        if ($sql->rowCount() != 0) {
+
+            $result = implode(',', array_map(function ($item) {
+                return $item->id;
+            }, $sql->fetchAll(PDO::FETCH_OBJ)));
+            return $result;
+
+        } else {
+            return [];
+        }
+    }
+
+    //Gelen id'den adını getir
+    public function getTypeNameById($id)
+    {
+        $sql = $this->db->prepare("SELECT name FROM $this->table WHERE id = ?");
+        $sql->execute([$id]);
+
+        //eğer bulunamazsa boş döndür, varsa name döndür
+        if ($sql->rowCount() == 0) {
+            return "";
+        } else {
+            return $sql->fetch(PDO::FETCH_OBJ)->name;
+        }
+    }
+
 
 
 

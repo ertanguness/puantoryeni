@@ -57,7 +57,7 @@ if ($_POST["action"] == "saveTransaction") {
     try {
         $data = [
             "id" => 0,
-            "date" => ($_POST["transaction_date"]),
+            "date" => Date::Ymd($_POST["transaction_date"]),
             "type_id" => $_POST["transaction_type"],
             "project_id" => $project_id,
             "person_id" => $person_id ,

@@ -35,7 +35,7 @@ $(document).on("click", ".add-wage-cut", function () {
           var income_expense = data.income_expense;
           
   
-        $("#total_payment").text(income_expense.total_payment);
+        //$("#total_payment").text(income_expense.total_payment);
         $("#total_income").text(income_expense.total_income);
         $("#total_expense").text(income_expense.total_expense);
         $("#balance").text(income_expense.balance);

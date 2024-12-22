@@ -42,6 +42,9 @@ $mpdf = new \Mpdf\Mpdf([
 
 // Sayfa genişliğini al
 $pageWidth = $mpdf->w;
+//Sayfayı yatay yap
+$mpdf->AddPage('L');
+
 ob_start();
 include(ROOT . '/pages/payroll/bordro.php');
 $html = ob_get_clean();
